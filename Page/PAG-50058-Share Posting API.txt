@@ -1,0 +1,150 @@
+OBJECT Page 50058 Share Posting API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=21-12-20;
+    Time=15:10:02;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    InsertAllowed=No;
+    DeleteAllowed=No;
+    SourceTable=Table9068770;
+    PageType=List;
+    CardPageID=SR Posted Share Transaction;
+    OnAfterGetRecord=BEGIN
+                       IF "Add. Value Type" = "Add. Value Type"::"Per Share" THEN
+                         "Issued Value (add. Value)" := "Add. Value"*Units
+                       ELSE
+                         "Issued Value (add. Value)" := "Add. Value";
+                     END;
+
+    OnAfterGetCurrRecord=BEGIN
+                           GetUnitsText;
+                         END;
+
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                GroupType=Repeater }
+
+    { 2   ;2   ;Field     ;
+                SourceExpr="Posting Date";
+                Editable=FALSE }
+
+    { 1040004;2;Field     ;
+                SourceExpr="Approval Date" }
+
+    { 4   ;2   ;Field     ;
+                SourceExpr="Share Issue Transaction Type";
+                Editable=FALSE }
+
+    { 6   ;2   ;Field     ;
+                SourceExpr="Share Class";
+                Editable=FALSE }
+
+    { 8   ;2   ;Field     ;
+                SourceExpr="Currency Code";
+                Editable=FALSE }
+
+    { 1000000001;2;Field  ;
+                SourceExpr="Allocation Method";
+                Editable=FALSE }
+
+    { 42  ;2   ;Field     ;
+                SourceExpr="Share Holder Name";
+                Editable=FALSE }
+
+    { 1000000110;2;Field  ;
+                SourceExpr="Share Holder(s)";
+                Editable=FALSE }
+
+    { 12  ;2   ;Field     ;
+                SourceExpr="Document No.";
+                Editable=FALSE }
+
+    { 10  ;2   ;Field     ;
+                SourceExpr="Printed Certificate No." }
+
+    { 1040006;2;Field     ;
+                SourceExpr="Certificate Date" }
+
+    { 14  ;2   ;Field     ;
+                SourceExpr=Units;
+                Editable=FALSE }
+
+    { 16  ;2   ;Field     ;
+                SourceExpr="Par Value";
+                Editable=FALSE }
+
+    { 18  ;2   ;Field     ;
+                SourceExpr="Par Value Amt paid per share";
+                Editable=FALSE }
+
+    { 20  ;2   ;Field     ;
+                SourceExpr="Issued Value (at Par)";
+                Editable=FALSE }
+
+    { 1040002;2;Field     ;
+                SourceExpr="Add. Value Type";
+                Editable=FALSE }
+
+    { 22  ;2   ;Field     ;
+                SourceExpr="Add. Value";
+                Editable=FALSE }
+
+    { 1040000;2;Field     ;
+                SourceExpr="Issued Value (add. Value)";
+                Editable=FALSE }
+
+    { 1000000012;2;Field  ;
+                SourceExpr="Total Amount paid (at Par)" }
+
+    { 1000000013;2;Field  ;
+                SourceExpr="Total Amount paid (Add. Value)" }
+
+    { 1000000011;2;Field  ;
+                SourceExpr="Par Value Amount Outstanding" }
+
+    { 1000000010;2;Field  ;
+                SourceExpr="Add. Value Amount Outstanding" }
+
+    { 24  ;2   ;Field     ;
+                SourceExpr="Share Numbers From";
+                Editable=TRUE }
+
+    { 36  ;2   ;Field     ;
+                SourceExpr="Share Numbers To";
+                Editable=TRUE }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="Benef. Owner All. Method" }
+
+    { 1000000009;2;Field  ;
+                SourceExpr="Beneficial Owner(s)" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    {
+      21.01.20  Mohammed Raiees
+                CRF51352 New changes
+
+      10.01.20  Omair Nasir
+                CRF51431 Added Share Holders(s) Column
+
+      06.09.19  Hubert Bartkowiak
+                CRF51352 New field "Add. Value Name".
+    }
+    END.
+  }
+}
+

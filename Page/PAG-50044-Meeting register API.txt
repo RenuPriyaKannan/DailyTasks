@@ -1,0 +1,74 @@
+OBJECT Page 50044 Meeting register API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=11-12-20;
+    Time=10:06:54;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    CaptionML=ENU=Meeting Register;
+    LinksAllowed=No;
+    SourceTable=Table9070258;
+    PageType=List;
+    CardPageID=Meeting Register Card;
+  }
+  CONTROLS
+  {
+    { 1000000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000001;1;Group  ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Client No." }
+
+    { 1000000013;2;Field  ;
+                SourceExpr="Client Name" }
+
+    { 1000000014;2;Field  ;
+                SourceExpr=Jurisdiction }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Meeting No." }
+
+    { 1000000004;2;Field  ;
+                SourceExpr="Meeting Date" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="Meeting Time" }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="Meeting Type" }
+
+    { 1000000007;2;Field  ;
+                SourceExpr="Meeting Address" }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="No. of Attendees" }
+
+    { 1000000009;2;Field  ;
+                SourceExpr="Quorum Met" }
+
+    { 1000000010;2;Field  ;
+                SourceExpr="No. of Attendees at Loc" }
+
+    { 1000000011;2;Field  ;
+                SourceExpr="Resolutions Approved" }
+
+    { 1000000012;2;Field  ;
+                SourceExpr="Date Minutes Signed" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

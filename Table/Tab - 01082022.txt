@@ -1,0 +1,2597 @@
+OBJECT Table 50000 Partitioned Client Entity
+{
+  OBJECT-PROPERTIES
+  {
+    Date=25-08-21;
+    Time=10:55:32;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Table Name          ;Code10        ;DataClassification=ToBeClassified }
+    { 2   ;   ;USER ID             ;Code50        ;DataClassification=ToBeClassified }
+    { 3   ;   ;Client No._Entity No.;Code20       ;DataClassification=ToBeClassified }
+    { 4   ;   ;First Partition Code;Code100       ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=First Partition Code }
+    { 5   ;   ;Second Partition Code;Code100      ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Second Partition Code }
+    { 1001;   ;Client Type         ;Code10        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Type }
+    { 1002;   ;Client Name         ;Text50        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Name }
+    { 1003;   ;CL Country of Incorporation;Code10 ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Country of Incorporation }
+    { 1004;   ;CL Date of Incorporation;Date      ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Date of Incorporation }
+    { 1005;   ;Registered Number   ;Text40        ;DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Registered Number;
+                                                              ENG=Registered Number;
+                                                              ENA=ABN] }
+    { 1006;   ;Currency Code       ;Code10        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Currency Code;
+                                                   Editable=No }
+    { 1007;   ;Administrative Office;Code10       ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Administrative Office }
+    { 1008;   ;Registered Office   ;Code10        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Registered Office }
+    { 1009;   ;Global Dimension 1 Code;Code20     ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Global Dimension 1 Code }
+    { 1010;   ;ClientAnalysisA     ;Code20        ;DataClassification=ToBeClassified;
+                                                   CaptionClass='50,1,A' }
+    { 1011;   ;ClientAnalysisB     ;Code20        ;DataClassification=ToBeClassified;
+                                                   CaptionClass='50,1,B' }
+    { 1012;   ;ClientAnalysisC     ;Code20        ;DataClassification=ToBeClassified;
+                                                   CaptionClass='50,1,C' }
+    { 1013;   ;ClientAnalysisD     ;Code20        ;DataClassification=ToBeClassified;
+                                                   CaptionClass='50,1,D' }
+    { 1014;   ;ClientAnalysisE     ;Code20        ;DataClassification=ToBeClassified;
+                                                   CaptionClass='50,1,E' }
+    { 1015;   ;ClientAnalysisF     ;Code20        ;DataClassification=ToBeClassified;
+                                                   CaptionClass='50,1,F' }
+    { 2001;   ;EN Name             ;Text50        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Name }
+    { 2002;   ;Date of Birth       ;Date          ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Date of Birth }
+    { 2003;   ;Nationality         ;Code10        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Nationality }
+    { 2004;   ;Profession          ;Code10        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Profession }
+    { 2005;   ;Domicile            ;Code10        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Domicile }
+    { 2006;   ;Residence           ;Code10        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Residence }
+    { 2007;   ;Title               ;Text30        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Title }
+    { 2008;   ;Name 2              ;Text50        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Name 2 }
+    { 2009;   ;Entity Type         ;Option        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Entity Type;
+                                                   OptionString=[ ,Bank] }
+    { 2010;   ;Marital Status      ;Option        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Marital Status;
+                                                   OptionString=[ ,Single,Married,Separated,Divorced,Widowed,Civil Partnership,Engaged,Unknown] }
+    { 2011;   ;Gender              ;Option        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Gender;
+                                                   OptionString=[ ,Male,Female] }
+    { 2012;   ;Initials            ;Text5         ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Initials }
+    { 2013;   ;Personal/Corporate  ;Option        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Personal/Corporate;
+                                                   OptionString=Personal,Corporate }
+    { 2014;   ;EN Country of Incorporation;Code10 ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Country of Incorporation }
+    { 2015;   ;EN Jurisdiction     ;Code10        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Jurisdiction }
+  }
+  KEYS
+  {
+    {    ;Table Name,USER ID,Client No._Entity No.;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT Table 50001 Client Details
+{
+  OBJECT-PROPERTIES
+  {
+    Date=16-11-20;
+    Time=15:46:42;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Client No.          ;Code20        ;DataClassification=ToBeClassified }
+    { 2   ;   ;Entry No.           ;Integer       ;DataClassification=ToBeClassified }
+    { 10  ;   ;Type                ;Code10        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Type }
+    { 20  ;   ;Name                ;Text50        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Name }
+    { 30  ;   ;Proper law          ;Code10        ;CaptionML=ENU=Proper law }
+    { 40  ;   ;Jurisdiction        ;Code10        ;CaptionML=ENU=Jurisdiction }
+    { 50  ;   ;Tax Status          ;Code10        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Tax Status }
+    { 1000;   ;FATCA Account Classification;Code20;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=FATCA Account Classification }
+    { 1010;   ;CRS Account Classification;Code20  ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=CRS Account Classification }
+    { 1020;   ;Tax Code            ;Code10        ;DataClassification=ToBeClassified }
+    { 1030;   ;Tax Return Country Code;Code10     ;DataClassification=ToBeClassified }
+    { 1040;   ;TIN Type            ;Code20        ;DataClassification=ToBeClassified }
+    { 1050;   ;TIN                 ;Code20        ;DataClassification=ToBeClassified }
+    { 1060;   ;Tax Category        ;Code20        ;DataClassification=ToBeClassified }
+    { 1061;   ;WSID                ;Text100       ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;Client No.,Entry No.                    ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT Table 50002 Entity Details
+{
+  OBJECT-PROPERTIES
+  {
+    Date=16-11-20;
+    Time=15:51:21;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Entity No.          ;Code20        ;DataClassification=ToBeClassified }
+    { 2   ;   ;Entry No.           ;Integer       ;DataClassification=ToBeClassified }
+    { 10  ;   ;Name                ;Text50        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Type }
+    { 20  ;   ;Name 2              ;Text50        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Name }
+    { 30  ;   ;Personal/Corporate  ;Option        ;CaptionML=ENU=Personal/Corporate;
+                                                   OptionString=Personal,Corporate }
+    { 40  ;   ;Jurisdiction        ;Code10        ;CaptionML=ENU=Jurisdiction }
+    { 41  ;   ;Residence           ;Code10        ;CaptionML=ENU=Proper law }
+    { 500 ;   ;Passport number     ;Code30        ;DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Passport/ID Card Number;
+                                                              ENG=Passport/ID Card Number] }
+    { 510 ;   ;Passport/ID Issue Date;Date        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Passport/ID Issue Date }
+    { 520 ;   ;Passport expiry date;Date          ;DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Passport/ID Card Expiry Date;
+                                                              ENG=Passport/ID Card Expiry Date] }
+    { 530 ;   ;Passport country of issue;Code10   ;TableRelation=Country/Region;
+                                                   DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Passport/ID Card Country of Issue;
+                                                              ENG=Passport/ID Card Country of Issue] }
+    { 550 ;   ;Passport/ID Number (2);Code30      ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Passport/ID Card Number (2) }
+    { 560 ;   ;Passport/ID Country (2);Code10     ;TableRelation=Country/Region;
+                                                   DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Passport/ID Card Country of Issue (2) }
+    { 570 ;   ;Passport/ID Issue Date (2);Date    ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Passport/ID Issue Date (2) }
+    { 580 ;   ;Passport/ID Expiry Date (2);Date   ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Passport/ID Card Expiry Date (2) }
+    { 1000;   ;FATCA Classification;Code20        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=FATCA Account Classification }
+    { 1010;   ;CRS Classification  ;Code20        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=CRS Account Classification }
+    { 1020;   ;Tax Code            ;Code10        ;DataClassification=ToBeClassified }
+    { 1030;   ;Tax Return Country Code;Code10     ;DataClassification=ToBeClassified }
+    { 1040;   ;TIN Type            ;Code20        ;DataClassification=ToBeClassified }
+    { 1050;   ;TIN                 ;Code20        ;DataClassification=ToBeClassified }
+    { 1060;   ;Tax Category        ;Code20        ;DataClassification=ToBeClassified }
+    { 1061;   ;WSID                ;Text100       ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;Entity No.,Entry No.                    ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT Table 50003 Notice Of Meeting
+{
+  OBJECT-PROPERTIES
+  {
+    Date=02-06-22;
+    Time=15:23:57;
+    Modified=Yes;
+    Version List=NOM;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Master Client No.   ;Code20        ;DataClassification=ToBeClassified }
+    { 2   ;   ;Corporate Director/Trustee;Code20  ;DataClassification=ToBeClassified }
+    { 3   ;   ;Fiduciary Director/Trustee;Code20  ;DataClassification=ToBeClassified }
+    { 4   ;   ;Individual Director/Trustee;Code20 ;DataClassification=ToBeClassified }
+    { 5   ;   ;Director/Trustee    ;Code20        ;DataClassification=ToBeClassified }
+    { 6   ;   ;Appointment Type    ;Code20        ;DataClassification=ToBeClassified }
+    { 7   ;   ;Type                ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=Client,Personal Entity,Corporate Entity,Resource }
+    { 10  ;   ;Master Client Name  ;Text150       ;DataClassification=ToBeClassified }
+    { 11  ;   ;Corp Director/Trustee Name;Text150 ;DataClassification=ToBeClassified }
+    { 12  ;   ;Fid Director/Trustee Name;Text150  ;DataClassification=ToBeClassified }
+    { 13  ;   ;Indv Director/Trust Name;Text150   ;DataClassification=ToBeClassified }
+    { 14  ;   ;Director/Trustee name;Text150      ;DataClassification=ToBeClassified }
+    { 15  ;   ;Director Quorum     ;Integer       ;DataClassification=ToBeClassified }
+    { 16  ;   ;Client Type         ;Text50        ;CaptionML=ENU=Client Type Type;
+                                                   Editable=Yes }
+    { 17  ;   ;First Partition Code;Code20        ;DataClassification=ToBeClassified }
+    { 18  ;   ;Partition Group     ;Code30        ;DataClassification=ToBeClassified }
+    { 19  ;   ;Purpose-Activity Code;Code20       ;OnValidate=VAR
+                                                                _PurposeActivity@1000000000 : Record 9069136;
+                                                              BEGIN
+                                                              END;
+
+                                                   OnLookup=VAR
+                                                              _PurposeRec@1000000000 : Record 9069136;
+                                                              _PurposePage@1000000001 : Page 9069829;
+                                                            BEGIN
+                                                            END;
+
+                                                   DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Purpose-Activity Code }
+    { 20  ;   ;Purpose/Objective   ;Text150       ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Purpose/Objective }
+  }
+  KEYS
+  {
+    {    ;Master Client No.,Corporate Director/Trustee,Individual Director/Trustee,Director/Trustee;
+                                                   Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT Table 50004 NAVLITE
+{
+  OBJECT-PROPERTIES
+  {
+    Date=16-06-22;
+    Time=12:18:22;
+    Modified=Yes;
+    Version List=NAVLITE;
+  }
+  PROPERTIES
+  {
+    OnInsert=BEGIN
+               //NAVUserID := USERID;
+               //"Document Date" := TODAY;
+
+               DocumentFolderSetup.GET;
+               "External Doc Management System" := DocumentFolderSetup."External Doc Management System";
+             END;
+
+    LookupPageID=Page50094;
+    DrillDownPageID=Page50094;
+  }
+  FIELDS
+  {
+    { 1   ;   ;Type                ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=[ ,Client,Entity,Customer,Vendor] }
+    { 2   ;   ;No.                 ;Code20        ;TableRelation=IF (Type=CONST(Client)) Client."Client No."
+                                                                 ELSE IF (Type=CONST(Entity)) Entity."Entity No."
+                                                                 ELSE IF (Type=CONST(Customer)) Customer.No.
+                                                                 ELSE IF (Type=CONST(Vendor)) Vendor.No.;
+                                                   OnValidate=BEGIN
+                                                                NAVUserID := USERID;
+                                                                "Document Date":= TODAY;
+
+                                                                CASE Type OF
+                                                                  Type::Client:
+                                                                    IF Client.GET("No.") THEN BEGIN
+                                                                      Name := Client.Name;
+                                                                      "First Partition Code" := Client."First Partition Code";
+                                                                      "Second Partition Code" := Client."Second Partition Code";
+                                                                      Jurisdiction := Client.Jurisdiction;
+                                                                    END;
+                                                                  Type::Entity:
+                                                                  IF Entity.GET("No.") THEN BEGIN
+                                                                      Name := Entity.Name;
+                                                                      "First Partition Code" := Entity."First Partition Code";
+                                                                      "Second Partition Code" := Entity."Second Partition Code";
+                                                                      Jurisdiction := Entity.Jurisdiction;
+                                                                      "Entity Intermediary" := Entity."Intermediary No.";
+                                                                     "Entity Owner" := Entity."Owner No.";
+                                                                      "Entity Prospect" := Entity."Prospect No.";
+                                                                    END;
+                                                                  Type::Customer:
+                                                                    IF Customer.GET("No.") THEN BEGIN
+                                                                      Name := Customer.Name;
+                                                                    END;
+                                                                  Type::Vendor:
+                                                                    IF Vendor.GET("No.") THEN BEGIN
+                                                                      Name := Vendor.Name;
+                                                                    END;
+                                                                END;
+                                                              END;
+
+                                                   DataClassification=ToBeClassified }
+    { 3   ;   ;Name                ;Text1024       }
+    { 4   ;   ;Jurisdiction        ;Code10        ;DataClassification=ToBeClassified }
+    { 5   ;   ;First Partition Code;Code10        ;TableRelation="First Partition".Code;
+                                                   DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=First Partition Code }
+    { 6   ;   ;Second Partition Code;Code10       ;TableRelation="Second Partition".Code;
+                                                   DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Second Partition Code }
+    { 7   ;   ;NAVUserID           ;Text30        ;InitValue=UserID }
+    { 8   ;   ;AttributeType       ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=[ ,Portfolio,Investment,Bank,Loan,Agent,Property,Miscellaneous Asset,Yacht,Aviation,Intellectual Property,Life Assurance,Job] }
+    { 9   ;   ;Attribute           ;Text250       ;OnLookup=VAR
+                                                              ClientAsset@100000005 : Record 9068546;
+                                                              EntityRec@100000004 : Record 9068505;
+                                                              ClientRec@100000003 : Record 9068500;
+                                                              ClientPortfolio@100000002 : Record 9068565;
+                                                              ClientInvestment@100000001 : Record 9068542;
+                                                              ClientAccount@100000000 : Record 9068624;
+                                                              TCIJob@100000006 : Record 9072681;
+                                                            BEGIN
+
+                                                              ClientPortfolio.SETRANGE("Client No.","No.");
+                                                              ClientAsset.SETRANGE("Client No.","No.");
+                                                              ClientInvestment.SETRANGE("Client No.","No.");
+                                                              ClientAccount.SETRANGE("Client No.","No.");
+                                                              TCIJob.SETRANGE("No.","No.");
+
+                                                              CASE AttributeType OF
+                                                                AttributeType::Portfolio:
+                                                                    IF PAGE.RUNMODAL ( 0 , ClientPortfolio ) = ACTION::LookupOK THEN BEGIN
+                                                                        Attribute := ClientPortfolio."Portfolio No.";
+                                                                    END;
+                                                                AttributeType::Investment:
+                                                                  IF PAGE.RUNMODAL( 0 , ClientInvestment) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := ClientInvestment."Asset Code";
+                                                                    END;
+                                                                AttributeType::Bank:
+                                                                BEGIN
+                                                                  ClientAccount.SETRANGE("Account Type",ClientAccount."Account Type"::Bank);
+                                                                  IF PAGE.RUNMODAL( 0 , ClientAccount) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := ClientAccount."No.";
+                                                                    END;
+                                                                END;
+                                                                AttributeType::Loan:
+                                                                BEGIN
+                                                                  ClientAccount.SETRANGE("Account Type",ClientAccount."Account Type"::Loan);
+                                                                  IF PAGE.RUNMODAL( 0 , ClientAccount) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := ClientAccount."No.";
+                                                                    END;
+                                                                 END;
+                                                                AttributeType::Agent:
+                                                                BEGIN
+                                                                  ClientAccount.SETRANGE("Account Type",ClientAccount."Account Type"::Agent);
+                                                                  IF PAGE.RUNMODAL( 0 , ClientAccount) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := ClientAccount."No.";
+                                                                    END;
+                                                                END;
+                                                                AttributeType::"Intellectual Property":
+                                                                 BEGIN
+                                                                   ClientAsset.SETRANGE("Asset Type",ClientAsset."Asset Type"::"Intellectual Property");
+                                                                  IF PAGE.RUNMODAL( 0 , ClientAsset) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := ClientAsset."Asset Code";
+                                                                    END;
+                                                                 END;
+                                                                AttributeType::Aviation:
+                                                                 BEGIN
+                                                                   ClientAsset.SETRANGE("Asset Type",ClientAsset."Asset Type"::Aviation);
+                                                                  IF PAGE.RUNMODAL( 0 , ClientAsset) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := ClientAsset."Asset Code";
+                                                                    END;
+                                                                 END;
+                                                                AttributeType::"Life Assurance":
+                                                                 BEGIN
+                                                                   ClientAsset.SETRANGE("Asset Type",ClientAsset."Asset Type"::"Life Assurance");
+                                                                  IF PAGE.RUNMODAL( 0 , ClientAsset) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := ClientAsset."Asset Code";
+                                                                    END;
+                                                                 END;
+                                                                AttributeType::"Miscellaneous Asset":
+                                                                 BEGIN
+                                                                   ClientAsset.SETRANGE("Asset Type",ClientAsset."Asset Type"::"Miscellaneous Asset");
+                                                                  IF PAGE.RUNMODAL( 0 , ClientAsset) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := ClientAsset."Asset Code";
+                                                                    END;
+                                                                 END;
+                                                                AttributeType::Property:
+                                                                 BEGIN
+                                                                   ClientAsset.SETRANGE("Asset Type",ClientAsset."Asset Type"::Property);
+                                                                  IF PAGE.RUNMODAL( 0 , ClientAsset) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := ClientAsset."Asset Code";
+                                                                    END;
+                                                                 END;
+                                                                AttributeType::Yacht:
+                                                                 BEGIN
+                                                                   ClientAsset.SETRANGE("Asset Type",ClientAsset."Asset Type"::Yacht);
+                                                                  IF PAGE.RUNMODAL( 0 , ClientAsset) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := ClientAsset."Asset Code";
+                                                                    END;
+                                                                 END;
+                                                                AttributeType::Job:
+                                                                 BEGIN
+                                                                  IF PAGE.RUNMODAL( 0 , TCIJob) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := TCIJob."Search Description";
+                                                                    END;
+                                                                 END;
+                                                              END;
+                                                            END;
+
+                                                   DataClassification=ToBeClassified }
+    { 10  ;   ;Document Date       ;Date          ;DataClassification=ToBeClassified }
+    { 11  ;   ;Entity Owner        ;Text50        ;DataClassification=ToBeClassified }
+    { 12  ;   ;Entity Prospect     ;Text50        ;DataClassification=ToBeClassified }
+    { 13  ;   ;Entity Intermediary ;Text50        ;DataClassification=ToBeClassified }
+    { 14  ;   ;External Doc Management System;Option;
+                                                   DataClassification=ToBeClassified;
+                                                   OptionString=Internal Navision,,Synergy ,To be defined,DataStore,,Sharepoint,,C062 FileNet,,,Hummingbird,iManage,C090 Saperion,C076 FileNet,C103 eDocs,C102 LiveLink,C094 KGS Interface,C067 Hyperlink,LaserFiche }
+    { 15  ;   ;ID                  ;Integer       ;AutoIncrement=Yes;
+                                                   DataClassification=ToBeClassified }
+    { 16  ;   ;Link Type           ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=[ ,Linked Client,Client Entity] }
+    { 17  ;   ;Multi No.           ;Text250       ;OnLookup=VAR
+                                                              ClientLookup@100000000 : Page 9068930;
+                                                              ClientRec@100000001 : Record 9068500;
+                                                              ClientEntityRec@100000002 : Record 9068508;
+                                                              ClientEntitiesAPILookup@100000003 : Page 50093;
+                                                              TempText@100000004 : Text;
+                                                              NoText@100000005 : Text;
+                                                              TextLoop@100000006 : Text;
+                                                              Strlength@100000007 : Integer;
+                                                              FinalStr@100000008 : Text;
+                                                              NameLoop@100000009 : Text;
+                                                              Strlength1@100000011 : Integer;
+                                                              FinalStr1@100000010 : Text;
+                                                              Strlength2@100000013 : Integer;
+                                                              FinalStr2@100000012 : Text;
+                                                              TypeLoop@100000014 : Text;
+                                                            BEGIN
+
+                                                              IF Type = Type::Client THEN BEGIN
+                                                               CASE Rec."Link Type" OF
+                                                                "Link Type"::"Linked Client":
+                                                                    BEGIN
+                                                                    ClientRec.SETFILTER(ClientRec."Lead Client Link",'%1',"No.");
+                                                                    ClientRec.FINDFIRST;
+                                                                    ClientLookup.LOOKUPMODE(TRUE);
+                                                                    ClientLookup.SETTABLEVIEW(ClientRec);
+                                                                    ClientLookup.SETRECORD(ClientRec);
+                                                                    IF ClientLookup.RUNMODAL() = ACTION::LookupOK THEN BEGIN
+                                                                      NoText := ClientLookup.GetSelectionFilter;
+                                                                      ClientLookup.GETRECORD(ClientRec);
+                                                                      ClientRec.SETFILTER("Client No.",NoText);
+                                                                      IF ClientRec.FINDSET THEN
+                                                                        REPEAT
+                                                                          TextLoop += ClientRec."Client No." + ',';
+                                                                          NameLoop += ClientRec.Name + ',';
+                                                                          Strlength := STRLEN(TextLoop);
+                                                                          FinalStr := DELSTR(TextLoop,Strlength);
+                                                                          Strlength1 := STRLEN(NameLoop);
+                                                                          FinalStr1 := DELSTR(NameLoop,Strlength1);
+                                                                          "Multi No." := FinalStr;
+                                                                          "Multi Name" := FinalStr1;
+                                                                        UNTIL ClientRec.NEXT = 0;
+                                                                    END;
+                                                                    END;
+                                                                "Link Type"::"Client Entity":
+                                                                  BEGIN
+                                                                    ClientEntityRec.SETFILTER(ClientEntityRec."Client No.",'%1',"No.");
+                                                                    ClientEntityRec.FINDFIRST;
+                                                                    ClientEntitiesAPILookup.LOOKUPMODE(TRUE);
+                                                                    ClientEntitiesAPILookup.SETTABLEVIEW(ClientEntityRec);
+                                                                    ClientEntitiesAPILookup.SETRECORD(ClientEntityRec);
+                                                                    IF ClientEntitiesAPILookup.RUNMODAL() = ACTION::LookupOK THEN BEGIN
+                                                                      NoText := ClientEntitiesAPILookup.GetSelectionFilter;
+                                                                      ClientEntitiesAPILookup.GETRECORD(ClientEntityRec);
+                                                                      ClientEntityRec.SETFILTER("Entity No.",NoText);
+                                                                      IF ClientEntityRec.FINDSET THEN
+                                                                        REPEAT
+                                                                          TextLoop += ClientEntityRec."Entity No." + ',';
+                                                                          NameLoop += ClientEntityRec."Entity Name" + ',';
+                                                                          TypeLoop += FORMAT(ClientEntityRec.Type) + ',';
+                                                                          Strlength := STRLEN(TextLoop);
+                                                                          FinalStr := DELSTR(TextLoop,Strlength);
+                                                                          Strlength1 := STRLEN(NameLoop);
+                                                                          FinalStr1 := DELSTR(NameLoop,Strlength1);
+                                                                          Strlength2 := STRLEN(TypeLoop);
+                                                                          FinalStr2 := DELSTR(TypeLoop,Strlength2);
+                                                                          "Multi No." := FinalStr;
+                                                                          "Multi Name" := FinalStr1;
+                                                                          "Multi Type" := FinalStr2;
+                                                                        UNTIL ClientEntityRec.NEXT = 0;
+                                                                  END;
+                                                                  END;
+                                                              END;
+                                                              END ELSE
+                                                              IF Type = Type::Entity THEN BEGIN
+                                                               IF "Link Type" = "Link Type"::"Client Entity" THEN
+                                                                  BEGIN
+                                                                    ClientEntityRec.SETFILTER(ClientEntityRec."Client No.",'%1',"No.");
+                                                                    ClientEntityRec.FINDFIRST;
+                                                                    ClientEntitiesAPILookup.LOOKUPMODE(TRUE);
+                                                                    ClientEntitiesAPILookup.SETTABLEVIEW(ClientEntityRec);
+                                                                    ClientEntitiesAPILookup.SETRECORD(ClientEntityRec);
+                                                                    IF ClientEntitiesAPILookup.RUNMODAL() = ACTION::LookupOK THEN BEGIN
+                                                                      NoText := ClientEntitiesAPILookup.GetSelectionFilter;
+                                                                      ClientEntitiesAPILookup.GETRECORD(ClientEntityRec);
+                                                                      ClientEntityRec.SETFILTER("Entity No.",NoText);
+                                                                      IF ClientEntityRec.FINDSET THEN
+                                                                        REPEAT
+                                                                          TextLoop += ClientEntityRec."Entity No." + ',';
+                                                                          NameLoop += ClientEntityRec."Entity Name" + ',';
+                                                                          TypeLoop += FORMAT(ClientEntityRec.Type) + ',';
+                                                                          Strlength := STRLEN(TextLoop);
+                                                                          FinalStr := DELSTR(TextLoop,Strlength);
+                                                                          Strlength1 := STRLEN(NameLoop);
+                                                                          FinalStr1 := DELSTR(NameLoop,Strlength1);
+                                                                          Strlength2 := STRLEN(TypeLoop);
+                                                                          FinalStr2 := DELSTR(TypeLoop,Strlength2);
+                                                                          "Multi No." := FinalStr;
+                                                                          "Multi Name" := FinalStr1;
+                                                                          "Multi Type" := FinalStr2;
+                                                                        UNTIL ClientEntityRec.NEXT = 0;
+                                                                    // MESSAGE(TextLoop);
+                                                                     //MESSAGE(FinalStr);
+                                                                  END;
+                                                                  END;
+                                                              END;
+                                                            END;
+                                                             }
+    { 18  ;   ;Multi Name          ;Text250       ;DataClassification=ToBeClassified }
+    { 19  ;   ;Multi Type          ;Text250       ;DataClassification=ToBeClassified }
+    { 100 ;   ;Search Text         ;Text250       ;DataClassification=ToBeClassified;
+                                                   Description=//Elastic Search }
+  }
+  KEYS
+  {
+    {    ;ID,Type,No.                             ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+    VAR
+      DocMan@100000004 : Codeunit 9068511;
+      Entity@100000000 : Record 9068505;
+      Client@100000001 : Record 9068500;
+      CorrespondenceDocType@100000002 : Record 9068657;
+      DocumentTypeSubType@100000003 : Record 9068463;
+      DocumentFolderSetup@100000005 : Record 9068662;
+      Customer@100000006 : Record 18;
+      Vendor@100000007 : Record 23;
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT Table 50005 Counter Party
+{
+  OBJECT-PROPERTIES
+  {
+    Date=31-01-21;
+    Time=12:46:59;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Client No           ;Code20        ;DataClassification=ToBeClassified }
+    { 2   ;   ;Client Name         ;Text100       ;DataClassification=ToBeClassified }
+    { 3   ;   ;Entity No           ;Code20        ;DataClassification=ToBeClassified }
+    { 4   ;   ;Entity Name         ;Text100       ;DataClassification=ToBeClassified }
+    { 5   ;   ;Entity Type         ;Code10        ;DataClassification=ToBeClassified }
+    { 6   ;   ;Entity Type Class   ;Text30        ;DataClassification=ToBeClassified }
+    { 7   ;   ;Entity Type Description;Text30     ;DataClassification=ToBeClassified }
+    { 8   ;   ;Type                ;Text30        ;DataClassification=ToBeClassified }
+    { 9   ;   ;Appointment Date    ;Date          ;DataClassification=ToBeClassified }
+    { 10  ;   ;Counter Party name  ;Text100       ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;Client No,Entity No,Entity Type         ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT Table 50006 DFX Setup
+{
+  OBJECT-PROPERTIES
+  {
+    Date=20-07-22;
+    Time=20:47:39;
+    Modified=Yes;
+    Version List=NAVLITE;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Primary Key         ;Code10        ;DataClassification=ToBeClassified }
+    { 2   ;   ;Create/Update Contact;Boolean      ;DataClassification=ToBeClassified }
+    { 3   ;   ;Update URL          ;Text250       ;DataClassification=ToBeClassified }
+    { 4   ;   ;Create URL          ;Text250       ;DataClassification=ToBeClassified }
+    { 5   ;   ;Hapi Key            ;Text250       ;DataClassification=ToBeClassified }
+    { 6   ;   ;Resource Group No.  ;Text30        ;DataClassification=ToBeClassified }
+    { 7   ;   ;Comapny Name        ;Text30        ;DataClassification=ToBeClassified }
+    { 10  ;   ;DFX Client          ;Code50        ;DataClassification=ToBeClassified }
+    { 100 ;   ;LF API URL          ;Text100       ;DataClassification=ToBeClassified }
+    { 101 ;   ;Elastic Serarch API URL;Text100    ;DataClassification=ToBeClassified }
+    { 102 ;   ;API User ID         ;Text50        ;DataClassification=ToBeClassified }
+    { 103 ;   ;API Password        ;Text30        ;ExtendedDatatype=Masked;
+                                                   DataClassification=ToBeClassified }
+    { 104 ;   ;Repository          ;Text100       ;DataClassification=ToBeClassified }
+    { 105 ;   ;Client Code         ;Code20        ;DataClassification=ToBeClassified }
+    { 106 ;   ;Partition Code URL  ;Text200       ;DataClassification=ToBeClassified }
+    { 107 ;   ;Name Change URL     ;Text250       ;DataClassification=ToBeClassified }
+    { 200 ;   ;JFSC Entity Type    ;Text250       ;DataClassification=ToBeClassified }
+    { 201 ;   ;HMRC Entity Type    ;Text30        ;DataClassification=ToBeClassified }
+    { 202 ;   ;JFSC_HMRC Entity Type;Text250      ;DataClassification=ToBeClassified }
+    { 300 ;   ;VEGA CreateCase     ;Text100       ;DataClassification=ToBeClassified }
+    { 301 ;   ;VEGA GETStatus      ;Text100       ;DataClassification=ToBeClassified }
+    { 302 ;   ;VEGA UserID         ;Text50        ;DataClassification=ToBeClassified }
+    { 303 ;   ;VEGA Password       ;Text50        ;ExtendedDatatype=Masked;
+                                                   DataClassification=ToBeClassified }
+    { 304 ;   ;Entity Type Allowed ;Text250       ;DataClassification=ToBeClassified }
+    { 305 ;   ;Entity Type Not Allowed;Text250    ;DataClassification=ToBeClassified }
+    { 306 ;   ;Entity Type Allowed Cont.;Text250  ;DataClassification=ToBeClassified }
+    { 307 ;   ;Entity Type Not Allowed Cont.;Text250;
+                                                   DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;Primary Key                             ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT Table 50007 External Doc Type
+{
+  OBJECT-PROPERTIES
+  {
+    Date=21-06-21;
+    Time=14:03:21;
+    Modified=Yes;
+    Version List=DFX Suite-1;
+  }
+  PROPERTIES
+  {
+    LookupPageID=Page9070343;
+    DrillDownPageID=Page9070343;
+  }
+  FIELDS
+  {
+    { 1   ;   ;NAV Doc Type        ;Code10        ;TableRelation="Correspondence Doc Type";
+                                                   NotBlank=Yes }
+    { 2   ;   ;NAV Doc Type Description;Text75    ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Doc Type".Type WHERE (Code=FIELD(NAV Doc Type)));
+                                                   Editable=No }
+    { 10  ;   ;External Doc Type   ;Text150       ;OnValidate=VAR
+                                                                ExtDocType@1000000000 : Record 50007;
+                                                              BEGIN
+                                                                ExtDocType.SETFILTER("NAV Doc Type",'<>%1',"NAV Doc Type");
+                                                                ExtDocType.SETFILTER("External Doc Type",'@' + "External Doc Type");
+                                                                IF NOT ExtDocType.ISEMPTY THEN
+                                                                  ERROR('LaserFiche Doc type is already defined');
+                                                              END;
+                                                               }
+  }
+  KEYS
+  {
+    {    ;NAV Doc Type                            ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT Table 50008 External Doc Sub Type
+{
+  OBJECT-PROPERTIES
+  {
+    Date=26-07-21;
+    Time=21:53:24;
+    Modified=Yes;
+    Version List=DFX Suite-1;
+  }
+  PROPERTIES
+  {
+    LookupPageID=Page9070344;
+    DrillDownPageID=Page9070344;
+  }
+  FIELDS
+  {
+    { 1   ;   ;NAV Doc Type        ;Code10        ;TableRelation="Correspondence Doc Type";
+                                                   OnValidate=VAR
+                                                                ExtDocType@1000000000 : Record 50007;
+                                                              BEGIN
+                                                                IF ExtDocType.GET("NAV Doc Type") THEN
+                                                                  "External Doc Type" := ExtDocType."External Doc Type";
+                                                              END;
+
+                                                   NotBlank=Yes }
+    { 2   ;   ;NAV Doc Sub Type    ;Code20        ;TableRelation="Document Type Sub Type"."Document Sub Type" WHERE (Document Type=FIELD(NAV Doc Type));
+                                                   NotBlank=Yes }
+    { 11  ;   ;NAV Doc Type Description;Text75    ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Doc Type".Type WHERE (Code=FIELD(NAV Doc Type)));
+                                                   Editable=No }
+    { 12  ;   ;NAV Doc Sub Type Description;Text75;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Document Type Sub Type"."Document Sub Type Description" WHERE (Document Type=FIELD(NAV Doc Type),
+                                                                                                                                      Document Sub Type=FIELD(NAV Doc Sub Type)));
+                                                   Editable=No }
+    { 20  ;   ;External Doc Type   ;Text150        }
+    { 30  ;   ;External Sub Doc Type;Text150       }
+  }
+  KEYS
+  {
+    {    ;NAV Doc Type,NAV Doc Sub Type           ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT Table 50009 DFX User Permission
+{
+  OBJECT-PROPERTIES
+  {
+    Date=30-03-21;
+    Time=18:19:32;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;User ID             ;Code50        ;DataClassification=ToBeClassified }
+    { 2   ;   ;User Security ID    ;GUID          ;DataClassification=ToBeClassified }
+    { 3   ;   ;Windows Security ID ;Text119       ;DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Windows Security ID;
+                                                              ENG=Windows Security ID] }
+    { 10  ;   ;BC User             ;Boolean       ;DataClassification=ToBeClassified }
+    { 20  ;   ;Role ID             ;Code20        ;DataClassification=ToBeClassified }
+    { 21  ;   ;Object Type         ;Option        ;CaptionML=[ENU=Object Type;
+                                                              ENG=Object Type];
+                                                   OptionString=Table Data,Table,,Report,,Codeunit,XMLport,MenuSuite,Page,Query,System }
+    { 22  ;   ;Object ID           ;Integer       ;TableRelation=IF (Object Type=CONST(Table Data)) AllObjWithCaption."Object ID" WHERE (Object Type=CONST(Table))
+                                                                 ELSE IF (Object Type=CONST(Table)) AllObjWithCaption."Object ID" WHERE (Object Type=CONST(Table))
+                                                                 ELSE IF (Object Type=CONST(Report)) AllObjWithCaption."Object ID" WHERE (Object Type=CONST(Report))
+                                                                 ELSE IF (Object Type=CONST(Codeunit)) AllObjWithCaption."Object ID" WHERE (Object Type=CONST(Codeunit))
+                                                                 ELSE IF (Object Type=CONST(XMLport)) AllObjWithCaption."Object ID" WHERE (Object Type=CONST(XMLport))
+                                                                 ELSE IF (Object Type=CONST(MenuSuite)) AllObjWithCaption."Object ID" WHERE (Object Type=CONST(MenuSuite))
+                                                                 ELSE IF (Object Type=CONST(Page)) AllObjWithCaption."Object ID" WHERE (Object Type=CONST(Page))
+                                                                 ELSE IF (Object Type=CONST(Query)) AllObjWithCaption."Object ID" WHERE (Object Type=CONST(Query))
+                                                                 ELSE IF (Object Type=CONST(System)) AllObjWithCaption."Object ID" WHERE (Object Type=CONST(System));
+                                                   CaptionML=[ENU=Object ID;
+                                                              ENG=Object ID] }
+    { 23  ;   ;Object Name         ;Text249       ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup(AllObjWithCaption."Object Caption" WHERE (Object Type=FIELD(Object Type),
+                                                                                                                Object ID=FIELD(Object ID)));
+                                                   CaptionML=[ENU=Object Name;
+                                                              ENG=Object Name] }
+    { 24  ;   ;Read Permission     ;Option        ;InitValue=Yes;
+                                                   CaptionML=[ENU=Read Permission;
+                                                              ENG=Read Permission];
+                                                   OptionCaptionML=[ENU="  ,Yes,Indirect";
+                                                                    ENG="  ,Yes,Indirect"];
+                                                   OptionString=[  ,Yes,Indirect] }
+    { 25  ;   ;Insert Permission   ;Option        ;InitValue=Yes;
+                                                   CaptionML=[ENU=Insert Permission;
+                                                              ENG=Insert Permission];
+                                                   OptionCaptionML=[ENU="  ,Yes,Indirect";
+                                                                    ENG="  ,Yes,Indirect"];
+                                                   OptionString=[  ,Yes,Indirect] }
+    { 26  ;   ;Modify Permission   ;Option        ;InitValue=Yes;
+                                                   CaptionML=[ENU=Modify Permission;
+                                                              ENG=Modify Permission];
+                                                   OptionCaptionML=[ENU="  ,Yes,Indirect";
+                                                                    ENG="  ,Yes,Indirect"];
+                                                   OptionString=[  ,Yes,Indirect] }
+    { 27  ;   ;Delete Permission   ;Option        ;InitValue=Yes;
+                                                   CaptionML=[ENU=Delete Permission;
+                                                              ENG=Delete Permission];
+                                                   OptionCaptionML=[ENU="  ,Yes,Indirect";
+                                                                    ENG="  ,Yes,Indirect"];
+                                                   OptionString=[  ,Yes,Indirect] }
+    { 28  ;   ;Execute Permission  ;Option        ;InitValue=Yes;
+                                                   CaptionML=[ENU=Execute Permission;
+                                                              ENG=Execute Permission];
+                                                   OptionCaptionML=[ENU=" ,Yes,Indirect";
+                                                                    ENG="  ,Yes,Indirect"];
+                                                   OptionString=[ ,Yes,Indirect] }
+    { 29  ;   ;Security Filter     ;TableFilter   ;CaptionML=[ENU=Security Filter;
+                                                              ENG=Security Filter] }
+  }
+  KEYS
+  {
+    {    ;User ID,Object ID,Object Type           ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT Table 50010 DFX User
+{
+  OBJECT-PROPERTIES
+  {
+    Date=31-03-21;
+    Time=16:06:25;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;User ID             ;Code50        ;DataClassification=ToBeClassified }
+    { 2   ;   ;Resource No.        ;Code20        ;DataClassification=ToBeClassified }
+    { 10  ;   ;BC User             ;Boolean       ;DataClassification=ToBeClassified }
+    { 50  ;   ;First Partition Code;Text500       ;DataClassification=ToBeClassified }
+    { 51  ;   ;Second Partition Code;Text500      ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;User ID                                 ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT Table 50011 DFX Hubspot Contact
+{
+  OBJECT-PROPERTIES
+  {
+    Date=08-03-21;
+    Time=12:31:50;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;No.                 ;Code20        ;DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=No.;
+                                                              ENG=No.] }
+    { 2   ;   ;Name                ;Text100       ;OnValidate=VAR
+                                                                ContBusRel@1001 : Record 5054;
+                                                                Cust@1000 : Record 18;
+                                                                Vend@1002 : Record 23;
+                                                              BEGIN
+                                                              END;
+
+                                                   DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Name;
+                                                              ENG=Name] }
+    { 3   ;   ;Name 2              ;Text50        ;DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Name 2;
+                                                              ENG=Name 2] }
+    { 4   ;   ;City                ;Text30        ;TableRelation=IF (Country/Region Code=CONST()) "Post Code".City
+                                                                 ELSE IF (Country/Region Code=FILTER(<>'')) "Post Code".City WHERE (Country/Region Code=FIELD(Country/Region Code));
+                                                   ValidateTableRelation=No;
+                                                   TestTableRelation=No;
+                                                   DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=City;
+                                                              ENG=City] }
+    { 5   ;   ;Phone No.           ;Text30        ;ExtendedDatatype=Phone No.;
+                                                   DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Phone No.;
+                                                              ENG=Phone No.] }
+    { 6   ;   ;Country/Region Code ;Code10        ;TableRelation=Country/Region;
+                                                   DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Country/Region Code;
+                                                              ENG=Country/Region Code] }
+    { 7   ;   ;E-Mail              ;Text80        ;OnValidate=VAR
+                                                                MailManagement@1000 : Codeunit 9520;
+                                                              BEGIN
+                                                              END;
+
+                                                   ExtendedDatatype=E-Mail;
+                                                   DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Email;
+                                                              ENG=Email] }
+    { 8   ;   ;Date Created        ;Date          ;DataClassification=ToBeClassified }
+    { 9   ;   ;Date Updated        ;Date          ;DataClassification=ToBeClassified }
+    { 10  ;   ;UpdateStatus        ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=None,Insert,Update,Delete,Error }
+    { 11  ;   ;ExecutionId         ;Integer       ;DataClassification=ToBeClassified }
+    { 12  ;   ;HubspotStatus       ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=None,Insert,Update,Delete,Error }
+  }
+  KEYS
+  {
+    {    ;No.                                     ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT Table 50012 Client Details Header
+{
+  OBJECT-PROPERTIES
+  {
+    Date=17-06-21;
+    Time=11:27:54;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Master Client  No.  ;Code20        ;DataClassification=ToBeClassified }
+    { 2   ;   ;Client No.          ;Code20        ;DataClassification=ToBeClassified }
+    { 3   ;   ;Windows Security ID ;Text119       ;DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Windows Security ID;
+                                                              ENG=Windows Security ID] }
+    { 4   ;   ;Client  Name        ;Text100       ;DataClassification=ToBeClassified }
+    { 5   ;   ;Master Client Name  ;Text100       ;DataClassification=ToBeClassified }
+    { 6   ;   ;Registered No.      ;Text40        ;DataClassification=ToBeClassified }
+    { 7   ;   ;Incorporated Date   ;Date          ;DataClassification=ToBeClassified }
+    { 8   ;   ;Number of Shares/Units;Integer     ;DataClassification=ToBeClassified }
+    { 9   ;   ;Address             ;Text50         }
+    { 10  ;   ;Address 2           ;Text50         }
+    { 11  ;   ;City                ;Text50         }
+    { 12  ;   ;County              ;Text50        ;CaptionML=[ENG=County;
+                                                              ENA=State] }
+    { 13  ;   ;Country             ;Text30        ;TableRelation=Country/Region.Code }
+    { 14  ;   ;Post Code           ;Code20        ;TableRelation="Post Code";
+                                                   ValidateTableRelation=No;
+                                                   TestTableRelation=No }
+    { 15  ;   ;Phone No.           ;Text30         }
+    { 16  ;   ;Fax No.             ;Text30         }
+    { 17  ;   ;E-mail              ;Text80         }
+    { 18  ;   ;Home Page           ;Text80         }
+    { 19  ;   ;Telex No.           ;Text20         }
+    { 20  ;   ;Bank Account No     ;Text30        ;DataClassification=ToBeClassified }
+    { 21  ;   ;Meeting No.         ;Integer       ;DataClassification=ToBeClassified;
+                                                   Editable=No }
+    { 22  ;   ;Meeting Date        ;Date          ;DataClassification=ToBeClassified }
+    { 23  ;   ;Meeting Time        ;Time          ;DataClassification=ToBeClassified }
+    { 24  ;   ;Meeting Type        ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=[ ,Directors,Shareholders] }
+    { 25  ;   ;Meeting Address     ;Code10        ;TableRelation="Office Address".Code;
+                                                   DataClassification=ToBeClassified }
+    { 26  ;   ;No. of Attendees    ;Integer       ;Editable=Yes }
+    { 27  ;   ;Quorom Met          ;Boolean       ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Quorom Met? }
+    { 28  ;   ;No. of Attendees at Loc;Integer    ;CaptionML=ENU=No. of Attendees at Meeting Location;
+                                                   Editable=Yes }
+    { 29  ;   ;Resolutions Approved;Integer       ;Editable=Yes }
+    { 30  ;   ;Date Minutes Signed ;Date          ;DataClassification=ToBeClassified }
+    { 31  ;   ;Jurisdiction        ;Code20        ;Editable=Yes }
+    { 32  ;   ;Status              ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=In Progress,Signed Off }
+    { 33  ;   ;Settked on          ;Date          ;DataClassification=ToBeClassified }
+    { 34  ;   ;Initial Fund        ;Decimal       ;DataClassification=ToBeClassified }
+    { 35  ;   ;Incorporated Country;Text100       ;DataClassification=ToBeClassified }
+    { 50  ;   ;First Partition Code;Code10        ;DataClassification=ToBeClassified }
+    { 51  ;   ;Second Partition Code;Code10       ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;Master Client  No.,Client No.           ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT Table 50013 Client Details Line
+{
+  OBJECT-PROPERTIES
+  {
+    Date=17-06-21;
+    Time=11:28:12;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Master Client  No.  ;Code20        ;DataClassification=ToBeClassified }
+    { 2   ;   ;Client/Entity No.   ;Code20        ;DataClassification=ToBeClassified }
+    { 3   ;   ;Type                ;Option        ;OnValidate=BEGIN
+                                                                {
+                                                                IF ( xRec.Type <> Type ) AND ( "Portfolio No." <> '' ) THEN
+                                                                  VALIDATE("No.",'');
+                                                                }
+                                                              END;
+
+                                                   DataClassification=ToBeClassified;
+                                                   OptionString=Investment,Property,Miscellaneous Asset,Bank,Loan,Agent Account,Yacht,Aviation,Intellectual Property,Life Assurance,Customer,Vendor,FX Contract,Director,Shareholder,Banker,Auditor,Secretary,Settlor,Beneficiary,Trustee,ChairMan,Protector,Power of Attouney,Alternate Director,Entity,Invoice,Investment Manager }
+    { 4   ;   ;No.                 ;Code20        ;ValidateTableRelation=No;
+                                                   DataClassification=ToBeClassified }
+    { 5   ;   ;Account Type        ;Option        ;OnValidate=BEGIN
+                                                                {
+                                                                IF ( xRec.Type <> Type ) AND ( "Portfolio No." <> '' ) THEN
+                                                                  VALIDATE("No.",'');
+                                                                  }
+                                                              END;
+
+                                                   DataClassification=ToBeClassified;
+                                                   OptionString=Investment,Property,Miscellaneous Asset,Bank,Loan,Agent Account,,,,Yacht,Aviation,Intellectual Property,Life Assurance,Customer,Vendor,FX Contract }
+    { 6   ;   ;Account No.         ;Code20        ;OnValidate=VAR
+                                                                _ClientBankAccountRec@1000000000 : Record 9068624 SECURITYFILTERING(Ignored);
+                                                              BEGIN
+                                                                {
+                                                                CASE Type OF
+                                                                  Type::Investment :
+                                                                    IF ClientInvestment.GET("Client No.","No.") THEN BEGIN
+                                                                      Description := ClientInvestment.Description;
+                                                                      Name := ClientInvestment.Name;
+                                                                      "Area Code" := ClientInvestment."Area Code";
+                                                                      "Investment Code" := ClientInvestment."Investment Code";
+                                                                      "SEDOL Code" := ClientInvestment."SEDOL Code";
+                                                                      "ISIN Code" := ClientInvestment."ISIN Code";
+                                                                      "CUSIP Code" := ClientInvestment."CUSIP Code";
+                                                                    END ELSE BEGIN
+                                                                      Description := '';
+                                                                      Name := '';
+                                                                    END;
+                                                                  Type::Property, Type::"Miscellaneous Asset", Type::Yacht, Type::Aviation,
+                                                                   Type::"Intellectual Property" ,Type::"Life Assurance":
+                                                                    IF ClientProperty.GET("Client No.","No.") THEN BEGIN
+                                                                      Description := ClientProperty.Description;
+                                                                      Name := ClientProperty.Name;
+                                                                    END ELSE BEGIN
+                                                                      Description := '';
+                                                                      Name := '';
+                                                                    END;
+                                                                  Type::Bank, Type::Loan, Type::"Agent Account" :
+                                                                    IF _ClientBankAccountRec.GET("Client No.","No.") THEN BEGIN
+                                                                      Description := COPYSTR(_ClientBankAccountRec.Description, 1, MAXSTRLEN(Description));
+                                                                      Name := _ClientBankAccountRec.Name;
+                                                                    END ELSE BEGIN
+                                                                      Description := '';
+                                                                      Name := '';
+                                                                    END;
+                                                                END;
+                                                                }
+                                                              END;
+
+                                                   DataClassification=ToBeClassified;
+                                                   NotBlank=Yes }
+    { 7   ;   ;Account Balance     ;Decimal       ;DataClassification=ToBeClassified;
+                                                   Editable=Yes }
+    { 8   ;   ;Account Balance (LCY);Decimal      ;DataClassification=ToBeClassified;
+                                                   Editable=Yes }
+    { 9   ;   ;Account Currency    ;Code10        ;DataClassification=ToBeClassified;
+                                                   Editable=Yes }
+    { 33  ;   ;Tax Code            ;Code10        ;TableRelation="Tax Codes";
+                                                   DataClassification=ToBeClassified }
+    { 34  ;   ;Tax Return Country Code;Code10     ;TableRelation="Tax Code Country Details"."Country Code" WHERE (Tax Code=FIELD(Tax Code));
+                                                   DataClassification=ToBeClassified }
+    { 35  ;   ;Tax Name            ;Text30        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Tax Codes".Name WHERE (Code=FIELD(Tax Code))) }
+    { 36  ;   ;Tax Description     ;Text50        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Tax Codes".Description WHERE (Code=FIELD(Tax Code))) }
+    { 37  ;   ;TIN Type            ;Code20        ;TableRelation="TIN Types"."TIN Type" WHERE (Country Code=FIELD(Tax Return Country Code));
+                                                   DataClassification=ToBeClassified }
+    { 38  ;   ;TIN                 ;Code20        ;OnValidate=VAR
+                                                                _TaxCodeValidMgmt@1000000000 : Codeunit 9068618;
+                                                              BEGIN
+                                                              END;
+
+                                                   DataClassification=ToBeClassified }
+    { 39  ;   ;AB. Adjusted Amount ;Decimal       ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Account Balance Adjusted Amount;
+                                                   Editable=Yes }
+    { 40  ;   ;Reporting Currency  ;Code10        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Tax Code Country Details"."Tax Reporting Currency" WHERE (Tax Code=FIELD(Tax Code),
+                                                                                                                                 Country Code=FIELD(Tax Return Country Code)));
+                                                   Editable=No }
+    { 41  ;   ;Client Name         ;Text100       ;DataClassification=ToBeClassified }
+    { 42  ;   ;Client/Entity Name  ;Text100       ;DataClassification=ToBeClassified }
+    { 43  ;   ;Portfolio No.       ;Code20        ;DataClassification=ToBeClassified }
+    { 44  ;   ;Registered No.      ;Text40        ;DataClassification=ToBeClassified }
+    { 45  ;   ;Incorporated Date   ;Date          ;DataClassification=ToBeClassified }
+    { 46  ;   ;Incorporated Country;Text100       ;DataClassification=ToBeClassified }
+    { 47  ;   ;Address             ;Text50        ;DataClassification=ToBeClassified }
+    { 48  ;   ;Address 2           ;Text50        ;DataClassification=ToBeClassified }
+    { 49  ;   ;City                ;Text50        ;DataClassification=ToBeClassified }
+    { 50  ;   ;County              ;Text50        ;DataClassification=ToBeClassified;
+                                                   CaptionML=[ENG=County;
+                                                              ENA=State] }
+    { 51  ;   ;Country             ;Text30        ;TableRelation=Country/Region.Code;
+                                                   DataClassification=ToBeClassified }
+    { 52  ;   ;Post Code           ;Code20        ;TableRelation="Post Code";
+                                                   ValidateTableRelation=No;
+                                                   TestTableRelation=No;
+                                                   DataClassification=ToBeClassified }
+    { 53  ;   ;Phone No.           ;Text30        ;DataClassification=ToBeClassified }
+    { 54  ;   ;Fax No.             ;Text30        ;DataClassification=ToBeClassified }
+    { 55  ;   ;E-mail              ;Text80        ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;Master Client  No.,Client/Entity No.,Type;
+                                                   Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT Table 50014 DFX NAV Outbox
+{
+  OBJECT-PROPERTIES
+  {
+    Date=21-09-21;
+    Time=21:59:55;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Company Name        ;Text30        ;DataClassification=ToBeClassified }
+    { 2   ;   ;Record Type         ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=Entity,Client }
+    { 3   ;   ;Record No           ;Code20        ;DataClassification=ToBeClassified }
+    { 4   ;   ;Record Sub Type     ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=[ ,Appointment,Account,Asset,Portfolio] }
+    { 5   ;   ;Record Sub No       ;Code20        ;DataClassification=ToBeClassified }
+    { 21  ;   ;Modifed Date        ;Date          ;DataClassification=ToBeClassified }
+    { 22  ;   ;Modifed Time        ;Time          ;DataClassification=ToBeClassified }
+    { 23  ;   ;Modifed DateTime    ;DateTime      ;DataClassification=ToBeClassified }
+    { 101 ;   ;Record Name         ;Text150       ;DataClassification=ToBeClassified }
+    { 102 ;   ;Client Entity Type  ;Code20        ;DataClassification=ToBeClassified }
+    { 103 ;   ;Client Entity Type Dec;Text30      ;DataClassification=ToBeClassified }
+    { 201 ;   ;Attribute 1         ;Text100       ;DataClassification=ToBeClassified }
+    { 202 ;   ;Attribute 2         ;Text100       ;DataClassification=ToBeClassified }
+    { 203 ;   ;Attribute 3         ;Text100       ;DataClassification=ToBeClassified }
+    { 204 ;   ;Attribute 4         ;Text100       ;DataClassification=ToBeClassified }
+    { 205 ;   ;Attribute 5         ;Text100       ;DataClassification=ToBeClassified }
+    { 206 ;   ;Attribute 6         ;Text100       ;DataClassification=ToBeClassified }
+    { 207 ;   ;Attribute 7         ;Text100       ;DataClassification=ToBeClassified }
+    { 208 ;   ;Attribute 8         ;Text100       ;DataClassification=ToBeClassified }
+    { 209 ;   ;Attribute 9         ;Text100       ;DataClassification=ToBeClassified }
+    { 210 ;   ;Attribute 10        ;Text100       ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;Company Name,Record Type,Record No,Record Sub Type,Record Sub No;
+                                                   Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT Table 50015 DFX Bulk Document Link
+{
+  OBJECT-PROPERTIES
+  {
+    Date=23-06-22;
+    Time=11:13:19;
+    Modified=Yes;
+    Version List=NAVLITE;
+  }
+  PROPERTIES
+  {
+    DataPerCompany=Yes;
+    OnInsert=VAR
+               NAVLITE@100000000 : Record 50004;
+             BEGIN
+               NAVLITE.SETRANGE(ID,ID);
+               IF NAVLITE.FINDFIRST THEN BEGIN
+                 Type := NAVLITE.Type;
+                 "No." := NAVLITE."No.";
+                 TAG := 'Systemtag';
+               END;
+             END;
+
+  }
+  FIELDS
+  {
+    { 1   ;   ;ID                  ;Integer       ;DataClassification=ToBeClassified }
+    { 2   ;   ;Line No.            ;Integer       ;AutoIncrement=Yes;
+                                                   DataClassification=ToBeClassified }
+    { 3   ;   ;Type                ;Option        ;TableRelation=NAVLITE.Type;
+                                                   DataClassification=ToBeClassified;
+                                                   OptionString=,Client,Entity,Customer,Vendor }
+    { 4   ;   ;No.                 ;Code20        ;TableRelation=NAVLITE.No.;
+                                                   DataClassification=ToBeClassified }
+    { 5   ;   ;Document Type       ;Code10        ;TableRelation="Correspondence Doc Type";
+                                                   OnValidate=BEGIN
+                                                                CorrespondenceDocType.SETRANGE(Code,Rec."Document Type");
+                                                                IF CorrespondenceDocType.FINDFIRST THEN
+                                                                  "Document Type Description" := CorrespondenceDocType.Type;
+
+                                                              END;
+
+                                                   DataClassification=ToBeClassified }
+    { 6   ;   ;Document Sub Type   ;Code20        ;TableRelation="Document Type Sub Type"."Document Sub Type" WHERE (Document Type=FIELD(Document Type));
+                                                   OnValidate=BEGIN
+                                                                DocumentTypeSubType.SETRANGE("Document Type",Rec."Document Type");
+                                                                DocumentTypeSubType.SETRANGE("Document Sub Type",Rec."Document Sub Type");
+                                                                IF DocumentTypeSubType.FINDFIRST THEN
+                                                                  "Document Sub Type Description" := DocumentTypeSubType."Document Sub Type Description";
+                                                              END;
+
+                                                   DataClassification=ToBeClassified }
+    { 7   ;   ;Document Type Description;Text75   ;DataClassification=ToBeClassified }
+    { 8   ;   ;Document Sub Type Description;Text75;
+                                                   DataClassification=ToBeClassified }
+    { 14  ;   ;File Path           ;Text250       ;OnLookup=VAR
+                                                              ClientDocPath@100000001 : Text[100];
+                                                              DocSetup@100000000 : Record 9068662;
+                                                              TempFilePath@100000002 : Text;
+                                                              Instr@100000003 : InStream;
+                                                              TextRead@100000004 : Text;
+                                                              TempBlob@100000005 : Record 99008535;
+                                                              Sample@100000006 : Text;
+                                                              Outstr@100000007 : OutStream;
+                                                              Convert@100000008 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Convert";
+                                                              TempFileName@100000009 : Text;
+                                                              StrFileName@100000010 : Text;
+                                                              DFXDMSLite@100000011 : Codeunit 50004;
+                                                              FileTest@100000012 : File;
+                                                              Int@100000013 : Integer;
+                                                              StreamInTest@100000014 : InStream;
+                                                              txt@100000015 : Text;
+                                                              StreamEnd@100000016 : Boolean;
+                                                              Hasval@100000017 : Boolean;
+                                                              Instr1@100000018 : InStream;
+                                                              NAVLITEPage@100000019 : Page 50094;
+                                                              StringBig@100000020 : BigText;
+                                                            BEGIN
+                                                              CLEAR(TempFilePath);
+                                                              CLEAR(TempFileName);
+                                                              CLEAR(TempBlobRead);
+                                                              "File Path" := FileManagement.BLOBImportWithFilter(TempBlobRead,'openfile','','All Files (*.*)|*.*','*.*');
+
+                                                              //Sample := TempBlobRead.ToBase64String();
+                                                              //MESSAGE(Sample);
+                                                              TempFileName := FileManagement.GetFileName("File Path");
+
+                                                              //"File Path" := TempFilePath;
+                                                              "File Name" := FORMAT(CURRENTDATETIME) + ' - ' + TempFileName;
+
+                                                              "Content Blob" := TempBlob.Blob;
+
+                                                              IF DFXDMSLite.NAVLFDocumentFlowAPI(TempBlobRead,"File Name",Rec) THEN;
+
+
+
+                                                              {
+                                                              NAVLITEPage.GetFileDetails(TempBlob,"File Name",Rec.Type,Rec."No.",Rec.ID);
+
+                                                              TempBlob.Blob := "Content Blob";
+                                                              DFXDMSLite.NAVLFDocumentFlowAPI(TempBlob,"File Name",Rec.Type,Rec."No.",Rec.ID);
+
+
+
+
+
+
+                                                              Clear(TextRead);
+                                                              CLEAR(TempFilePath);
+                                                              CLEAR(Instr);
+                                                              CLEAR(TempFileName);
+                                                              TempFileName := FileManagement.BLOBImportWithFilter(TempBlob,'openfile','','All Files (*.*)|*.*','*.*');
+                                                              TempFileName := FileManagement.GetFileName(TempFilePath);
+
+                                                              "File Path" := TempFilePath;
+                                                              "File Name" := FORMAT(CURRENTDATETIME) + ' - ' + TempFileName;
+
+                                                              //DFXDMSLite.NAVLFDocumentFlowAPI(TempBlob,"File Name");
+                                                              //Sample := TempBlob.ToBase64String();
+                                                              //MESSAGE(Sample);
+
+                                                              TempBlob.Blob.CREATEINSTREAM(Instr);
+                                                              //FILE.UPLOADINTOSTREAM('Open File', '', 'All Files (*.*)|*.*',TempFilePath, Instr1);
+                                                              //Instr1.READ(TextRead);
+                                                              //MESSAGE('0. %1',TextRead);
+
+                                                              "File Path" := DocMan.GetFileName('Select File',ClientDocPath,'');
+
+                                                              TempBlob.INIT;
+                                                              TempBlob.Blob.CREATEOUTSTREAM(Outstr);
+                                                              Sample := TempBlob.ToBase64String();
+                                                              MESSAGE(Sample);
+
+                                                              //Sample := Convert.ToBase64String(TextRead);
+                                                              MESSAGE(Sample);
+
+
+                                                              IF (UPLOADINTOSTREAM('Open File', '', 'All Files (*.*)|*.*',TempFilePath, Instr)) THEN BEGIN
+                                                              // If you use read then while written after read will not read anything because already everything in InStream variable is read -- vice versa
+                                                              //Instr.READ(TextRead);
+                                                              Instr.READTEXT(TextRead);
+                                                              //StreamEnd := Instr.EOS;
+                                                              MESSAGE('1. %1',TextRead);
+                                                              END;
+
+                                                              while not Instr.EOS do begin
+                                                                    Instr.READTEXT(TextRead);
+                                                                    //Do some processing
+                                                                   // Message('Stream is still processing')
+                                                                  end;
+                                                                  Message('End of Stream');
+
+                                                              MESSAGE('2. %1',TextRead);
+
+                                                              TempBlob.Blob.CREATEOUTSTREAM(Outstr);
+                                                              COPYSTREAM(Outstr,Instr);
+                                                              Hasval:= TempBlob.Blob.HASVALUE;
+                                                              MESSAGE(FORMAT(TempBlob.Blob.HASVALUE));
+                                                              Outstr.WRITETEXT(TextRead);
+                                                              //TextRead := TempBlob.ToBase64String;
+                                                              MESSAGE('3. %1',TextRead);
+
+
+
+                                                              //Tested Code
+                                                              DocSetup.GET;
+                                                              IF DocSetup."External Doc Management System" <> DocSetup."External Doc Management System"::Sharepoint THEN
+                                                                DocMan."Get Document Path"(Type,"No.",'',ClientDocPath,TRUE);
+
+                                                              "File Path" := DocMan.GetFileName('Select File',ClientDocPath,'');
+
+
+                                                              TempBlob.INIT;
+                                                              TempBlob.Blob.CREATEOUTSTREAM(Outstr);
+                                                              Sample := TempBlob.ToBase64String();
+                                                              MESSAGE(Sample);
+
+                                                              //Sample := Convert.ToBase64String(TextRead);
+                                                              MESSAGE(Sample);
+                                                              }
+                                                              //Testing
+                                                            END;
+
+                                                   DataClassification=ToBeClassified }
+    { 20  ;   ;File Name           ;Text250       ;OnLookup=VAR
+                                                              FileManagement@100000000 : Codeunit 419;
+                                                              TempFileName@100000001 : Text;
+                                                              TempBlob@100000002 : Record 99008535;
+                                                              DFXDMSLite@100000003 : Codeunit 50004;
+                                                              TempFilePath@100000004 : Text;
+                                                            BEGIN
+                                                            END;
+
+                                                   DataClassification=ToBeClassified }
+    { 21  ;   ;Processed           ;Boolean       ;DataClassification=ToBeClassified }
+    { 23  ;   ;TAG                 ;Text30        ;DataClassification=ToBeClassified }
+    { 24  ;   ;Content Blob        ;BLOB          ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;ID,Line No.                             ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+    VAR
+      CorrespondenceDocType@100000006 : Record 9068657;
+      DocumentTypeSubType@100000005 : Record 9068463;
+      ClientDocPath@100000004 : Text[100];
+      DocSetup@100000003 : Record 9068662;
+      DocMan@100000002 : Codeunit 9068511;
+      FileManagement@100000000 : Codeunit 419;
+      TempBlobRead@100000007 : Record 99008535;
+      TempblobFile@100000008 : Record 99008535;
+      TxtConfirmOverwriteFile@100000011 : TextConst 'ENU=Do you want to overwrite existing file?';
+      TxtErrDocNotLinked@100000010 : TextConst 'ENU=Document not linked.';
+      DEFAULT_MSG_SUCCESS@100000009 : TextConst 'ENU=Document linked.';
+      TempFileName@100000012 : Text;
+      APILog@100000013 : Record 50019;
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT Table 50016 DFX Correspondence Store
+{
+  OBJECT-PROPERTIES
+  {
+    Date=23-06-22;
+    Time=15:10:03;
+    Modified=Yes;
+    Version List=NAVLITE;
+  }
+  PROPERTIES
+  {
+    Permissions=TableData 9068662=r;
+    OnInsert=VAR
+               _DocumentFolderSetupRec@1000000000 : Record 9068662;
+             BEGIN
+               {IF "Document Inserted Date" = 0D THEN
+                 "Document Inserted Date" := TODAY;
+
+               IF ISNULLGUID("Document GUID") THEN
+                 "Document GUID" := CREATEGUID();
+
+               Name := ReturnEntityName;
+               "Last Date Modified" := TODAY;
+
+               WITH DocumentFolderSetup DO BEGIN
+                 GET;
+                 CASE "External Doc Management System" OF
+                   "External Doc Management System"::"Internal Navision" : ; //Nothing
+                   "External Doc Management System"::"Synergy "          : ; //Nothing
+                   "External Doc Management System"::"To be defined"     : ; //Nothing
+                   "External Doc Management System"::DataStore           : ; //Nothing
+                   "External Doc Management System"::Sharepoint          : SendToHoldingPoolSharepoint(1);
+                   "External Doc Management System"::"C076 FileNet"      : ; // IsDoneBySubscriberNow SendToHoldingPoolFileNet(1);
+                   "External Doc Management System"::LaserFiche          : ; //Nothing
+                   "External Doc Management System"::"C102 LiveLink"     : ; //Nothing
+                   ELSE
+                     ERROR('DMS Integration type not supported.');
+                 END;
+               END;
+
+               _DocumentFolderSetupRec.GET;
+               CASE _DocumentFolderSetupRec."Doc. Type Mandatory" OF
+                 _DocumentFolderSetupRec."Doc. Type Mandatory"::"Doc Type Only" :
+                 BEGIN
+                   IF "Document Type"='' THEN
+                     ERROR('Document Type cannot be blank! Please Link E-mail again');
+                 END;
+                 _DocumentFolderSetupRec."Doc. Type Mandatory"::"Doc Type and Sub Type" :
+                 BEGIN
+                   IF ("Document Type"='') OR ("Document Sub Type"='') THEN
+                     ERROR('Document Type and Document Subtype cannot be blank! Please Link E-mail again');
+                 END;
+               END;
+               }
+             END;
+
+    OnModify=BEGIN
+               "Last Date Modified" := TODAY;
+
+               WITH DocumentFolderSetup DO BEGIN
+                 GET;
+                 CASE "External Doc Management System" OF
+                   "External Doc Management System"::"Internal Navision" : ; //Nothing
+                   "External Doc Management System"::"Synergy "          : ; //Nothing
+                   "External Doc Management System"::"To be defined"     : ; //Nothing
+                   "External Doc Management System"::DataStore           : ; //Nothing
+                   "External Doc Management System"::Sharepoint          : SendToHoldingPoolSharepoint(2);
+                   "External Doc Management System"::iManage             : ; //Nothing
+                   "External Doc Management System"::"C076 FileNet"      : ; //Nothing
+                   "External Doc Management System"::LaserFiche          : ; //Nothing
+                   "External Doc Management System"::"C102 LiveLink"     : ; //Nothing
+                   ELSE
+                     ERROR('DMS Integration type not supported.');
+                 END;
+               END;
+               {
+               DocumentFolderSetup.GET;
+               CASE DocumentFolderSetup."Doc. Type Mandatory" OF
+                 DocumentFolderSetup."Doc. Type Mandatory"::"Doc Type Only" :
+                 BEGIN
+                   IF "Document Type"='' THEN
+                     ERROR('Document Type cannot be blank! Please Link E-mail again');
+                 END;
+                 DocumentFolderSetup."Doc. Type Mandatory"::"Doc Type and Sub Type" :
+                 BEGIN
+                   IF ("Document Type"='') OR ("Document Sub Type"='') THEN
+                     ERROR('Document Type and Document Subtype cannot be blank! Please Link E-mail again');
+                 END;
+               END;
+               }
+             END;
+
+    OnDelete=BEGIN
+               WITH DocumentFolderSetup DO BEGIN
+                 GET;
+                 CASE "External Doc Management System" OF
+                   "External Doc Management System"::"Internal Navision" : ; //Nothing
+                   "External Doc Management System"::"Synergy "          : ; //Nothing
+                   "External Doc Management System"::"To be defined"     : ; //Nothing
+                   "External Doc Management System"::DataStore           : ; //Nothing
+                   "External Doc Management System"::Hummingbird         : ERROR('You are not allowed to delete documents!');
+                   "External Doc Management System"::iManage             : ; //Nothing
+                   "External Doc Management System"::"C090 Saperion"     : ; //Nothing
+                   "External Doc Management System"::"C076 FileNet"      : ; //Nothing
+                   "External Doc Management System"::LaserFiche          : ; //Nothing
+                   "External Doc Management System"::"C102 LiveLink"     : ; //Nothing
+                   ELSE
+                     ERROR('DMS Integration type not supported.');
+                 END;
+               END;
+             END;
+
+    LookupPageID=Page9069348;
+    DrillDownPageID=Page9069348;
+  }
+  FIELDS
+  {
+    { 1   ;   ;ID                  ;Code20        ;SQL Data Type=Variant }
+    { 2   ;   ;No.                 ;Code20        ;TableRelation=IF (Type=CONST(Client)) Client
+                                                                 ELSE IF (Type=CONST(Prospect)) CM-Prospect
+                                                                 ELSE IF (Type=CONST(Intermediary)) Intermediary
+                                                                 ELSE IF (Type=CONST(Entity)) Entity
+                                                                 ELSE IF (Type=CONST(Client Owner)) Owner
+                                                                 ELSE IF (Type=CONST(Potential Client)) "Potential Client"
+                                                                 ELSE IF (Type=FILTER(Customer)) Customer }
+    { 5   ;   ;Type                ;Option        ;OptionString=[ ,Client,Entity,Prospect,Intermediary,Client Owner,Resource,,Dimension,,,External Bank Payment,,,,Potential Client,Custom1,Customer,Vendor,Contact] }
+    { 6   ;   ;External DMS Status ;Option        ;OptionString=[ ,Pending,Processing,Processed];
+                                                   Editable=No }
+    { 10  ;   ;MS Office Doc Type  ;Code10         }
+    { 20  ;   ;Subject             ;Text150        }
+    { 30  ;   ;Info1               ;Text100        }
+    { 40  ;   ;Info2               ;Text100        }
+    { 50  ;   ;Document GUID       ;GUID           }
+    { 60  ;   ;Name                ;Text100        }
+    { 70  ;   ;Last Date Modified  ;Date          ;Editable=No }
+    { 100 ;   ;Temporary           ;Boolean        }
+    { 105 ;   ;Authorised          ;Boolean        }
+    { 110 ;   ;Workflow No.        ;Integer       ;TableRelation=IF (Source of Document=CONST(Workflow)) "TWM Workflow"."Entry No." WHERE (Entry No.=FIELD(Workflow No.)) }
+    { 111 ;   ;Payment No.         ;Code35         }
+    { 1000;   ;FilePath            ;Text250        }
+    { 1002;   ;PathInStdCasePath   ;Boolean        }
+    { 1010;   ;FileName            ;Text250        }
+    { 1020;   ;Source of Document  ;Option        ;OptionString=,Navision,Imported,,,,,Workflow,Payment }
+    { 1030;   ;Document Inserted Date;Date         }
+    { 1040;   ;Document Inserted By;Code50        ;TableRelation=User."User Name";
+                                                   OnLookup=VAR
+                                                              _UserMgt@1000000000 : Codeunit 418;
+                                                            BEGIN
+                                                              _UserMgt.LookupUserID("Document Inserted By");
+                                                            END;
+
+                                                   ValidateTableRelation=No;
+                                                   TestTableRelation=No }
+    { 1050;   ;Last Accessed Via Navision;Date     }
+    { 1060;   ;Last Accessed By    ;Code50        ;TableRelation=User."User Name";
+                                                   OnLookup=VAR
+                                                              _UserMgt@1000000000 : Codeunit 418;
+                                                            BEGIN
+                                                              _UserMgt.LookupUserID("Last Accessed By");
+                                                            END;
+
+                                                   ValidateTableRelation=No;
+                                                   TestTableRelation=No }
+    { 1100;   ;Document in Paper Form;Boolean      }
+    { 1110;   ;Additional Information;Text100      }
+    { 1111;   ;Mail Merge Template Code;Code10    ;TableRelation="Interaction Template$" }
+    { 1112;   ;Document Type       ;Code10        ;TableRelation=IF (Type=CONST(Client)) "Correspondence Doc Type".Code WHERE (Client Document=CONST(Yes),
+                                                                                                                               Client Type=FIELD(Client Type Filter),
+                                                                                                                               Category=FIELD(Category Filter))
+                                                                                                                               ELSE IF (Type=CONST(Entity)) "Correspondence Doc Type".Code WHERE (Entity Document=CONST(Yes),
+                                                                                                                                                                                                  Entity Type=FIELD(Entity Type Filter),
+                                                                                                                                                                                                  Category=FIELD(Category Filter))
+                                                                                                                                                                                                  ELSE IF (Type=CONST(Prospect)) "Correspondence Doc Type".Code WHERE (Prospect Document=CONST(Yes),
+                                                                                                                                                                                                                                                                       Category=FIELD(Category Filter))
+                                                                                                                                                                                                                                                                       ELSE IF (Type=CONST(Intermediary)) "Correspondence Doc Type".Code WHERE (Intermediary Document=CONST(Yes),
+                                                                                                                                                                                                                                                                                                                                                Category=FIELD(Category Filter))
+                                                                                                                                                                                                                                                                                                                                                ELSE IF (Type=CONST(Client Owner)) "Correspondence Doc Type".Code WHERE (Client Owner Document=CONST(Yes),
+                                                                                                                                                                                                                                                                                                                                                                                                                         Category=FIELD(Category Filter))
+                                                                                                                                                                                                                                                                                                                                                                                                                         ELSE IF (Type=CONST(Resource)) "Correspondence Doc Type".Code WHERE (Resource Document=CONST(Yes),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              Category=FIELD(Category Filter))
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ELSE IF (Type=CONST(Dimension)) "Correspondence Doc Type".Code WHERE (Dimension Document=CONST(Yes),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Category=FIELD(Category Filter))
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ELSE IF (Type=CONST(External Bank Payment)) "Correspondence Doc Type".Code WHERE (Ext. Bank Payment Document=CONST(Yes),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      Category=FIELD(Category Filter))
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ELSE IF (Type=CONST(Potential Client)) "Correspondence Doc Type".Code WHERE (Potential Client Document=CONST(Yes),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   Category=FIELD(Category Filter))
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ELSE "Correspondence Doc Type".Code }
+    { 1113;   ;Document Type Text  ;Text75        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Doc Type".Type WHERE (Code=FIELD(Document Type)));
+                                                   Editable=No }
+    { 1115;   ;Document Sub Type   ;Code20        ;TableRelation="Document Type Sub Type"."Document Sub Type" WHERE (Document Type=FIELD(Document Type)) }
+    { 1116;   ;Document Sub Type Text;Text75      ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Document Type Sub Type"."Document Sub Type Description" WHERE (Document Type=FIELD(Document Type),
+                                                                                                                                      Document Sub Type=FIELD(Document Sub Type))) }
+    { 1120;   ;Author              ;Text100        }
+    { 1130;   ;Document Date       ;Date           }
+    { 1140;   ;Priority            ;Option        ;OptionString=High,Medium,Low }
+    { 1150;   ;Document Copy_      ;Boolean        }
+    { 2000;   ;Restricted Combination;Boolean     ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Document Type Sub Type"."Restricted Combination" WHERE (Document Type=FIELD(Document Type),
+                                                                                                                               Document Sub Type=FIELD(Document Sub Type))) }
+    { 2001;   ;Corresp. Store Link Exists;Boolean ;FieldClass=FlowField;
+                                                   CalcFormula=Exist("Correspondence Store Link" WHERE (Type=FIELD(Type),
+                                                                                                        No.=FIELD(No.),
+                                                                                                        ID=FIELD(ID),
+                                                                                                        Link Type=FIELD(Link Type Filter),
+                                                                                                        Link Code=FIELD(Link Code Filter)));
+                                                   Editable=No }
+    { 2005;   ;Entity Type Filter  ;Code20        ;FieldClass=FlowFilter;
+                                                   Editable=No }
+    { 2007;   ;Link Type Filter    ;Option        ;FieldClass=FlowFilter;
+                                                   OptionString=[ ,Asset,Safe Custody,Bank,Loan,Agent,Investment,Client Entity,Client Entity History,Customer,Vendor,Portfolio,Transaction Monitoring,Interaction,Activity,Business Rule,Client Invoice,Meeting];
+                                                   Editable=Yes }
+    { 2008;   ;Link Code Filter    ;Code20        ;FieldClass=FlowFilter;
+                                                   Editable=Yes }
+    { 2010;   ;Client Type Filter  ;Code20        ;FieldClass=FlowFilter;
+                                                   Editable=No }
+    { 2015;   ;Category Filter     ;Code20        ;FieldClass=FlowFilter;
+                                                   Editable=No }
+    { 76100;  ;Portfolio Company ID;Code20         }
+    { 83000;  ;No. of Linked Records;Integer      ;FieldClass=FlowField;
+                                                   CalcFormula=Count("Correspondence Store Link" WHERE (ID=FIELD(ID),
+                                                                                                        No.=FIELD(No.),
+                                                                                                        Type=FIELD(Type)));
+                                                   Editable=No }
+    { 83002;  ;Document Expiry Date;Date           }
+    { 83003;  ;Complaint No.       ;Code10        ;TableRelation="Complaint Register"."Complaint No." WHERE (Client No.=FIELD(No.)) }
+    { 83004;  ;Litigation No.      ;Code10        ;TableRelation="Litigation Register"."Litigation No." WHERE (Client No.=FIELD(No.)) }
+    { 83005;  ;Trans. Mon. Document No.;Code20    ;TableRelation="Transaction Background Detail"."Document No." }
+    { 85000;  ;Archived            ;Boolean        }
+    { 85050;  ;Archived Date       ;Date           }
+    { 85100;  ;Archived By         ;Code50        ;TableRelation=User."User Name";
+                                                   OnLookup=VAR
+                                                              _UserMgt@1000000000 : Codeunit 418;
+                                                            BEGIN
+                                                              _UserMgt.LookupUserID("Archived By");
+                                                            END;
+
+                                                   ValidateTableRelation=No;
+                                                   TestTableRelation=No }
+    { 85500;  ;Client Tracker No   ;Integer        }
+    { 85501;  ;Client Tracker blob ;BLOB           }
+    { 86001;  ;LaserFiche Entry ID ;Integer        }
+    { 88000;  ;Meta_Int_1          ;Integer       ;CaptionClass='52,1' }
+    { 88001;  ;Meta_Int_2          ;Integer       ;CaptionClass='52,2' }
+    { 88002;  ;Meta_Int_3          ;Integer       ;CaptionClass='52,3' }
+    { 88010;  ;Meta_Text_1         ;Text100       ;CaptionClass='52,4' }
+    { 88011;  ;Meta_Text_2         ;Text100       ;CaptionClass='52,5' }
+    { 88012;  ;Meta_Text_3         ;Text100       ;OnLookup=BEGIN
+                                                              {DocumentFolderSetup.SetCorrespondenceStoreRec(Rec);
+                                                              DocumentFolderSetup.MetaTextLookup(Meta_Text_3, 3);
+                                                              }
+                                                            END;
+
+                                                   CaptionClass='52,6' }
+    { 88013;  ;Meta_Text_4         ;Text150       ;CaptionClass='52,7' }
+    { 88014;  ;Meta_Text_5         ;Text250       ;CaptionClass='52,8' }
+    { 88015;  ;Meta_Text_6         ;Text250       ;CaptionClass='52,9' }
+    { 88020;  ;Meta_Code_1         ;Code50        ;OnValidate=BEGIN
+                                                                {DocumentFolderSetup.SetCorrespondenceStoreRec(Rec);
+                                                                DocumentFolderSetup.MetaCodeValidate(Meta_Code_1, 1);
+                                                                }
+                                                              END;
+
+                                                   OnLookup=BEGIN
+                                                              {DocumentFolderSetup.SetCorrespondenceStoreRec(Rec);
+                                                              DocumentFolderSetup.MetaCodeLookup(Meta_Code_1, 1);
+                                                              VALIDATE(Meta_Code_1,Meta_Code_1);
+                                                              }
+                                                            END;
+
+                                                   CaptionClass='52,10' }
+    { 88021;  ;Meta_Code_2         ;Code50        ;OnValidate=BEGIN
+                                                                {DocumentFolderSetup.SetCorrespondenceStoreRec(Rec);
+                                                                DocumentFolderSetup.MetaCodeValidate(Meta_Code_2, 2);
+                                                                }
+                                                              END;
+
+                                                   OnLookup=BEGIN
+                                                              {DocumentFolderSetup.SetCorrespondenceStoreRec(Rec);
+                                                              DocumentFolderSetup.MetaCodeLookup(Meta_Code_2, 2);
+                                                              VALIDATE(Meta_Code_2,Meta_Code_2);
+                                                              }
+                                                            END;
+
+                                                   CaptionClass='52,11' }
+    { 88022;  ;Meta_Code_3         ;Code50        ;OnValidate=BEGIN
+                                                                {DocumentFolderSetup.SetCorrespondenceStoreRec(Rec);
+                                                                DocumentFolderSetup.MetaCodeValidate(Meta_Code_3, 3);
+                                                                }
+                                                              END;
+
+                                                   OnLookup=BEGIN
+                                                              {DocumentFolderSetup.SetCorrespondenceStoreRec(Rec);
+                                                              DocumentFolderSetup.MetaCodeLookup(Meta_Code_3, 3);
+                                                              VALIDATE(Meta_Code_3,Meta_Code_3);
+                                                              }
+                                                            END;
+
+                                                   CaptionClass='52,12' }
+    { 88023;  ;Meta_Code_4         ;Code100       ;OnValidate=BEGIN
+                                                                {DocumentFolderSetup.SetCorrespondenceStoreRec(Rec);
+                                                                DocumentFolderSetup.MetaCodeValidate(Meta_Code_4, 4);
+                                                                }
+                                                              END;
+
+                                                   OnLookup=BEGIN
+                                                              {DocumentFolderSetup.SetCorrespondenceStoreRec(Rec);
+                                                              DocumentFolderSetup.MetaCodeLookup(Meta_Code_4, 4);
+                                                              VALIDATE(Meta_Code_4,Meta_Code_4);
+                                                              }
+                                                            END;
+
+                                                   CaptionClass='52,13' }
+    { 88030;  ;Meta_Decimal_1      ;Decimal       ;CaptionClass='52,14' }
+    { 88031;  ;Meta_Decimal_2      ;Decimal       ;CaptionClass='52,15' }
+    { 88040;  ;Meta_Date_1         ;Date          ;CaptionClass='52,16' }
+    { 88041;  ;Meta_Date_2         ;Date          ;CaptionClass='52,17' }
+    { 88050;  ;Meta_Time_1         ;Time          ;CaptionClass='52,18' }
+    { 88051;  ;Meta_Time_2         ;Time          ;CaptionClass='52,19' }
+    { 88060;  ;Meta_DateTime_1     ;DateTime      ;CaptionClass='52,20' }
+    { 88061;  ;Meta_DateTime_2     ;DateTime      ;CaptionClass='52,21' }
+    { 9068370;;F2-Restricted       ;Boolean       ;FieldClass=FlowField;
+                                                   CalcFormula=Exist("Partitioning Restrictions" WHERE (User ID=FILTER(%ME),
+                                                                                                        Table Name=FILTER(Client|Entity|Owner|Prospect|Potential Client),
+                                                                                                        Primary Key=FIELD(No.)));
+                                                   Editable=No }
+  }
+  KEYS
+  {
+    {    ;Type,No.,ID                             ;Clustered=Yes }
+    {    ;Document Inserted Date,ID                }
+    {    ;Last Accessed Via Navision,ID            }
+    {    ;Subject                                  }
+    {    ;No.,Document Type,Document Inserted Date }
+    {    ;Document Type                            }
+    {    ;FileName                                 }
+    {    ;Document Date,ID                         }
+    {    ;Meta_Date_1,Meta_Date_2                  }
+    {    ;Meta_Text_3                              }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+    VAR
+      AppSetupRec@1000000001 : Record 9068230;
+      DocumentFolderSetup@1000000000 : Record 9068662;
+
+    PROCEDURE OpenDocument@1040001(pType@1000000003 : ' ,Client,Entity,Prospect,Intermediary,Client Owner,Resource,,Dimension,,,External Bank Payment,,,,Potential Client';pNo@1000000004 : Code[20];pKeyValues@1000000005 : Text[250]);
+    VAR
+      DocMan@1040003 : Codeunit 9068511;
+      _DocumentFolderSetupRec@1040002 : Record 9068662;
+      _TCISPFunctions@1040004 : Codeunit 9072391;
+      _iManageMgmt@1000000001 : Codeunit 9072380;
+      IsHandled@1000000000 : Boolean;
+    BEGIN
+      OnBeforeOpenDocument(Rec,IsHandled);
+      IF IsHandled THEN
+        EXIT;
+
+      WITH DocumentFolderSetup DO BEGIN
+        GET;
+        CASE "External Doc Management System" OF
+          "External Doc Management System"::"Internal Navision" : DocMan."Open Document"(Type,"No.",ID);
+          "External Doc Management System"::"Synergy "          : DocMan."Open Document"(Type,"No.",ID);
+          "External Doc Management System"::"To be defined"     : DocMan."Open Document"(Type,"No.",ID);
+          "External Doc Management System"::DataStore           : DocMan."Open Document"(Type,"No.",ID);
+          "External Doc Management System"::Sharepoint          : _TCISPFunctions.OpenFromSharePoint(FilePath,FileName,"Document GUID");
+          "External Doc Management System"::"C076 FileNet"      : DocMan."Open Document"(Type,"No.",ID);
+          "External Doc Management System"::LaserFiche          : DocMan."Open Document"(Type,"No.",ID);
+          ELSE
+            ERROR('DMS Integration type not supported.');
+        END;
+      END;
+    END;
+
+    PROCEDURE SendToHoldingPooliManage@1040002(pJobType@1040000 : Integer);
+    VAR
+      _ClientRec@1040001 : Record 9068500;
+      _EntityRec@1040002 : Record 9068505;
+      _IntermediaryRec@1040003 : Record 9068447;
+      _CorresStore@1040005 : Record 9068660;
+      _Resource@1040006 : Record 156;
+      _Prospect@1040007 : Record 9068440;
+      _OwnerRec@1040008 : Record 9068443;
+      _PotentialClient@1040004 : Record 9068732;
+      _iManageMgmt@1040009 : Codeunit 9072380;
+      _CorresStoreDFX@100000000 : Record 50016;
+    BEGIN
+      {_CorresStore := Rec;
+      CASE Type OF
+        Type::Client : BEGIN
+          _ClientRec.GET("No.");
+          _iManageMgmt.CreateHoldingPoolEntry(pJobType, _CorresStore, 1);
+        END;
+
+        Type::Entity : BEGIN
+          _EntityRec.GET("No.");
+          _iManageMgmt.CreateHoldingPoolEntry(pJobType, _CorresStore, 4);
+        END;
+
+        Type::Intermediary : BEGIN
+          _IntermediaryRec.GET("No.");
+          _iManageMgmt.CreateHoldingPoolEntry(pJobType, _CorresStore, 3);
+        END;
+
+        Type::"Client Owner" : BEGIN
+          _OwnerRec.GET("No.");
+          _iManageMgmt.CreateHoldingPoolEntry(pJobType, _CorresStore, 2);
+        END;
+
+        Type::Resource : BEGIN
+          _Resource.GET("No.");
+          _iManageMgmt.CreateHoldingPoolEntry(pJobType, _CorresStore, 5);
+        END;
+
+        Type::Prospect : BEGIN
+          _Prospect.GET("No.");
+          _iManageMgmt.CreateHoldingPoolEntry(pJobType, _CorresStore, 7);
+        END;
+
+        Type::"Potential Client" : BEGIN
+          _PotentialClient.GET("No.");
+          _iManageMgmt.CreateHoldingPoolEntry(pJobType, _CorresStore, 6);
+        END;
+
+
+      END;
+      }
+    END;
+
+    PROCEDURE SendToHoldingPoolSharepoint@1000000008(pJobType@1000000002 : Integer);
+    VAR
+      _TCIMessages@1000000003 : Record 9072397;
+      _SharePointFunctions@1000000001 : Codeunit 9072391;
+      _RecordRef@1000000000 : RecordRef;
+    BEGIN
+      {
+      IF pJobType = 3 THEN BEGIN
+        _TCIMessages.SETRANGE(_TCIMessages."NAV GUID","Document GUID");
+        IF _TCIMessages.FIND('-') THEN
+          _TCIMessages.DELETE;
+        EXIT;
+      END;
+      _RecordRef.GETTABLE(Rec);
+      _RecordRef.SETPOSITION(GETPOSITION);
+      CASE pJobType OF
+        1: _SharePointFunctions.MessageCreateEventHandler(_RecordRef,FilePath,FileName, "Document GUID");
+        2: _SharePointFunctions.MessageUpdateEventHandler(_RecordRef,FilePath,FileName, "Document GUID");
+      END;
+      }
+    END;
+
+    LOCAL PROCEDURE ReturnEntityName@1000000003() : Text;
+    VAR
+      Client@1000000000 : Record 9068500;
+      Entity@1000000001 : Record 9068505;
+      Prospect@1000000002 : Record 9068440;
+      Intermediary@1000000003 : Record 9068447;
+      Owner@1000000004 : Record 9068443;
+      PotentialClient@1000000005 : Record 9068732;
+    BEGIN
+      IF Type = Type::Client THEN BEGIN
+        IF Client.GET("No.") THEN
+          EXIT(Client."Search Name");
+      END ELSE IF Type = Type::Prospect THEN BEGIN
+        IF Prospect.GET("No.") THEN
+          EXIT(Prospect."Search Name");
+      END ELSE IF Type = Type::"Client Owner" THEN BEGIN
+        IF Owner.GET("No.") THEN
+          EXIT(Owner."Search Name");
+      END ELSE IF Type = Type::Entity THEN BEGIN
+        IF Entity.GET("No.") THEN
+          EXIT(Entity."Search Name");
+      END ELSE IF Type = Type::"Potential Client" THEN BEGIN
+        IF PotentialClient.GET("No.") THEN
+          EXIT(PotentialClient."Search Name");
+      END ELSE IF Type = Type::Intermediary THEN BEGIN
+        IF Intermediary.GET("No.") THEN
+          EXIT(Intermediary."Search Name");
+      END;
+    END;
+
+    [Integration]
+    LOCAL PROCEDURE OnBeforeOpenDocument@1000000001(CorrespondenceStore@1000000000 : Record 50016;VAR IsHandled@1000000001 : Boolean);
+    BEGIN
+    END;
+
+    BEGIN
+    {
+      29.06.20  Hubert Bartkowiak
+                CRF55316 "Client Invoice" and "Meeting" options added to "Link Type Filter".
+
+      ------------------------------------------------------------------------------------------------------------------------------
+      07.04.20  Ritam Majumdar
+                CRF54043 LaserFiche Integration new Fields 86001 added.
+
+      01.04.20  Unnar Eliasson
+                CRF53295 Fields 2001, 2007 & 2008 added as flowfilters and flowfield
+                to allow filtering out documents that are already linked to when going to the
+                Docs & Correspondence Page from Link Document to Activity
+
+      30.03.20  Nigel O'Brien
+                CRF52742 add C102 livelink to insert,modify,delete
+
+      17.02.20  Gregory Kordowski
+                CRF48955 OnInsert/OnModify - check for "Doc. Type Mandatory"
+    }
+    END.
+  }
+}
+
+OBJECT Table 50017 DFX Correspondence Store Link
+{
+  OBJECT-PROPERTIES
+  {
+    Date=23-06-22;
+    Time=11:15:41;
+    Modified=Yes;
+    Version List=NAVLITE;
+  }
+  PROPERTIES
+  {
+    Permissions=TableData 9068662=r;
+    OnInsert=VAR
+               _DocumentFolderSetupRec@1000000000 : Record 9068662;
+             BEGIN
+               "Date Linked" := TODAY;
+               "User Linked" := USERID;
+             END;
+
+    OnDelete=BEGIN
+               UnLinkDocument;
+             END;
+
+    LookupPageID=Page9069711;
+    DrillDownPageID=Page9069711;
+  }
+  FIELDS
+  {
+    { 1   ;   ;ID                  ;Code20        ;SQL Data Type=Variant;
+                                                   NotBlank=Yes }
+    { 2   ;   ;No.                 ;Code20        ;TableRelation=IF (Type=CONST(Client)) Client
+                                                                 ELSE IF (Type=CONST(Prospect)) CM-Prospect
+                                                                 ELSE IF (Type=CONST(Intermediary)) Intermediary
+                                                                 ELSE IF (Type=CONST(Entity)) Entity
+                                                                 ELSE IF (Type=CONST(Client Owner)) Owner
+                                                                 ELSE IF (Type=CONST(Potential Client)) "Potential Client" }
+    { 5   ;   ;Type                ;Option        ;OptionString=[ ,Client,Entity,Prospect,Intermediary,Client Owner,Resource,,Dimension,,,External Bank Payment,,,,Potential Client] }
+    { 6   ;   ;External DMS Status ;Option        ;OptionString=[ ,Pending,Processing,Processed];
+                                                   Editable=No }
+    { 7   ;   ;Link Type           ;Option        ;OptionString=[ ,Asset,Safe Custody,Bank,Loan,Agent,Investment,Client Entity,Client Entity History,Customer,Vendor,Portfolio,Transaction Monitoring,Interaction,Activity,Business Rule,Client Invoice,Meeting];
+                                                   Editable=Yes }
+    { 8   ;   ;Link Code           ;Code20        ;TableRelation=IF (Link Type=CONST(Asset)) "Client Asset"."Asset Code" WHERE (Client No.=FIELD(No.))
+                                                                 ELSE IF (Link Type=CONST(Safe Custody)) "Safe Custody Records"."Safe Custody Code" WHERE (Type=CONST(Client),
+                                                                                                                                                           No.=FIELD(No.))
+                                                                                                                                                           ELSE IF (Link Type=CONST(Bank)) "Client Account".No. WHERE (Account Type=CONST(Bank),
+                                                                                                                                                                                                                       Client No.=FIELD(No.))
+                                                                                                                                                                                                                       ELSE IF (Link Type=CONST(Loan)) "Client Account".No. WHERE (Account Type=CONST(Loan),
+                                                                                                                                                                                                                                                                                   Client No.=FIELD(No.))
+                                                                                                                                                                                                                                                                                   ELSE IF (Link Type=CONST(Asset)) "Client Account".No. WHERE (Account Type=CONST(Agent),
+                                                                                                                                                                                                                                                                                                                                                Client No.=FIELD(No.))
+                                                                                                                                                                                                                                                                                                                                                ELSE IF (Link Type=CONST(Investment)) "Client Investment"."Asset Code" WHERE (Client No.=FIELD(No.))
+                                                                                                                                                                                                                                                                                                                                                ELSE IF (Link Type=CONST(Client Entity)) "Client Entity"."Entity No." WHERE (Client No.=FIELD(No.))
+                                                                                                                                                                                                                                                                                                                                                ELSE IF (Link Type=CONST(Client Entity History)) "Client Entity History"."Entry No." WHERE (Client No.=FIELD(No.))
+                                                                                                                                                                                                                                                                                                                                                ELSE IF (Link Type=CONST(Customer)) "Client Customer".No. WHERE (Client No.=FIELD(No.))
+                                                                                                                                                                                                                                                                                                                                                ELSE IF (Link Type=CONST(Vendor)) "Client Vendor".No. WHERE (Client No.=FIELD(No.))
+                                                                                                                                                                                                                                                                                                                                                ELSE IF (Link Type=CONST(Interaction)) "Client Interaction Details"."Interaction No." WHERE (No.=FIELD(No.));
+                                                   Editable=Yes }
+    { 9   ;   ;Correspondence Store Type;Option   ;OptionString=Correspondence Store,External DMS }
+    { 10  ;   ;MS Office Doc Type  ;Code10        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Store"."MS Office Doc Type" WHERE (ID=FIELD(ID),
+                                                                                                                         No.=FIELD(No.),
+                                                                                                                         Type=FIELD(Type)));
+                                                   Editable=No }
+    { 20  ;   ;Subject             ;Text150       ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Store".Subject WHERE (ID=FIELD(ID),
+                                                                                                            No.=FIELD(No.),
+                                                                                                            Type=FIELD(Type)));
+                                                   Editable=No }
+    { 31  ;   ;Date Linked         ;Date           }
+    { 32  ;   ;User Linked         ;Code50        ;TableRelation=User."User Name";
+                                                   ValidateTableRelation=No;
+                                                   TestTableRelation=No }
+    { 1010;   ;FileName            ;Text250       ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Store".FileName WHERE (ID=FIELD(ID),
+                                                                                                             No.=FIELD(No.),
+                                                                                                             Type=FIELD(Type)));
+                                                   Editable=No }
+    { 1020;   ;Source of Document  ;Option        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Store"."Source of Document" WHERE (ID=FIELD(ID),
+                                                                                                                         No.=FIELD(No.),
+                                                                                                                         Type=FIELD(Type)));
+                                                   OptionString=,Navision,Imported,,,,,Workflow;
+                                                   Editable=No }
+    { 1030;   ;Document Inserted Date;Date        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Store"."Document Inserted Date" WHERE (ID=FIELD(ID),
+                                                                                                                             No.=FIELD(No.),
+                                                                                                                             Type=FIELD(Type)));
+                                                   Editable=No }
+    { 1040;   ;Document Inserted By;Code50        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Store"."Document Inserted By" WHERE (ID=FIELD(ID),
+                                                                                                                           No.=FIELD(No.),
+                                                                                                                           Type=FIELD(Type)));
+                                                   TableRelation=User."User Name";
+                                                   OnLookup=VAR
+                                                              _UserMgt@1000000000 : Codeunit 418;
+                                                            BEGIN
+                                                            END;
+
+                                                   ValidateTableRelation=No;
+                                                   Editable=No }
+    { 1112;   ;Document Type       ;Code10        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Store"."Document Type" WHERE (ID=FIELD(ID),
+                                                                                                                    No.=FIELD(No.),
+                                                                                                                    Type=FIELD(Type)));
+                                                   TableRelation="Correspondence Doc Type".Code;
+                                                   Editable=No }
+    { 1113;   ;Document Type Text  ;Text75        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Doc Type".Type WHERE (Code=FIELD(Document Type)));
+                                                   Editable=No }
+    { 1115;   ;Document Sub Type   ;Code20        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Store"."Document Sub Type" WHERE (ID=FIELD(ID),
+                                                                                                                        No.=FIELD(No.),
+                                                                                                                        Type=FIELD(Type)));
+                                                   TableRelation="Document Type Sub Type"."Document Sub Type" WHERE (Document Type=FIELD(Document Type)) }
+    { 1116;   ;Document Sub Type Text;Text75      ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Document Type Sub Type"."Document Sub Type Description" WHERE (Document Type=FIELD(Document Type),
+                                                                                                                                      Document Sub Type=FIELD(Document Sub Type))) }
+    { 1130;   ;Document Date       ;Date          ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Store"."Document Date" WHERE (ID=FIELD(ID),
+                                                                                                                    No.=FIELD(No.),
+                                                                                                                    Type=FIELD(Type)));
+                                                   Editable=No }
+    { 2000;   ;Restricted Combination;Boolean     ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Document Type Sub Type"."Restricted Combination" WHERE (Document Type=FIELD(Document Type),
+                                                                                                                               Document Sub Type=FIELD(Document Sub Type)));
+                                                   Editable=No }
+    { 3000;   ;External Document ID;Code20         }
+    { 3001;   ;External Document Subject;Text150   }
+    { 3002;   ;External Document Type;Code10       }
+    { 3003;   ;External Document Sub Type;Code20   }
+    { 3004;   ;External Doc Inserted Date;Date     }
+    { 3005;   ;External Doc Inserted By;Code50     }
+    { 83002;  ;Document Expiry Date;Date          ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Store"."Document Expiry Date" WHERE (ID=FIELD(ID),
+                                                                                                                           No.=FIELD(No.),
+                                                                                                                           Type=FIELD(Type)));
+                                                   Editable=No }
+  }
+  KEYS
+  {
+    {    ;Correspondence Store Type,Type,No.,ID,Link Type,Link Code;
+                                                   Clustered=Yes }
+    {    ;Correspondence Store Type,ID             }
+    {    ;ID,No.,Type                              }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+    VAR
+      UNLINK_DOCUMENT@1000000000 : TextConst 'ENU=Are you sure to unlink the Document %1 from %2 %3';
+
+    PROCEDURE OpenDocument@1040001(pType@1000000003 : ' ,Client,Entity,Prospect,Intermediary,Client Owner,Resource,,Dimension,,,External Bank Payment,,,,Potential Client';pNo@1000000004 : Code[20];pID@1000000005 : Code[20]);
+    VAR
+      CorrespondenceStore@1000000006 : Record 9068660;
+      DocumentFolderSetup@1000000000 : Record 9068662;
+      GeneralLedgerSetup@1000000001 : Record 98;
+      IsHandled@100000000 : Boolean;
+    BEGIN
+      OnBeforeLinkOpenDocument(Rec,IsHandled);
+      IF IsHandled THEN
+        EXIT;
+
+      CorrespondenceStore.GET(pType,pNo,pID);
+      CorrespondenceStore.OpenDocument(pType,pNo,'');
+    END;
+
+    PROCEDURE LinkDocument@1000000001();
+    VAR
+      CorrespondenceStore@1000000004 : Record 9068660;
+      CorrespondenceStoreLink@1000000005 : Record 9069078;
+      CorrespondenceStoreLink2@1000000006 : Record 9069078;
+    BEGIN
+      CorrespondenceStore.FILTERGROUP(2);
+      CorrespondenceStore.SETFILTER(Type,GETFILTER(Type));
+      CorrespondenceStore.SETFILTER("No.",GETFILTER("No."));
+      CorrespondenceStore.SETRANGE("Temporary",FALSE);
+      CorrespondenceStore.SETFILTER("Link Type Filter",GETFILTER("Link Type"));
+      CorrespondenceStore.SETFILTER("Link Code Filter",GETFILTER("Link Code"));
+      CorrespondenceStore.SETRANGE("Corresp. Store Link Exists",FALSE);
+      CorrespondenceStore.FILTERGROUP(0);
+
+      IF PAGE.RUNMODAL(PAGE::"Docs and Correspondence",CorrespondenceStore) = ACTION::LookupOK THEN BEGIN
+        IF CorrespondenceStore.ID <> '' THEN BEGIN
+          CorrespondenceStoreLink2.INIT;
+          CorrespondenceStoreLink2.Type        := CorrespondenceStore.Type;
+          CorrespondenceStoreLink2."No."       := CorrespondenceStore."No.";
+          EVALUATE(CorrespondenceStoreLink2."Link Type",GETFILTER("Link Type"));
+          CorrespondenceStoreLink2."Link Code" := GETFILTER("Link Code");
+          CorrespondenceStoreLink2.ID          := CorrespondenceStore.ID;
+          CorrespondenceStoreLink2.INSERT(TRUE);
+        END;
+      END;
+    END;
+
+    PROCEDURE UnLinkDocument@1000000000();
+    BEGIN
+      IF CONFIRM(STRSUBSTNO(UNLINK_DOCUMENT,ID,FORMAT("Link Type"),"Link Code")) THEN
+        DELETE;
+    END;
+
+    PROCEDURE OpenCard@1000000002();
+    VAR
+      ClientAccount@1000000000 : Record 9068624;
+      ClientAsset@1000000001 : Record 9068546;
+      ClientCustomer@1000000003 : Record 9068602;
+      ClientVendor@1000000004 : Record 9068604;
+      SafeCustodyRecords@1000000005 : Record 9068532;
+      ClientPortfolio@1000000006 : Record 9068565;
+      ClientInvestment@1000000007 : Record 9068542;
+      ClientEntity@1000000008 : Record 9068508;
+      ClientEntityHistory@1000000009 : Record 9068509;
+      TransactionBackgroundDetail@1000000010 : Record 9073104;
+      Activity@1000000011 : Record 9068905;
+      ClientManagementFunctions@1000000002 : Codeunit 9068493;
+      ActivityManagement@1000000012 : Codeunit 9068560;
+    BEGIN
+      {CASE Type OF
+        Type::Client : BEGIN
+          CASE "Link Type" OF
+            "Link Type"::Agent,"Link Type"::Bank,"Link Type"::Loan : BEGIN
+              ClientAccount.GET("No.","Link Code");
+              ClientManagementFunctions.OpenAccountCardWithRec(ClientAccount."Account Type", ClientAccount);
+            END;
+            "Link Type"::Asset : BEGIN
+              ClientAsset.GET("No.","Link Code");
+              ClientManagementFunctions.OpenAssetCard(ClientAsset);
+            END;
+            "Link Type"::"Safe Custody" : BEGIN
+              SafeCustodyRecords.GET(0,"No.", "Link Code");
+              PAGE.RUNMODAL(PAGE::"Safe Custody Card",SafeCustodyRecords);
+            END;
+            "Link Type"::Customer : BEGIN
+              ClientCustomer.GET("No.","Link Code");
+               PAGE.RUNMODAL(PAGE::"Client Customer Card",ClientCustomer);
+            END;
+            "Link Type"::Vendor : BEGIN
+              ClientVendor.GET("No.","Link Code");
+              PAGE.RUNMODAL(PAGE::"Client Vendor Card",ClientVendor);
+            END;
+            "Link Type"::Portfolio : BEGIN
+              ClientPortfolio.GET("No.","Link Code");
+              PAGE.RUNMODAL(PAGE::"Client Portfolio",ClientPortfolio);
+            END;
+            "Link Type"::Investment : BEGIN
+              ClientInvestment.GET("No.","Link Code");
+              PAGE.RUNMODAL(PAGE::"Client Investment Card",ClientInvestment);
+            END;
+            "Link Type"::"Client Entity" : BEGIN
+              ClientEntity.SETRANGE("Client No.","No.");
+              ClientEntity.SETRANGE("Entity No.","Link Code");
+              PAGE.RUNMODAL(PAGE::"Client Entities",ClientEntity);
+            END;
+            "Link Type"::"Client Entity History" : BEGIN
+              ClientEntityHistory.SETRANGE("Client No.","No.");
+              ClientEntityHistory.SETRANGE("Entity No.","Link Code");
+              PAGE.RUNMODAL(PAGE::"Entity History",ClientEntityHistory);
+            END;
+            "Link Type"::"Transaction Monitoring" : BEGIN
+              TransactionBackgroundDetail.GET("No.","Link Code");
+              PAGE.RUNMODAL(PAGE::"Transaction Background Card",TransactionBackgroundDetail);
+            END;
+            "Link Type"::Interaction : BEGIN
+      //        TransactionBackgroundDetail.GET("No.","Link Code");
+      //        PAGE.RUNMODAL(PAGE::"Transaction Background Card",TransactionBackgroundDetail);
+            END;
+            "Link Type"::Activity : BEGIN
+              Activity.GET("Link Code");
+              ActivityManagement.OpenActivityCardUI(Activity);
+            END;
+            "Link Type"::"Business Rule" : BEGIN
+      //        TransactionBackgroundDetail.GET("No.","Link Code");
+      //        PAGE.RUNMODAL(PAGE::"Transaction Background Card",TransactionBackgroundDetail);
+            END;
+
+          END;
+        END;
+      END;
+      }
+    END;
+
+    PROCEDURE ReturnExternalID@1000000004() : Code[20];
+    VAR
+      CorrespondenceStoreLink@1000000000 : Record 9069078;
+    BEGIN
+      CorrespondenceStoreLink.SETCURRENTKEY("Correspondence Store Type",ID);
+      CorrespondenceStoreLink.SETRANGE("Correspondence Store Type", CorrespondenceStoreLink."Correspondence Store Type"::"External DMS");
+      IF CorrespondenceStoreLink.FINDLAST THEN
+        EXIT(INCSTR(CorrespondenceStoreLink.ID))
+      ELSE
+        EXIT('1');
+    END;
+
+    [Integration]
+    LOCAL PROCEDURE OnBeforeLinkOpenDocument@100000000(CorrespondenceStore@1000000000 : Record 50017;VAR IsHandled@1000000001 : Boolean);
+    BEGIN
+    END;
+
+    BEGIN
+    {
+      05.08.20  Nigel O'Brien
+                CRF55214 add new key for performance from page 9069346
+
+      08.04.20  Alex Snape
+                CRF53524 Added OnBeforeLinkOpenDocument, ReturnExternalID now not local
+
+      01.04.20  Unnar Eliasson
+                CRF53295 Changed the Filtering when Linking Document rather than using MARKEDONLY
+                OpenCard amended to open Activity Card
+
+      02.01.20  Adrian Akers
+                CRF48933  New Link Type of Meeting
+
+      08.10.19  Dimitar Mashev
+                CRF51650 "Client Invoice" added to link types field
+
+      04.10.19  Ritam Majumdar
+                CRF52061  Field length for FileName changed to 250
+    }
+    END.
+  }
+}
+
+OBJECT Table 50018 WSID
+{
+  OBJECT-PROPERTIES
+  {
+    Date=24-03-22;
+    Time=13:31:27;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Type                ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=,Client,Entity }
+    { 2   ;   ;ClientNo/EntityNo   ;Code20        ;TableRelation=IF (Type=CONST(Client)) Client."Client No."
+                                                                 ELSE IF (Type=CONST(Entity)) Entity."Entity No.";
+                                                   OnValidate=VAR
+                                                                ClientRec@1000000000 : Record 9068500;
+                                                                EntityRec@1000000001 : Record 9068505;
+                                                              BEGIN
+                                                                CASE Type OF
+                                                                Type::Client : BEGIN
+                                                                ClientRec.GET("ClientNo/EntityNo");
+                                                                WSID := ClientRec.Name;
+                                                                END;
+                                                                Type::Entity : BEGIN
+                                                                EntityRec.GET("ClientNo/EntityNo");
+                                                                WSID := EntityRec."Name 2" + ' '+ EntityRec.Name;
+                                                                END
+                                                                END;
+                                                              END;
+
+                                                   DataClassification=ToBeClassified }
+    { 3   ;   ;WSID                ;Text100        }
+    { 4   ;   ;WebPageLink         ;Text250       ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;Type,ClientNo/EntityNo                  ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT Table 50019 API Log
+{
+  OBJECT-PROPERTIES
+  {
+    Date=21-07-22;
+    Time=15:28:09;
+    Modified=Yes;
+    Version List=DFX;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Entry No.           ;Integer       ;AutoIncrement=Yes;
+                                                   DataClassification=ToBeClassified }
+    { 2   ;   ;API                 ;Text100       ;DataClassification=ToBeClassified }
+    { 3   ;   ;API URL             ;Text250       ;DataClassification=ToBeClassified }
+    { 4   ;   ;Record Id           ;RecordID      ;DataClassification=ToBeClassified }
+    { 5   ;   ;Record Type         ;Text50        ;DataClassification=ToBeClassified }
+    { 6   ;   ;Record No.          ;Code20        ;DataClassification=ToBeClassified }
+    { 7   ;   ;Created Date        ;DateTime      ;DataClassification=ToBeClassified }
+    { 8   ;   ;Status              ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=Failure,Success }
+    { 9   ;   ;Description         ;Text250       ;DataClassification=ToBeClassified }
+    { 10  ;   ;UserID              ;Text100       ;TableRelation=User."User Name";
+                                                   ValidateTableRelation=No;
+                                                   DataClassification=ToBeClassified }
+    { 1000;   ;Name                ;Text100       ;DataClassification=ToBeClassified;
+                                                   Description=//Partition code change }
+    { 1001;   ;OldPartitionCode    ;Text250       ;DataClassification=ToBeClassified }
+    { 1002;   ;NewPartitionCode    ;Text250       ;DataClassification=ToBeClassified }
+    { 1003;   ;Function            ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=Insert,Delete,Modify,Rename }
+    { 1004;   ;Flag                ;Boolean       ;DataClassification=ToBeClassified }
+    { 1005;   ;OldPartitionGroup   ;Text250       ;DataClassification=ToBeClassified }
+    { 1006;   ;NewPartitionGroup   ;Text250       ;DataClassification=ToBeClassified }
+    { 2000;   ;OldName             ;Text250       ;DataClassification=ToBeClassified;
+                                                   Description=//Entity Name Change }
+    { 2001;   ;NewName             ;Text250       ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;Entry No.                               ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    PROCEDURE LogEntries@100000000(pAPI@100000000 : Text;pAPIURL@100000001 : Text;pRecordType@100000002 : Text;"pRecordNo."@100000003 : Code[20];pStatus@100000004 : Boolean;pErrorMsg@100000005 : Text[250];pOldName@100000006 : Text;pNewName@100000009 : Text;POldPartitionCode@100000010 : Text;PNewPartitionCode@100000011 : Text;POldPartitionGroup@100000013 : Text;PNewPartitionGroup@100000012 : Text);
+    VAR
+      ErrorLog@100000007 : Record 50019;
+      ErrorLog1@100000008 : Record 50019;
+    BEGIN
+      ErrorLog.INIT;
+
+
+      ErrorLog.API := pAPI;
+      ErrorLog."Created Date" := CREATEDATETIME(TODAY,TIME);
+      ErrorLog.UserID := UserID;
+      ErrorLog."Record Type" := pRecordType;
+      ErrorLog."Record No." := "pRecordNo.";
+      ErrorLog."API URL" := pAPIURL;
+      ErrorLog.OldName := pOldName;
+      ErrorLog.NewName := pNewName;
+      ErrorLog.OldPartitionCode := POldPartitionCode;
+      ErrorLog.NewPartitionCode := PNewPartitionCode;
+      ErrorLog.OldPartitionGroup := POldPartitionGroup;
+      ErrorLog.NewPartitionGroup := PNewPartitionGroup;
+        IF pStatus THEN BEGIN
+          ErrorLog.Status := ErrorLog.Status::Success;
+          ErrorLog.Description := pErrorMsg;//'Record - ' + ErrorLog."Record Type" + ' - ' + ErrorLog."Record No." + ' - ' + FORMAT(ErrorLog.Status);
+        END
+        ELSE BEGIN
+          ErrorLog.Status := ErrorLog.Status::Failure;
+          ErrorLog.Description := pErrorMsg;//GETLASTERRORTEXT();
+        END;
+
+        IF ErrorLog1.FINDLAST THEN
+          ErrorLog."Entry No." := ErrorLog1."Entry No." + 1;
+       ErrorLog.INSERT(TRUE);
+    END;
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT Table 50020 DFX VEGA Interface
+{
+  OBJECT-PROPERTIES
+  {
+    Date=29-07-22;
+    Time=12:31:28;
+    Modified=Yes;
+    Version List=DFX VEGA;
+  }
+  PROPERTIES
+  {
+    OnInsert=BEGIN
+               {DFXVEGAInterface.RESET;
+               DFXVEGAInterface.SETRANGE(Status,DFXVEGAInterface.Status::UnProcessed);
+               IF DFXVEGAInterface.FINDSET THEN
+                 UnProcessed := DFXVEGAInterface.COUNT;
+
+
+               DFXVEGAInterface1.RESET;
+               DFXVEGAInterface1.SETRANGE(Status,DFXVEGAInterface1.Status::InReview);
+               IF DFXVEGAInterface1.FINDSET THEN
+                 InReview := DFXVEGAInterface1.COUNT;
+
+               DFXVEGAInterface2.RESET;
+               DFXVEGAInterface2.SETRANGE(Status,DFXVEGAInterface1.Status::Processed);
+               IF DFXVEGAInterface2.FINDSET THEN
+                 Processed := DFXVEGAInterface2.COUNT;
+               }
+             END;
+
+  }
+  FIELDS
+  {
+    { 1   ;   ;Entry No.           ;Code50        ;DataClassification=ToBeClassified }
+    { 2   ;   ;Entity No.          ;Code20        ;DataClassification=ToBeClassified }
+    { 3   ;   ;Entity Name         ;Text250       ;DataClassification=ToBeClassified }
+    { 4   ;   ;First/Second        ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=,First,Second }
+    { 5   ;   ;Status              ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=,UnProcessed,InProcess,InReview,Processed,Rejected,IdleRejected }
+    { 6   ;   ;Case ID             ;Code50        ;DataClassification=ToBeClassified }
+    { 7   ;   ;Passport Number     ;Code30        ;DataClassification=ToBeClassified }
+    { 8   ;   ;Passport Issue Date ;Date          ;DataClassification=ToBeClassified }
+    { 9   ;   ;Passport Expiry Date;Date          ;DataClassification=ToBeClassified }
+    { 10  ;   ;Passport Country of Issue;Code20   ;DataClassification=ToBeClassified }
+    { 11  ;   ;Email               ;Text50        ;DataClassification=ToBeClassified }
+    { 12  ;   ;Status Message      ;Text250       ;DataClassification=ToBeClassified }
+    { 13  ;   ;External Case ID    ;Text30        ;DataClassification=ToBeClassified }
+    { 1000;   ;New Passport Number ;Code30        ;DataClassification=ToBeClassified }
+    { 1001;   ;New Passport Issue Date;Date       ;DataClassification=ToBeClassified }
+    { 1002;   ;New Passport Expiry Date;Date      ;DataClassification=ToBeClassified }
+    { 1003;   ;New Passport Country of Issue;Code20;
+                                                   DataClassification=ToBeClassified }
+    { 1004;   ;Document Data       ;BLOB          ;DataClassification=ToBeClassified }
+    { 3001;   ;API Status          ;Text50        ;DataClassification=ToBeClassified;
+                                                   Description=//API Response write }
+    { 3002;   ;Error Message       ;Text100       ;DataClassification=ToBeClassified }
+    { 3003;   ;Object Reference    ;Text30        ;DataClassification=ToBeClassified }
+    { 3004;   ;Case Status         ;Text30        ;DataClassification=ToBeClassified }
+    { 3005;   ;Percentage Complete ;Decimal       ;DataClassification=ToBeClassified }
+    { 3006;   ;Data                ;Text250       ;DataClassification=ToBeClassified }
+    { 3007;   ;File Name           ;Text250       ;DataClassification=ToBeClassified }
+    { 3008;   ;Flag                ;Boolean       ;DataClassification=ToBeClassified }
+    { 3009;   ;Review URL          ;Text250       ;DataClassification=ToBeClassified }
+    { 5001;   ;Unprocessed         ;Integer       ;FieldClass=FlowField;
+                                                   CalcFormula=Count("DFX VEGA Interface" WHERE (Status=FILTER(UnProcessed),
+                                                                                                 RM User ID=FIELD(Current User)));
+                                                   Description=//For Cue }
+    { 5002;   ;Inprocess           ;Integer       ;FieldClass=FlowField;
+                                                   CalcFormula=Count("DFX VEGA Interface" WHERE (Status=FILTER(InProcess),
+                                                                                                 RM User ID=FIELD(Current User))) }
+    { 5003;   ;InReview            ;Integer       ;FieldClass=FlowField;
+                                                   CalcFormula=Count("DFX VEGA Interface" WHERE (Status=FILTER(InReview),
+                                                                                                 RM User ID=FIELD(Current User))) }
+    { 5004;   ;Processed           ;Integer       ;FieldClass=FlowField;
+                                                   CalcFormula=Count("DFX VEGA Interface" WHERE (Status=FILTER(Processed),
+                                                                                                 RM User ID=FIELD(Current User))) }
+    { 5005;   ;Rejected            ;Integer       ;FieldClass=FlowField;
+                                                   CalcFormula=Count("DFX VEGA Interface" WHERE (Status=FILTER(Rejected|IdleRejected),
+                                                                                                 RM User ID=FIELD(Current User))) }
+    { 5007;   ;Current User        ;Code50        ;FieldClass=FlowFilter }
+    { 6001;   ;Relationship manager;Code30        ;DataClassification=ToBeClassified;
+                                                   Description=//CE RM link }
+    { 6002;   ;RM Mail             ;Text100       ;DataClassification=ToBeClassified }
+    { 6003;   ;RM User ID          ;Text50        ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;Entry No.                               ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+    VAR
+      DFXVEGAInterface@100000000 : Record 50020;
+      DFXVEGAInterface1@100000001 : Record 50020;
+      DFXVEGAInterface2@100000002 : Record 50020;
+
+    BEGIN
+    END.
+  }
+}
+

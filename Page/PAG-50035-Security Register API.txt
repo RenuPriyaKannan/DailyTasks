@@ -1,0 +1,170 @@
+OBJECT Page 50035 Security Register API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=11-12-20;
+    Time=10:08:48;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    ModifyAllowed=Yes;
+    SourceTable=Table9068755;
+    PageType=List;
+    CardPageID=Client Security Card;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000000;1;Group  ;
+                GroupType=Repeater }
+
+    { 1000000018;2;Field  ;
+                SourceExpr="Client No.";
+                CaptionClass=FIELDCAPTION("Client No.");
+                Editable=FALSE }
+
+    { 1040034;2;Field     ;
+                SourceExpr=Description }
+
+    { 1040018;2;Field     ;
+                SourceExpr="Security Code";
+                Editable=FALSE }
+
+    { 1040000;2;Field     ;
+                SourceExpr="Client Formal Name";
+                CaptionClass=FIELDCAPTION("Client Formal Name");
+                Visible=FALSE;
+                Editable=FALSE }
+
+    { 1000000024;2;Field  ;
+                SourceExpr="Instrument Creating Security";
+                CaptionClass=FIELDCAPTION("Instrument Creating Security");
+                Editable=FALSE }
+
+    { 1040044;2;Field     ;
+                SourceExpr="Security Provided" }
+
+    { 1040046;2;Field     ;
+                SourceExpr="Security Provided To/By" }
+
+    { 1040020;2;Field     ;
+                SourceExpr="Date Security Started";
+                Editable=FALSE }
+
+    { 1000000038;2;Field  ;
+                SourceExpr="Security Expiry Date";
+                CaptionClass=FIELDCAPTION("Security Expiry Date");
+                Editable=FALSE }
+
+    { 1040022;2;Field     ;
+                SourceExpr="Date of Discharge";
+                Editable=FALSE }
+
+    { 1040024;2;Field     ;
+                SourceExpr="Security Currency";
+                Editable=FALSE }
+
+    { 1040040;2;Field     ;
+                SourceExpr="Amount of Security" }
+
+    { 1040026;2;Field     ;
+                SourceExpr="Asset Valuation Currency";
+                Editable=FALSE }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="Asset Valuation On" }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="Asset Valuation" }
+
+    { 1040036;2;Field     ;
+                Name=Asset ValuationCalc;
+                CaptionML=ENU=Asset Valuation;
+                SourceExpr=CalcAssetVal }
+
+    { 1040028;2;Field     ;
+                SourceExpr="Outstanding Liability Currency";
+                Editable=FALSE }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Outstanding Liability On" }
+
+    { 1000000004;2;Field  ;
+                SourceExpr="Outstanding Liability" }
+
+    { 1040038;2;Field     ;
+                Name=Outstanding LiabilityCalc;
+                CaptionML=ENU=Outstanding Liability;
+                SourceExpr=CalcLiabilityVal }
+
+    { 1000000034;2;Field  ;
+                SourceExpr="Filed with Company Registry";
+                CaptionClass=FIELDCAPTION("Filed with Company Registry");
+                Editable=FALSE }
+
+    { 1000000036;2;Field  ;
+                SourceExpr="Date Filed Company Registry";
+                CaptionClass=FIELDCAPTION("Date Filed Company Registry");
+                Editable=FALSE }
+
+    { 1000000042;2;Field  ;
+                SourceExpr="Legal Charge Registered";
+                CaptionClass=FIELDCAPTION("Legal Charge Registered");
+                Editable=FALSE }
+
+    { 1040042;2;Field     ;
+                SourceExpr="Legal Charge Registered Date" }
+
+    { 1040002;2;Field     ;
+                SourceExpr=ClientAnalysisA;
+                Editable=FALSE }
+
+    { 1040004;2;Field     ;
+                SourceExpr=ClientAnalysisB;
+                Editable=FALSE }
+
+    { 1040006;2;Field     ;
+                SourceExpr=ClientAnalysisC;
+                Editable=FALSE }
+
+    { 1040008;2;Field     ;
+                SourceExpr=ClientAnalysisD;
+                Editable=FALSE }
+
+    { 1040010;2;Field     ;
+                SourceExpr=ClientAnalysisE;
+                Editable=FALSE }
+
+    { 1040012;2;Field     ;
+                SourceExpr=ClientAnalysisF;
+                Editable=FALSE }
+
+    { 1040014;2;Field     ;
+                SourceExpr="Global Dimension 1 Code";
+                Editable=FALSE }
+
+    { 1040016;2;Field     ;
+                SourceExpr="Global Dimension 2 Code";
+                Editable=FALSE }
+
+    { 1040030;2;Field     ;
+                SourceExpr=Comment;
+                Editable=FALSE }
+
+    { 1040032;2;Field     ;
+                SourceExpr="Warning Comment";
+                Editable=FALSE }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

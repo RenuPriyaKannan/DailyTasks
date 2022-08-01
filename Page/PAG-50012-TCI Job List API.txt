@@ -1,0 +1,142 @@
+OBJECT Page 50012 TCI Job List API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=27-11-20;
+    Time=20:41:59;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9072681;
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                GroupType=Repeater }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="No.";
+                Visible=TRUE }
+
+    { 1000000008;2;Field  ;
+                SourceExpr=Blocked;
+                Visible=FALSE }
+
+    { 4   ;2   ;Field     ;
+                SourceExpr="Search Description" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="Bill To Customer Name" }
+
+    { 6   ;2   ;Field     ;
+                SourceExpr=Description }
+
+    { 35  ;2   ;Field     ;
+                SourceExpr=Status;
+                Visible=FALSE }
+
+    { 10  ;2   ;Field     ;
+                SourceExpr="Person Responsible";
+                Visible=FALSE }
+
+    { 19  ;2   ;Field     ;
+                SourceExpr="Job Posting Group";
+                Visible=FALSE }
+
+    { 12  ;2   ;Field     ;
+                SourceExpr="Global Dimension 1 Code";
+                Visible=FALSE }
+
+    { 14  ;2   ;Field     ;
+                SourceExpr="Global Dimension 2 Code";
+                Visible=FALSE }
+
+    { 8   ;2   ;Field     ;
+                SourceExpr="Bill-to Customer No." }
+
+    { 1000000020;2;Field  ;
+                SourceExpr=Intermediary }
+
+    { 1000000010;2;Field  ;
+                SourceExpr=ClientAnalysisJ1 }
+
+    { 1000000012;2;Field  ;
+                SourceExpr=ClientAnalysisJ2 }
+
+    { 1000000014;2;Field  ;
+                CaptionML=[ENU=Client Status;
+                           ENG=Client Status];
+                SourceExpr=ClientActive }
+
+    { 1040000;2;Field     ;
+                SourceExpr=ClientAnalysisA;
+                CaptionClass='50,1,A' }
+
+    { 1040002;2;Field     ;
+                SourceExpr=ClientAnalysisB }
+
+    { 1040004;2;Field     ;
+                SourceExpr=ClientAnalysisC }
+
+    { 1040006;2;Field     ;
+                SourceExpr=ClientAnalysisD }
+
+    { 1040008;2;Field     ;
+                SourceExpr=ClientAnalysisE }
+
+    { 1040010;2;Field     ;
+                SourceExpr=ClientAnalysisF }
+
+    { 1040012;2;Field     ;
+                SourceExpr="Next Fee Review Date" }
+
+    { 1000000004;2;Field  ;
+                SourceExpr="Job Currency Code" }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="WIP Balance (LCY)" }
+
+    { 1000000013;2;Field  ;
+                Description=TWM90.07#1;
+                SourceExpr="Usage (Price)";
+                Visible=FALSE }
+
+    { 1000000016;2;Field  ;
+                SourceExpr="First Partition Code" }
+
+    { 1000000015;2;Field  ;
+                SourceExpr="Second Partition Code" }
+
+    { 1000000025;2;Field  ;
+                SourceExpr="Default Recipient Account" }
+
+    { 1000000024;2;Field  ;
+                SourceExpr="Settlement Client No." }
+
+    { 1000000023;2;Field  ;
+                SourceExpr="Default Payment Account" }
+
+    { 1000000022;2;Field  ;
+                SourceExpr="Payment Method Code" }
+
+    { 1000000021;2;Field  ;
+                SourceExpr="Settlement Due" }
+
+    { 1000000019;2;Field  ;
+                SourceExpr="Settlement Resource" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

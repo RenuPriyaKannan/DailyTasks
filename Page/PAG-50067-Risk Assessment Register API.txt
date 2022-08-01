@@ -1,0 +1,165 @@
+OBJECT Page 50067 Risk Assessment Register API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=15-01-21;
+    Time=14:13:34;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SaveValues=Yes;
+    InsertAllowed=No;
+    DeleteAllowed=No;
+    ModifyAllowed=Yes;
+    SourceTable=Table9068951;
+    DataCaptionExpr='Risk Assessment Register';
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000001;1;Group  ;
+                Editable=false;
+                GroupType=Repeater }
+
+    { 1000000036;2;Field  ;
+                SourceExpr=Type }
+
+    { 1000000035;2;Field  ;
+                SourceExpr="No." }
+
+    { 1000000044;2;Field  ;
+                Name=Code }
+
+    { 1000000034;2;Field  ;
+                SourceExpr="Assessment Date" }
+
+    { 1000000033;2;Field  ;
+                SourceExpr="Risk Template Code" }
+
+    { 1000000032;2;Field  ;
+                SourceExpr="Mandatory Risk Assessment" }
+
+    { 1000000031;2;Field  ;
+                SourceExpr=Comments }
+
+    { 1000000030;2;Field  ;
+                SourceExpr=Status }
+
+    { 1000000029;2;Field  ;
+                SourceExpr="Version No." }
+
+    { 1000000028;2;Field  ;
+                SourceExpr="Risk Rating" }
+
+    { 1000000027;2;Field  ;
+                SourceExpr="Assessment Due" }
+
+    { 1000000026;2;Field  ;
+                SourceExpr="Workflow Entry No." }
+
+    { 1000000038;2;Field  ;
+                Description=TWM90.07#1;
+                SourceExpr="Client Status" }
+
+    { 1000000039;2;Field  ;
+                Description=TWM90.07#1;
+                SourceExpr="Inactive Entity" }
+
+    { 1000000040;2;Field  ;
+                Description=TWM90.07#1;
+                SourceExpr="Closed Owner" }
+
+    { 1000000041;2;Field  ;
+                Description=TWM90.07#1;
+                SourceExpr="Prospect Potential" }
+
+    { 1000000042;2;Field  ;
+                Description=TWM90.07#1;
+                SourceExpr="Potential Client Status" }
+
+    { 1000000025;2;Field  ;
+                SourceExpr="Client Name" }
+
+    { 1000000024;2;Field  ;
+                SourceExpr="Prospect Name" }
+
+    { 1000000023;2;Field  ;
+                SourceExpr="Owner Name" }
+
+    { 1000000022;2;Field  ;
+                SourceExpr="Entity Name" }
+
+    { 1000000021;2;Field  ;
+                SourceExpr="Include in Risk Calculation" }
+
+    { 1000000020;2;Field  ;
+                SourceExpr="Risk Weighting" }
+
+    { 1000000019;2;Field  ;
+                SourceExpr="Date Completed" }
+
+    { 1000000018;2;Field  ;
+                SourceExpr="Time Completed" }
+
+    { 1000000017;2;Field  ;
+                SourceExpr="Date Signed-off" }
+
+    { 1000000016;2;Field  ;
+                SourceExpr="Time Signed-off" }
+
+    { 1000000015;2;Field  ;
+                SourceExpr="Completed By" }
+
+    { 1000000014;2;Field  ;
+                SourceExpr="Signed-off By" }
+
+    { 1000000013;2;Field  ;
+                SourceExpr="Medium Risk Value" }
+
+    { 1000000012;2;Field  ;
+                SourceExpr="High Risk Value" }
+
+    { 1000000011;2;Field  ;
+                SourceExpr=ClientAnalysisA }
+
+    { 1000000010;2;Field  ;
+                SourceExpr=ClientAnalysisB }
+
+    { 1000000009;2;Field  ;
+                SourceExpr=ClientAnalysisC }
+
+    { 1000000008;2;Field  ;
+                SourceExpr=ClientAnalysisD }
+
+    { 1000000007;2;Field  ;
+                SourceExpr=ClientAnalysisE }
+
+    { 1000000006;2;Field  ;
+                SourceExpr=ClientAnalysisF }
+
+    { 1000000005;2;Field  ;
+                SourceExpr=Administrator }
+
+    { 1000000004;2;Field  ;
+                SourceExpr=Manager }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Total Workflow Count" }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Total Activity Count" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

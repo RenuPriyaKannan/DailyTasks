@@ -1,0 +1,107 @@
+OBJECT Page 50021 Entity Details API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=21-11-20;
+    Time=20:29:45;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table50002;
+    PageType=List;
+    ActionList=ACTIONS
+    {
+      { 1000000024;  ;ActionContainer;
+                      CaptionML=ENU=action;
+                      ActionContainerType=NewDocumentItems }
+    }
+  }
+  CONTROLS
+  {
+    { 1000000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000001;1;Group  ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Entity No." }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Entry No." }
+
+    { 1000000004;2;Field  ;
+                SourceExpr=Name }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="Name 2" }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="Personal/Corporate" }
+
+    { 1000000007;2;Field  ;
+                SourceExpr=Jurisdiction }
+
+    { 1000000008;2;Field  ;
+                SourceExpr=Residence }
+
+    { 1000000009;2;Field  ;
+                SourceExpr="Passport number" }
+
+    { 1000000010;2;Field  ;
+                SourceExpr="Passport/ID Issue Date" }
+
+    { 1000000011;2;Field  ;
+                SourceExpr="Passport expiry date" }
+
+    { 1000000012;2;Field  ;
+                SourceExpr="Passport country of issue" }
+
+    { 1000000013;2;Field  ;
+                SourceExpr="Passport/ID Number (2)" }
+
+    { 1000000014;2;Field  ;
+                SourceExpr="Passport/ID Country (2)" }
+
+    { 1000000015;2;Field  ;
+                SourceExpr="Passport/ID Issue Date (2)" }
+
+    { 1000000016;2;Field  ;
+                SourceExpr="Passport/ID Expiry Date (2)" }
+
+    { 1000000017;2;Field  ;
+                SourceExpr="FATCA Classification" }
+
+    { 1000000018;2;Field  ;
+                SourceExpr="CRS Classification" }
+
+    { 1000000019;2;Field  ;
+                SourceExpr="Tax Code" }
+
+    { 1000000020;2;Field  ;
+                SourceExpr="Tax Return Country Code" }
+
+    { 1000000021;2;Field  ;
+                SourceExpr="TIN Type" }
+
+    { 1000000022;2;Field  ;
+                SourceExpr=TIN }
+
+    { 1000000023;2;Field  ;
+                SourceExpr="Tax Category" }
+
+    { 1000000026;2;Field  ;
+                SourceExpr=WSID }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

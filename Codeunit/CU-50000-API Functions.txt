@@ -1,0 +1,1770 @@
+OBJECT Codeunit 50000 API Functions
+{
+  OBJECT-PROPERTIES
+  {
+    Date=30-06-22;
+    Time=10:58:43;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    OnRun=VAR
+            TestJson@100000000 : TextConst 'ENG={
+                      "Action":{
+          "Function": "CREATENEW"
+                                 },
+                                 "Records":[{
+                                 "AttachedToType": "Client",
+                                 "AttachedToNo": "CLI092",
+                                 "LFEntryID": "1234",
+                                 "FileName": "abc.txt",
+                                 "DocDescription" : "Initial Deed",
+                                 "LFDocType" : "",
+                                 "LFDocSubType" : "",
+                                 "LFUID" : "60000"
+                                 }
+                                 ]
+                                 }';
+            UpdateJSON@100000001 : TextConst 'ENU={
+                      "Action":{
+          "Function": "UPDATE"
+          },
+          "Records":[{
+          "AttachedToType": "Client",
+          "AttachedToNo": "CLI092",
+          "LFEntryID": "12345",
+          "FileName": "abcd.txt",
+          "DocDescription" : "Deed",
+          "LFDocType" : "",
+          "LFDocSubType" : "",
+          "LFUID" : "60000"
+          }
+          ]
+          }';
+            update@1000000000 : TextConst 'ENU={
+                      "Action":{
+          "Function": "UPDATE"
+          },
+          "Records":[{
+          "AttachedToType": "Client",
+          "AttachedToNo": "CLI092",
+          "LFEntryID": "12347656",
+          "FileName": "xyz.txt",
+          "DocDescription" : "Deed",
+          "LFDocType" : "",
+          "LFDocSubType" : "",
+          "LFUID" : "60000"
+          }
+          ]
+          }';
+            UPDATETEST@1000000001 : TextConst 'ENU={
+                      "Action":{
+          "Function": "UPDATE"
+          },
+          "Records":[{
+          "AttachedToType": "Client",
+          "AttachedToNo": "CL00004", 
+          "LFEntryID": 40613,
+                             "FileName": "abc-doc.txt",
+                             "DocDescription" : "testLF-doc",
+                             "LFDocType" : "CHAR",
+                             "LFDocSubType" : "TEST"
+                             }
+                             ]
+                             }';
+            AgreementAttachedType@1000000002 : 'Prospect,Contact,Owner,,,Potential Client,,,Client,,,Entity,Intermediary,Resource';
+            "Meeting Type"@1000000004 : ' ,Directors,Shareholders';
+            Status@1000000003 : 'In Progress,Signed Off';
+            Freeze@100000002 : ' ,Yes,No';
+            RecordType@100000003 : 'Prospect,Client Owner,Client,Entity,Resource';
+            LinkedTo@100000004 : ' ,Client,Entity,Prospect,Owner,Job,Bank,Loan,Agent,Property,Miscellaneous Asset,Yacht,Aviation,Intellectual Property,Life Assurance,Quoted Investment,Unquoted Investment,Potential Client,Borrowing and Lending,Portfolio,Payments/Receipts,Resource,Safe Custody,Introducer,Distribution,Addition';
+          BEGIN
+            MESSAGE('Licence');
+            //CreateCounterparty('CLI0000001');
+            //UpdateNavFromLF(update);
+            //UpdateNavFromLF(UPDATETEST);
+            //InsertAgreementRegister('RE001',AgreementAttachedType::Entity,'E00000008',TODAY,'12344',TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,2,'ttt');
+            //InsertMeetingRegister('CLI0000004','WESTFIELD INTERNATIONAL INVESTMENT INC.',TODAY,000300T,"Meeting Type"::Shareholders,'',Status::"In Progress");
+            //SignOffTrackingPeriod(RecordType::Entity,'E00000005','FATCA','US',010126D,311226D,TODAY,TODAY);
+            //CreateUDF(LinkedTo::Entity,'E00000025','EMS_GUID','','E00000025',LinkedTo::" ",'',TODAY,TODAY,1);
+            //CreateTWMPayment('0000020');
+            //CancelTWMPayment('PY00000009');
+            //ValidateTWMPayment('PY00000010');
+          END;
+
+  }
+  CODE
+  {
+    VAR
+      ClientManagementFunctions@100000000 : Codeunit 9068493;
+      NavOneSystem@100000002 : Codeunit 9068249;
+      DataPartitioningMgmtit@100000001 : Codeunit 9072480;
+      NoSeriesManagement@1000000000 : Codeunit 396;
+      JSONMgt@100000003 : Codeunit 5459;
+
+    [External]
+    PROCEDURE CreateClient@100000002(Name@100000000 : Text[50];ClientType@100000001 : Code[10];ClientFormalName@100000002 : Text[150];CurrencyCode@100000003 : Code[10];LegalCode@100000004 : Code[20];FirstPartitionCode@100000005 : Code[10];SecondPartitionCode@100000006 : Code[10];TrustDirector@100000007 : Code[20];RelationshipManager@100000008 : Code[20];AssistRelationshipManager@100000009 : Code[20];Administrator@100000010 : Code[20];Accountant@100000011 : Code[20];ClientActivityGroup@100000012 : Code[20];CreateFiscalYear@100000013 : Boolean;InserMailingAddress@100000014 : Boolean);
+    VAR
+      ClientRecTEMP@100000019 : TEMPORARY Record 9068500;
+      ClientRec@100000015 : Record 9068500;
+      ClientGLSetup@100000016 : Record 9068618;
+      NewClientGLSetup@100000017 : Record 9068618;
+      ClientTypeRec@100000018 : Record 9068501;
+      NewClientSetup@100000020 : Codeunit 9068482;
+      CreatedProperly@100000021 : Boolean;
+    BEGIN
+      ClientRecTEMP.INIT;
+      ClientRecTEMP.Type := ClientType;
+      ClientRecTEMP.Name := Name;
+      ClientRecTEMP."Client Formal Name" := ClientFormalName;
+      ClientRecTEMP."Currency Code" := CurrencyCode;
+      ClientRecTEMP."Global Dimension 1 Code" := LegalCode;
+      ClientRecTEMP."First Partition Code" := FirstPartitionCode;
+      ClientRecTEMP."Second Partition Code" := SecondPartitionCode;
+      ClientRecTEMP.ClientAnalysisA := TrustDirector;
+      ClientRecTEMP.ClientAnalysisB := RelationshipManager;
+      ClientRecTEMP.ClientAnalysisC := AssistRelationshipManager;
+      ClientRecTEMP.ClientAnalysisD := Administrator;
+      ClientRecTEMP.ClientAnalysisE := Accountant;
+      ClientRecTEMP.ClientAnalysisF := ClientActivityGroup;
+      ClientRec := ClientRecTEMP;
+
+      NewClientSetup.CreateClient(ClientRec, CurrencyCode, InserMailingAddress,
+        ClientRec."Global Dimension 2 Code", '') ;
+    END;
+
+    [External]
+    PROCEDURE CreateEntity@1000000001(Name@1000000000 : Text[50];Name2@1000000001 : Text[50];DateOfBirth@1000000002 : Date;Nationality@1000000003 : Code[10];Profession@1000000004 : Code[10];Residence@1000000005 : Code[10];Personal_Corporate@1000000006 : 'Personal,Corporate';Jurisdiction@1000000007 : Code[10];CountryofIncorporation@1000000008 : Code[10];DateOfIncorporation@1000000011 : Date;CreateOwner@100000000 : Boolean;isBank@100000001 : Boolean) EntityCode : Code[20];
+    VAR
+      Entity@100000003 : Record 9068505;
+      Owner@100000002 : Record 9068443;
+    BEGIN
+
+      IF Personal_Corporate = Personal_Corporate::Personal THEN
+        IF (STRLEN(Name) < 2) THEN
+          ERROR('Name must be at least 2 characters');
+      // IF Personal_Corporate = Personal_Corporate::Corporate THEN
+      //  IF (STRLEN(Name2) < 2) THEN
+      //    ERROR('Name2 must be at least 2 characters');
+
+      Entity.INIT;
+      Entity.Name :=  Name;
+      Entity."Name 2" := Name2;
+      Entity.UpdateFormalName;
+      Entity."Date of Birth" := DateOfBirth;
+      Entity.Nationality := Nationality;
+      Entity.Profession := Profession;
+      Entity.Residence := Residence;
+      CASE Personal_Corporate OF
+        Personal_Corporate::Personal : Entity."Personal/Corporate" := Entity."Personal/Corporate"::Personal;
+        Personal_Corporate::Corporate : Entity."Personal/Corporate":= Entity."Personal/Corporate"::Corporate;
+      END;
+      IF isBank THEN
+        Entity."Entity Type" := Entity."Entity Type"::Bank;
+
+      Entity.Jurisdiction := Jurisdiction;
+      Entity."Country of Incorporation" := CountryofIncorporation;
+      Entity."Date of incorp./formation" := DateOfIncorporation;
+      Entity.INSERT(TRUE);
+
+      IF CreateOwner THEN BEGIN
+        Owner.INIT;
+        Owner."Entity No." := Entity."Entity No.";
+        Owner.INSERT(TRUE);
+
+        Entity."Owner No." := Owner."No.";
+        Entity.MODIFY;
+
+        ClientManagementFunctions.UpdateOwnerFromEntity(Entity,FALSE);
+      END;
+      EXIT(EntityCode);
+    END;
+
+    [External]
+    PROCEDURE CreateBankAccount@100000000(ClientNo@100000000 : Code[20];BankCode@100000001 : Code[20];Name@100000002 : Text[50];Name2@100000003 : Text[50];AccountInNameOf@100000004 : Text[150];BankAccountNo@100000005 : Text[30];PostingGroup@100000006 : Code[10];CurrencyCode@100000007 : Code[10];SortCode@100000008 : Text[20];SwiftCode@100000009 : Code[20];IBAN@100000010 : Code[50]);
+    VAR
+      ClientAccount@100000011 : Record 9068624;
+    BEGIN
+      ClientAccount.INIT;
+      ClientAccount."Client No." := ClientNo;
+      ClientAccount.VALIDATE("Bank Code",BankCode);
+      ClientAccount.Name := Name;
+      ClientAccount."Name 2" := Name2;
+      ClientAccount."Account In Name Of" := AccountInNameOf;
+      ClientAccount."Bank Account No." := BankAccountNo;
+      ClientAccount.VALIDATE("Posting Group",PostingGroup);
+      ClientAccount."Currency Code" := CurrencyCode;
+      ClientAccount."Sort Code" := SortCode;
+      ClientAccount."Swift Code" := SwiftCode;
+      ClientAccount.IBAN := IBAN;
+      ClientAccount.INSERT(TRUE);
+    END;
+
+    [External]
+    PROCEDURE CreateContact@1000000014(Type@1000000000 : 'Company,Person';CompanyName@1000000001 : Text[100];FirstName@1000000002 : Text[50];Surname@1000000003 : Text[50];CompanyNo@1000000004 : Code[20]) ContactNo : Code[20];
+    VAR
+      ContactRec@1000000005 : Record 5050;
+      RMSetup@1000000006 : Record 5079;
+      NoSeriesMgt@1000000007 : Codeunit 396;
+      "No."@100000000 : Code[20];
+    BEGIN
+      CLEAR("No.");
+
+      CASE Type OF
+        Type::Company : BEGIN
+          IF ContactRec.INSERT(TRUE) THEN
+            "No." := ContactRec."No.";
+          ContactRec."Company Name" := CompanyName;
+          ContactRec."Company No." := ContactRec."No.";
+          ContactRec.MODIFY;
+        END;
+        Type::Person : BEGIN
+           ContactRec.INIT;
+          ContactRec.VALIDATE("First Name",FirstName);
+          ContactRec.VALIDATE(Surname,Surname);
+          ContactRec.VALIDATE(Type,Type);
+          ContactRec.VALIDATE("Company No.",CompanyNo);
+          IF ContactRec.INSERT(TRUE) THEN
+           "No." := ContactRec."No.";
+        END;
+      END;
+
+      EXIT("No.");
+    END;
+
+    [External]
+    PROCEDURE ShowInvoice@1000000000(DocumentNo@1000000000 : Code[20];FilePath@1000000003 : Text) PDFFileName : Text;
+    VAR
+      ClientInvoice@1000000001 : Record 9068453;
+      ClientInvoiceTemplate2@1000000002 : Report 9072674;
+      SalesInvoiceHeader@1000000004 : Record 112;
+    BEGIN
+      IF SalesInvoiceHeader.GET(DocumentNo) THEN
+        IF NOT ClientInvoice.GET(SalesInvoiceHeader."Billing Guide Number") THEN
+          EXIT;
+
+      IF FilePath = '' THEN
+        EXIT;
+
+      PDFFileName :=  FilePath + FORMAT(CREATEGUID);
+      PDFFileName := DELCHR(PDFFileName,'=','{-}');
+      PDFFileName += '.pdf';
+      ClientInvoiceTemplate2.SETTABLEVIEW(ClientInvoice);
+      ClientInvoiceTemplate2.SAVEASPDF(PDFFileName);
+
+      EXIT(PDFFileName);
+    END;
+
+    [External]
+    PROCEDURE GetBillingGuideNo@1000000007(DocumentNo@1000000000 : Code[20]) BillingGuiideNo : Code[20];
+    VAR
+      SalesInvoiceHeader@1000000001 : Record 112;
+    BEGIN
+
+      IF SalesInvoiceHeader.GET(DocumentNo) THEN
+        EXIT(SalesInvoiceHeader."Billing Guide Number");
+    END;
+
+    [External]
+    PROCEDURE VistraPayment@1000000002(ClientNo@1000000000 : Code[20];InvoiceNo@1000000001 : Code[20];PaymentDate@1000000002 : Date;CurrencyCode@1000000003 : Code[10];TotalAmount@1000000004 : Decimal;BenefName@1000000005 : Text[150];BenefAddress@1000000006 : Text[50];BenefAddress2@1000000007 : Text[50];BenefBankName@1000000008 : Text[70];BenefBankAddress@1000000009 : Text[140];BenefBankAccountNo@1000000010 : Text[34]) ReturnError : Text;
+    VAR
+      ClientRec@1000000011 : Record 9068500;
+      TWMPayments@1000000012 : Record 9072144;
+      TWMPaymentsExtension@1000000013 : Record 9072145;
+      TWMBankingIntegrationSetup@1000000014 : Record 9072130;
+      TWMPaymentsCU@1000000015 : Codeunit 9072130;
+    BEGIN
+
+      IF NOT ClientRec.GET(ClientNo) THEN
+        ERROR('Client not found');
+
+      TWMPayments.INIT;
+      TWMPayments."Document Type" := TWMPayments."Document Type"::Payment;
+      TWMBankingIntegrationSetup.GET;
+       TWMBankingIntegrationSetup.TESTFIELD("Payment Reference Nos.");
+       TWMPayments.Reference := NoSeriesManagement.GetNextNo(TWMBankingIntegrationSetup."Payment Reference Nos.", TODAY, TRUE);
+       TWMPayments."No. Series" := TWMBankingIntegrationSetup."Payment Reference Nos.";
+      TWMPayments.INSERT(TRUE);
+
+      // TWMPayments.CreateExtendedFields;
+      // TWMPayments.CreateAuthSelection;
+      // TWMPaymentsCU.CreateJnlTemplates(TWMPayments);
+      // TWMPaymentsCU.UpdateJournals(TWMPayments);
+
+      TWMPayments."Internal / External" := TWMPayments."Internal / External"::"External Payment";
+      TWMPayments.VALIDATE("External Payment Type", TWMPayments."External Payment Type"::SWIFT);
+      TWMPayments.VALIDATE("From Client",ClientRec."Client No.");
+      TWMPayments.VALIDATE("Value Date",PaymentDate);
+      TWMPayments.VALIDATE("To Currency",CurrencyCode);
+      TWMPayments.VALIDATE("Payment Amount",TotalAmount);
+      TWMPayments."Payments Details" := InvoiceNo;
+      TWMPayments.VALIDATE("Beneficiary Customer",BenefName);
+      TWMPayments.VALIDATE("Beneficiarys Bank Line 1",BenefBankName);
+      TWMPayments."Beneficiarys Bank Line 2" := BenefBankAddress;
+      TWMPayments."Beneficiary Account Number" := BenefBankAccountNo;
+      TWMPayments.Status := TWMPayments.Status::"Enter Details";
+      TWMPayments.MODIFY;
+
+      IF TWMPaymentsExtension.GET(TWMPayments.Reference) THEN BEGIN
+        TWMPaymentsExtension."Beneficiary Address" := BenefAddress;
+        TWMPaymentsExtension."Beneficiary Address 2" := BenefAddress2;
+        TWMPaymentsExtension.MODIFY;
+      END;
+    END;
+
+    [External]
+    PROCEDURE LinkDocument@1000000003(Type@1000000000 : ' ,Client,Entity,Prospect,Intermediary,Client Owner,Resource,,Dimension,,,External Bank Payment,,,,Potential Client,Custom1';Name@1000000001 : Text[50];FileNamePath@1000000014 : Text[500];DocumentType@1000000003 : Code[10];DocumentSubType@1000000004 : Code[20];DocumentDate@1000000005 : Date;Subject@1000000006 : Text[150];DocumentExpiryDate@1000000007 : Date;AdditionalInformation@1000000008 : Text[100]);
+    VAR
+      ClientRec@1000000002 : Record 9068500;
+      EntityRec@1000000015 : Record 9068505;
+      CorrespondenceStore@1000000011 : Record 9068660;
+      DocumentFolderSetup@1000000010 : Record 9068662;
+      DocumentandMailManagement@1000000009 : Codeunit 9068511;
+      DocType@1000000012 : Code[50];
+      TempCode@1000000013 : Code[20];
+      No_@1000000016 : Code[20];
+    BEGIN
+      DocumentFolderSetup.GET;
+      IF DocumentFolderSetup."External Doc Management System" <> DocumentFolderSetup."External Doc Management System"::"Internal Navision" THEN
+        ERROR('Link Document supports only Internal Navision DMS');
+
+      CASE Type OF
+        Type::Client : BEGIN
+          ClientRec.SETFILTER(Name,'%1','@*' + Name + '*');
+          IF NOT ClientRec.FINDFIRST THEN
+            ERROR('Client not found');
+          No_ := ClientRec."Client No.";
+        END;
+        Type::Entity : BEGIN
+          EntityRec.SETFILTER(Name,'%1','@*' + Name + '*');
+          IF NOT EntityRec.FINDFIRST THEN
+            ERROR('Entity not found');
+          No_ := EntityRec."Entity No.";
+        END;
+        ELSE ERROR('Not coded');
+      END;
+      CorrespondenceStore.Type := Type;
+      CorrespondenceStore."No." := No_;
+      CorrespondenceStore.Name := ReturnEntityName(Type,No_);
+      CorrespondenceStore.Subject := Subject;
+      IF DocumentType <> '' THEN BEGIN
+        CorrespondenceStore."Document Type" := DocumentType;
+        CorrespondenceStore."Document Sub Type" := DocumentSubType;
+      END ELSE
+        CorrespondenceStore."Document Type" := 'Migrated';
+
+      CorrespondenceStore."Document Date" := DocumentDate;
+      CorrespondenceStore."Additional Information" := AdditionalInformation;
+      CorrespondenceStore."Document Expiry Date" := DocumentExpiryDate;
+      CorrespondenceStore."Document Inserted Date" := TODAY;
+      CorrespondenceStore."Document Inserted By" := USERID;
+      CorrespondenceStore."Last Accessed Via Navision" := TODAY;
+      CorrespondenceStore."Last Accessed By" := USERID;
+      CorrespondenceStore.ID := DocumentandMailManagement."Get Next Document Number"(Type,No_);
+      CorrespondenceStore."Document GUID" := CREATEGUID;
+      DocumentandMailManagement."Get File Details From FullPath"(FileNamePath,CorrespondenceStore."MS Office Doc Type",CorrespondenceStore.FileName,
+                                  CorrespondenceStore.FilePath);
+      //CorrespondenceStore.FilePath := FilePath;
+      //CorrespondenceStore.FileName := FileName;
+      CorrespondenceStore.INSERT;
+    END;
+
+    [External]
+    PROCEDURE UpdateDocumentType@1000000006(Type@1000000000 : ' ,Client,Entity,Prospect,Intermediary,Client Owner,Resource,,Dimension,,,External Bank Payment,,,,Potential Client,Custom1';Name@1000000006 : Text[50];FileNamePath@1000000014 : Text[500];DocumentType@1000000003 : Code[10];DocumentSubType@1000000004 : Code[20]);
+    VAR
+      ClientRec@1000000008 : Record 9068500;
+      EntityRec@1000000007 : Record 9068505;
+      CorrespondenceStore@1000000011 : Record 9068660;
+      DocumentFolderSetup@1000000010 : Record 9068662;
+      DocumentandMailManagement@1000000009 : Codeunit 9068511;
+      DocType@1000000012 : Code[10];
+      TempCode@1000000013 : Code[20];
+      FileName@1000000002 : Text[250];
+      FilePath@1000000005 : Text[250];
+      No_@1000000001 : Code[20];
+    BEGIN
+      // DocumentFolderSetup.GET;
+      // IF DocumentFolderSetup."External Doc Management System" <> DocumentFolderSetup."External Doc Management System"::"Internal Navision" THEN
+      //  ERROR('Link Document supports only Internal Navision DMS');
+
+      CASE Type OF
+        Type::Client : BEGIN
+          ClientRec.SETFILTER(Name,'%1','@*' + Name + '*');
+          IF NOT ClientRec.FINDFIRST THEN
+            ERROR('Client not found');
+          No_ := ClientRec."Client No.";
+        END;
+        Type::Entity : BEGIN
+          EntityRec.SETFILTER(Name,'%1','@*' + Name + '*');
+          IF NOT EntityRec.FINDFIRST THEN
+            ERROR('Entity not found');
+          No_ := EntityRec."Entity No.";
+        END;
+        ELSE ERROR('Not coded');
+      END;
+
+      DocumentandMailManagement."Get File Details From FullPath"(FileNamePath,DocType,FileName,
+                                  FilePath);
+
+
+      CorrespondenceStore.SETRANGE(Type,Type);
+      CorrespondenceStore.SETRANGE("No.",No_);
+      CorrespondenceStore.SETRANGE(FileName,FileName);
+      CorrespondenceStore.SETRANGE(FilePath,FilePath);
+      IF CorrespondenceStore.FINDFIRST THEN BEGIN
+        CorrespondenceStore."Document Type" := DocumentType;
+        CorrespondenceStore."Document Sub Type" := DocumentSubType;
+        CorrespondenceStore.MODIFY;
+      END;
+    END;
+
+    LOCAL PROCEDURE ReturnEntityName@1000000010(Type@1000000007 : ' ,Client,Entity,Prospect,Intermediary,Client Owner,Resource,,Dimension,,,External Bank Payment,,,,Potential Client,Custom1';No_@1000000006 : Code[20]) : Text;
+    VAR
+      Client@1000000000 : Record 9068500;
+      Entity@1000000001 : Record 9068505;
+      Prospect@1000000002 : Record 9068440;
+      Intermediary@1000000003 : Record 9068447;
+      Owner@1000000004 : Record 9068443;
+      PotentialClient@1000000005 : Record 9068732;
+    BEGIN
+      IF Type = Type::Client THEN BEGIN
+        IF Client.GET(No_) THEN
+          EXIT(Client."Search Name");
+      END ELSE IF Type = Type::Prospect THEN BEGIN
+        IF Prospect.GET(No_) THEN
+          EXIT(Prospect."Search Name");
+      END ELSE IF Type = Type::"Client Owner" THEN BEGIN
+        IF Owner.GET(No_) THEN
+          EXIT(Owner."Search Name");
+      END ELSE IF Type = Type::Entity THEN BEGIN
+        IF Entity.GET(No_) THEN
+          EXIT(Entity."Search Name");
+      END ELSE IF Type = Type::"Potential Client" THEN BEGIN
+        IF PotentialClient.GET(No_) THEN
+          EXIT(PotentialClient."Search Name");
+      END ELSE IF Type = Type::Intermediary THEN BEGIN
+        IF Intermediary.GET(No_) THEN
+          EXIT(Intermediary."Search Name");
+      END;
+    END;
+
+    [External]
+    PROCEDURE PrepareCLENList@1000000004(UserID@1000000000 : Code[50];TableName@1000000001 : Code[10]);
+    VAR
+      ClientRec@1000000002 : Record 9068500;
+      EntityRec@1000000003 : Record 9068505;
+      PartitioningRestrictions@1000000004 : Record 9072487;
+      PartitionedClientEntity@1000000005 : Record 50000;
+      Resource@1000000006 : Record 156;
+    BEGIN
+      Resource.SETRANGE("Login User ID",UserID);
+      IF Resource.ISEMPTY THEN
+        EXIT;
+
+
+      CASE TableName OF
+        'CL' : BEGIN
+          PartitioningRestrictions.SETRANGE("User ID",UserID);
+          PartitioningRestrictions.SETRANGE("Table Name",PartitioningRestrictions."Table Name"::Client);
+
+          PartitionedClientEntity.SETRANGE("Table Name",'CL');
+          PartitionedClientEntity.SETRANGE("USER ID",UserID);
+
+          IF ClientRec.FINDSET THEN REPEAT
+            PartitionedClientEntity.SETRANGE("Client No._Entity No.",ClientRec."Client No.");
+            IF PartitionedClientEntity.ISEMPTY THEN BEGIN
+              PartitioningRestrictions.SETRANGE("Primary Key",ClientRec."Client No.");
+              IF PartitioningRestrictions.ISEMPTY THEN BEGIN
+                PartitionedClientEntity.INIT;
+                PartitionedClientEntity."Table Name" := 'CL';
+                PartitionedClientEntity."USER ID" := UserID;
+                PartitionedClientEntity."Client No._Entity No." := ClientRec."Client No.";
+                PartitionedClientEntity."First Partition Code" := ClientRec."First Partition Code";
+                PartitionedClientEntity."First Partition Code" := ClientRec."Second Partition Code";
+                PartitionedClientEntity."Client Name" := ClientRec.Name;
+                PartitionedClientEntity."CL Country of Incorporation" := ClientRec."Country of Incorporation";
+                PartitionedClientEntity."CL Date of Incorporation" := ClientRec."Date of Incorporation";
+                PartitionedClientEntity."Registered Number" := ClientRec."Registered Number";
+                ClientRec.CALCFIELDS("Currency Code");
+                PartitionedClientEntity."Currency Code" := ClientRec."Currency Code";
+                PartitionedClientEntity."Administrative Office" := ClientRec."Administrative Office";
+                PartitionedClientEntity."Registered Office" := ClientRec."Registered Office";
+                PartitionedClientEntity."Global Dimension 1 Code" := ClientRec."Global Dimension 1 Code";
+                PartitionedClientEntity.ClientAnalysisA := ClientRec.ClientAnalysisA;
+                PartitionedClientEntity.ClientAnalysisB := ClientRec.ClientAnalysisB;
+                PartitionedClientEntity.ClientAnalysisC := ClientRec.ClientAnalysisC;
+                PartitionedClientEntity.ClientAnalysisD := ClientRec.ClientAnalysisD;
+                PartitionedClientEntity.ClientAnalysisE := ClientRec.ClientAnalysisE;
+                PartitionedClientEntity.ClientAnalysisF := ClientRec.ClientAnalysisF;
+                PartitionedClientEntity.INSERT;
+              END;
+            END;
+          UNTIL ClientRec.NEXT = 0;
+        END;
+        'EN' : BEGIN
+          PartitioningRestrictions.SETRANGE("User ID",UserID);
+          PartitioningRestrictions.SETRANGE("Table Name",PartitioningRestrictions."Table Name"::Entity);
+
+          PartitionedClientEntity.SETRANGE("Table Name",'EN');
+          PartitionedClientEntity.SETRANGE("USER ID",UserID);
+
+          IF EntityRec.FINDSET THEN REPEAT
+            PartitionedClientEntity.SETRANGE("Client No._Entity No.",EntityRec."Entity No.");
+            IF PartitionedClientEntity.ISEMPTY THEN BEGIN
+              PartitioningRestrictions.SETRANGE("Primary Key",EntityRec."Entity No.");
+              IF PartitioningRestrictions.ISEMPTY THEN BEGIN
+                PartitionedClientEntity.INIT;
+                PartitionedClientEntity."Table Name" := 'EN';
+                PartitionedClientEntity."USER ID" := UserID;
+                PartitionedClientEntity."Client No._Entity No." := EntityRec."Entity No.";
+                PartitionedClientEntity."EN Name" := EntityRec.Name;
+                PartitionedClientEntity."Date of Birth" := EntityRec."Date of Birth";
+                PartitionedClientEntity.Nationality := EntityRec.Nationality;
+                PartitionedClientEntity.Profession := EntityRec.Profession;
+                PartitionedClientEntity.Residence := EntityRec.Residence;
+                PartitionedClientEntity.Title := EntityRec.Title;
+                PartitionedClientEntity."Name 2" := EntityRec."Name 2";
+                PartitionedClientEntity."Entity Type" := EntityRec."Entity Type";
+                PartitionedClientEntity."Marital Status" := EntityRec."Marital Status";
+                PartitionedClientEntity.Gender := EntityRec.Gender;
+                PartitionedClientEntity.Initials := EntityRec.Initials;
+                PartitionedClientEntity."Personal/Corporate" := EntityRec."Personal/Corporate";
+                PartitionedClientEntity."EN Country of Incorporation" := EntityRec."Country of Incorporation";
+                PartitionedClientEntity."EN Jurisdiction" := EntityRec.Jurisdiction;
+                PartitionedClientEntity.INSERT;
+              END;
+            END;
+          UNTIL EntityRec.NEXT = 0;
+        END;
+      END;
+    END;
+
+    [External]
+    PROCEDURE GetClientType@1000000005(pClientCode@1000000000 : Code[20]) ClType : Code[30];
+    VAR
+      ClientRec@1000000001 : Record 9068500;
+    BEGIN
+      IF ClientRec.GET(pClientCode) THEN BEGIN
+        ClientRec.CALCFIELDS("Client Type Type");
+        ClType :=  FORMAT(ClientRec."Client Type Type");
+        EXIT(ClType);
+      END;
+    END;
+
+    [External]
+    PROCEDURE CreateCustomer@1000000008(Name@1000000014 : Text[50];ClientType@1000000013 : Code[10];SearchName@1000000012 : Text[150];CurrencyCode@1000000011 : Code[10];LegalCode@1000000010 : Code[20];FirstPartitionCode@1000000009 : Code[10];SecondPartitionCode@1000000008 : Code[10];TrustDirector@1000000007 : Code[20];RelationshipManager@1000000006 : Code[20];AssistRelationshipManager@1000000005 : Code[20];Administrator@1000000004 : Code[20];Accountant@1000000003 : Code[20];ClientActivityGroup@1000000002 : Code[20];CreateFiscalYear@1000000001 : Boolean;InserMailingAddress@1000000000 : Boolean);
+    VAR
+      CustRecTEMP@1000000028 : TEMPORARY Record 18;
+      CustRec@1000000027 : Record 18;
+      CustGLSetup@1000000026 : Record 98;
+      NewCustGLSetup@1000000025 : Record 98;
+      ClientTypeRec@1000000024 : Record 9068501;
+      CreatedProperly@1000000022 : Boolean;
+    BEGIN
+      CustRecTEMP.INIT;
+      //CustRecTEMP.Type := ClientType;
+      CustRecTEMP.Name := Name;
+      CustRecTEMP."Search Name" := SearchName;
+      CustRecTEMP."Currency Code" := CurrencyCode;
+      CustRecTEMP."Global Dimension 1 Code" := LegalCode;
+      CustRecTEMP."First Partition Code" := FirstPartitionCode;
+      CustRecTEMP."Second Partition Code" := SecondPartitionCode;
+      CustRecTEMP.ClientAnalysisA := TrustDirector;
+      CustRecTEMP.ClientAnalysisB := RelationshipManager;
+      CustRecTEMP.ClientAnalysisC := AssistRelationshipManager;
+      CustRecTEMP.ClientAnalysisD := Administrator;
+      CustRecTEMP.ClientAnalysisE := Accountant;
+      CustRecTEMP.ClientAnalysisF := ClientActivityGroup;
+      CustRec := CustRecTEMP;
+      CustRec.INSERT(TRUE);
+
+      //NewClientSetup.CreateClient(CustRec, CurrencyCode, InserMailingAddress,
+        //CustRec."Global Dimension 2 Code", '') ;
+    END;
+
+    [External]
+    PROCEDURE UpdateEntity@1000000012(EntityNo@1000000043 : Text;Type@1000000042 : Text[50];Personal_Corporate@1000000041 : 'Personal,Corporate';Name@1000000040 : Text[50];Name2@1000000039 : Text[50];AnonimisedName@1000000038 : Text[50];Initials@1000000037 : Text[50];SearchName@1000000036 : Text[50];Gender@1000000035 : ',Male,Female';PEP@1000000034 : Boolean;EP@1000000033 : Boolean;Classification@1000000032 : Text[50];"Externa ReferenceNo"@1000000031 : Text[50];Passportnumber@1000000030 : Text[50];Passportcountryofissue@1000000029 : Text[50];"Passport/IDIssueDate"@1000000028 : Date;Passportexpirydate@1000000027 : Date;"Passport/IDNumber(2)"@1000000026 : Text[50];"Passport/IDCountry(2)"@1000000025 : Text[50];"Passport/IDIssueDate(2)"@1000000024 : Date;"Passport/IDExpiryDate(2)"@1000000023 : Date;DateofBirth@1000000022 : Date;Nationality@1000000021 : Text[50];BankSwiftCode@1000000020 : Text[50];BankSortCode@1000000019 : Text[50];Inactive@1000000018 : Boolean;NINumber@1000000017 : Text[50];Profession@1000000016 : Text[50];"OwnerNo."@1000000015 : Text[50];Manager@1000000014 : Text[50];Administrator@1000000013 : Text[50];FirstPartitionCode@1000000012 : Text[50];FormalName@1000000011 : Text[50];LastRiskAssessmentDate@1000000010 : Date;NextRiskAssessmentDueDate@1000000009 : Date;CurrentRiskRating@1000000008 : Text[50];CurrentRiskWeight@1000000007 : Integer;Address1@1000000006 : Text[50];Address2@1000000005 : Text[50];Address3@1000000004 : Text[50];City@1000000003 : Text[50];PostCode@1000000002 : Text[50];County@1000000001 : Text[50];CountryCode@1000000000 : Text[50]);
+    VAR
+      Entity@1000000044 : Record 9068505;
+    BEGIN
+      Entity.RESET;
+      Entity.SETRANGE("Entity No.",EntityNo);
+      IF Entity.FINDFIRST THEN BEGIN
+        Entity.Type := Type;
+        Entity."Personal/Corporate" := Personal_Corporate;
+        Entity.Name :=  Name;
+        Entity."Name 2" := Name2;
+        Entity.UpdateFormalName;
+        Entity."Anonimised Name" := AnonimisedName;
+        Entity.Initials := Initials;
+        Entity."Search Name" := SearchName;
+        Entity.Gender := Gender;
+        Entity.PEP := PEP;
+        Entity.EP := EP;
+        Entity.Classification := Classification;
+        Entity."External Reference No" := "Externa ReferenceNo";
+        Entity."Passport number" := Passportnumber;
+        Entity."Passport country of issue" := Passportcountryofissue;
+        Entity."Passport/ID Issue Date" := "Passport/IDIssueDate";
+        Entity."Passport expiry date" := Passportexpirydate;
+        Entity."Passport/ID Number (2)" := "Passport/IDNumber(2)";
+        Entity."Passport/ID Country (2)" := "Passport/IDCountry(2)";
+        Entity."Passport/ID Issue Date (2)" := "Passport/IDIssueDate(2)";
+        Entity."Passport/ID Expiry Date (2)" := "Passport/IDExpiryDate(2)";
+        Entity."Date of Birth" := DateofBirth;
+        Entity.Nationality := Nationality;
+        Entity."Bank Swift Code" := BankSwiftCode;
+        Entity."Bank Sort Code" := BankSortCode;
+        Entity.Inactive :=Inactive;
+        Entity."NI Number" := NINumber;
+        Entity.Profession := Profession;
+        Entity."Owner No." := "OwnerNo.";
+        Entity.Profession := Profession;
+        Entity.Manager := Manager;
+        Entity.Administrator := Administrator;
+        Entity."First Partition Code" := FirstPartitionCode;
+        Entity."Formal Name" := FormalName;
+        Entity."Last Risk Assessment Date" := LastRiskAssessmentDate;
+        Entity."Next Risk Assessment Due Date" := NextRiskAssessmentDueDate;
+        Entity."Current Risk Rating" := CurrentRiskRating;
+        Entity."Current Risk Weight" := CurrentRiskWeight;
+        Entity."Address 1" := Address1;
+        Entity."Address 2" := Address2;
+        Entity."Address 3" := Address3;
+        Entity.City := City;
+        Entity."Post Code" := PostCode;
+        Entity.County := County;
+        Entity."Country Code" := CountryCode;
+
+        //Entity.Residence := Residence;
+        //CASE Personal_Corporate OF
+        //Personal_Corporate::Personal : Entity."Personal/Corporate" := Entity."Personal/Corporate"::Personal;
+        // Personal_Corporate::Corporate : Entity."Personal/Corporate":= Entity."Personal/Corporate"::Corporate;
+        //END;
+
+      //  Entity.Jurisdiction := Jurisdiction;
+       // Entity."Country of Incorporation" := CountryofIncorporation;
+       // Entity."Date of incorp./formation" := DateOfIncorporation;
+
+        Entity.MODIFY(TRUE);
+      END;
+    END;
+
+    [External]
+    PROCEDURE UpdateOwner@1000000011(Owner_Type@1000000000 : 'Corporate,Personal';No@1000000001 : Text[50];Type@1000000002 : Text[50];Surname@1000000003 : Text[50];Forename_s@1000000004 : Text[50];Anonimised_Name@1000000005 : Text[50];Director@1000000006 : Text[50];Status_Code@1000000007 : Text[50];Currency_Code@1000000008 : Text[50];Search_Name@1000000009 : Text[50];Last_Review_Completed@1000000010 : Date;Next_Review_Due@1000000011 : Date;Closed@1000000012 : Boolean;Formal_Name@1000000013 : Text[50];External_Reference_No@1000000014 : Text[50]);
+    VAR
+      Owner@1000000015 : Record 9068443;
+    BEGIN
+      Owner.RESET;
+      Owner.SETRANGE("No.",No);
+      Owner.SETRANGE("Owner Type",Owner_Type);
+      IF Owner.FINDFIRST THEN BEGIN
+        Owner.Type := Type;
+        //Owner.VALIDATE(owner.Surname,Surname);
+        Owner.Surname := Surname;
+        Owner."Forename(s)" := Forename_s;
+        Owner."Anonimised Name" := Anonimised_Name;
+        Owner.Director := Director;
+        Owner."Status Code" := Status_Code;
+        Owner."Currency Code" := Currency_Code;
+        Owner."Search Name" := Search_Name;
+        Owner."Last Review Completed" := Last_Review_Completed;
+        Owner."Next Review Due" := Next_Review_Due;
+        Owner.Closed := Closed;
+        Owner."Formal Name" := Formal_Name;
+        Owner."External Reference No." := External_Reference_No;
+        Owner.MODIFY(TRUE);
+      END
+    END;
+
+    [External]
+    PROCEDURE isEntityPEP@1000000009(pEntityNo@1000000000 : Code[20]) : Boolean;
+    VAR
+      EntityRec@1000000001 : Record 9068505;
+    BEGIN
+      IF EntityRec.GET(pEntityNo) AND EntityRec.PEP THEN
+        EXIT(TRUE);
+    END;
+
+    [External]
+    PROCEDURE PrepareClientDetails@1000000013(WSID@1000000000 : Text[100]);
+    VAR
+      ClientRec@1000000001 : Record 9068500;
+      ClientDetails@1000000002 : Record 50001;
+      TaxDetails@1000000003 : Record 9068793;
+      i@1000000004 : Integer;
+    BEGIN
+      ClientRec.RESET;
+      ClientRec.SETRANGE(Name,WSID);
+      IF ClientRec.FINDFIRST THEN BEGIN
+      //IF ClientRec.GET(pClientNo) THEN BEGIN
+        ClientDetails.SETRANGE(WSID,WSID);
+        ClientDetails.DELETEALL;
+
+
+        ClientDetails.INIT;
+
+        TaxDetails.SETRANGE("Record Type",TaxDetails."Record Type"::Client);
+        TaxDetails.SETRANGE("Record No.",ClientRec."Client No.");
+        IF TaxDetails.FINDSET THEN BEGIN
+          i := 1;
+          REPEAT
+          ClientDetails."Client No." := ClientRec."Client No.";
+          ClientDetails."Entry No." := i;
+          ClientDetails.Type := ClientRec.Type;
+          ClientDetails.Name := ClientRec.Name;
+          ClientDetails."Proper law":= ClientRec."Proper law";
+          ClientDetails.Jurisdiction:= ClientRec.Jurisdiction;
+          ClientDetails."Tax Status" := ClientRec."Tax Status";
+          ClientDetails.WSID := ClientRec.Name;
+          ClientDetails."FATCA Account Classification" := ClientRec."FATCA Account Classification";
+          ClientDetails."CRS Account Classification" := ClientRec."CRS Account Classification";
+
+
+            ClientDetails."Tax Code" := TaxDetails."Tax Code";
+            ClientDetails."Tax Return Country Code" := TaxDetails."Tax Return Country Code";
+            ClientDetails."TIN Type" := TaxDetails."TIN Type";
+            ClientDetails.TIN := TaxDetails.TIN;
+            ClientDetails."Tax Category" := TaxDetails."Tax Category";
+            //ClientDetails."Entry No." := i;
+            ClientDetails.INSERT;
+            i += 1;
+
+          UNTIL TaxDetails.NEXT = 0;
+
+        END ELSE BEGIN
+          ClientDetails."Client No." := ClientRec."Client No.";
+          ClientDetails."Entry No." := i;
+          ClientDetails.Type := ClientRec.Type;
+          ClientDetails.Name := ClientRec.Name;
+          ClientDetails."Proper law":= ClientRec."Proper law";
+          ClientDetails.Jurisdiction:= ClientRec.Jurisdiction;
+          ClientDetails."Tax Status" := ClientRec."Tax Status";
+          ClientDetails."FATCA Account Classification" := ClientRec."FATCA Account Classification";
+          ClientDetails."CRS Account Classification" := ClientRec."CRS Account Classification";
+          ClientDetails.WSID := ClientRec.Name;
+          ClientDetails.INSERT;
+        END;
+        //ClientDetails.INSERT;
+      END;
+    END;
+
+    [External]
+    PROCEDURE PrepareEntityDetails@1000000015(WSID@1000000000 : Text[100]);
+    VAR
+      EntityRec@1000000001 : Record 9068505;
+      EntityDetails@1000000002 : Record 50002;
+      TaxDetails@1000000003 : Record 9068793;
+      i@1000000004 : Integer;
+      TempWSID@1000000005 : Text[100];
+    BEGIN
+      EntityRec.RESET;
+      //TempWSID := 'Mr ' + WSID;
+      EntityRec.SETFILTER("Formal Name",'%1','*' + WSID + '*');
+      IF EntityRec.FINDFIRST THEN BEGIN
+      //IF EntityRec.GET(pEntityNo) THEN BEGIN
+        EntityDetails.SETRANGE(WSID,WSID);
+        EntityDetails.DELETEALL;
+
+        EntityDetails.INIT;
+
+        TaxDetails.SETRANGE("Record Type",TaxDetails."Record Type"::Entity);
+        TaxDetails.SETRANGE("Record No.",EntityRec."Entity No.");
+
+        IF TaxDetails.FINDSET THEN BEGIN
+          i := 1;
+         REPEAT
+            EntityDetails."Entity No." := EntityRec."Entity No.";
+            EntityDetails."Entry No." := i;
+            EntityDetails.Name := EntityRec.Name;
+            EntityDetails."Name 2" := EntityRec."Name 2";
+            EntityDetails."Personal/Corporate":= EntityRec."Personal/Corporate";
+            EntityDetails.Jurisdiction:= EntityRec.Jurisdiction;
+            EntityDetails.Residence := EntityRec.Residence;
+            EntityDetails."Passport number" := EntityRec."Passport number";
+            EntityDetails."Passport country of issue" := EntityRec."Passport country of issue";
+            EntityDetails."Passport/ID Issue Date" := EntityRec."Passport/ID Issue Date";
+            EntityDetails."Passport expiry date" := EntityRec."Passport expiry date";
+            EntityDetails."Passport/ID Number (2)" := EntityRec."Passport/ID Number (2)";
+            EntityDetails."Passport/ID Country (2)" := EntityRec."Passport/ID Country (2)";
+            EntityDetails."Passport/ID Issue Date (2)" := EntityRec."Passport/ID Issue Date (2)";
+            EntityDetails."Passport/ID Expiry Date (2)" := EntityRec."Passport/ID Expiry Date (2)";
+            EntityDetails.WSID := EntityRec."Name 2" + ' ' + EntityRec.Name;
+
+            EntityDetails."FATCA Classification" := EntityRec."FATCA Classification";
+            EntityDetails."CRS Classification" := EntityRec."CRS Classification";
+
+
+
+            EntityDetails."Tax Code" := TaxDetails."Tax Code";
+            EntityDetails."Tax Return Country Code" := TaxDetails."Tax Return Country Code";
+            EntityDetails."TIN Type" := TaxDetails."TIN Type";
+            EntityDetails.TIN := TaxDetails.TIN;
+            EntityDetails."Tax Category" := TaxDetails."Tax Category";
+           // EntityDetails."Entry No." := i;
+            EntityDetails.INSERT;
+            i += 1;
+
+          UNTIL TaxDetails.NEXT = 0;
+
+        END ELSE BEGIN
+            EntityDetails."Entity No." := EntityRec."Entity No.";
+            EntityDetails."Entry No." := i;
+            EntityDetails.Name := EntityRec.Name;
+            EntityDetails."Name 2" := EntityRec."Name 2";
+            EntityDetails."Personal/Corporate":= EntityRec."Personal/Corporate";
+            EntityDetails.Jurisdiction:= EntityRec.Jurisdiction;
+            EntityDetails.Residence := EntityRec.Residence;
+            EntityDetails."Passport number" := EntityRec."Passport number";
+            EntityDetails."Passport country of issue" := EntityRec."Passport country of issue";
+            EntityDetails."Passport/ID Issue Date" := EntityRec."Passport/ID Issue Date";
+            EntityDetails."Passport expiry date" := EntityRec."Passport expiry date";
+            EntityDetails."Passport/ID Number (2)" := EntityRec."Passport/ID Number (2)";
+            EntityDetails."Passport/ID Country (2)" := EntityRec."Passport/ID Country (2)";
+            EntityDetails."Passport/ID Issue Date (2)" := EntityRec."Passport/ID Issue Date (2)";
+            EntityDetails."Passport/ID Expiry Date (2)" := EntityRec."Passport/ID Expiry Date (2)";
+            EntityDetails.WSID := EntityRec."Name 2" + ' ' + EntityRec.Name;
+
+            EntityDetails."FATCA Classification" := EntityRec."FATCA Classification";
+            EntityDetails."CRS Classification" := EntityRec."CRS Classification";
+
+          EntityDetails.INSERT;
+        END;
+        //EntityDetails.INSERT;
+      END;
+    END;
+
+    [EventSubscriber(Table,9068655,OnBeforeModifyEvent)]
+    LOCAL PROCEDURE ONBeforeMODIFYClientAccTracker@1000000016(VAR Rec@1000000000 : Record 9068655;VAR xRec@1000000001 : Record 9068655;RunTrigger@1000000002 : Boolean);
+    BEGIN
+      xRec := Rec; //For Modification "Field x Completed By" UserID change
+    END;
+
+    PROCEDURE ContactIntegration@100000003(VAR Contact@100000000 : Record 5050);
+    VAR
+      HttpClient@100000022 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.HttpClient";
+      DFXSetup@100000021 : Record 50006;
+      HttpWebReqMgt@100000020 : Codeunit 1297;
+      URL@100000019 : Text;
+      JSON@100000018 : Text;
+      TempBlob@100000017 : Record 99008535;
+      InStr@100000016 : InStream;
+      HttpResponseMsg@100000015 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.HttpResponseMessage";
+      HttpStatusCode@100000014 : DotNet "'System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpStatusCode";
+      ResponseHeader@100000013 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NameValueCollection";
+      ApiResult@100000012 : Text;
+      JObject@100000011 : DotNet "'Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed'.Newtonsoft.Json.Linq.JObject";
+      JSONMgt@100000010 : Codeunit 5459;
+      body@100000009 : Text;
+      JsonObject@100000008 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      RecRef@100000007 : RecordRef;
+      RecContact@100000006 : Record 5050;
+      XMLParas@100000005 : Record 1235;
+      OutStr@100000004 : OutStream;
+      Country@100000003 : Record 9;
+      TempContact@100000002 : Record 5050;
+      TempBlob1@100000001 : Record 99008535;
+    BEGIN
+      DFXSetup.FINDFIRST;
+      IF NOT DFXSetup."Create/Update Contact" THEN
+        EXIT;
+      URL := DFXSetup."Update URL" + Contact."E-Mail" + DFXSetup."Hapi Key";
+      HttpWebReqMgt.Initialize(URL);
+      HttpWebReqMgt.DisableUI;
+      HttpWebReqMgt.SetMethod('POST');
+      HttpWebReqMgt.SetContentType('application/json');
+      HttpWebReqMgt.SetReturnType('application/json');
+      TempBlob.INIT;
+      TempBlob.Blob.CREATEOUTSTREAM(OutStr);
+      OutStr.WRITETEXT('{');
+      OutStr.WRITETEXT('"properties": [');
+      OutStr.WRITETEXT('{');
+      OutStr.WRITETEXT('"property": "firstname",');
+      OutStr.WRITETEXT('"value": "' + Contact."First Name" + '"');
+      OutStr.WRITETEXT('},');
+      OutStr.WRITETEXT('{');
+      OutStr.WRITETEXT('"property": "lastname",');
+      OutStr.WRITETEXT('"value": "' + Contact.Surname + '"');
+      OutStr.WRITETEXT('},');
+      OutStr.WRITETEXT('{');
+      OutStr.WRITETEXT('"property": "website",');
+      OutStr.WRITETEXT('"value": "http://hubspot.com"');
+      OutStr.WRITETEXT('},');
+      OutStr.WRITETEXT('{');
+      OutStr.WRITETEXT('"property": "company",');
+      OutStr.WRITETEXT('"value": "' + Contact."Company Name" + '"');
+      OutStr.WRITETEXT('},');
+      OutStr.WRITETEXT('{');
+      OutStr.WRITETEXT('"property": "phone",');
+      OutStr.WRITETEXT('"value": "' + Contact."Phone No."+ '"');
+      OutStr.WRITETEXT('},');
+      OutStr.WRITETEXT('{');
+      OutStr.WRITETEXT('"property": "address",');
+      OutStr.WRITETEXT('"value": "' + Contact.Address +'"');
+      OutStr.WRITETEXT('},');
+      OutStr.WRITETEXT('{');
+      OutStr.WRITETEXT('"property": "city",');
+      OutStr.WRITETEXT('"value": "' + Contact.City + '"');
+      OutStr.WRITETEXT('},');
+      OutStr.WRITETEXT('{');
+      OutStr.WRITETEXT('"property": "state",');
+      OutStr.WRITETEXT('"value": ""');
+      OutStr.WRITETEXT('},');
+      OutStr.WRITETEXT('{');
+      OutStr.WRITETEXT('"property": "zip",');
+      OutStr.WRITETEXT('"value": "' + Contact."Post Code" + '"');
+      OutStr.WRITETEXT('}');
+      OutStr.WRITETEXT(']');
+      OutStr.WRITETEXT('}');
+
+      HttpWebReqMgt.AddBodyBlob(TempBlob);
+      TempBlob1.INIT;
+      TempBlob1.Blob.CREATEINSTREAM(InStr);
+      RecContact.RESET;
+      RecContact.COPY(Contact);
+      RecRef.OPEN(5050);
+      RecRef.GET(RecContact.RECORDID);
+      IF HttpWebReqMgt.GetResponse(InStr,HttpStatusCode,ResponseHeader) THEN BEGIN
+      ApiResult:= TempBlob1.ReadAsText('',TEXTENCODING::UTF8);
+      JSONMgt.InitializeFromString(ApiResult);
+      JSONMgt.SelectTokenFromRoot('govtRequestDTO');
+      JSON:=JSONMgt.GetValue('Irn');
+      JSONMgt.GetValueAndSetToRecFieldNo(RecRef,'Irn',16627);
+      RecRef.MODIFY;
+      END
+    END;
+
+    [EventSubscriber(Table,5050,OnAfterOnModify,"",Skip,Skip)]
+    PROCEDURE SubscriberUpdateContact@100000001(VAR Contact@100000000 : Record 5050;xContact@100000001 : Record 5050);
+    VAR
+      HttpClient@100000002 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.HttpClient";
+      DFXSetup@100000003 : Record 50006;
+      HttpWebReqMgt@100000004 : Codeunit 1297;
+      URL@100000005 : Text;
+      JSON@100000006 : Text;
+      TempBlob@100000007 : Record 99008535;
+      InStr@100000008 : InStream;
+      HttpResponseMsg@100000009 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.HttpResponseMessage";
+      HttpStatusCode@100000010 : DotNet "'System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpStatusCode";
+      ResponseHeader@100000011 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NameValueCollection";
+      ApiResult@100000012 : Text;
+      JObject@100000013 : DotNet "'Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed'.Newtonsoft.Json.Linq.JObject";
+      JSONMgt@100000014 : Codeunit 5459;
+      body@100000015 : Text;
+      JsonObject@100000016 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      RecRef@100000017 : RecordRef;
+      RecContact@100000018 : Record 5050;
+      XMLParas@100000019 : Record 1235;
+      OutStr@100000020 : OutStream;
+      Country@100000021 : Record 9;
+      TempContact@100000022 : Record 5050;
+      TempBlob1@100000023 : Record 99008535;
+    BEGIN
+      {
+      IF Contact."E-Mail" = '' THEN
+        EXIT;
+
+      ContactIntegration(Contact);
+       }
+    END;
+
+    LOCAL PROCEDURE OAuthValidationContact@100000008() APIToken : Text;
+    VAR
+      HttpClient@100000000 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.HttpClient";
+      HttpResponse@100000001 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.HttpResponseMessage";
+      HttpContent@100000002 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.HttpContent";
+      HttpHeaders@100000003 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.Headers.HttpHeaders";
+      Url@100000004 : Text;
+      JsonObj@100000005 : DotNet "'Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed'.Newtonsoft.Json.Linq.JObject";
+      JsonToken@100000006 : DotNet "'Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed'.Newtonsoft.Json.Linq.JToken";
+      Token@100000007 : Text;
+      ClientID@100000008 : Text;
+      Secret@100000009 : Text[250];
+      BaseTxt@100000010 : Text[1024];
+      APITokenLocal@100000011 : Text;
+      HttpWebReqMgt@100000012 : Codeunit 1297;
+      APPID@100000013 : Text;
+      TempBlob@100000014 : TEMPORARY Record 99008535;
+      istream@100000015 : InStream;
+      HttpStatusCode@100000017 : DotNet "'System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpStatusCode";
+      ResponseHeader@100000016 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NameValueCollection";
+      ApiResult@100000019 : Text;
+      JObject@100000018 : DotNet "'Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed'.Newtonsoft.Json.Linq.JObject";
+      JSONMgt@100000020 : Codeunit 5459;
+      JSON@100000021 : Text;
+    BEGIN
+      Url := 'https://app.hubspot.com/oauth/';
+      ClientID := 'ba701976-f6ed-47c7-9b9a-695142dede5c';
+      Secret := 'c09eccbe-441a-4d08-83c3-87820c44b2df';
+      APPID := '238597';
+      //https://app.hubspot.com/oauth/authorize?client_id=ba701976-f6ed-47c7-9b9a-695142dede5c&redirect_uri=https://app.hubspot.com/&scope=contacts
+
+      //https://app.hubspot.com/oauth/authorize?client_id=ba701976-f6ed-47c7-9b9a-695142dede5c&redirect_uri=https://app.hubspot.com/&scope=contacts
+
+
+      BaseTxt := Url + 'authorize?client_id=' + ClientID + '&redirect_uri=https://app.hubspot.com/&scope=contacts';
+      //'&client_secret=' + lSecret + '&scope=https://graph.microsoft.com/.default';
+      //HttpContent.clear();
+      //HttpContent.WriteFrom(BaseTxt);
+      //HttpHeaders.init;
+      //HttpHeaders.Clear();
+      //HttpContent.GetHeaders(HttpHeaders);
+      //HttpHeaders.Remove('Content-Type');
+      //HttpHeaders.Add('Content-Type', 'application/x-www-form-urlencoded');
+      //HttpContent.GetHeaders(HttpHeaders);
+      //if HttpClient.Post(Url, HttpContent, HttpResponse) then begin
+        //HttpResponse.Content.ReadAs(Token);
+        //JsonObj.ReadFrom(Token);
+        //JsonObj.Get('access_token', lJsonToken);
+       // JsonToken.WriteTo(APITokenLocal);
+       // APITokenLocal := DELCHR(APITokenLocal, '=', '"');
+       // MESSAGE(APITokenLocal);
+       // EXIT(APITokenLocal);
+
+      //end
+      //else
+        //error('API Token Request failed');
+        Url := 'https://app.hubspot.com/238597/oauth2/token';
+        ClientID := 'ba701976-f6ed-47c7-9b9a-695142dede5c';
+      Secret := 'c09eccbe-441a-4d08-83c3-87820c44b2df';
+      APPID := '238597';
+      //https://app.hubspot.com/oauth/authorize?client_id=ba701976-f6ed-47c7-9b9a-695142dede5c&redirect_uri=https://app.hubspot.com/&scope=contacts
+
+      //https://app.hubspot.com/oauth/authorize?client_id=ba701976-f6ed-47c7-9b9a-695142dede5c&redirect_uri=https://app.hubspot.com/&scope=contacts
+
+
+      //BaseTxt := Url + 'authorize?client_id=' + ClientID + '&redirect_uri=https://app.hubspot.com/&scope=contacts';
+
+
+
+      BaseTxt := 'grant_type=client_credentials'+ '&client_id=' + ClientID + '&client_secret=' + Secret + '&redirect_uri=https://app.hubspot.com/&scope=contacts';
+
+      BaseTxt := 'https://app.hubspot.com/oauth/authorize?client_id=ba701976-f6ed-47c7-9b9a-695142dede5c' + ClientID + '&client_secret=' + Secret + '&redirect_uri=https://app.hubspot.com/&scope=contacts';
+
+      BaseTxt := 'https://app.hubspot.com/oauth/authorize?client_id=ba701976-f6ed-47c7-9b9a-695142dede5c&redirect_uri=https://app.hubspot.com/&scope=contacts';
+
+      BaseTxt := 'https://mytenant.onmicrosoft.com/fbff8dbb-5212-4e05-ba78-54078da0fa62';
+
+
+      //BaseTxt :='https://app.hubspot.com/oauth/authorize' + '?client_id=${encodeURIComponent(ba701976-f6ed-47c7-9b9a-695142dede5c)}' + '&scope=${encodeURIComponent(contacts)}' + '&redirect_uri=${encodeURIComponent(https://app.hubspot.com)}';
+
+      TempBlob.WriteAsText(BaseTxt, TEXTENCODING::UTF8);
+      TempBlob.Blob.CREATEINSTREAM(istream, TEXTENCODING::UTF8);
+      //MESSAGE(FORMAT(istream));
+
+      HttpWebReqMgt.Initialize(BaseTxt);
+      HttpWebReqMgt.SetMethod := 'POST';
+      HttpWebReqMgt.SetContentType('application/x-www-form-urlencodee');
+      //HttpWebReqMgt.ContentLength := BaseTxt;
+
+      IF HttpWebReqMgt.GetResponse(istream,HttpStatusCode,ResponseHeader) THEN BEGIN
+        ApiResult:= TempBlob.ReadAsText('',TEXTENCODING::UTF8);
+        JSONMgt.InitializeFromString(ApiResult);
+        JSONMgt.SelectTokenFromRoot('govtRequestDTO');
+        JSON:=JSONMgt.GetValue('');
+      END;
+
+      MESSAGE(JSON);
+        {
+      IF FORMAT(HttpWebResponse.StatusCode) = 'OK' THEN
+      BEGIN
+        StreamReader := StreamReader.StreamReader(HttpWebResponse.GetResponseStream);
+        JSonString := StreamReader.ReadToEnd;
+
+        lResponse.Content().ReadAs(Token);
+                  lJsonObj.ReadFrom(Token);
+                  lJsonObj.Get('access_token', lJsonToken);
+                  lJsonToken.WriteTo(APITokenLocal);
+                  APITokenLocal := DelChr(APITokenLocal, '=', '"');
+                  Exit(APITokenLocal);
+        }
+    END;
+
+    LOCAL PROCEDURE SetRequestStream@100000004(VAR HttpWebRequest@100000000 : DotNet "'System.Net.Http.WebRequest, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.WebRequestHandler";VAR String@100000001 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.StringNormalizationExtensions");
+    BEGIN
+      {
+      StreamWriter := StreamWriter.StreamWriter(HttpWebRequest.GetRequestStream);
+      StreamWriter.Write(String);
+      StreamWriter.Close;
+      StreamWriter.Dispose;
+      }
+    END;
+
+    [EventSubscriber(Table,156,OnAfterModifyEvent)]
+    PROCEDURE "ONModifyResourceNo."@100000006(VAR Rec@100000000 : Record 156;VAR xRec@100000001 : Record 156;RunTrigger@100000002 : Boolean);
+    VAR
+      DFXSetup@100000005 : Record 50006;
+      Resource@100000004 : Record 156;
+      SalesPerson@100000003 : Record 13;
+    BEGIN
+      IF Rec."Resource Group No." =  xRec."Resource Group No." THEN
+        EXIT;
+
+      DFXSetup.GET;
+
+      Resource.SETRANGE("No.",DFXSetup."Resource Group No.");
+      IF Resource.FINDFIRST THEN BEGIN
+        IF SalesPerson.GET(Resource."No.") THEN
+          EXIT;
+        SalesPerson.INIT;
+        SalesPerson.Code := Resource."No.";
+        SalesPerson.Name := COPYSTR(Resource."Name 2"+ ' '+ Resource.Name,1,MAXSTRLEN(SalesPerson.Name));
+        SalesPerson.INSERT;
+      END;
+    END;
+
+    [External]
+    PROCEDURE UpdateNavFromLF@100000005(LFMsg_Payload@1000000000 : Text) : Text;
+    VAR
+      FunctionName@1000000002 : Code[20];
+      TotalCount@1000000003 : Integer;
+      RecordsToParse@1000000004 : Integer;
+    BEGIN
+      IF NOT JSONMgt.InitializeFromString(LFMsg_Payload) THEN
+        ERROR('Failed to Initialize JSON payload please ensure it''s correctly formed. https://jsonlint.com/');
+
+      IF NOT JSONMgt.SelectTokenFromRoot('Action') THEN
+        ERROR('The Node Action has not been defined. Please refer to the JSON documentation');
+
+      FunctionName := JSONMgt.GetValue('Function');
+
+      IF NOT JSONMgt.SelectTokenFromRoot('Records') THEN
+        ERROR('The Node Records has not been defined. Please refer to the JSON documentation');
+
+      CLEARLASTERROR;
+
+      TotalCount := JSONMgt.GetCount;
+      FOR RecordsToParse := 0 TO TotalCount DO
+        IF JSONMgt.SelectItemFromRoot('Records', RecordsToParse) THEN
+          CASE UPPERCASE(FORMAT(FunctionName)) OF
+            'UPDATE'     :ParseLFUpdate(JSONMgt.WriteObjectToString, UPPERCASE(FunctionName));
+
+           END;
+
+      EXIT('SUCCESS');
+    END;
+
+    LOCAL PROCEDURE ParseLFUpdate@100000010(Json@1000000000 : Text;Function@1000000003 : Code[20]) : Boolean;
+    VAR
+      RecordRef@1000000002 : RecordRef;
+      LFMessagesTemp@1000000004 : TEMPORARY Record 9069241;
+    BEGIN
+      IF NOT JSONMgt.InitializeFromString(Json) THEN
+        EXIT(FALSE);
+
+      WITH LFMessagesTemp DO BEGIN
+        CLEAR(LFMessagesTemp);
+        RecordRef.GETTABLE(LFMessagesTemp);
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'AttachedToType', FIELDNO("Attached To Type"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'AttachedToNo', FIELDNO("Attached To No"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'LFEntryID', FIELDNO("LaserFiche Entry ID"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'FileName', FIELDNO("File Name"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'DocDescription', FIELDNO("Document Description"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'LFDocType', FIELDNO("LaserFiche Document Type"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'LFDocSubType', FIELDNO("LaserFiche Document Sub Type"));
+        RecordRef.SETTABLE(LFMessagesTemp);
+        AddLFMessageRecord(LFMessagesTemp, "Function");
+      END;
+
+      EXIT(TRUE);
+    END;
+
+    PROCEDURE GetNAVDocType@100000012(LFDoctype@1000000000 : Text[150]) : Code[10];
+    VAR
+      LFDocTypeRecord@1000000001 : Record 9069244;
+    BEGIN
+      LFDocTypeRecord.SETRANGE("LaserFiche Doc Type", LFDoctype);
+      IF LFDocTypeRecord.FINDFIRST THEN
+        EXIT(LFDocTypeRecord."NAV Doc Type");
+
+      EXIT('');
+    END;
+
+    LOCAL PROCEDURE GetNAVDocSubType@1000000019(LFDocType@1000000000 : Text[150];LFDocSubType@1000000001 : Text[150]) : Code[20];
+    VAR
+      LFDocSubTypeRecord@1000000002 : Record 9069245;
+    BEGIN
+      LFDocSubTypeRecord.SETRANGE("LaserFiche Doc Type", LFDocType);
+      LFDocSubTypeRecord.SETRANGE("LaserFiche Sub Doc Type", LFDocSubType);
+      IF LFDocSubTypeRecord.FINDFIRST THEN
+        EXIT(LFDocSubTypeRecord."NAV Doc Sub Type");
+
+      EXIT('');
+    END;
+
+    LOCAL PROCEDURE AddLFMessageRecord@100000011(LaserFicheTemp@1000000000 : Record 9069241;Function@1000000002 : Code[20]);
+    VAR
+      LFMessages@1000000001 : Record 9069241;
+    BEGIN
+      LFMessages.INIT;
+      LFMessages.TRANSFERFIELDS(LaserFicheTemp);
+      LFMessages."Company Name" := COMPANYNAME;
+      LFMessages."Inserted By" := USERID;
+      LFMessages."Inserted Date" := TODAY;
+      LFMessages."Document Type" := GetNAVDocType(LFMessages."LaserFiche Document Type");
+      LFMessages."Document Sub Type" := GetNAVDocSubType(LFMessages."LaserFiche Document Type", LFMessages."LaserFiche Document Sub Type");
+
+      CASE "Function" OF
+          'CREATENEW' : LFMessages."LaserFiche Status" := LFMessages."LaserFiche Status"::New;
+          'UPDATE'    : LFMessages."LaserFiche Status" := LFMessages."LaserFiche Status"::Update;
+          'DELETE'    : LFMessages."LaserFiche Status" := LFMessages."LaserFiche Status"::Deleted;
+        END;
+
+      IF LFMessages.INSERT(TRUE) THEN
+          UpdateIntoCorrespondenceStore(LFMessages);
+    END;
+
+    LOCAL PROCEDURE UpdateIntoCorrespondenceStore@1000000023(LFMsg@1000000000 : Record 9069241);
+    VAR
+      CorrespondenceStore@1000000001 : Record 9068660;
+      DocMgmntCU@1000000002 : Codeunit 9068511;
+      DocType@1000000003 : Code[10];
+    BEGIN
+      CorrespondenceStore.RESET;
+      CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFMsg."LaserFiche Entry ID");
+      IF CorrespondenceStore.FINDFIRST THEN
+        BEGIN
+            CorrespondenceStore."No." := LFMsg."Attached To No";
+            CorrespondenceStore."Document Type" := LFMsg."Document Type";
+            CorrespondenceStore."Document Sub Type" := LFMsg."Document Sub Type";
+            CorrespondenceStore."LaserFiche Entry ID" := LFMsg."LaserFiche Entry ID";
+            CorrespondenceStore."Source of Document" := CorrespondenceStore."Source of Document"::Imported;
+            CorrespondenceStore."Document Inserted By" := 'LASERFICHE';
+            CorrespondenceStore."Document Date" := TODAY;
+            CorrespondenceStore.FileName := LFMsg."File Name";
+            CorrespondenceStore.Subject := LFMsg."Document Description";
+            CorrespondenceStore."MS Office Doc Type" := LFMsg."File Type";
+
+            IF LFMsg."Attached To Type" = LFMsg."Attached To Type"::Client THEN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::Client;
+            IF LFMsg."Attached To Type" = LFMsg."Attached To Type"::Entity THEN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::Entity;
+            IF LFMsg."Attached To Type" = LFMsg."Attached To Type"::Resource THEN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::Resource;
+            IF LFMsg."Attached To Type" = LFMsg."Attached To Type"::"Client Owner" THEN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::"Client Owner";
+
+            //CorrespondenceStore.ID := DocMgmntCU."Get Next Document Number"(CorrespondenceStore.Type, CorrespondenceStore."No.");
+
+            IF GetDocType(LFMsg."File Name", DocType) THEN
+              CorrespondenceStore."MS Office Doc Type" := DocType;
+
+
+            IF CorrespondenceStore.MODIFY(TRUE) THEN BEGIN
+              UploadedToLaserFiche(LFMsg."Entry No", LFMsg."LaserFiche Entry ID",'UPDATE');
+              END
+        END;
+    END;
+
+    PROCEDURE UploadedToLaserFiche@1000000020(EntryNo@1000000000 : Integer;LFUID@1000000002 : Integer;Mode@1000000005 : Code[10]);
+    VAR
+      LFMessages@1000000001 : Record 9069241;
+      LaserFicheMessArchive@1000000003 : Record 9069242;
+      CorrespondenceStore@1000000004 : Record 9068660;
+    BEGIN
+      IF LFMessages.GET(EntryNo) THEN BEGIN
+        LFMessages.Status := LFMessages.Status::Uploaded;
+        LFMessages."LaserFiche Entry ID"  := LFUID;
+        LFMessages.MODIFY;
+      END;
+
+      IF Mode = 'UPDATE' THEN BEGIN
+        CorrespondenceStore.SETRANGE("Document GUID",LFMessages."NAV Document GUID");
+        IF CorrespondenceStore.FINDFIRST THEN BEGIN
+           CorrespondenceStore."LaserFiche Entry ID" := LFMessages."LaserFiche Entry ID";
+           CorrespondenceStore.MODIFY;
+
+           LaserFicheMessArchive.INIT;
+           LaserFicheMessArchive.TRANSFERFIELDS(LFMessages);
+           LaserFicheMessArchive.Status := LaserFicheMessArchive.Status::Success;
+           LaserFicheMessArchive.INSERT(TRUE);
+
+           LFMessages.DELETE;
+        END
+      END ELSE BEGIN
+             LaserFicheMessArchive.INIT;
+             LaserFicheMessArchive.TRANSFERFIELDS(LFMessages);
+             LaserFicheMessArchive.Status := LaserFicheMessArchive.Status::Success;
+             LaserFicheMessArchive.INSERT(TRUE);
+
+             LFMessages.DELETE;
+           END;
+    END;
+
+    LOCAL PROCEDURE GetDocType@100000013(FileName@1000000000 : Text;VAR Type@1000000001 : Code[10]) Success : Boolean;
+    VAR
+      L@1000000003 : Integer;
+      P@1000000002 : Integer;
+    BEGIN
+      L := STRLEN (FileName);
+      IF L < 5 THEN EXIT;
+      P := L;
+      REPEAT
+        P := P - 1;
+      UNTIL (COPYSTR(FileName,P,1) = '.') OR (P = 1);
+      IF (P = 1) OR ((L - P) >10) THEN
+        EXIT(FALSE);
+      Type := COPYSTR(FileName,P,(L-(P-1)));
+    END;
+
+    [External]
+    PROCEDURE UpdatePassports@1000000017(EntityNumber@1000000002 : Code[20];FirstSecond@1000000000 : 'First,Second';PassportNumber@1000000001 : Text[50];IssueDate@1000000003 : Date;ExpiryDate@1000000004 : Date;CountryIssued@1000000005 : Code[10]);
+    VAR
+      EntityRec@1000000006 : Record 9068505;
+    BEGIN
+      IF NOT EntityRec.GET(EntityNumber) THEN
+        EXIT;
+
+      CASE FirstSecond OF
+        FirstSecond::First : BEGIN
+          EntityRec."Passport number" := PassportNumber;
+          EntityRec."Passport/ID Issue Date" := IssueDate;
+          EntityRec."Passport expiry date" := ExpiryDate;
+          EntityRec."Passport country of issue" := CountryIssued;
+        END;
+        FirstSecond::Second : BEGIN
+          EntityRec."Passport/ID Number (2)" := PassportNumber;
+          EntityRec."Passport/ID Issue Date (2)" := IssueDate;
+          EntityRec."Passport/ID Expiry Date (2)" := ExpiryDate;
+          EntityRec."Passport/ID Country (2)" := CountryIssued;
+        END;
+      END;
+
+      EntityRec.MODIFY;
+    END;
+
+    [External]
+    PROCEDURE InsertAgreementRegister@1000000018(AgreementCode@1000000002 : Code[20];AgreementAttachedType@1000000003 : 'Prospect,Contact,Owner,,,Potential Client,,,Client,,,Entity,Intermediary,Resource';"AttachedToNo."@1000000004 : Code[20];DateofAgreement@1000000005 : Date;Barcode@100000000 : Text;Agreement_Caption_1@100000001 : Boolean;Agreement_Caption_2@100000002 : Boolean;Agreement_Caption_3@100000004 : Boolean;Agreement_Caption_4@100000003 : Boolean;Agreement_Caption_5@100000006 : Boolean;Agreement_Caption_6@100000008 : Boolean;Agreement_Caption_7@100000007 : Boolean;Agreement_Caption_8@100000005 : Boolean;Agreement_Caption_9@100000010 : Boolean;Agreement_Caption_10@100000009 : Boolean;Freeze_Concent@100000011 : ' ,Yes,No';Exception@100000012 : Text);
+    VAR
+      AgreementSetup@1000000001 : Record 9070210;
+      AgreementRegister@1000000000 : Record 9070211;
+    BEGIN
+      AgreementSetup.RESET;
+      AgreementSetup.SETRANGE("Agreement Code",AgreementCode);
+      AgreementSetup.SETRANGE("Agreement Attached Type",AgreementAttachedType);
+      IF AgreementSetup.FINDFIRST THEN
+        BEGIN
+          AgreementRegister."Agreement Code" := AgreementSetup."Agreement Code";
+          AgreementRegister."Agreement Attached Type" := AgreementSetup."Agreement Attached Type";
+          AgreementRegister.VALIDATE("Attached To No.", "AttachedToNo.");
+          AgreementRegister."Date of Agreement" := DateofAgreement;
+          AgreementRegister.Barcode := Barcode;
+          AgreementRegister."Agreement Caption 1" := Agreement_Caption_1;
+          AgreementRegister."Agreement Caption 2" := Agreement_Caption_2;
+          AgreementRegister."Agreement Caption 3" := Agreement_Caption_3;
+          AgreementRegister."Agreement Caption 4" := Agreement_Caption_4;
+          AgreementRegister."Agreement Caption 5" := Agreement_Caption_5;
+          AgreementRegister."Agreement Caption 6" := Agreement_Caption_6;
+          AgreementRegister."Agreement Caption 7" := Agreement_Caption_7;
+          AgreementRegister."Agreement Caption 8" := Agreement_Caption_8;
+          AgreementRegister."Agreement Caption 9" := Agreement_Caption_9;
+          AgreementRegister."Agreement Caption 10" := Agreement_Caption_10;
+          AgreementRegister."Freeze Concent" := Freeze_Concent;
+          AgreementRegister.Exception := Exception;
+          AgreementRegister.INSERT;
+        END
+      ELSE
+      ERROR('AgreementSetup does not contain the specified AgreementCode (%1) and AttachedType (%2)',AgreementCode,AgreementAttachedType);
+    END;
+
+    [External]
+    PROCEDURE StartWorkflow@1000000024(WorkflowCode@1000000005 : Code[20];AttachedToNo@1000000004 : Code[20];AttachedToType@1000000000 : ' ,Client,Prospect,Client Owner,Intermediary,Entity,Resource';Responsible@1000000003 : Code[20];AdditionalDescription@1000000016 : Text[250]);
+    VAR
+      WorkflowBlueprint@1000000002 : Record 9073640;
+      TWMWorkflow@1000000007 : Record 9073608;
+      TWMWorkflow2@1000000014 : Record 9073608;
+      ClientRec@1000000012 : Record 9068500;
+      ClientTypeRec@1000000013 : Record 9068501;
+      Resource@1000000010 : Record 156;
+      WorkflowResource@1000000011 : Record 9073591;
+      CompletedWorkflow@1000000015 : Record 9073645;
+      WorkflowManagement@1000000006 : Codeunit 9073581;
+      StartWorkflow@1000000008 : Codeunit 9073590;
+      WorkflowSetup@1000000009 : Record 9073592;
+      CreateBlueprint@1000000001 : Codeunit 9073601;
+    BEGIN
+
+      WorkflowSetup.GET(WorkflowCode);
+      WorkflowBlueprint.SETRANGE("Workflow Code",WorkflowCode);
+      IF NOT WorkflowBlueprint.FINDLAST THEN BEGIN
+        CreateBlueprint.ShadowActivity(WorkflowSetup);
+        COMMIT;
+        WorkflowBlueprint.FINDLAST;
+      END;
+
+      IF Responsible <> '' THEN
+        Resource.GET(Responsible);
+
+      WorkflowResource.GET(Resource."No.");
+
+      IF WorkflowBlueprint."Only one per Attached to Type" THEN BEGIN
+        TWMWorkflow.SETCURRENTKEY("Workflow Code","Attached To No.");
+        TWMWorkflow.SETRANGE("Attached To Type", WorkflowBlueprint."Attached To Type");
+        TWMWorkflow.SETRANGE("Workflow Code", WorkflowBlueprint."Workflow Code");
+        TWMWorkflow.SETRANGE("Attached To No.",AttachedToNo);
+        IF TWMWorkflow.FINDFIRST THEN
+          ERROR('There is already a ''%1'' process in progress for %2 %3. Only one can be in progress at a time.',
+            WorkflowBlueprint.Description, WorkflowBlueprint."Attached To Type", AttachedToNo);
+      END;
+
+      TWMWorkflow.INIT;
+      TWMWorkflow."Template Version No." := WorkflowBlueprint."Version No.";
+      TWMWorkflow."Start Date" := TODAY;
+      TWMWorkflow.Author := Resource."No.";
+      TWMWorkflow."Created On" := TODAY;
+      TWMWorkflow."Created At" := TIME;
+      TWMWorkflow."Workflow Code" := WorkflowCode;
+      TWMWorkflow.Description := WorkflowSetup.Description;
+      TWMWorkflow."Abort Allowed" := WorkflowBlueprint."Abort Allowed";
+      TWMWorkflow."Attached To Type" := AttachedToType;
+      TWMWorkflow.VALIDATE("Attached To No.",AttachedToNo);
+      TWMWorkflow."Workflow Type" := WorkflowSetup."Workflow Type";
+      TWMWorkflow."Additional Description" := AdditionalDescription;
+
+      IF WorkflowBlueprint."Med Importance Update" <> 0 THEN BEGIN
+        TWMWorkflow."Medium Importance Update At" := StartWorkflow.CalculateUpdateDate(
+          WorkflowBlueprint."Medium Unit of Measure", WorkflowBlueprint."Med Importance Update");
+      END;
+
+      IF WorkflowBlueprint."High Importance Update" <> 0 THEN BEGIN
+        TWMWorkflow."High Importance Update At" := StartWorkflow.CalculateUpdateDate(
+          WorkflowBlueprint."High Unit of Measure", WorkflowBlueprint."High Importance Update");
+      END;
+
+      IF AttachedToType = AttachedToType::Client THEN
+        IF ClientRec.GET(AttachedToNo) THEN BEGIN
+          TWMWorkflow."Client Type" := ClientRec.Type;
+          IF ClientTypeRec.GET(ClientRec.Type) THEN
+            TWMWorkflow."Client Type Class" := ClientTypeRec.Type;
+        END;
+
+      TWMWorkflow.Responsible := Resource."No.";
+
+      TWMWorkflow."Work Type Code" := WorkflowBlueprint."Work Type Code";
+
+      TWMWorkflow."Date Enabled":= TODAY;
+      IF TWMWorkflow2.FINDLAST  THEN
+        TWMWorkflow."Entry No." := TWMWorkflow2."Entry No." + 1
+      ELSE
+        TWMWorkflow."Entry No." := 1;
+
+      IF CompletedWorkflow.FINDLAST THEN
+        IF CompletedWorkflow."Entry No." >= TWMWorkflow."Entry No." THEN
+          TWMWorkflow."Entry No." := CompletedWorkflow."Entry No." + 1;
+
+      TWMWorkflow.INSERT;
+
+      StartWorkflow.CreateFirstEvents(TWMWorkflow);
+    END;
+
+    [External]
+    PROCEDURE CreateUDF@1000000021(LinkedTo@1000000000 : ' ,Client,Entity,Prospect,Owner,Job,Bank,Loan,Agent,Property,Miscellaneous Asset,Yacht,Aviation,Intellectual Property,Life Assurance,Quoted Investment,Unquoted Investment,Potential Client,Borrowing and Lending,Portfolio,Payments/Receipts,Resource,Safe Custody,Introducer,Distribution,Addition';LinkedToNo@1000000001 : Code[20];UDFCode@1000000002 : Code[20];Data@1000000003 : Text[250];EntityNo@1000000004 : Code[20];SubLinkedTo@1000000005 : ' ,Bank,Loan,Agent,Property,Miscellaneous Asset,Yacht,Aviation,Intellectual Property,Life Assurance,Quoted Investment,Unquoted Investment,Potential Client,Borrowing and Lending,Portfolio,Payments/Receipts,Resource,Safe Custody,Distribution,Addition';SubLinkedToNo@1000000006 : Code[20];EffectiveFrom@1000000007 : Date;EffectiveTo@1000000008 : Date;SortOrder@1000000009 : Integer);
+    VAR
+      UserDefinedField@1000000010 : Record 9068255;
+      UserDefinedFieldData@1000000011 : Record 9068256;
+      Owner@1000000012 : Record 9068443;
+      Prospect@1000000013 : Record 9068440;
+      Entity@1000000014 : Record 9068505;
+    BEGIN
+      UserDefinedField.SETRANGE(Code,UDFCode);
+      IF UserDefinedField.FINDFIRST THEN;
+      IF UserDefinedField.ISEMPTY THEN
+        ERROR('UDF Code not found');
+
+      UserDefinedFieldData.INIT;
+      UserDefinedFieldData.VALIDATE(Code,UserDefinedField.Code);
+
+      IF EntityNo <> '' THEN BEGIN
+         IF NOT Entity.GET(EntityNo) THEN
+           ERROR('Entity is not found');
+
+        UserDefinedFieldData."Entity No." := EntityNo;
+
+        Owner.SETRANGE("Entity No.",EntityNo);
+        IF Owner.FINDFIRST THEN BEGIN
+          UserDefinedFieldData."Linked To" := UserDefinedFieldData."Linked To"::Owner;
+          UserDefinedFieldData."Linked To No." := Owner."No.";
+        END;
+        Prospect.SETRANGE("Entity No.",EntityNo);
+        IF Prospect.FINDFIRST THEN BEGIN
+          UserDefinedFieldData."Linked To" := UserDefinedFieldData."Linked To"::Prospect;
+          UserDefinedFieldData."Linked To No." := Prospect."No.";
+        END;
+        IF UserDefinedFieldData."Linked To No." = '' THEN BEGIN
+          UserDefinedFieldData."Linked To" := UserDefinedFieldData."Linked To"::Entity;
+          UserDefinedFieldData."Linked To No." := EntityNo;
+        END;
+      END ELSE BEGIN
+        CASE LinkedTo OF
+          LinkedTo::Owner : BEGIN
+            Owner.RESET;
+            IF Owner.GET(LinkedToNo) THEN BEGIN
+              UserDefinedFieldData."Linked To" := UserDefinedFieldData."Linked To"::Owner;
+              UserDefinedFieldData."Linked To No." := Owner."No.";
+              UserDefinedFieldData."Entity No." := Owner."Entity No.";
+            END;
+          END;
+          LinkedTo::Prospect : BEGIN
+            Prospect.RESET;
+            IF Prospect.GET(LinkedToNo) THEN BEGIN
+              UserDefinedFieldData."Linked To" := UserDefinedFieldData."Linked To"::Prospect;
+              UserDefinedFieldData."Linked To No." := Prospect."No.";
+              UserDefinedFieldData."Entity No." := Prospect."Entity No.";
+            END;
+          END;
+        END;
+      END;
+
+      IF UserDefinedFieldData."Linked To No." = '' THEN
+        ERROR('Linked To No. is not found');
+      UserDefinedFieldData.VALIDATE("Sub Linked to",SubLinkedTo);
+      UserDefinedFieldData.VALIDATE("Sub Linked To No.",SubLinkedToNo);
+      UserDefinedFieldData.INSERT(TRUE);
+      UserDefinedFieldData.VALIDATE(Data,Data);
+      IF SortOrder <> 0 THEN
+        UserDefinedFieldData."Sort Order" := SortOrder;
+      UserDefinedFieldData."Effective From" := EffectiveFrom;
+      UserDefinedFieldData."Effective To" := EffectiveTo;
+      UserDefinedFieldData.MODIFY(TRUE);
+    END;
+
+    [External]
+    PROCEDURE InsertMeetingRegister@1000000022(ClientNo@1000000000 : Code[20];ClientName@1000000001 : Text[150];MeetingDate@1000000002 : Date;MeetingTime@1000000003 : Time;MeetingType@1000000004 : ' ,Directors,Shareholders';MeetingAddress@1000000005 : Code[10];Status@1000000006 : 'In Progress,Signed Off') "Meeting No." : Integer;
+    VAR
+      MeetingRegister@1000000007 : Record 9070258;
+      No@1000000008 : Integer;
+      DocMgmntCU@1000000009 : Codeunit 9068511;
+      Type@1000000010 : ' ,Client,Entity,Prospect,Intermediary,Client Owner,Resource,,Dimension,,,External Bank Payment,,,,Potential Client';
+      MeetingRegister2@1000000011 : Record 9070258;
+      ClientRec@1000000012 : Record 9068500;
+    BEGIN
+      MeetingRegister.RESET;
+      MeetingRegister.INIT;
+
+      IF ClientNo <> '' THEN
+         MeetingRegister.VALIDATE("Client No.",ClientNo)
+      ELSE BEGIN
+       ClientRec.SETFILTER(Name,'%1','@*' + ClientName + '*');
+        IF ClientRec.FINDFIRST THEN
+          MeetingRegister.VALIDATE("Client No.",ClientRec."Client No.");
+      END;
+
+      MeetingRegister."Meeting Date" := MeetingDate;
+      MeetingRegister."Meeting Time" := MeetingTime;
+      MeetingRegister."Meeting Type" := MeetingType;
+      MeetingRegister.VALIDATE("Meeting Address",MeetingAddress);
+      MeetingRegister.Status := Status;
+
+      IF MeetingRegister.INSERT(TRUE) THEN
+        EXIT(MeetingRegister."Meeting No.");
+    END;
+
+    [External]
+    PROCEDURE SignOffTrackingPeriod@100000007(RecordType@100000004 : 'Prospect,Client Owner,Client,Entity,Resource';RecordNo@100000005 : Code[20];TaxCode@100000006 : Code[20];TaxReturnCountry@100000007 : Code[10];TaxReturnStartDate@100000008 : Date;TaxReturnEndDate@100000009 : Date;SignOffDate@100000021 : Date;ClosingDate@100000011 : Date) : Boolean;
+    VAR
+      NewEntryNo@100000000 : Integer;
+      TaxTrackerMgt@100000001 : Codeunit 9068539;
+      TempDate@100000002 : Date;
+      SignOffDateMandatory@100000003 : Boolean;
+      CheckSignoff@100000010 : Boolean;
+      Text0001@100000018 : TextConst 'ENU=You do not have permission (%1) to sign off periods.';
+      Text0002@100000017 : TextConst 'ENU=Are you sure you want to close the tracking period for this %1?';
+      Text0003@100000016 : TextConst 'ENU=Please specify Period Closing Date.';
+      Text0004@100000015 : TextConst 'ENU=There is already a completed Tax period on the %1.\ Do you wish to continue?';
+      Text0005@100000014 : TextConst 'ENU=Cancelled';
+      Text0006@100000013 : TextConst 'ENU=There is already a completed Tax period after the %1';
+      Text0007@100000012 : TextConst 'ENU=Do you wish to create a new period?';
+      SIGNOFFPERMISSION@100000019 : TextConst 'ENU=_CM-TAXTRACK SIGNOF';
+      TaxTrackerCheck@100000020 : Record 9068801 SECURITYFILTERING(Filtered);
+      Text0009@100000022 : TextConst 'ENU=There is already a Signed-Off Tracker with the same Tax Period';
+      Text0008@100000023 : TextConst 'ENU=Tax Period is now closed. A new tax period based upon the old one has been created.';
+      TaxTracker@100000024 : Record 9068801 SECURITYFILTERING(Filtered);
+      NewTaxTracker@100000025 : Record 9068801 SECURITYFILTERING(Filtered);
+      SubstanceRegister@100000026 : Record 9070255;
+    BEGIN
+
+      IF SignOffDate = 0D THEN
+        ERROR('Please Specify signoff date');
+
+
+
+      IF ClosingDate = 0D THEN
+         ERROR(Text0003);
+
+      TaxTrackerCheck.RESET;
+      TaxTrackerCheck.SETRANGE("Record Type",RecordType);
+      TaxTrackerCheck.SETRANGE("Record No.", RecordNo);
+      TaxTrackerCheck.SETRANGE("Tax Code",TaxCode );
+      TaxTrackerCheck.SETRANGE("Tax Return Country",TaxReturnCountry);
+      TaxTrackerCheck.SETRANGE("Tax Return Start Date",TaxReturnStartDate);
+      TaxTrackerCheck.SETRANGE("Tax Return End Date",TaxReturnEndDate);
+      TaxTrackerCheck.SETRANGE("Tracker Period Status", TaxTrackerCheck."Tracker Period Status"::"Signed Off");
+      IF TaxTrackerCheck.FINDFIRST THEN
+        ERROR(Text0009);
+
+
+      TaxTracker.RESET;
+      TaxTracker.SETRANGE("Record Type",RecordType);
+      TaxTracker.SETRANGE("Record No.", RecordNo);
+      TaxTracker.SETRANGE("Tax Code",TaxCode );
+      TaxTracker.SETRANGE("Tax Return Country",TaxReturnCountry);
+      TaxTracker.SETRANGE("Tax Return Start Date",TaxReturnStartDate);
+      TaxTracker.SETRANGE("Tax Return End Date",TaxReturnEndDate);
+      IF TaxTracker.FINDFIRST THEN BEGIN
+        TaxTracker."Tax Period Completed Date" := ClosingDate;
+        TaxTracker."Tracker Period Status" := TaxTracker."Tracker Period Status" ::"Signed Off";
+        TaxTracker."Period Closed by" := USERID;
+        IF TaxTracker.MODIFY THEN BEGIN
+         SignOffTaxTrackerCard(TaxTracker);
+          IF CreateNewPeriod(TaxTracker,NewTaxTracker) THEN
+            EXIT(TRUE)
+          ELSE
+            EXIT(FALSE);
+
+        END
+      END ELSE
+        ERROR('Tax Tracker Record not found');
+    END;
+
+    PROCEDURE CreateNewPeriod@100000014(PreviousTracker@1000000000 : Record 9068801 SECURITYFILTERING(Filtered);VAR TaxTracker@1000000002 : Record 9068801) : Boolean;
+    VAR
+      FrequencyFormula@1040000 : Text[5];
+    BEGIN
+      WITH PreviousTracker DO BEGIN
+        //DO a check do we already have the next period
+        TaxTracker.INIT;
+        TaxTracker.TRANSFERFIELDS ( PreviousTracker );
+        TaxTracker."Entry No." := 0;
+        TaxTracker."Field 1" := 0D;
+        TaxTracker."Field 2" := 0D;
+        TaxTracker."Field 3" := 0D;
+        TaxTracker."Field 4" := 0D;
+        TaxTracker."Field 5" := 0D;
+        TaxTracker."Field 6" := 0D;
+        TaxTracker."Field 7" := 0D;
+        TaxTracker."Field 8" := 0D;
+        TaxTracker."Field 9" := 0D;
+        TaxTracker."Field 10" := 0D;
+        TaxTracker."Field 11" := 0D;
+        TaxTracker."Field 12" := 0D;
+        TaxTracker."Field 13" := 0D;
+        TaxTracker."Field 14" := 0D;
+        TaxTracker."Field 15" := 0D;
+        TaxTracker."Field 16" := 0D;
+        TaxTracker."Field 17" := 0D;
+        TaxTracker."Tax Return Start Date" := 0D;
+        TaxTracker."Tax Return End Date"   := 0D;
+        TaxTracker."Tax Period Completed Date" := 0D;
+        TaxTracker."Period Closed by" := '';
+        TaxTracker."Tracker Period Status" := TaxTracker."Tracker Period Status"::"In Progress";
+        TaxTracker."Tracker Status" := 0;
+
+        FrequencyFormula := PreviousTracker.GetFrequencyCalcFormula(PreviousTracker.Frequency);
+
+        IF FrequencyFormula <> '' THEN BEGIN
+          IF PreviousTracker."Tax Return Start Date" <> 0D THEN
+            TaxTracker."Tax Return Start Date" := CALCDATE(FrequencyFormula,PreviousTracker."Tax Return Start Date");
+          IF PreviousTracker."Tax Return End Date" <> 0D THEN
+            TaxTracker."Tax Return End Date" := CALCDATE(FrequencyFormula,PreviousTracker."Tax Return End Date");
+          IF PreviousTracker."Filing Date" <> 0D THEN
+            TaxTracker."Filing Date" := CALCDATE(FrequencyFormula,PreviousTracker."Filing Date");
+        END;
+
+        IF TaxTracker.INSERT(TRUE) THEN
+          EXIT(TRUE)
+        ELSE
+          EXIT(FALSE);
+      END;
+    END;
+
+    PROCEDURE SignOffTaxTrackerCard@1000000051(TaxTracker@1000000000 : Record 9068801);
+    VAR
+      SubstanceSetup@1000000003 : Record 9070256;
+      SubstanceRegister@1000000004 : Record 9070255;
+    BEGIN
+      SubstanceSetup.GET;
+      IF TaxTracker."Tax Return Country" <> SubstanceSetup."Jersey Country Code" THEN
+        EXIT;
+
+      IF TaxTracker."Tax Code" <> SubstanceSetup."Company Tax Return Tax Code" THEN
+        EXIT;
+
+      IF TaxTracker."Record Type" <> TaxTracker."Record Type"::Client THEN
+        EXIT;
+
+      IF TaxTracker."Substance Entry No." = 0 THEN
+        EXIT;
+
+      IF SubstanceRegister.GET(TaxTracker."Record No.", TaxTracker."Substance Entry No.") THEN BEGIN
+        IF (TaxTracker."Tax Return Start Date" <> SubstanceRegister."Period Start") OR
+          (TaxTracker."Tax Return End Date" <> SubstanceRegister."Period End") THEN
+          MESSAGE('Tax Tracker and linked Substance record period dates do not match. Substance Card will not be updated.')
+        ELSE BEGIN
+               IF SubstanceRegister.Status <> SubstanceRegister.Status::Completed THEN BEGIN
+                  SubstanceRegister.Status := SubstanceRegister.Status::Completed;
+                  SubstanceRegister.MODIFY;
+               END;
+             END;
+      END;
+    END;
+
+    [External]
+    PROCEDURE CreateTWMPayment@100000009(ClientNo@100000000 : Code[20]) Reference : Text;
+    VAR
+      TWMPayments@100000001 : Record 9072144;
+      Client@100000002 : Record 9068500;
+    BEGIN
+      TWMPayments.INIT;
+      TWMPayments.Reference := '';
+      Client.RESET;
+      Client.GET(ClientNo);
+      //IF Client.GET(ClientNo) THEN BEGIN
+        TWMPayments."From Client" := Client."Client No.";
+        TWMPayments."Document Type" := TWMPayments."Document Type"::Payment;
+        TWMPayments."From Bank Account Option" := TWMPayments."From Bank Account Option"::Client;
+        IF TWMPayments.INSERT(TRUE) THEN
+            EXIT(TWMPayments.Reference)
+      //END ELSE
+        //ERROR('Client %1 not found',ClientNo);
+    END;
+
+    [External]
+    PROCEDURE CancelTWMPayment@100000023("Payment Reference"@100000000 : Code[35]) Result : Boolean;
+    VAR
+      TWMPayments@100000001 : Record 9072144;
+    BEGIN
+      TWMPayments.GET("Payment Reference");
+      IF TWMPayments.Status = TWMPayments.Status::"Payment Sent" THEN BEGIN
+        IF TWMPayments.CancelPayment(FALSE,FALSE) THEN
+          EXIT(FALSE);
+      END ELSE BEGIN
+        IF TWMPayments.CancelPayment(TRUE,FALSE) THEN
+          EXIT(TRUE);
+      END;
+    END;
+
+    [External]
+    PROCEDURE ValidateTWMPayment@100000024("Payment Reference"@100000000 : Code[35]) Result : Boolean;
+    VAR
+      RecTWMPayments@100000001 : Record 9072144;
+      CUTWMPayments@100000002 : Codeunit 9072130;
+      ErrorCount@100000003 : Integer;
+    BEGIN
+      RecTWMPayments.GET("Payment Reference");
+      ErrorCount := CUTWMPayments.UpdateValidatePayFileFields(RecTWMPayments);
+
+      MESSAGE(FORMAT(ErrorCount));
+      IF ErrorCount = 0 THEN
+        EXIT(TRUE)
+      ELSE
+        EXIT(FALSE);
+      //END ELSE
+       // ERROR('Payment %1 Do not EXISTS',"Payment Reference");
+    END;
+
+    BEGIN
+    END.
+  }
+}
+

@@ -1,0 +1,205 @@
+OBJECT Page 50051 DFXVega Interface
+{
+  OBJECT-PROPERTIES
+  {
+    Date=29-07-22;
+    Time=18:24:12;
+    Modified=Yes;
+    Version List=DFX VEGA;
+  }
+  PROPERTIES
+  {
+    AccessByPermission=Page 50051=X;
+    ApplicationArea=#ALL;
+    InsertAllowed=No;
+    DeleteAllowed=Yes;
+    ModifyAllowed=Yes;
+    SourceTable=Table50020;
+    SourceTableView=SORTING(Entry No.)
+                    ORDER(Ascending);
+    PageType=List;
+    UsageCategory=Lists;
+    RefreshOnActivate=Yes;
+    OnOpenPage=BEGIN
+                 SETRANGE("RM User ID",USERID);
+               END;
+
+    OnAfterGetRecord=BEGIN
+                       IF Status = Status::UnProcessed THEN
+                         UpdateEditable := TRUE
+                       ELSE
+                         IF (Status = Status::InReview) OR (Status = Status::InProcess) THEN
+                         UpdateEditable := FALSE;
+
+                       IF Status = Status::InReview THEN
+                         GETStatusEditable := TRUE
+                       ELSE
+                         IF (Status = Status::InProcess) OR (Status = Status::UnProcessed) THEN
+                         GETStatusEditable := FALSE;
+                     END;
+
+    ActionList=ACTIONS
+    {
+      { 100000012;   ;ActionContainer;
+                      CaptionML=ENU=New;
+                      ActionContainerType=NewDocumentItems }
+      { 100000013;1  ;Action    ;
+                      Name=Update;
+                      Promoted=Yes;
+                      Visible=UpdateEditable;
+                      Enabled=UpdateEditable;
+                      Image=UpdateDescription;
+                      OnAction=VAR
+                                 RecDFXVEGAInterface@100000000 : Record 50020;
+                                 PagDFXVegaInterface@100000001 : Page 50104;
+                                 AccuroFunctions@100000002 : Codeunit 50006;
+                               BEGIN
+
+                                 RecDFXVEGAInterface.RESET;
+                                 RecDFXVEGAInterface.SETRANGE(Flag,TRUE);
+                                 //CurrPage.SETSELECTIONFILTER(RecDFXVEGAInterface);
+                                 IF RecDFXVEGAInterface.FINDFIRST THEN
+                                   REPEAT
+                                     IF RecDFXVEGAInterface.Status = RecDFXVEGAInterface.Status::UnProcessed THEN BEGIN
+                                       AccuroFunctions.VegaPassportExpiryCreateCase(RecDFXVEGAInterface."Entry No.",RecDFXVEGAInterface."Entity No.");
+                                   END;
+                                   UNTIL RecDFXVEGAInterface.NEXT = 0;
+                               END;
+                                }
+      { 100000014;1  ;Action    ;
+                      Name=GETStatus;
+                      Promoted=Yes;
+                      Visible=False;
+                      Enabled=GETStatusEditable;
+                      Image=Status;
+                      OnAction=VAR
+                                 RecDFXVEGAInterface@100000002 : Record 50020;
+                                 PagDFXVegaInterface@100000001 : Page 50104;
+                                 AccuroFunctions@100000000 : Codeunit 50006;
+                               BEGIN
+                                 RecDFXVEGAInterface.RESET;
+                                 CurrPage.SETSELECTIONFILTER(RecDFXVEGAInterface);
+                                 IF RecDFXVEGAInterface.FINDFIRST THEN
+                                   REPEAT
+                                     IF RecDFXVEGAInterface.Status = RecDFXVEGAInterface.Status::InReview THEN BEGIN
+                                       AccuroFunctions.VegaPassportExpiryGetStatus(RecDFXVEGAInterface."Entry No.");
+                                   END;
+                                   UNTIL RecDFXVEGAInterface.NEXT = 0;
+                               END;
+                                }
+      { 100000015;1  ;Action    ;
+                      Name=Entity Card;
+                      RunObject=Page 9068922;
+                      RunPageLink=Entity No.=FIELD(Entity No.);
+                      Promoted=Yes;
+                      Image=Card }
+      { 100000017;1  ;Action    ;
+                      Name=Reject;
+                      Visible=False;
+                      Enabled=False;
+                      OnAction=VAR
+                                 RecDFXVEGAInterface@100000002 : Record 50020;
+                                 PagDFXVegaInterface@100000001 : Page 50104;
+                                 AccuroFunctions@100000000 : Codeunit 50006;
+                               BEGIN
+                                 RecDFXVEGAInterface.RESET;
+                                 RecDFXVEGAInterface.SETRANGE(Flag,FALSE);
+                                 CurrPage.SETSELECTIONFILTER(RecDFXVEGAInterface);
+                                 IF RecDFXVEGAInterface.FINDFIRST THEN
+                                   REPEAT
+                                     IF RecDFXVEGAInterface.Status = RecDFXVEGAInterface.Status::UnProcessed THEN BEGIN
+                                       AccuroFunctions.StatusUpdate(RecDFXVEGAInterface."Entry No.",RecDFXVEGAInterface."Entity No.","Status Message");
+                                   END;
+                                   UNTIL RecDFXVEGAInterface.NEXT = 0;
+                               END;
+                                }
+      { 100000019;1  ;Action    ;
+                      Name=Review;
+                      Promoted=Yes;
+                      Visible=GETStatusEditable;
+                      Enabled=GETStatusEditable;
+                      Image=Open;
+                      RunPageMode=View;
+                      OnAction=BEGIN
+                                 HYPERLINK(Rec."Review URL");
+                               END;
+                                }
+    }
+  }
+  CONTROLS
+  {
+    { 100000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 100000001;1;Group   ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 100000016;2;Field   ;
+                SourceExpr=Flag }
+
+    { 100000002;2;Field   ;
+                SourceExpr="Entry No.";
+                Editable=False }
+
+    { 100000003;2;Field   ;
+                SourceExpr="Entity No.";
+                Editable=False }
+
+    { 100000004;2;Field   ;
+                SourceExpr="Entity Name";
+                Editable=False }
+
+    { 100000007;2;Field   ;
+                SourceExpr="Case ID";
+                Visible=True;
+                Enabled=True;
+                Editable=False }
+
+    { 100000020;2;Field   ;
+                SourceExpr="External Case ID";
+                Editable=False }
+
+    { 100000005;2;Field   ;
+                SourceExpr="First/Second";
+                Editable=False }
+
+    { 100000006;2;Field   ;
+                SourceExpr=Status;
+                Editable=False }
+
+    { 100000008;2;Field   ;
+                Name=Passport number;
+                SourceExpr="Passport Number";
+                Editable=False }
+
+    { 100000009;2;Field   ;
+                SourceExpr="Passport Issue Date";
+                Editable=False }
+
+    { 100000010;2;Field   ;
+                SourceExpr="Passport Expiry Date";
+                Editable=False }
+
+    { 100000011;2;Field   ;
+                SourceExpr="Passport Country of Issue";
+                Editable=False }
+
+    { 100000018;2;Field   ;
+                SourceExpr="Status Message";
+                Visible=true;
+                Enabled=true;
+                Editable=False }
+
+  }
+  CODE
+  {
+    VAR
+      UpdateEditable@100000000 : Boolean;
+      GETStatusEditable@100000001 : Boolean;
+
+    BEGIN
+    END.
+  }
+}
+

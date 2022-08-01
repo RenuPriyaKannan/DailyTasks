@@ -1,0 +1,1214 @@
+OBJECT Page 50005 Client Card Company API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=26-11-20;
+    Time=23:42:40;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    InsertAllowed=No;
+    DeleteAllowed=No;
+    SourceTable=Table9068500;
+    PageType=Card;
+    PromotedActionCategoriesML=ENU=New,Process,Report,To Do,CDD,Comments;
+    OnOpenPage=VAR
+                 _DocSetup@1040002 : Record 9068662;
+                 AppSetupRec@1000000000 : Record 9068230;
+               BEGIN
+               END;
+
+    OnAfterGetCurrRecord=VAR
+                           ClientSetup@1000000000 : Record 9068496;
+                         BEGIN
+                         END;
+
+  }
+  CONTROLS
+  {
+    { 1900000001;;Container;
+                Name=ContentArea;
+                CaptionML=ENU=ContentArea;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                Name=GeneralGroup;
+                CaptionML=[ENU=General;
+                           ENG=General];
+                GroupType=Group }
+
+    { 264 ;2   ;Field     ;
+                SourceExpr="Client No." }
+
+    { 265 ;2   ;Field     ;
+                SourceExpr=Name }
+
+    { 304 ;2   ;Field     ;
+                SourceExpr="Client Formal Name" }
+
+    { 1100000504;2;Field  ;
+                SourceExpr="Name Translation" }
+
+    { 1000000371;2;Field  ;
+                SourceExpr="Anonimised Name";
+                Visible=FALSE }
+
+    { 1000000410;2;Field  ;
+                CaptionML=ENU=Purpose/Activities Code;
+                SourceExpr="Purpose-Activity Code" }
+
+    { 269 ;2   ;Field     ;
+                CaptionML=ENU=Purpose/Activities Desc.;
+                SourceExpr="Purpose/Objective" }
+
+    { 1040122;2;Field     ;
+                CaptionML=ENU=Lead Client;
+                SourceExpr="Lead Client" }
+
+    { 268 ;2   ;Field     ;
+                SourceExpr=Intermediary }
+
+    { 100001004;2;Group   ;
+                GroupType=Group }
+
+    { 100000001;3;Field   ;
+                SourceExpr="Intermediary Name";
+                Editable=FALSE }
+
+    { 100000002;3;Field   ;
+                SourceExpr="Intermediary Contact" }
+
+    { 100000003;3;Field   ;
+                SourceExpr="Intermediary Contact Name";
+                Editable=FALSE }
+
+    { 286 ;2   ;Field     ;
+                SourceExpr="Global Dimension 1 Code" }
+
+    { 1000000404;2;Field  ;
+                SourceExpr="Global Dimension 2 Code" }
+
+    { 1000000028;2;Field  ;
+                SourceExpr=ClientAnalysisA }
+
+    { 1000000029;2;Field  ;
+                SourceExpr=ClientAnalysisB }
+
+    { 1000000030;2;Field  ;
+                SourceExpr=ClientAnalysisC }
+
+    { 1000000031;2;Field  ;
+                SourceExpr=ClientAnalysisD }
+
+    { 1000000032;2;Field  ;
+                SourceExpr=ClientAnalysisE }
+
+    { 1000000033;2;Field  ;
+                SourceExpr=ClientAnalysisF }
+
+    { 1100000431;2;Field  ;
+                SourceExpr="First Partition Code" }
+
+    { 1000000003;2;Field  ;
+                SourceExpr=Reference }
+
+    { 1000000506;2;Field  ;
+                SourceExpr="External Reference No" }
+
+    { 1000000507;2;Field  ;
+                SourceExpr="External Reference No 2" }
+
+    { 1000000426;2;Field  ;
+                SourceExpr="Entity No." }
+
+    { 1000000423;2;Field  ;
+                SourceExpr="Legal Entity Identifier (LEI)" }
+
+    { 1000000470;2;Field  ;
+                Name=Next LEI Renewal date;
+                SourceExpr="Next LEI Renewal Date" }
+
+    { 1040131;2;Field     ;
+                SourceExpr="Lead Client Link" }
+
+    { 1040037;2;Field     ;
+                SourceExpr="Potential Client No.";
+                Editable=FALSE }
+
+    { 306 ;2   ;Field     ;
+                SourceExpr=Type;
+                Importance=Promoted }
+
+    { 307 ;2   ;Field     ;
+                SourceExpr="Search Name" }
+
+    { 309 ;2   ;Field     ;
+                SourceExpr="Currency Code";
+                Importance=Promoted;
+                Editable=FALSE }
+
+    { 1040033;2;Field     ;
+                CaptionML=[ENU=Year End;
+                           ENG=Year End];
+                ToolTipML=ENU=dd/mm/yy;
+                SourceExpr="Next Year End" }
+
+    { 1040028;2;Field     ;
+                Name=Financial Year End;
+                ToolTipML=ENU=dd/mm;
+                Importance=Promoted }
+
+    { 312 ;2   ;Field     ;
+                CaptionML=[ENU=Std Admin Agreement?;
+                           ENG=Std Admin Agreement?];
+                SourceExpr="Std Admin Agreement" }
+
+    { 1040143;2;Field     ;
+                SourceExpr="Hold Mail" }
+
+    { 315 ;2   ;Field     ;
+                SourceExpr=Status;
+                Importance=Promoted }
+
+    { 1000000016;2;Field  ;
+                Name=[ Sub Status];
+                Lookup=Yes;
+                CaptionML=ENU=Sub Status;
+                SourceExpr="Sub Status";
+                LookupPageID=Client Sub Status List }
+
+    { 318 ;2   ;Field     ;
+                SourceExpr="Prospective to Live";
+                Editable=FALSE }
+
+    { 183 ;2   ;Field     ;
+                SourceExpr="Live/Prospect to Terminal";
+                Editable=FALSE }
+
+    { 316 ;2   ;Field     ;
+                SourceExpr="Date Of Closure";
+                Editable=FALSE }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="Last Risk Assessment Date";
+                Editable=FALSE }
+
+    { 1000000019;2;Field  ;
+                CaptionML=[ENU=Current Risk Rating;
+                           ENG=Current Risk Rating/Weight];
+                SourceExpr="Current Risk Rating";
+                Editable=FALSE }
+
+    { 1000000021;2;Field  ;
+                SourceExpr="Current Risk Weight";
+                Editable=FALSE }
+
+    { 1040026;2;Field     ;
+                SourceExpr="Next Risk Assessment Due Date" }
+
+    { 1000000037;2;Field  ;
+                CaptionML=[ENU=Last Review;
+                           ENG=Last Review];
+                SourceExpr="Last Review Completed";
+                Editable=FALSE }
+
+    { 1000000039;2;Field  ;
+                SourceExpr="Next Review Due";
+                Editable=FALSE }
+
+    { 321 ;2   ;Field     ;
+                CaptionML=[ENU=History;
+                           ENG=History];
+                SourceExpr="Has Client Name History Entry" }
+
+    { 1000000400;2;Field  ;
+                SourceExpr="New Business" }
+
+    { 1000000434;2;Field  ;
+                CaptionML=ENU=Treasury Lookup;
+                SourceExpr="Treasury Lookup" }
+
+    { 1000000478;2;Field  ;
+                ToolTipML=ENU=Standard industrial classification of economic activities (SIC);
+                SourceExpr="SIC Code" }
+
+    { 1905919201;1;Group  ;
+                Name=CompanyGroup;
+                CaptionML=[ENU=Company;
+                           ENG=Company];
+                GroupType=Group }
+
+    { 1040080;2;Field     ;
+                Name=Company_RegisteredNumber;
+                CaptionML=[ENU=Registered Number;
+                           ENG=Registered Number;
+                           ENA=ABN];
+                SourceExpr="Registered Number" }
+
+    { 1040078;2;Field     ;
+                Name=Company_CountryofIncorporation;
+                CaptionML=ENU=Country of Incorporation;
+                SourceExpr="Country of Incorporation";
+                Importance=Promoted }
+
+    { 1040076;2;Field     ;
+                Name=Company_DateofIncorporation;
+                CaptionML=ENU=Date of Incorporation;
+                SourceExpr="Date of Incorporation";
+                Importance=Promoted }
+
+    { 1040074;2;Field     ;
+                Name=Company_AdministrativeOffice;
+                CaptionML=ENU=Administrative Office;
+                SourceExpr="Administrative Office" }
+
+    { 1040072;2;Field     ;
+                Name=Company_RegisteredOffice;
+                CaptionML=ENU=Registered Office;
+                SourceExpr="Registered Office" }
+
+    { 1040070;2;Field     ;
+                Name=Company_StatutoryRecordLocation;
+                CaptionML=ENU=Statutory Record Location;
+                SourceExpr="Statutory Record Location" }
+
+    { 1040067;2;Field     ;
+                Name=Company_DissolvedStruckoff;
+                SourceExpr="Dissolved/Struck off" }
+
+    { 1040069;2;Field     ;
+                Name=Company_DateDissolvedStruckoff;
+                ToolTipML=ENU=Date Dissolved/Struck off;
+                SourceExpr="Date Dissolved/Struck off" }
+
+    { 1040065;2;Field     ;
+                Name=Company_CompanyClass;
+                CaptionML=ENU=Company Class;
+                SourceExpr="Company Class" }
+
+    { 1040063;2;Field     ;
+                Name=Company_LegalType;
+                CaptionML=ENU=Legal Type;
+                SourceExpr="Legal Type";
+                Importance=Promoted }
+
+    { 1040061;2;Field     ;
+                Name=Company_Jurisdiction;
+                CaptionML=ENU=Jurisdiction;
+                SourceExpr=Jurisdiction }
+
+    { 1040039;2;Field     ;
+                Name=Company_Properlaw;
+                CaptionML=ENU=Proper Law;
+                SourceExpr="Proper law" }
+
+    { 1040059;2;Field     ;
+                Name=Company_AuditStatus;
+                CaptionML=[ENU=Audit Status;
+                           ENG=Audit Status / Date];
+                SourceExpr="Audit Status" }
+
+    { 1040058;2;Field     ;
+                Name=Company_AuditStatusDate;
+                CaptionML=ENU=Audit Status Date;
+                SourceExpr="Audit Status Date" }
+
+    { 1040056;2;Field     ;
+                Name=Company_CompanySeal;
+                CaptionML=ENU=Company Seal;
+                SourceExpr="Company Seal" }
+
+    { 1040054;2;Field     ;
+                Name=Company_LocationofSeal;
+                CaptionML=[ENU=Location of Seal;
+                           ENG=Location of Seal];
+                SourceExpr="Location of Seal" }
+
+    { 1040052;2;Field     ;
+                Name=Company_StatutoryReference;
+                CaptionML=ENU=Statutory Reference;
+                SourceExpr="Statutory Reference" }
+
+    { 1040050;2;Field     ;
+                Name=Company_AnnualReturnRequired;
+                CaptionML=ENU=Annual Return Required;
+                SourceExpr="Annual Return Required" }
+
+    { 1040048;2;Field     ;
+                Name=Company_AnnualReturnFilingDate;
+                CaptionML=ENU=Annual Return Filing Date;
+                SourceExpr="Annual Return Filing Date" }
+
+    { 1000001415;2;Field  ;
+                Name=Company_AnnualReturnStatus;
+                CaptionML=[ENU=Annual Return Action;
+                           ENG=Annual Return Action];
+                SourceExpr="Annual Return Action" }
+
+    { 1040003;2;Field     ;
+                Name=Company_LastAnnualReturnMadeupto;
+                CaptionML=ENU=Last AR Made up to;
+                SourceExpr="Last Annual Return Made up to" }
+
+    { 1040098;2;Field     ;
+                Name=Company_AGMRequired;
+                CaptionML=ENU=AGM Required;
+                SourceExpr="AGM Required" }
+
+    { 1040101;2;Field     ;
+                Name=Company_DateAGMDispensedWith;
+                CaptionML=ENU=Date AGM Dispensed with/Opted In;
+                SourceExpr="Date AGM Dispensed With" }
+
+    { 1040097;2;Field     ;
+                Name=Company_LastAGMHeldDate;
+                CaptionML=ENU=Last AGM Held Date;
+                SourceExpr="Last AGM Held Date" }
+
+    { 1040093;2;Field     ;
+                Name=Company_LocationofLastAGM;
+                CaptionML=ENU=Location of Last AGM;
+                SourceExpr="Location of Last AGM" }
+
+    { 1040096;2;Field     ;
+                Name=Company_NextAGMToBeHeldDate;
+                CaptionML=ENU=Next AGM To Be Held Date;
+                SourceExpr="Next AGM To Be Held Date" }
+
+    { 1040092;2;Field     ;
+                Name=Company_LocationofNextAGM;
+                CaptionML=ENU=Location of Next AGM;
+                SourceExpr="Location of Next AGM" }
+
+    { 1000000416;2;Field  ;
+                SourceExpr="Quorum as Percentage" }
+
+    { 1040094;2;Field     ;
+                Name=Company_ShareholdersQuorum;
+                CaptionML=ENU=Shareholders' Quorum;
+                SourceExpr="Shareholders' Quorum" }
+
+    { 1040099;2;Field     ;
+                Name=Company_LocationofBoardMeetings;
+                CaptionML=ENU=Location of Board Meetings;
+                SourceExpr="Location of Board Meetings" }
+
+    { 1040100;2;Field     ;
+                Name=Company_DateofLastBoardMeeting;
+                CaptionML=ENU=Date of Last Board Meeting;
+                SourceExpr="Date of Last Board Meeting" }
+
+    { 1040095;2;Field     ;
+                Name=Company_DirectorsQuorum;
+                CaptionML=ENU=Directors' Quorum;
+                SourceExpr="Directors' Quorum" }
+
+    { 1040102;2;Field     ;
+                Name=Company_CompanyLimitedbyGuarantee;
+                CaptionML=ENU=Company Limited by Guarantee;
+                SourceExpr="Company Limited by Guarantee" }
+
+    { 1040104;2;Field     ;
+                Name=Company_ForeignRegisteredCompany;
+                CaptionML=ENU=Foreign Registered Company;
+                SourceExpr="Foreign Registered Company" }
+
+    { 1040106;2;Field     ;
+                Name=Company_DateRegisteredasForeignCo;
+                CaptionML=ENU=Date Registered as Foreign Co.;
+                SourceExpr="Date Registered as Foreign Co." }
+
+    { 1040108;2;Field     ;
+                Name=Company_ForeignRegisteredCoNumber;
+                CaptionML=ENU=Foreign Registered Co Number;
+                SourceExpr="Foreign Registered Co Number" }
+
+    { 1000001178;2;Field  ;
+                SourceExpr="Foreign Company Reg. Name" }
+
+    { 1000001179;2;Field  ;
+                SourceExpr="Date De-Registered" }
+
+    { 1040110;2;Field     ;
+                Name=Company_FRReturnRequired;
+                CaptionML=ENU=FR Return Required;
+                SourceExpr="FR Return Required" }
+
+    { 1040112;2;Field     ;
+                Name=Company_FRAnnualReturnFilingDate;
+                CaptionML=ENU=FR Annual Return Filing Date;
+                SourceExpr="FR Annual Return Filing Date" }
+
+    { 1040118;2;Field     ;
+                Name=Company_FRAnnualReturnMadeupto;
+                CaptionML=ENU=FR Annual Return Made up to;
+                SourceExpr="FR Annual Return Made up to" }
+
+    { 1000000179;2;Field  ;
+                Name=ISE_Listed;
+                CaptionML=ENU=ISE Listed;
+                BlankZero=Yes;
+                SourceExpr="ISE Listed" }
+
+    { 1000000180;2;Field  ;
+                Name=Direct_listing;
+                CaptionML=ENU=Direct listing;
+                BlankZero=Yes;
+                SourceExpr="Direct listing" }
+
+    { 1000000415;2;Field  ;
+                Name=ISE_Registration_number;
+                CaptionML=ENU=ISE Registration number;
+                BlankZero=Yes;
+                SourceExpr="ISE Registration number" }
+
+    { 1000000437;2;Field  ;
+                Name=Initial_listing_year;
+                CaptionML=ENU=Initial listing year;
+                BlankZero=Yes;
+                SourceExpr="Initial listing year" }
+
+    { 1000000058;1;Group  ;
+                Name=TrustGroup;
+                CaptionML=ENU=Trust;
+                GroupType=Group }
+
+    { 1000000057;2;Field  ;
+                Name=[Trust_EpitomeofTrust ];
+                CaptionML=[ENU=Epitome of Trust :;
+                           ENG=Epitome of Trust :];
+                MultiLine=Yes }
+
+    { 1000000056;2;Field  ;
+                Name=Trust_InitialTrustFund;
+                CaptionML=ENU=Initial Trust Fund;
+                SourceExpr="Initial Trust Fund" }
+
+    { 1000000055;2;Field  ;
+                Name=Trust_InitialTrustFundDate;
+                CaptionML=ENU=Initial Trust Fund Date;
+                SourceExpr="Initial Trust Fund Date" }
+
+    { 1000000054;2;Field  ;
+                Name=Trust_IncomeCapitalised;
+                CaptionML=ENU=Income Capitalised;
+                SourceExpr="Income Capitalised" }
+
+    { 1000000052;2;Field  ;
+                Name=Trust_VestingDate;
+                CaptionML=ENU=Vesting Date;
+                SourceExpr="Vesting Date" }
+
+    { 1000000051;2;Field  ;
+                Name=Trust_DateExecuted;
+                CaptionML=ENU=Date Executed;
+                SourceExpr="Date Executed";
+                Importance=Promoted }
+
+    { 1000000050;2;Field  ;
+                Name=Trust_Max.TrustPeriod;
+                CaptionML=ENU=Max. Trust Period;
+                SourceExpr="Max. Trust Period" }
+
+    { 1000000412;2;Group  ;
+                GroupType=Group }
+
+    { 1000000911;3;Field  ;
+                Name=Trust_PeriodLength;
+                CaptionML=ENU=Period Length;
+                SourceExpr="Period Length" }
+
+    { 1000000049;2;Field  ;
+                Name=Trust_ActualTrustClosingDate;
+                CaptionML=ENU=Actual Trust Closing Date;
+                SourceExpr="Actual Trust Closing Date" }
+
+    { 1000000048;2;Field  ;
+                Name=Trust_PerpetuityDate;
+                CaptionML=ENU=Perpetuity Date;
+                SourceExpr="Perpetuity Date" }
+
+    { 1000000047;2;Field  ;
+                Name=Trust_AdministrativeOffice;
+                CaptionML=[ENU=Administration Office;
+                           ENG=Administration Office];
+                SourceExpr="Administrative Office";
+                Importance=Promoted }
+
+    { 1000000500;2;Field  ;
+                SourceExpr=Jurisdiction }
+
+    { 1000000046;2;Field  ;
+                Name=Trust_StatutoryRecordLocation;
+                CaptionML=ENU=Statutory Record Location;
+                SourceExpr="Statutory Record Location" }
+
+    { 1000000511;2;Field  ;
+                Name=<Statutory Reference>;
+                CaptionML=ENU=Statutory Reference;
+                SourceExpr="Statutory Reference" }
+
+    { 1000000452;2;Group  ;
+                GroupType=Group }
+
+    { 1000000446;3;Field  ;
+                Name=Trust_Quorum as Percentage;
+                SourceExpr="Quorum as Percentage" }
+
+    { 1000000398;3;Field  ;
+                Name=Trust_Company_ShareholdersQuorum;
+                SourceExpr="Shareholders' Quorum" }
+
+    { 1000000045;2;Field  ;
+                Name=Trust_Properlaw;
+                CaptionML=ENU=Proper law;
+                SourceExpr="Proper law";
+                Importance=Promoted }
+
+    { 1000000044;2;Field  ;
+                Name=Trust_RegisteredNumber;
+                CaptionML=[ENU=Registered Number;
+                           ENG=Registered Number;
+                           ENA=ABN];
+                SourceExpr="Registered Number" }
+
+    { 1000000043;2;Field  ;
+                Name=Trust_IsGrantorTrust;
+                CaptionML=ENU=Is Grantor Trust;
+                SourceExpr="Is Grantor Trust" }
+
+    { 1000000042;2;Field  ;
+                Name=Trust_ProtectorAppointed;
+                CaptionML=ENU=Protector Appointed;
+                SourceExpr="Protector Appointed" }
+
+    { 1000000040;2;Field  ;
+                Name=Trust_Co_Trustee;
+                CaptionML=ENU=Co Trustee;
+                SourceExpr="Co Trustee" }
+
+    { 1000000038;2;Field  ;
+                Name=Trust_DateofLastLOW;
+                CaptionML=ENU=Date of Last LOW;
+                SourceExpr="Date of Last LOW" }
+
+    { 1000000036;2;Field  ;
+                Name=Trust_LetterofWishes;
+                CaptionML=ENU=Letter of Wishes;
+                SourceExpr="Letter of Wishes" }
+
+    { 1000001451;2;Field  ;
+                SourceExpr=Discretionary;
+                Importance=Additional }
+
+    { 1000000035;2;Field  ;
+                Name=Trust_RevocableIrrevocable;
+                CaptionML=ENU=Revocable/Irrevocable;
+                SourceExpr="Revocable/Irrevocable" }
+
+    { 1000000034;2;Field  ;
+                Name=Trust_LegalType;
+                CaptionML=ENU=Legal Type;
+                SourceExpr="Legal Type";
+                Importance=Promoted }
+
+    { 1000000027;2;Field  ;
+                Name=Trust_AuditStatus;
+                CaptionML=ENU=Audit Status;
+                SourceExpr="Audit Status" }
+
+    { 1000000026;2;Field  ;
+                Name=Trust_AuditStatusDate;
+                CaptionML=ENU=Audit Status Date;
+                SourceExpr="Audit Status Date" }
+
+    { 1000000600;2;Field  ;
+                SourceExpr="Reserve Powers" }
+
+    { 1000000025;2;Field  ;
+                Name=Trust_TypeofDeed;
+                CaptionML=ENU=Type of Deed;
+                SourceExpr="Type of Deed" }
+
+    { 1000000462;2;Field  ;
+                Name=Estate_LegalType;
+                CaptionML=ENU=Legal Type;
+                SourceExpr="Legal Type" }
+
+    { 1000000461;2;Field  ;
+                Name=Estate_LetterofWishes;
+                CaptionML=ENU=Letter of Wishes;
+                SourceExpr="Letter of Wishes" }
+
+    { 1000000463;2;Field  ;
+                Name=Estate_Properlaw;
+                CaptionML=ENU=Proper law;
+                SourceExpr="Proper law" }
+
+    { 1000000466;2;Field  ;
+                Name=Estate_DateofLastLOW;
+                CaptionML=ENU=Date of Last LOW;
+                SourceExpr="Date of Last LOW" }
+
+    { 1000000467;2;Field  ;
+                Name=Estate_IncomeCapitalised;
+                CaptionML=ENU=Income Capitalised;
+                SourceExpr="Income Capitalised" }
+
+    { 1000000460;2;Field  ;
+                Name=Estate_TypeofDeed;
+                CaptionML=ENU=Type of Deed;
+                SourceExpr="Type of Deed" }
+
+    { 1000000468;2;Field  ;
+                Name=Estate_StatutoryReference;
+                CaptionML=ENU=Statutory Reference;
+                SourceExpr="Statutory Reference" }
+
+    { 1000000469;2;Field  ;
+                Name=Estate_EstablishmentDate;
+                CaptionML=ENU=Establishment Date;
+                SourceExpr="Establishment Date" }
+
+    { 1000000288;2;Field  ;
+                Name=Estate_Administrative Office;
+                CaptionML=ENU=Administrative Office;
+                SourceExpr="Administrative Office" }
+
+    { 1000000091;2;Field  ;
+                Name=Foundation_EpitomeofFoundation;
+                CaptionML=[ENU=Epitome of Foundation;
+                           ENG=Epitome of Foundation];
+                MultiLine=Yes }
+
+    { 1000000090;2;Field  ;
+                Name=Foundation_RegisteredNumber;
+                CaptionML=[ENU=Registered Number;
+                           ENG=Registered Number;
+                           ENA=ABN];
+                SourceExpr="Registered Number" }
+
+    { 1000000089;2;Field  ;
+                Name=Foundation_InitialTrustFund;
+                CaptionML=ENU=Initial Endowment;
+                SourceExpr="Initial Trust Fund" }
+
+    { 1000000088;2;Field  ;
+                Name=Foundation_IncomeCapitalised;
+                CaptionML=ENU=Income Capitalised;
+                SourceExpr="Income Capitalised" }
+
+    { 1000000087;2;Field  ;
+                Name=Foundation_VestingDate;
+                CaptionML=ENU=Vesting Date;
+                SourceExpr="Vesting Date" }
+
+    { 1000000086;2;Field  ;
+                Name=Foundation_DateExecuted;
+                CaptionML=ENU=Formation Date;
+                SourceExpr="Date Executed";
+                Importance=Promoted }
+
+    { 1000000085;2;Field  ;
+                Name=Foundation_MaxTrustPeriod;
+                CaptionML=ENU=Max. Period;
+                SourceExpr="Max. Trust Period" }
+
+    { 1000000084;2;Field  ;
+                Name=Foundation_ActualTrustClosingDate;
+                CaptionML=ENU=Closing Date;
+                SourceExpr="Actual Trust Closing Date" }
+
+    { 1000000083;2;Field  ;
+                Name=Foundation_AdministrativeOffice;
+                CaptionML=ENU=Administration Office;
+                SourceExpr="Administrative Office";
+                Importance=Promoted }
+
+    { 1000000082;2;Field  ;
+                Name=Foundation_RegisteredOffice;
+                CaptionML=ENU=Registered Office;
+                SourceExpr="Registered Office" }
+
+    { 1000000081;2;Field  ;
+                Name=Foundation_StatutoryRecordLocation;
+                CaptionML=ENU=Statutory Record Location;
+                SourceExpr="Statutory Record Location" }
+
+    { 1000000080;2;Field  ;
+                Name=Foundation_ProperLaw;
+                CaptionML=ENU=Proper law;
+                SourceExpr="Proper law";
+                Importance=Promoted }
+
+    { 1000000079;2;Field  ;
+                Name=Foundation_TaxStatus;
+                CaptionML=ENU=Tax Status;
+                SourceExpr="Tax Status" }
+
+    { 1000000078;2;Field  ;
+                Name=Foundation_ProtectorAppointed;
+                CaptionML=[ENU=Protector/Guardian Appointed;
+                           ENG=Protector/Guardian Appointed];
+                SourceExpr="Protector Appointed" }
+
+    { 1000000077;2;Field  ;
+                Name=Foundation_ReservePowers;
+                CaptionML=ENU=Reserve Powers;
+                SourceExpr="Reserve Powers" }
+
+    { 1000000076;2;Field  ;
+                Name=Foundation_CoTrustee;
+                CaptionML=ENU=Board of Foundation;
+                SourceExpr="Co Trustee" }
+
+    { 1000000075;2;Field  ;
+                Name=Foundation_DateofLastLOW;
+                CaptionML=ENU=Date of Last By Laws;
+                SourceExpr="Date of Last LOW" }
+
+    { 1000000453;2;Group  ;
+                Name=<Control1000000555>;
+                GroupType=Group }
+
+    { 1000000448;3;Field  ;
+                Name=<FOUNDATION_Quorum as Percentage>;
+                SourceExpr="Quorum as Percentage" }
+
+    { 1000000447;3;Field  ;
+                Name=FOUNDATION_Company_ShareholdersQuorum;
+                CaptionML=ENU=Shareholders' Quorum;
+                SourceExpr="Shareholders' Quorum" }
+
+    { 1000000074;2;Field  ;
+                Name=Foundation_LetterofWishes;
+                CaptionML=ENU=By Laws;
+                SourceExpr="Letter of Wishes" }
+
+    { 1000000472;2;Field  ;
+                SourceExpr="Revocable/Irrevocable" }
+
+    { 1000000073;2;Field  ;
+                Name=Foundation_Jurisdiction;
+                CaptionML=ENU=Jurisdiction;
+                SourceExpr=Jurisdiction }
+
+    { 1000000072;2;Field  ;
+                Name=Foundation_AnnualReturnRequired;
+                CaptionML=ENU=Annual Return Required;
+                SourceExpr="Annual Return Required" }
+
+    { 1000000071;2;Field  ;
+                Name=Foundation_AnnualReturnFilingDate;
+                CaptionML=ENU=Annual Return Filing Date;
+                SourceExpr="Annual Return Filing Date" }
+
+    { 100000008;2;Field   ;
+                Name=Foundation_AnnualReturnStatus;
+                CaptionML=ENU=Annual Return Action;
+                SourceExpr="Annual Return Action" }
+
+    { 1000000070;2;Field  ;
+                Name=Foundation_LastAnnualReturnMadeupto;
+                CaptionML=[ENU=Last AR Made up to;
+                           ENG=Last AR Made up to];
+                SourceExpr="Last Annual Return Made up to" }
+
+    { 1000000700;2;Field  ;
+                Name=Foundation_StatutesType;
+                SourceExpr="Statutes Type" }
+
+    { 1000000069;2;Field  ;
+                Name=Foundation_LegalType;
+                CaptionML=ENU=Legal Type;
+                SourceExpr="Legal Type";
+                Importance=Promoted }
+
+    { 1000000458;2;Field  ;
+                Name=Foundation_AuditStatus;
+                CaptionML=ENU=Audit Status;
+                Description=<#39 CRF49300>;
+                SourceExpr="Audit Status" }
+
+    { 1000000193;2;Field  ;
+                Name=Foundation_AuditStatusDate;
+                CaptionML=ENU=Audit Status Date;
+                Description=<#39 CRF49300>;
+                SourceExpr="Audit Status Date" }
+
+    { 1000000115;2;Field  ;
+                Name=Partnership_RegisteredNumber;
+                CaptionML=[ENU=Registered Number;
+                           ENG=Registered Number;
+                           ENA=ABN];
+                SourceExpr="Registered Number" }
+
+    { 1000000114;2;Field  ;
+                Name=Partnership_CountryofIncorporation;
+                CaptionML=[ENU=Country of Formation;
+                           ENG=Country of Formation];
+                SourceExpr="Country of Incorporation" }
+
+    { 1000000113;2;Field  ;
+                Name=Partnership_DateofIncorporation;
+                CaptionML=[ENU=Date of Formation;
+                           ENG=Date of Formation];
+                SourceExpr="Date of Incorporation";
+                Importance=Promoted }
+
+    { 1000000112;2;Field  ;
+                Name=Partnership_AdministrativeOffice;
+                CaptionML=ENU=Administrative Office;
+                SourceExpr="Administrative Office";
+                Importance=Promoted }
+
+    { 1000000111;2;Field  ;
+                Name=Partnership_RegisteredOffice;
+                CaptionML=ENU=Registered Office;
+                SourceExpr="Registered Office" }
+
+    { 1000000110;2;Field  ;
+                Name=Partnership_StatutoryRecordLocation;
+                CaptionML=ENU=Statutory Record Location;
+                SourceExpr="Statutory Record Location" }
+
+    { 1000000109;2;Field  ;
+                Name=Partnership_CompanyClass;
+                CaptionML=[ENU=Partnership Class;
+                           ENG=Partnership Class];
+                SourceExpr="Company Class" }
+
+    { 1000000108;2;Field  ;
+                Name=Partnership_LegalType;
+                CaptionML=ENU=Legal Type;
+                SourceExpr="Legal Type";
+                Importance=Promoted }
+
+    { 1000000107;2;Field  ;
+                Name=Partnership_Jurisdiction;
+                CaptionML=ENU=Jurisdiction;
+                SourceExpr=Jurisdiction }
+
+    { 1000000106;2;Field  ;
+                Name=Partnership_Properlaw;
+                CaptionML=ENU=Proper law;
+                SourceExpr="Proper law";
+                Importance=Promoted }
+
+    { 1000000105;2;Field  ;
+                Name=Partnership_TaxStatus;
+                CaptionML=ENU=Tax Status;
+                SourceExpr="Tax Status" }
+
+    { 1000000104;2;Field  ;
+                Name=Partnership_AuditStatus;
+                CaptionML=[ENU=Audit Status;
+                           ENG=Audit Status / Date];
+                SourceExpr="Audit Status" }
+
+    { 1000000100;2;Field  ;
+                Name=Partnership_AuditStatusDate;
+                CaptionML=ENU=Audit Status Date;
+                SourceExpr="Audit Status Date" }
+
+    { 1000000454;2;Group  ;
+                Name=<Control1000000556>;
+                GroupType=Group }
+
+    { 1000000450;3;Field  ;
+                Name=<PARTNER_Quorum as Percentage>;
+                SourceExpr="Quorum as Percentage" }
+
+    { 1000000449;3;Field  ;
+                Name=PARTNER_Company_ShareholdersQuorum;
+                CaptionML=ENU=Shareholders' Quorum;
+                SourceExpr="Shareholders' Quorum" }
+
+    { 1000000102;2;Field  ;
+                Name=Partnership_StatutoryReference;
+                CaptionML=ENU=Statutory Reference;
+                SourceExpr="Statutory Reference" }
+
+    { 1000000101;2;Field  ;
+                Name=Partnership_AnnualReturnRequired;
+                CaptionML=ENU=Annual Return Required;
+                SourceExpr="Annual Return Required" }
+
+    { 1000000099;2;Field  ;
+                Name=Partnership_AnnualReturnFilingDate;
+                CaptionML=ENU=Annual Return Filing Date;
+                SourceExpr="Annual Return Filing Date" }
+
+    { 100000004;2;Field   ;
+                Name=Partnership_AnnualReturnStatus;
+                CaptionML=ENU=Annual Return Action;
+                SourceExpr="Annual Return Action" }
+
+    { 100000007;2;Field   ;
+                Name=Partnership_LastAnnRetMadeUpTo;
+                CaptionML=ENU=Last AR Made up to;
+                SourceExpr="Last Annual Return Made up to" }
+
+    { 1000000098;2;Field  ;
+                Name=Partnership_AGMRequired;
+                CaptionML=[ENU=Partners Meeting Required;
+                           ENG=Partners Meeting Required];
+                SourceExpr="AGM Required" }
+
+    { 1000000097;2;Field  ;
+                Name=Partnership_LastAGMHeldDate;
+                CaptionML=[ENU=Last Meeting Held Date;
+                           ENG=Last Meeting Held Date];
+                SourceExpr="Last AGM Held Date" }
+
+    { 1000000096;2;Field  ;
+                Name=Partnership_LocationofLastAGM;
+                CaptionML=[ENU=Location of Last Meeting;
+                           ENG=Location of Last Meeting];
+                SourceExpr="Location of Last AGM" }
+
+    { 1000000095;2;Field  ;
+                Name=Partnership_NextAGMToBeHeldDate;
+                CaptionML=[ENU=Next Meeting To Be Held Date;
+                           ENG=Next Meeting To Be Held Date];
+                SourceExpr="Next AGM To Be Held Date" }
+
+    { 1000000094;2;Field  ;
+                Name=Partnership_LocationofNextAGM;
+                CaptionML=[ENU=Location of Next Meeting;
+                           ENG=Location of Next Meeting];
+                SourceExpr="Location of Next AGM" }
+
+    { 1000000093;2;Field  ;
+                Name=Partnership_DateDissolvedStruckoff;
+                CaptionML=[ENU=Date Wound Up;
+                           ENG=Date Wound Up];
+                SourceExpr="Date Dissolved/Struck off" }
+
+    { 1000000443;2;Field  ;
+                Name=ISE_Listed2;
+                CaptionML=ENU=ISE Listed;
+                BlankZero=Yes;
+                SourceExpr="ISE Listed" }
+
+    { 1000000442;2;Field  ;
+                Name=Direct_listing2;
+                CaptionML=ENU=Direct listing;
+                BlankZero=Yes;
+                SourceExpr="Direct listing" }
+
+    { 1000000441;2;Field  ;
+                Name=ISE_Registration_number2;
+                CaptionML=ENU=ISE Registration number;
+                BlankZero=Yes;
+                SourceExpr="ISE Registration number" }
+
+    { 1000000385;2;Field  ;
+                Name=Initial_listing_year2;
+                CaptionML=ENU=Initial listing year;
+                BlankZero=Yes;
+                SourceExpr="Initial listing year" }
+
+    { 1000000126;2;Group  ;
+                CaptionML=ENU=Fund;
+                GroupType=Group }
+
+    { 1000000117;3;Field  ;
+                Name=Fund_Jurisdiction;
+                CaptionML=ENU=Jurisdiction;
+                SourceExpr=Jurisdiction;
+                Importance=Promoted }
+
+    { 1000000120;3;Field  ;
+                Name=Fund_LegalType;
+                CaptionML=ENU=Legal Type;
+                SourceExpr="Legal Type";
+                Importance=Promoted }
+
+    { 1000000118;3;Field  ;
+                Name=Fund_Tax Status;
+                CaptionML=ENU=Tax Status;
+                SourceExpr="Tax Status" }
+
+    { 1000000125;2;Group  ;
+                CaptionML=ENU=European Union Savings Tax Directive;
+                GroupType=Group }
+
+    { 1000000124;3;Field  ;
+                Name=Fund_EUSTD_InscopeforEUSTD;
+                CaptionML=ENU=In Scope For EUSTD;
+                SourceExpr="In scope for EUSTD" }
+
+    { 1000000123;3;Field  ;
+                Name=Fund_EUSTD_Inscopemanuallyentered;
+                CaptionML=ENU=In Scope Manually Entered;
+                SourceExpr="In scope manually entered" }
+
+    { 1000000122;3;Field  ;
+                Name=Fund_EUSTD_Reasonformanual entry;
+                CaptionML=ENU=Reason For Manual Entry;
+                SourceExpr="Reason for manual entry";
+                LookupPageID=EUSTD In Scope Reason Codes }
+
+    { 1000000121;3;Field  ;
+                Name=Fund_EUSTD_Date last status change;
+                CaptionML=ENU=Date Last Status Change;
+                SourceExpr="Date last status change" }
+
+    { 1000000060;2;Field  ;
+                Name=Bank_Jurisdiction;
+                CaptionML=ENU=Jurisdiction;
+                SourceExpr=Jurisdiction;
+                Importance=Promoted }
+
+    { 1000000059;2;Field  ;
+                Name=Bank_LegalType;
+                CaptionML=ENU=Legal Type;
+                SourceExpr="Legal Type";
+                Importance=Promoted }
+
+    { 1000000067;2;Field  ;
+                Name=Other_Jurisdiction;
+                CaptionML=ENU=Jurisdiction;
+                SourceExpr=Jurisdiction;
+                Importance=Promoted }
+
+    { 1000000066;2;Field  ;
+                Name=Other_RegisteredOffice;
+                CaptionML=ENU=Registered Office;
+                SourceExpr="Registered Office" }
+
+    { 1000000065;2;Field  ;
+                Name=Other_AdministrativeOffice;
+                CaptionML=ENU=Administrative Office;
+                SourceExpr="Administrative Office";
+                Importance=Promoted }
+
+    { 1000000064;2;Field  ;
+                Name=Other_LegalType;
+                CaptionML=ENU=Legal Type;
+                SourceExpr="Legal Type";
+                Importance=Promoted }
+
+    { 1000000063;2;Field  ;
+                Name=Other_EstablishmentDate;
+                CaptionML=ENU=Establishment Date;
+                SourceExpr="Establishment Date";
+                Importance=Promoted }
+
+    { 1000000062;2;Field  ;
+                Name=Other_StatutoryReference;
+                CaptionML=ENU=Statutory Reference;
+                SourceExpr="Statutory Reference" }
+
+    { 1000000456;2;Group  ;
+                GroupType=Group }
+
+    { 1000000451;3;Field  ;
+                Name=<OTHER_Quorum as Percentage>;
+                SourceExpr="Quorum as Percentage" }
+
+    { 1000000103;3;Field  ;
+                Name=OTHER_Company_ShareholdersQuorum;
+                CaptionML=ENU=Shareholders' Quorum;
+                SourceExpr="Shareholders' Quorum" }
+
+    { 1000000290;2;Field  ;
+                Name=Other_ProperLaw;
+                CaptionML=ENU=Proper Law;
+                SourceExpr="Proper law" }
+
+    { 1901079801;1;Group  ;
+                Name=TaxInformationGroup;
+                CaptionML=[ENU=Tax Information;
+                           ENG=Tax];
+                GroupType=Group }
+
+    { 308 ;2   ;Field     ;
+                SourceExpr="Tax Status" }
+
+    { 1040041;2;Field     ;
+                SourceExpr="Description of Tax Structure" }
+
+    { 1040045;2;Field     ;
+                SourceExpr="Last Tax Review" }
+
+    { 1000000527;2;Field  ;
+                SourceExpr="FATCA Account Classification" }
+
+    { 1000000529;2;Field  ;
+                SourceExpr="FATCA Acc. Class. Description" }
+
+    { 1000000432;2;Field  ;
+                SourceExpr="FATCA Non Reportable Account" }
+
+    { 1000000464;2;Field  ;
+                SourceExpr="Account is FATCA RFI" }
+
+    { 1000000459;2;Field  ;
+                SourceExpr="FATCA Filer Category";
+                Enabled="Account is FATCA RFI" }
+
+    { 1000000528;2;Field  ;
+                SourceExpr="CRS Account Classification" }
+
+    { 1000000531;2;Field  ;
+                SourceExpr="CRS Acc. Class. Description" }
+
+    { 1000000533;2;Field  ;
+                SourceExpr="CRS Non Reportable Account" }
+
+    { 1000000411;2;Field  ;
+                SourceExpr="Account is CRS RFI" }
+
+    { 1906752101;1;Group  ;
+                Name=TerminationGroup;
+                CaptionML=[ENU=Termination;
+                           ENG=Termination];
+                GroupType=Group }
+
+    { 1040021;2;Field     ;
+                SourceExpr="Method of Exit" }
+
+    { 1040017;2;Field     ;
+                SourceExpr="Date of Exit" }
+
+    { 1040015;2;Field     ;
+                SourceExpr="Archive Record File No." }
+
+    { 1040013;2;Field     ;
+                CaptionML=[ENU=Date of Notification of Closure;
+                           ENG=Date of Notification of Closure];
+                SourceExpr="Date of Notification" }
+
+    { 1040008;2;Field     ;
+                SourceExpr="Length of Relationship (years)" }
+
+    { 1040007;2;Field     ;
+                SourceExpr="Reason for Closure" }
+
+    { 1040005;2;Field     ;
+                SourceExpr="Estimated Annual Fees lost" }
+
+    { 1040145;2;Field     ;
+                SourceExpr="Estimated AUM Lost" }
+
+    { 1040006;2;Field     ;
+                SourceExpr="Lost to Competitor" }
+
+    { 267 ;2   ;Field     ;
+                SourceExpr="System Setup Date";
+                Visible=TRUE;
+                Editable=FALSE }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

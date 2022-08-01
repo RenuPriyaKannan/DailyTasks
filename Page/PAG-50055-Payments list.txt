@@ -1,0 +1,215 @@
+OBJECT Page 50055 Payments list
+{
+  OBJECT-PROPERTIES
+  {
+    Date=21-12-20;
+    Time=13:24:11;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    Editable=Yes;
+    SourceTable=Table9072144;
+    SourceTableView=WHERE(Document Type=FILTER(<>Receipt));
+    PageType=List;
+    OnInit=VAR
+             TWMBankingIntegrationSetup@1000000000 : Record 9072130;
+             ApplicationSetup@1000000001 : Record 9068230;
+           BEGIN
+           END;
+
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000000;1;Group  ;
+                GroupType=Repeater }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="From Bank Account Option" }
+
+    { 1040000;2;Field     ;
+                CaptionML=ENU=Document Type;
+                SourceExpr="Document Type";
+                Editable=FALSE }
+
+    { 1000000001;2;Field  ;
+                CaptionML=ENU=Reference;
+                SourceExpr=Reference }
+
+    { 1000000023;2;Field  ;
+                CaptionML=ENU=From Client;
+                SourceExpr="From Client" }
+
+    { 1000000025;2;Field  ;
+                CaptionML=ENU=From Client Name;
+                SourceExpr="From Client Name" }
+
+    { 1000000041;2;Field  ;
+                SourceExpr="From Bank Account No. (Source)" }
+
+    { 1000000043;2;Field  ;
+                SourceExpr="From Bank Acc. No. (Practice)" }
+
+    { 1000000018;2;Field  ;
+                SourceExpr=ClientAnalysisA;
+                Visible=FALSE }
+
+    { 1000000019;2;Field  ;
+                SourceExpr=ClientAnalysisB;
+                Visible=FALSE }
+
+    { 1000000020;2;Field  ;
+                SourceExpr=ClientAnalysisC;
+                Visible=FALSE }
+
+    { 1000000021;2;Field  ;
+                SourceExpr=ClientAnalysisD;
+                Visible=FALSE }
+
+    { 1000000024;2;Field  ;
+                SourceExpr=ClientAnalysisE;
+                Visible=FALSE }
+
+    { 1000000026;2;Field  ;
+                SourceExpr=ClientAnalysisF;
+                Visible=FALSE }
+
+    { 1000000010;2;Field  ;
+                CaptionML=ENU=From Narrative;
+                SourceExpr="Debit Narrative" }
+
+    { 1000000003;2;Field  ;
+                CaptionML=ENU=Status;
+                SourceExpr=Status }
+
+    { 1040006;2;Field     ;
+                CaptionML=ENU=Additional Status;
+                SourceExpr="Additional Status";
+                Visible=FALSE }
+
+    { 1000000048;2;Field  ;
+                CaptionML=ENU=Value Date;
+                SourceExpr="Value Date" }
+
+    { 1000000028;2;Field  ;
+                SourceExpr="Authorisation Release" }
+
+    { 1000000005;2;Field  ;
+                CaptionML=ENU=Internal / External;
+                SourceExpr="Internal / External";
+                Visible=FALSE }
+
+    { 1000000007;2;Field  ;
+                CaptionML=ENU=Internal Transfer Type }
+
+    { 1000000009;2;Field  ;
+                CaptionML=ENU=External Payment Type;
+                SourceExpr="External Payment Type" }
+
+    { 1000000011;2;Field  ;
+                CaptionML=ENU=Payment Administrator;
+                SourceExpr="Created By Resource" }
+
+    { 1000000031;2;Field  ;
+                CaptionML=ENU=Auth User 1;
+                SourceExpr="Auth User 1";
+                Style=Attention }
+
+    { 1000000038;2;Field  ;
+                CaptionML=ENU=Auth User 2;
+                SourceExpr="Auth User 2";
+                Style=Attention }
+
+    { 1000000040;2;Field  ;
+                CaptionML=ENU=Auth User 3;
+                SourceExpr="Auth User 3";
+                Style=Attention }
+
+    { 1000000015;2;Field  ;
+                CaptionML=ENU=Internal Reference 1;
+                SourceExpr="Internal Reference 1" }
+
+    { 1000000052;2;Field  ;
+                CaptionML=ENU=From Currency;
+                SourceExpr="From Currency" }
+
+    { 1000000017;2;Field  ;
+                CaptionML=ENU=Amount in Source Currency;
+                SourceExpr="Amount in Source Currency" }
+
+    { 1000000054;2;Field  ;
+                CaptionML=ENU=To Currency;
+                SourceExpr="To Currency" }
+
+    { 1100000035;2;Field  ;
+                SourceExpr="Payment Amount" }
+
+    { 1000000027;2;Field  ;
+                CaptionML=ENU=Transfer To Client;
+                SourceExpr="Transfer To Client";
+                Visible=FALSE }
+
+    { 1000000029;2;Field  ;
+                CaptionML=ENU=Transfer To Client Name;
+                SourceExpr="Transfer To Client Name";
+                Visible=FALSE }
+
+    { 1000000012;2;Field  ;
+                SourceExpr="Beneficiary Customer" }
+
+    { 1000000022;2;Field  ;
+                CaptionML=ENU=Entered Date;
+                SourceExpr="Entered Date" }
+
+    { 1000000036;2;Field  ;
+                CaptionML=ENU=Entered Time;
+                SourceExpr="Entered Time" }
+
+    { 1000000042;2;Field  ;
+                CaptionML=ENU=Payment File Created By;
+                SourceExpr="Payment File Created By" }
+
+    { 1000000044;2;Field  ;
+                CaptionML=ENU=Payment File Created Date;
+                SourceExpr="Payment File Created Date" }
+
+    { 1000000046;2;Field  ;
+                CaptionML=ENU=Payment File Created Time;
+                SourceExpr="Payment File Created Time" }
+
+    { 1000000039;2;Field  ;
+                SourceExpr="Beneficiarys bank sort code";
+                Visible=false }
+
+    { 1000000037;2;Field  ;
+                SourceExpr="Beneficiarys bank SWIFT code";
+                Visible=false }
+
+    { 1000000035;2;Field  ;
+                SourceExpr="Beneficiary Account Number";
+                Visible=false }
+
+    { 1100000032;2;Field  ;
+                SourceExpr="Beneficiary IBAN";
+                Visible=false }
+
+    { 1000040041;2;Field  ;
+                SourceExpr="Option on Authorised";
+                Visible=FALSE }
+
+    { 1000000045;2;Field  ;
+                SourceExpr="Source System Bank" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

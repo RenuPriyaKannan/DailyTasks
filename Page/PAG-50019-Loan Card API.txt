@@ -1,0 +1,297 @@
+OBJECT Page 50019 Loan Card API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=04-12-20;
+    Time=11:41:02;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    CaptionML=ENU=Loan Account Card;
+    SourceTable=Table9068624;
+    SourceTableView=WHERE(Account Type=CONST(Loan));
+    PageType=Card;
+    RefreshOnActivate=Yes;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                CaptionML=[ENU=General;
+                           ENG=General] }
+
+    { 1000000000;2;Field  ;
+                SourceExpr="Client No." }
+
+    { 2   ;2   ;Field     ;
+                SourceExpr="No." }
+
+    { 1000000027;2;Field  ;
+                SourceExpr="Portfolio No." }
+
+    { 1000000010;2;Field  ;
+                SourceExpr=Type }
+
+    { 1000000012;2;Field  ;
+                SourceExpr="Client / Entity No." }
+
+    { 1000000037;2;Field  ;
+                SourceExpr="Type 2" }
+
+    { 1030000004;2;Field  ;
+                Description=TWM80.06#1;
+                SourceExpr="Client / Entity No. 2" }
+
+    { 1040005;2;Field     ;
+                SourceExpr="Related Loan Account";
+                OnLookup=VAR
+                           ClientAccount@1040000 : Record 9068624;
+                           ClientAccList@1000000001 : Page 9068716;
+                         BEGIN
+                         END;
+                          }
+
+    { 1000000002;2;Field  ;
+                SourceExpr=Name }
+
+    { 1000000034;2;Field  ;
+                SourceExpr=Description }
+
+    { 10  ;2   ;Field     ;
+                CaptionML=[ENU=Loan Account No.;
+                           ENG=Loan Account No.];
+                SourceExpr="Bank Account No." }
+
+    { 12  ;2   ;Field     ;
+                CaptionML=[ENU=Reference No.;
+                           ENG=Reference No.];
+                SourceExpr="Reference No." }
+
+    { 1000000042;2;Field  ;
+                CaptionML=[ENU=Additional Description;
+                           ENG=Additional Description];
+                SourceExpr="Description 2" }
+
+    { 1040009;2;Field     ;
+                SourceExpr="Asset Category" }
+
+    { 1040072;2;Field     ;
+                SourceExpr="Include in Statement Tracker" }
+
+    { 1040097;2;Field     ;
+                SourceExpr=Closed }
+
+    { 28  ;2   ;Field     ;
+                SourceExpr=Blocked }
+
+    { 1040025;2;Field     ;
+                SourceExpr="Date Closed" }
+
+    { 20  ;2   ;Field     ;
+                SourceExpr="Search Name" }
+
+    { 1040007;2;Field     ;
+                SourceExpr="Loan Type" }
+
+    { 1040015;2;Field     ;
+                SourceExpr="Account Classification" }
+
+    { 1000000005;2;Group  ;
+                GroupType=Group }
+
+    { 1040017;3;Field     ;
+                SourceExpr="Balance Available" }
+
+    { 1040075;3;Field     ;
+                SourceExpr="Interest Start Date" }
+
+    { 1040077;3;Field     ;
+                SourceExpr="Interest End Date" }
+
+    { 1040079;3;Field     ;
+                SourceExpr="Interest Frequency" }
+
+    { 1040066;3;Field     ;
+                SourceExpr="Open Date" }
+
+    { 1040011;3;Field     ;
+                SourceExpr="Loan Facility" }
+
+    { 6   ;3   ;Field     ;
+                SourceExpr="Maturity Date" }
+
+    { 8   ;3   ;Field     ;
+                SourceExpr="Interest Rate %" }
+
+    { 1040061;3;Field     ;
+                SourceExpr="Interest Type" }
+
+    { 1000000018;3;Group  ;
+                GroupType=Group }
+
+    { 1040085;4;Field     ;
+                SourceExpr="Interest Accrual Rate Code" }
+
+    { 1000000019;3;Group  ;
+                GroupType=Group }
+
+    { 1040082;4;Field     ;
+                SourceExpr="Money Market Code" }
+
+    { 1040019;3;Field     ;
+                SourceExpr="Interest Calculation Method" }
+
+    { 1040023;3;Field     ;
+                SourceExpr="Next Interest Payment Date" }
+
+    { 24  ;2   ;Field     ;
+                SourceExpr="Min. Balance" }
+
+    { 30  ;2   ;Field     ;
+                SourceExpr="Last Date Modified" }
+
+    { 1000000138;2;Field  ;
+                SourceExpr="Last Review Date" }
+
+    { 1000000039;2;Field  ;
+                SourceExpr="Next Review Date" }
+
+    { 1000000009;1;Group  ;
+                CaptionML=ENU=Communication;
+                GroupType=Group }
+
+    { 1000000015;2;Field  ;
+                CaptionML=ENU=Phone No.;
+                SourceExpr=ReturnFieldData('Phone No.') }
+
+    { 1000000013;2;Field  ;
+                CaptionML=ENU=Fax No.;
+                SourceExpr=ReturnFieldData('Fax No.') }
+
+    { 1000000014;2;Field  ;
+                CaptionML=ENU=E-Mail;
+                SourceExpr=ReturnFieldData('E-Mail') }
+
+    { 1000000011;2;Field  ;
+                CaptionML=ENU=Home Page;
+                SourceExpr=ReturnFieldData('Home Page') }
+
+    { 1906540401;1;Group  ;
+                CaptionML=[ENU=Term;
+                           ENG=Term] }
+
+    { 1040053;2;Field     ;
+                SourceExpr=Term }
+
+    { 1040049;2;Field     ;
+                SourceExpr="Period From Date" }
+
+    { 1040051;2;Field     ;
+                SourceExpr="Period To Date" }
+
+    { 1040057;2;Field     ;
+                SourceExpr="Secured/Unsecured" }
+
+    { 1040003;2;Field     ;
+                SourceExpr="Loan Covenants" }
+
+    { 1040002;2;Field     ;
+                SourceExpr="No. of Loan Covenants";
+                Editable=FALSE }
+
+    { 1904784501;1;Group  ;
+                CaptionML=[ENU=Posting;
+                           ENG=Posting] }
+
+    { 1040027;2;Field     ;
+                SourceExpr="Currency Code" }
+
+    { 1040028;2;Field     ;
+                SourceExpr="Last Statement No." }
+
+    { 1040029;2;Field     ;
+                SourceExpr="Balance Last Statement" }
+
+    { 1040095;2;Field     ;
+                SourceExpr="Reconciliation Required" }
+
+    { 1040093;2;Field     ;
+                SourceExpr="Statement Frequency" }
+
+    { 1040090;2;Field     ;
+                SourceExpr="Date Last Reconciled" }
+
+    { 1040089;2;Field     ;
+                SourceExpr="Date Next Reconciliation Due" }
+
+    { 1040030;2;Field     ;
+                SourceExpr="Unreconciled Entries" }
+
+    { 1040013;2;Field     ;
+                SourceExpr="External System Ref" }
+
+    { 1040031;2;Field     ;
+                CaptionML=[ENU=Warning message on limit breach of facility;
+                           ENG=Warning message on limit breach of facility];
+                SourceExpr="Breach Of Facility";
+                MultiLine=Yes }
+
+    { 1040037;2;Field     ;
+                CaptionML=[ENU=Loan Acc. Posting Group;
+                           ENG=Loan Acc. Posting Group];
+                SourceExpr="Posting Group";
+                LookupPageID=Client Loan Acc. Posting Gr. }
+
+    { 1040038;2;Field     ;
+                SourceExpr="Global Dimension 1 Code" }
+
+    { 1040039;2;Field     ;
+                SourceExpr="Global Dimension 2 Code" }
+
+    { 1040040;2;Field     ;
+                SourceExpr="Capital/Income" }
+
+    { 1040062;2;Field     ;
+                SourceExpr="Revaluation Method" }
+
+    { 1000000038;2;Field  ;
+                SourceExpr="Exclude From Revaluation" }
+
+    { 1040069;2;Field     ;
+                SourceExpr="Unrealised FX at Date" }
+
+    { 1040084;2;Field     ;
+                SourceExpr="Exclude from Accruals" }
+
+    { 1000000025;2;Field  ;
+                SourceExpr="Interest Due Creation Method" }
+
+    { 1000000023;2;Field  ;
+                SourceExpr="Related Int Due A/c Type" }
+
+    { 1000000024;2;Field  ;
+                SourceExpr="Related Int Due A/c No." }
+
+    { 1000000030;2;Field  ;
+                SourceExpr="Latest Cash Interest Inv." }
+
+    { 1000000029;2;Group  ;
+                GroupType=Group }
+
+    { 1000000004;3;Field  ;
+                ToolTipML=ENU=For Loan Statements only;
+                SourceExpr="Loan Statement Customer ID" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

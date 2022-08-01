@@ -1,0 +1,50 @@
+OBJECT Page 50101 Risk Assessment API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=20-07-22;
+    Time=15:31:16;
+    Modified=Yes;
+    Version List=;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9068951;
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 100000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 100000001;1;Group   ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 100000002;2;Field   ;
+                SourceExpr=Type }
+
+    { 100000003;2;Field   ;
+                SourceExpr="No." }
+
+    { 100000004;2;Field   ;
+                SourceExpr="Assessment Date" }
+
+    { 100000005;2;Field   ;
+                SourceExpr="Risk Template Code" }
+
+    { 100000006;2;Field   ;
+                SourceExpr="Version No." }
+
+    { 100000007;2;Field   ;
+                SourceExpr="Risk Weighting" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

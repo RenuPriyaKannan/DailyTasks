@@ -1,0 +1,71 @@
+OBJECT Page 50070 Attendee Register API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=15-01-21;
+    Time=14:15:57;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9070259;
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 1000000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000001;1;Group  ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Client No." }
+
+    { 1000000015;2;Field  ;
+                SourceExpr="Client Name" }
+
+    { 1000000016;2;Field  ;
+                SourceExpr=Jurisdiction }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Meeting No." }
+
+    { 1000000011;2;Field  ;
+                SourceExpr="Meeting Date" }
+
+    { 1000000012;2;Field  ;
+                SourceExpr="Meeting Time" }
+
+    { 1000000013;2;Field  ;
+                SourceExpr="Meeting Type" }
+
+    { 1000000014;2;Field  ;
+                SourceExpr="Meeting Address" }
+
+    { 1000000004;2;Field  ;
+                SourceExpr="Attendee Type" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="Attendee No." }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="Attendee Location" }
+
+    { 1000000007;2;Field  ;
+                SourceExpr="Attendee In Capacity Of" }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="Attendee Part of Quorum" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

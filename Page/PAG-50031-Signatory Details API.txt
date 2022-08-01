@@ -1,0 +1,61 @@
+OBJECT Page 50031 Signatory Details API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=04-12-20;
+    Time=11:46:05;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9068712;
+    PageType=Card;
+    OnInsertRecord=VAR
+                     SignatoryDetails@1000000000 : Record 9068712;
+                   BEGIN
+                   END;
+
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000000;1;Group  ;
+                CaptionML=ENU=General }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Client No." }
+
+    { 1000000004;2;Field  ;
+                SourceExpr="Entity No." }
+
+    { 1000000001;2;Field  ;
+                SourceExpr=Code;
+                Editable=FALSE }
+
+    { 1000000003;2;Field  ;
+                SourceExpr=Description }
+
+    { 1000000005;2;Field  ;
+                SourceExpr=Type }
+
+    { 1000000007;2;Field  ;
+                SourceExpr=Other }
+
+    { 1000000011;2;Field  ;
+                SourceExpr="Asset Type" }
+
+    { 1000000013;2;Field  ;
+                SourceExpr=Asset }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

@@ -1,0 +1,93 @@
+OBJECT Page 50001 Partitioned Entity
+{
+  OBJECT-PROPERTIES
+  {
+    Date=14-07-21;
+    Time=17:35:23;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table50000;
+    SourceTableView=WHERE(Table Name=CONST(EN));
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 1000000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000001;1;Group  ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Table Name" }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="USER ID" }
+
+    { 1000000004;2;Field  ;
+                SourceExpr="Client No._Entity No." }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="First Partition Code" }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="Second Partition Code" }
+
+    { 1000000013;2;Field  ;
+                SourceExpr=Title }
+
+    { 1000000007;2;Field  ;
+                SourceExpr="EN Name" }
+
+    { 1000000014;2;Field  ;
+                SourceExpr="Name 2" }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="Date of Birth" }
+
+    { 1000000009;2;Field  ;
+                SourceExpr=Nationality }
+
+    { 1000000010;2;Field  ;
+                SourceExpr=Profession }
+
+    { 1000000011;2;Field  ;
+                SourceExpr=Domicile }
+
+    { 1000000012;2;Field  ;
+                SourceExpr=Residence }
+
+    { 1000000015;2;Field  ;
+                SourceExpr="Entity Type" }
+
+    { 1000000016;2;Field  ;
+                SourceExpr="Marital Status" }
+
+    { 1000000017;2;Field  ;
+                SourceExpr=Gender }
+
+    { 1000000018;2;Field  ;
+                SourceExpr=Initials }
+
+    { 1000000019;2;Field  ;
+                SourceExpr="Personal/Corporate" }
+
+    { 1000000020;2;Field  ;
+                SourceExpr="EN Country of Incorporation" }
+
+    { 1000000021;2;Field  ;
+                SourceExpr="EN Jurisdiction" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

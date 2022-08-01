@@ -1,0 +1,228 @@
+OBJECT Page 50039 Prospect API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=02-12-20;
+    Time=18:46:15;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    Editable=No;
+    InsertAllowed=No;
+    DeleteAllowed=No;
+    ModifyAllowed=Yes;
+    SourceTable=Table9068440;
+    PageType=List;
+    PromotedActionCategoriesML=ENU=New,Process,Report,To Do,CDD,Comments;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1040001;1;Group     ;
+                GroupType=Repeater }
+
+    { 1040002;2;Field     ;
+                SourceExpr="Prospect Type" }
+
+    { 1040004;2;Field     ;
+                SourceExpr="No." }
+
+    { 1040006;2;Field     ;
+                SourceExpr=Type }
+
+    { 1000000003;2;Field  ;
+                SourceExpr=Potential;
+                Visible=FALSE }
+
+    { 1040008;2;Field     ;
+                CaptionML=[ENU=Title;
+                           ENG=Title];
+                SourceExpr=Title;
+                Visible=FALSE }
+
+    { 1040010;2;Field     ;
+                CaptionML=ENU=Surname / Company Name;
+                SourceExpr=Surname }
+
+    { 1040012;2;Field     ;
+                CaptionML=ENU=Forename / Company Name 2;
+                SourceExpr="Forename(s)" }
+
+    { 1000000028;2;Field  ;
+                SourceExpr=Initials;
+                Visible=FALSE }
+
+    { 1000000000;2;Field  ;
+                SourceExpr="Formal Name";
+                Visible=FALSE }
+
+    { 1000000001;2;Field  ;
+                SourceExpr="Anonimised Name";
+                Visible=FALSE }
+
+    { 1000000007;2;Field  ;
+                SourceExpr="Relationship Manager" }
+
+    { 1040022;2;Field     ;
+                CaptionML=ENU=Introducing Director;
+                SourceExpr=Director }
+
+    { 1000000008;2;Field  ;
+                SourceExpr=Manager }
+
+    { 1000000009;2;Field  ;
+                SourceExpr=Administrator }
+
+    { 1040016;2;Field     ;
+                SourceExpr="Date Created" }
+
+    { 1000000039;2;Field  ;
+                SourceExpr="Date Gone off" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="External Reference No.";
+                Visible=FALSE }
+
+    { 1000000010;2;Field  ;
+                SourceExpr="Product Provided";
+                Visible=FALSE }
+
+    { 1000000037;2;Field  ;
+                SourceExpr="Type of Business" }
+
+    { 1000000012;2;Field  ;
+                SourceExpr="Estimated Fees Currency" }
+
+    { 1000000013;2;Field  ;
+                CaptionML=ENU=Estimated Fees Annual;
+                SourceExpr="Estimated Fees" }
+
+    { 1000000014;2;Field  ;
+                SourceExpr=EP;
+                Visible=FALSE }
+
+    { 1000000015;2;Field  ;
+                CaptionML=ENU=PEP;
+                SourceExpr="Politically Exposed";
+                Visible=FALSE }
+
+    { 1000000016;2;Field  ;
+                SourceExpr=Reference;
+                Visible=FALSE }
+
+    { 1000000017;2;Field  ;
+                SourceExpr=Classification;
+                Visible=FALSE }
+
+    { 1000000011;2;Field  ;
+                CaptionML=ENU=Business Type;
+                SourceExpr=Profession;
+                Visible=FALSE }
+
+    { 1000000018;2;Field  ;
+                SourceExpr="Date Agreement Sent";
+                Visible=FALSE }
+
+    { 1000000019;2;Field  ;
+                SourceExpr="Date Agreement Received";
+                Visible=FALSE }
+
+    { 1000000020;2;Field  ;
+                SourceExpr="Client Agreement Dated";
+                Visible=FALSE }
+
+    { 1000000021;2;Field  ;
+                SourceExpr="Last Risk Assessment Date";
+                Visible=FALSE }
+
+    { 1000000022;2;Field  ;
+                SourceExpr="Current Risk Rating";
+                Visible=FALSE }
+
+    { 1000000023;2;Field  ;
+                SourceExpr="Current Risk Weight";
+                Visible=FALSE }
+
+    { 1000000024;2;Field  ;
+                SourceExpr="Next Risk Assessment Due Date";
+                Visible=FALSE }
+
+    { 1000000025;2;Field  ;
+                SourceExpr="Last Review Completed";
+                Visible=FALSE }
+
+    { 1000000026;2;Field  ;
+                SourceExpr="Next Review Due";
+                Visible=FALSE }
+
+    { 1000000027;2;Field  ;
+                SourceExpr="Initial Fees Currency";
+                Visible=FALSE }
+
+    { 1000000038;2;Field  ;
+                SourceExpr="Estimated Initial Fees" }
+
+    { 1000000029;2;Field  ;
+                SourceExpr="Estimated AUM Currency";
+                Visible=FALSE }
+
+    { 1000000030;2;Field  ;
+                SourceExpr="Estimated AUM";
+                Visible=FALSE }
+
+    { 1000000031;2;Field  ;
+                SourceExpr="Introduced by Name";
+                Visible=FALSE }
+
+    { 1000000032;2;Field  ;
+                SourceExpr="Introduced by Contact Name";
+                Visible=FALSE }
+
+    { 1000000033;2;Field  ;
+                SourceExpr=Jurisdiction;
+                Visible=FALSE }
+
+    { 1000000034;2;Field  ;
+                SourceExpr=Domicile;
+                Visible=FALSE }
+
+    { 1000000035;2;Field  ;
+                SourceExpr="Residence for Tax Purposes";
+                Visible=FALSE }
+
+    { 1000000036;2;Field  ;
+                SourceExpr=Nationality;
+                Visible=FALSE }
+
+    { 1000066657;2;Field  ;
+                SourceExpr="First Partition Code" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    {
+      01.04.20  Alex Snape
+                CRF52328 Agreement Register / Contact enhancements
+
+      07.02.20  Omair Nasir
+                CRF51593 Start Workflow action button included for Prospect
+
+      06.01.20  Unnar Eliasson
+                CRF53343 AllowedtoViewPartition is now using NavOneSystem Codeunit
+
+      20.12.19  Omair Nasir
+                CRF53233 Added condition on the Authorization Report based on Prospect Type
+
+      04.04.19  Hubert Bartkowiak
+                CRF47757 New action Warning register.
+    }
+    END.
+  }
+}
+

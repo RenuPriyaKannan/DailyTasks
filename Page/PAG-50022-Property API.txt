@@ -1,0 +1,430 @@
+OBJECT Page 50022 Property API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=21-01-21;
+    Time=14:32:16;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9068546;
+    SourceTableView=SORTING(Asset Type)
+                    WHERE(Asset Type=CONST(Property));
+    DataCaptionFields=Name;
+    PageType=Card;
+    PromotedActionCategoriesML=ENU=New,Process,Report,Asset;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                CaptionML=ENU=General }
+
+    { 1000000002;2;Group  ;
+                GroupType=Group }
+
+    { 1000000003;3;Field  ;
+                SourceExpr="Client No." }
+
+    { 2   ;3   ;Field     ;
+                SourceExpr="Asset Code" }
+
+    { 1000000040;3;Field  ;
+                SourceExpr="Asset Type";
+                Editable=FALSE }
+
+    { 1040020;3;Field     ;
+                SourceExpr="Asset Sub Type" }
+
+    { 33  ;3   ;Field     ;
+                SourceExpr="Portfolio No." }
+
+    { 8   ;3   ;Field     ;
+                SourceExpr=Name }
+
+    { 1000000019;3;Field  ;
+                SourceExpr="Short Name" }
+
+    { 10  ;3   ;Field     ;
+                SourceExpr=Description }
+
+    { 1000000005;2;Group  ;
+                GroupType=Group }
+
+    { 4   ;3   ;Field     ;
+                SourceExpr=Address }
+
+    { 6   ;3   ;Field     ;
+                SourceExpr="Address 2" }
+
+    { 14  ;3   ;Field     ;
+                SourceExpr=City }
+
+    { 16  ;3   ;Field     ;
+                CaptionML=ENU=County;
+                SourceExpr=County }
+
+    { 25  ;3   ;Field     ;
+                SourceExpr="Post Code" }
+
+    { 23  ;3   ;Field     ;
+                SourceExpr=Country }
+
+    { 1000000038;3;Field  ;
+                SourceExpr="Management Company" }
+
+    { 1000000046;3;Field  ;
+                SourceExpr="Mgmt. Company Name" }
+
+    { 1000000080;3;Field  ;
+                CaptionML=ENU=Manag. Agent Duties;
+                SourceExpr="Management Agent Duties" }
+
+    { 1040010;3;Field     ;
+                SourceExpr="Reference No." }
+
+    { 1000000012;3;Field  ;
+                SourceExpr="Asset Category" }
+
+    { 1000000026;3;Field  ;
+                SourceExpr="Category Code" }
+
+    { 1000000024;3;Field  ;
+                SourceExpr="Category Description" }
+
+    { 1040037;3;Field     ;
+                ToolTipML=ENU=Official Title per Title Deed;
+                SourceExpr="Registered Property Title" }
+
+    { 51  ;3   ;Field     ;
+                SourceExpr=Ownership }
+
+    { 1040000;3;Field     ;
+                SourceExpr="Ownership Other Code" }
+
+    { 1000000007;2;Group  ;
+                GroupType=Group }
+
+    { 1000000008;3;Field  ;
+                SourceExpr="Search Name" }
+
+    { 1000000009;2;Field  ;
+                CaptionML=[ENU=Information Currency;
+                           ENG=Information Currency];
+                SourceExpr="Currency Code" }
+
+    { 1040005;2;Field     ;
+                CaptionML=[ENU=Posting Currency;
+                           ENG=Posting Currency];
+                SourceExpr="Posting Currency Code" }
+
+    { 27  ;2   ;Field     ;
+                SourceExpr="Property Posting Group" }
+
+    { 12  ;2   ;Field     ;
+                SourceExpr="Global Dimension 1 Code" }
+
+    { 182 ;2   ;Field     ;
+                SourceExpr="Global Dimension 2 Code" }
+
+    { 1040042;2;Field     ;
+                SourceExpr="Loc. Title Deeds Ent/Office" }
+
+    { 53  ;2   ;Field     ;
+                SourceExpr="Location Title Deeds" }
+
+    { 1000000042;2;Field  ;
+                SourceExpr="Asset Held By Type" }
+
+    { 1040040;2;Field     ;
+                SourceExpr="Asset Held By" }
+
+    { 1000000041;2;Field  ;
+                SourceExpr="Use of Property" }
+
+    { 201 ;2   ;Field     ;
+                SourceExpr=Status }
+
+    { 1000000078;2;Field  ;
+                CaptionML=ENU=Inv. of Fix + Fittings;
+                SourceExpr="Inventory of Fix + Fittings" }
+
+    { 1000000058;2;Field  ;
+                SourceExpr="Acquisition Agent" }
+
+    { 1040003;2;Field     ;
+                ToolTipML=ENG=Non-Resident Landlord Exemption;
+                SourceExpr="NRL Exemption" }
+
+    { 1040022;2;Field     ;
+                SourceExpr="Year Of Construction" }
+
+    { 1040012;2;Field     ;
+                SourceExpr="Date of Acquisition" }
+
+    { 1040014;2;Field     ;
+                SourceExpr="Date of Disposal" }
+
+    { 1000000031;2;Field  ;
+                SourceExpr="Unit Holding" }
+
+    { 1000000043;2;Field  ;
+                Description=TWM90.07#2;
+                SourceExpr="Insurance Required" }
+
+    { 1000000089;2;Field  ;
+                SourceExpr="Last Risk Assessment Date";
+                Editable=FALSE }
+
+    { 1000000086;2;Field  ;
+                SourceExpr="Current Risk Rating";
+                Editable=FALSE }
+
+    { 1000000050;2;Field  ;
+                SourceExpr="Current Risk Weight";
+                Editable=FALSE }
+
+    { 1000000048;2;Field  ;
+                SourceExpr="Next Risk Assessment Due Date";
+                Editable=FALSE }
+
+    { 1907778001;1;Group  ;
+                CaptionML=ENU=Leasehold }
+
+    { 1000000023;2;Field  ;
+                SourceExpr=Lessor }
+
+    { 1000000029;2;Field  ;
+                SourceExpr="Lessor Name" }
+
+    { 56  ;2   ;Field     ;
+                SourceExpr="Location Lease" }
+
+    { 132 ;2   ;Field     ;
+                SourceExpr="Headlease Rent Amt." }
+
+    { 55  ;2   ;Field     ;
+                SourceExpr="Headlease Rent Basis" }
+
+    { 1000000032;2;Field  ;
+                SourceExpr="Headlease Rent Currency" }
+
+    { 1040024;2;Field     ;
+                SourceExpr="Ground Rent Payable" }
+
+    { 1040026;2;Field     ;
+                SourceExpr="Ground Rent Frequency" }
+
+    { 1040028;2;Field     ;
+                SourceExpr="Next Ground Rent Due" }
+
+    { 116 ;2   ;Field     ;
+                SourceExpr="Tax Reference" }
+
+    { 36  ;2   ;Field     ;
+                SourceExpr="Head Lease Dated" }
+
+    { 38  ;2   ;Field     ;
+                SourceExpr="Term of Lease (years)" }
+
+    { 47  ;2   ;Field     ;
+                SourceExpr="Head Lease starts" }
+
+    { 49  ;2   ;Field     ;
+                SourceExpr="Head Lease ends" }
+
+    { 1040030;2;Field     ;
+                SourceExpr="Service Charge Amount" }
+
+    { 1040032;2;Field     ;
+                SourceExpr="Service Charge Due" }
+
+    { 1040034;2;Field     ;
+                SourceExpr="Shares in Manag. Co held" }
+
+    { 1906687001;1;Group  ;
+                CaptionML=ENU=Maintenance/Legislation }
+
+    { 1000000000;2;Group  ;
+                CaptionML=ENU=Does Safety Legislation Apply?;
+                GroupType=Group }
+
+    { 1000000047;3;Field  ;
+                CaptionML=[ENU=Environmental Legislation;
+                           ENG=Environmental Legislation];
+                SourceExpr="Environmental Legislation" }
+
+    { 1000000049;3;Field  ;
+                ToolTipML=ENG=Expiry date of Certification;
+                SourceExpr="Next Environmental Issues Rev." }
+
+    { 1000000051;3;Field  ;
+                SourceExpr="Asbestos Legislation" }
+
+    { 1000000053;3;Field  ;
+                ToolTipML=ENG=Expiry date of Certification;
+                SourceExpr="Next Asbestos Check" }
+
+    { 1000000055;3;Field  ;
+                SourceExpr="Legionella Code of Practice" }
+
+    { 1000000057;3;Field  ;
+                ToolTipML=ENG=Expiry date of Certification;
+                SourceExpr="Next Legionella CoP Date" }
+
+    { 1000000059;3;Field  ;
+                CaptionML=[ENU=Furniture Legislation;
+                           ENG=Furniture Legislation];
+                SourceExpr="Furniture Legislation" }
+
+    { 1000000061;3;Field  ;
+                ToolTipML=ENG=Expiry date of Certification;
+                SourceExpr="Next Furn. and Furnishing Insp" }
+
+    { 1000000066;3;Field  ;
+                BlankZero=Yes;
+                SourceExpr="Curr. Energy Eff. Rating" }
+
+    { 1000000070;3;Field  ;
+                DrillDown=No;
+                SourceExpr="Curr. Energy Eff. Band" }
+
+    { 1000000085;3;Field  ;
+                BlankZero=Yes;
+                SourceExpr="Potential Energy Eff. Rating" }
+
+    { 1000000071;3;Field  ;
+                DrillDown=No;
+                SourceExpr="Potential Energy Eff. Band" }
+
+    { 1000000090;3;Field  ;
+                SourceExpr="EPC Expiry Date" }
+
+    { 1000000034;3;Field  ;
+                SourceExpr="Smoke Detector Fitted" }
+
+    { 1000000036;3;Field  ;
+                SourceExpr="Next Smoke Detector Check" }
+
+    { 1000000037;3;Field  ;
+                SourceExpr="Dioxide Detectors Fitted" }
+
+    { 1000000039;3;Field  ;
+                SourceExpr="Next Dioxide Detector Check" }
+
+    { 1000000001;2;Group  ;
+                GroupType=Group }
+
+    { 63  ;3   ;Field     ;
+                SourceExpr="Health && Safety comments" }
+
+    { 1000000063;3;Field  ;
+                CaptionML=[ENU=Gas Legislation;
+                           ENG=Gas Legislation];
+                SourceExpr="Gas Legislation" }
+
+    { 1000000065;3;Field  ;
+                ToolTipML=ENG=Expiry date of Certification;
+                SourceExpr="Next Gas Check" }
+
+    { 1000000067;3;Field  ;
+                CaptionML=ENG=Electrical Legislation;
+                SourceExpr="Electrical Legislation" }
+
+    { 1000000045;3;Field  ;
+                ToolTipML=ENG=Expiry date of Certification;
+                SourceExpr="Next Elect. Equipm. Check" }
+
+    { 1000000016;3;Field  ;
+                SourceExpr="Fire Legislation" }
+
+    { 1000000018;3;Field  ;
+                ToolTipML=ENG=Expiry date of Certification;
+                SourceExpr="Next Fire Check" }
+
+    { 1000000033;3;Field  ;
+                SourceExpr="Home Info Pack" }
+
+    { 1000000035;3;Field  ;
+                ToolTipML=ENG=Expiry date of Certification;
+                SourceExpr="Next Home Info Pack Check" }
+
+    { 1000000082;3;Field  ;
+                BlankZero=Yes;
+                SourceExpr="Curr. Env. Impact Rating" }
+
+    { 1000000084;3;Field  ;
+                DrillDown=No;
+                SourceExpr="Curr. Env. Impact Band" }
+
+    { 1000000088;3;Field  ;
+                BlankZero=Yes;
+                SourceExpr="Potential Env. Impact Rating" }
+
+    { 1000000087;3;Field  ;
+                DrillDown=No;
+                SourceExpr="Potential Env. Impact Band" }
+
+    { 1905401101;1;Group  ;
+                CaptionML=ENU=Finance }
+
+    { 1040048;2;Field     ;
+                SourceExpr="Include in Statement Tracker" }
+
+    { 1000000022;2;Field  ;
+                SourceExpr="Include In Depreciation" }
+
+    { 1000000069;2;Group  ;
+                CaptionML=ENU=Depreciation Details;
+                GroupType=Group }
+
+    { 1000000028;3;Field  ;
+                SourceExpr="Depreciation Method" }
+
+    { 1000000030;3;Field  ;
+                SourceExpr="Depreciation Start Date" }
+
+    { 1000000072;3;Group  ;
+                GroupType=Group }
+
+    { 1000000054;4;Field  ;
+                SourceExpr="Depreciation End Date" }
+
+    { 1000000056;4;Field  ;
+                SourceExpr="No of Depreciation Years" }
+
+    { 1000000077;3;Group  ;
+                GroupType=Group }
+
+    { 1000000060;4;Field  ;
+                SourceExpr="Depn % per Annum" }
+
+    { 1000000074;3;Field  ;
+                SourceExpr="No of Dep Days In Dep Period";
+                Visible=FALSE }
+
+    { 1000000062;3;Field  ;
+                SourceExpr="Depn Calculated On" }
+
+    { 1000000073;3;Group  ;
+                GroupType=Group }
+
+    { 1000000064;4;Field  ;
+                SourceExpr="Manual Depn Amount (CCY)" }
+
+    { 1000000068;4;Field  ;
+                SourceExpr="Manual Depn Amount (LCY)" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

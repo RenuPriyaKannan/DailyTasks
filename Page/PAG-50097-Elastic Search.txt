@@ -1,0 +1,53 @@
+OBJECT Page 50097 Elastic Search
+{
+  OBJECT-PROPERTIES
+  {
+    Date=16-06-22;
+    Time=12:30:15;
+    Modified=Yes;
+    Version List=;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table50004;
+    DataCaptionExpr=ElasticSearch;
+    PageType=Card;
+    RefreshOnActivate=Yes;
+    ActionList=ACTIONS
+    {
+      { 100000003;   ;ActionContainer;
+                      CaptionML=ENU=action;
+                      ActionContainerType=NewDocumentItems }
+      { 100000004;1  ;Action    ;
+                      Name=Search;
+                      OnAction=VAR
+                                 DFXDMSLite@100000000 : Codeunit 50004;
+                               BEGIN
+                                 DFXDMSLite.ElasticSearchAPI("Search Text",Rec);
+                               END;
+                                }
+    }
+  }
+  CONTROLS
+  {
+    { 100000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 100000001;1;Group   ;
+                Name=General;
+                GroupType=Group }
+
+    { 100000002;2;Field   ;
+                SourceExpr="Search Text" }
+
+  }
+  CODE
+  {
+    VAR
+      ElasticSearch@100000000 : Text;
+
+    BEGIN
+    END.
+  }
+}
+

@@ -1,0 +1,139 @@
+OBJECT Page 50025 Life Assurance API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=04-12-20;
+    Time=11:43:07;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    CaptionML=ENU=Client Life Assurance Card;
+    SourceTable=Table9068546;
+    SourceTableView=SORTING(Asset Type)
+                    WHERE(Asset Type=CONST(Life Assurance));
+    DataCaptionFields=Name;
+    PageType=Document;
+    RefreshOnActivate=Yes;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                CaptionML=[ENU=General;
+                           ENG=General] }
+
+    { 1000000000;2;Field  ;
+                SourceExpr="Client No." }
+
+    { 2   ;2   ;Field     ;
+                SourceExpr="Asset Code" }
+
+    { 1000000017;2;Field  ;
+                SourceExpr="Asset Type";
+                Editable=FALSE }
+
+    { 1040014;2;Field     ;
+                SourceExpr="Asset Sub Type" }
+
+    { 33  ;2   ;Field     ;
+                SourceExpr="Portfolio No." }
+
+    { 8   ;2   ;Field     ;
+                SourceExpr=Name }
+
+    { 1000000041;2;Field  ;
+                SourceExpr="Short Name" }
+
+    { 10  ;2   ;Field     ;
+                SourceExpr=Description }
+
+    { 1040001;2;Field     ;
+                CaptionML=ENU=Date Created/Assigned;
+                SourceExpr="Date of Registration" }
+
+    { 1040005;2;Field     ;
+                SourceExpr="Reference No." }
+
+    { 1040012;2;Field     ;
+                SourceExpr="Asset Category" }
+
+    { 1000000010;2;Field  ;
+                SourceExpr="Category Code" }
+
+    { 1000000011;2;Field  ;
+                SourceExpr="Category Description" }
+
+    { 1040021;2;Field     ;
+                SourceExpr="Include in Statement Tracker" }
+
+    { 1040004;2;Field     ;
+                CaptionML=[ENU=Posting Currency;
+                           ENG=Posting Currency];
+                SourceExpr="Posting Currency Code" }
+
+    { 27  ;2   ;Field     ;
+                CaptionML=[ENU=Asset Posting Group;
+                           ENG=Asset Posting Group];
+                SourceExpr="Property Posting Group" }
+
+    { 12  ;2   ;Field     ;
+                SourceExpr="Global Dimension 1 Code" }
+
+    { 182 ;2   ;Field     ;
+                SourceExpr="Global Dimension 2 Code" }
+
+    { 1000000008;2;Field  ;
+                CaptionML=[ENU=Information Currency;
+                           ENG=Information Currency];
+                SourceExpr="Currency Code" }
+
+    { 1000000016;2;Field  ;
+                SourceExpr="Loc. Title Deeds Ent/Office" }
+
+    { 53  ;2   ;Field     ;
+                SourceExpr="Location Title Deeds" }
+
+    { 1000000024;2;Field  ;
+                SourceExpr="Asset Held By Type" }
+
+    { 1000000023;2;Field  ;
+                SourceExpr="Asset Held By" }
+
+    { 1000000015;2;Field  ;
+                SourceExpr=Status }
+
+    { 1040008;2;Field     ;
+                SourceExpr="Date of Acquisition" }
+
+    { 1040010;2;Field     ;
+                SourceExpr="Date of Disposal" }
+
+    { 1000000018;2;Field  ;
+                Description=TWM90.07#2;
+                SourceExpr="Insurance Required" }
+
+    { 1000000029;2;Field  ;
+                SourceExpr="Last Risk Assessment Date" }
+
+    { 1000000028;2;Field  ;
+                SourceExpr="Current Risk Rating" }
+
+    { 1000000027;2;Field  ;
+                SourceExpr="Current Risk Weight" }
+
+    { 1000000026;2;Field  ;
+                SourceExpr="Next Risk Assessment Due Date" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

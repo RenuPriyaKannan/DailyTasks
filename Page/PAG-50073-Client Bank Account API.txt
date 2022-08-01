@@ -1,0 +1,476 @@
+OBJECT Page 50073 Client Bank Account API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=15-01-21;
+    Time=14:17:57;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9068624;
+    SourceTableView=WHERE(Account Type=CONST(Bank));
+    PageType=Card;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                CaptionML=[ENU=General;
+                           ENG=General] }
+
+    { 2   ;2   ;Field     ;
+                SourceExpr="No." }
+
+    { 64  ;2   ;Field     ;
+                SourceExpr="Bank Code" }
+
+    { 1000000046;2;Field  ;
+                SourceExpr="Portfolio No." }
+
+    { 1000000005;2;Field  ;
+                CaptionML=ENU=Name;
+                SourceExpr=Name }
+
+    { 1000000006;2;Field  ;
+                CaptionML=[ENU=Name 2;
+                           ENG=Name 2];
+                SourceExpr=ReturnFieldData('Name 2');
+                CaptionClass='Name 2';
+                Editable=true }
+
+    { 88  ;2   ;Field     ;
+                SourceExpr=Description }
+
+    { 18  ;2   ;Field     ;
+                CaptionML=[ENU=Account Contact;
+                           ENG=Account Contact];
+                SourceExpr=Contact }
+
+    { 36  ;2   ;Field     ;
+                SourceExpr="Bank Account No." }
+
+    { 1000000052;2;Field  ;
+                ToolTipML=ENG=International Bank Account Number;
+                SourceExpr=IBAN }
+
+    { 76  ;2   ;Field     ;
+                CaptionML=[ENU=Reference No.;
+                           ENG=Reference No.];
+                SourceExpr="Reference No." }
+
+    { 1000000160;2;Field  ;
+                SourceExpr="Relationship Manager" }
+
+    { 65  ;2   ;Field     ;
+                SourceExpr="Account In Name Of" }
+
+    { 1040002;2;Field     ;
+                SourceExpr=Closed }
+
+    { 1040010;2;Field     ;
+                SourceExpr="Asset Category" }
+
+    { 1040050;2;Field     ;
+                CaptionML=[ENU=Credit Rating;
+                           ENG=Credit Rating];
+                SourceExpr=GetCreditRating(1);
+                CaptionClass='Credit Rating' }
+
+    { 1040051;2;Field     ;
+                CaptionML=[ENU=Credit Rating Date;
+                           ENG=Credit Rating Date];
+                SourceExpr=GetCreditRating(2);
+                CaptionClass='Credit Rating Date' }
+
+    { 1040054;2;Field     ;
+                CaptionML=[ENU=Credit Rating Agency;
+                           ENG=Credit Rating Agency];
+                SourceExpr=GetCreditRating(3);
+                CaptionClass='Credit Rating Agency' }
+
+    { 1040072;2;Field     ;
+                SourceExpr="Include in Statement Tracker" }
+
+    { 1000000004;2;Field  ;
+                Name=txtExtPayment;
+                CaptionML=ENU=Outstanding Ext. Paymt;
+                Editable=true;
+                OnAssistEdit=VAR
+                               _ClientBankAccountRec@1000000002 : Record 9068624;
+                               "_ClientBankAcc.ExtPaymSentForm"@1000000000 : Page 9068787;
+                             BEGIN
+                             END;
+                              }
+
+    { 1040004;2;Field     ;
+                SourceExpr="Date Closed" }
+
+    { 20  ;2   ;Field     ;
+                SourceExpr="Search Name" }
+
+    { 1040000;2;Field     ;
+                SourceExpr="Bank Account Type" }
+
+    { 1040022;2;Field     ;
+                SourceExpr="Account Classification" }
+
+    { 1000000073;2;Field  ;
+                Name=<Additional Description>;
+                CaptionML=[ENU=Additional Description;
+                           ENG=Additional Description];
+                SourceExpr="Description 2" }
+
+    { 1000000059;2;Group  ;
+                GroupType=Group }
+
+    { 1000000060;3;Field  ;
+                SourceExpr="Interest Start Date" }
+
+    { 1040075;3;Field     ;
+                SourceExpr="Interest End Date" }
+
+    { 1040077;3;Field     ;
+                SourceExpr="Interest Frequency" }
+
+    { 1040062;3;Field     ;
+                SourceExpr="Open Date" }
+
+    { 80  ;3   ;Field     ;
+                SourceExpr="Maturity Date" }
+
+    { 82  ;3   ;Field     ;
+                SourceExpr="Interest Rate %" }
+
+    { 1040049;3;Field     ;
+                SourceExpr="Interest Type" }
+
+    { 1000000080;3;Field  ;
+                SourceExpr="Period From Date" }
+
+    { 1000000079;3;Field  ;
+                SourceExpr="Period To Date" }
+
+    { 1000000057;3;Group  ;
+                GroupType=Group }
+
+    { 1040083;4;Field     ;
+                SourceExpr="Interest Accrual Rate Code" }
+
+    { 1000000061;3;Group  ;
+                GroupType=Group }
+
+    { 1040079;4;Field     ;
+                SourceExpr="Money Market Code" }
+
+    { 1040085;3;Field     ;
+                SourceExpr="Interest Calculation Method" }
+
+    { 1000000065;3;Field  ;
+                SourceExpr="Next Interest Payment Date" }
+
+    { 1040006;2;Field     ;
+                SourceExpr="Overdraft Facility" }
+
+    { 1040008;2;Field     ;
+                SourceExpr="Overdraft Limit" }
+
+    { 24  ;2   ;Field     ;
+                SourceExpr="Min. Balance" }
+
+    { 26  ;2   ;Field     ;
+                SourceExpr="Our Contact Code" }
+
+    { 28  ;2   ;Field     ;
+                SourceExpr=Blocked }
+
+    { 86  ;2   ;Field     ;
+                CaptionML=[ENU=Bank Swift Code;
+                           ENG=Bank Swift Code];
+                SourceExpr=ReturnFieldData('Swift Code');
+                CaptionClass='Bank Swift Code';
+                Editable=FALSE }
+
+    { 90  ;2   ;Field     ;
+                CaptionML=[ENU=Bank Sort Code;
+                           ENG=Bank Sort Code;
+                           ENA=BSB];
+                SourceExpr=ReturnFieldData('Sort Code');
+                CaptionClass='Bank Sort Code';
+                Editable=FALSE }
+
+    { 1100000016;2;Field  ;
+                CaptionML=ENU=Bank ABA Code;
+                SourceExpr=ReturnFieldData('ABA Code');
+                CaptionClass='Bank ABA Code';
+                Editable=FALSE }
+
+    { 94  ;2   ;Field     ;
+                SourceExpr="Password Exists" }
+
+    { 1000000001;2;Field  ;
+                Name=GeneralTabUnrec;
+                CaptionML=ENU=Unreconciled Entries;
+                SourceExpr="Unreconciled Entries" }
+
+    { 1040024;2;Field     ;
+                SourceExpr="Loan Covenants" }
+
+    { 1040026;2;Field     ;
+                CaptionML=[ENU=No. of Loan Covenants;
+                           ENG=No. of Loan Covenants];
+                SourceExpr="No. of Loan Covenants";
+                Editable=FALSE }
+
+    { 1040030;2;Field     ;
+                SourceExpr="Loan Facility" }
+
+    { 1000000015;2;Field  ;
+                SourceExpr="Last Date Modified" }
+
+    { 1000000011;2;Field  ;
+                SourceExpr="No. of Signatories on Account" }
+
+    { 1902768601;1;Group  ;
+                CaptionML=[ENU=Communication;
+                           ENG=Communication] }
+
+    { 1000000026;2;Field  ;
+                Name=PhoneNo;
+                CaptionML=[ENU=Phone No.;
+                           ENG=Phone No.];
+                SourceExpr=ReturnFieldData('Phone No.');
+                Editable=true }
+
+    { 1000000022;2;Field  ;
+                Name=FaxNo;
+                CaptionML=[ENU=Fax No.;
+                           ENG=Fax No.];
+                SourceExpr=ReturnFieldData('Fax No.');
+                Editable=true }
+
+    { 1000000021;2;Field  ;
+                Name=Email;
+                ExtendedDatatype=E-Mail;
+                CaptionML=[ENU=E-Mail;
+                           ENG=E-Mail];
+                SourceExpr=ReturnFieldData('E-Mail');
+                Editable=true }
+
+    { 1000000020;2;Field  ;
+                Name=HomePage;
+                ExtendedDatatype=URL;
+                CaptionML=[ENU=Home Page;
+                           ENG=Home Page];
+                SourceExpr=ReturnFieldData('Home Page');
+                Editable=true }
+
+    { 1904784501;1;Group  ;
+                CaptionML=[ENU=Posting;
+                           ENG=Posting];
+                GroupType=Group }
+
+    { 34  ;2   ;Field     ;
+                SourceExpr="Currency Code" }
+
+    { 48  ;2   ;Field     ;
+                SourceExpr="Last Cheque No." }
+
+    { 50  ;2   ;Field     ;
+                SourceExpr="Transit No." }
+
+    { 60  ;2   ;Field     ;
+                SourceExpr="Last Statement No." }
+
+    { 62  ;2   ;Field     ;
+                SourceExpr="Balance Last Statement" }
+
+    { 1040012;2;Field     ;
+                SourceExpr="Reconciliation Required" }
+
+    { 1040020;2;Field     ;
+                SourceExpr="Statement Frequency" }
+
+    { 1040016;2;Field     ;
+                SourceExpr="Date Last Reconciled" }
+
+    { 1040015;2;Field     ;
+                SourceExpr="Date Next Reconciliation Due" }
+
+    { 1000000053;2;Field  ;
+                SourceExpr="Reconciliation Reason" }
+
+    { 1040014;2;Field     ;
+                Name=PostingTabUnrec;
+                CaptionML=ENU=Unreconciled Entries;
+                SourceExpr="Unreconciled Entries" }
+
+    { 1000000054;2;Field  ;
+                SourceExpr="Transaction Import" }
+
+    { 1000000056;2;Field  ;
+                CaptionML=[ENU=Trans Import Charge;
+                           ENG=Trans Import Charge];
+                SourceExpr="Transaction Import Charge" }
+
+    { 1000000038;2;Field  ;
+                SourceExpr="External System Ref" }
+
+    { 1000000040;2;Field  ;
+                SourceExpr="External System Link" }
+
+    { 1000000044;2;Field  ;
+                CaptionML=[ENU=Ext Cheque Clearing No.;
+                           ENG=Ext Cheque Clearing No.];
+                SourceExpr="Ext Sys Cheque Clearing No." }
+
+    { 1000000032;2;Field  ;
+                CaptionML=[ENU=System Data 1;
+                           ENG=System Data 1];
+                SourceExpr="Client Data 1" }
+
+    { 1000000034;2;Field  ;
+                CaptionML=[ENU=System Data 2;
+                           ENG=System Data 2];
+                SourceExpr="Client Data 2" }
+
+    { 1000000036;2;Field  ;
+                CaptionML=[ENU=System Data 3;
+                           ENG=System Data 3];
+                SourceExpr="Client Data 3" }
+
+    { 32  ;2   ;Field     ;
+                SourceExpr="Posting Group" }
+
+    { 56  ;2   ;Field     ;
+                SourceExpr="Global Dimension 1 Code" }
+
+    { 58  ;2   ;Field     ;
+                SourceExpr="Global Dimension 2 Code" }
+
+    { 1000000058;2;Field  ;
+                SourceExpr="Capital/Income" }
+
+    { 1040056;2;Field     ;
+                SourceExpr="Revaluation Method" }
+
+    { 1000000166;2;Field  ;
+                SourceExpr="Exclude From Revaluation" }
+
+    { 1040058;2;Field     ;
+                SourceExpr="Unrealised FX at Date" }
+
+    { 1040081;2;Field     ;
+                SourceExpr="Exclude from Accruals" }
+
+    { 1000000071;2;Field  ;
+                SourceExpr="Related Int Due A/c Type" }
+
+    { 1000000072;2;Field  ;
+                SourceExpr="Related Int Due A/c No." }
+
+    { 1000000028;2;Field  ;
+                SourceExpr="Commission Bal. Bank Account" }
+
+    { 1000000030;2;Field  ;
+                SourceExpr="Settlement Bank Account" }
+
+    { 1040070;2;Field     ;
+                ToolTipML=ENG=If ticked then this Bank Account will be used as default Contribution Bank Account in the Contribution Posting. If only one Account exist for this Currency, it will be used as the default Bank Account.;
+                SourceExpr="Pension Contribution Account" }
+
+    { 1040068;2;Field     ;
+                ToolTipML=ENG=If ticked then this Bank Account will be used as default FX Bank Account when doing FX Conversion in the Pension Investment Instructions. If only one Account exist for this Currency, it will be used as the default Bank Account.;
+                SourceExpr="Pension fx Account" }
+
+    { 1040066;2;Field     ;
+                SourceExpr="Member Split Mandatory" }
+
+    { 1000000074;2;Field  ;
+                SourceExpr="Process Bank Statements" }
+
+    { 1000000069;2;Group  ;
+                GroupType=Group }
+
+    { 1100000066;3;Field  ;
+                SourceExpr="Calls Default Paym. Bank Acc" }
+
+    { 1000000067;3;Field  ;
+                SourceExpr="Distrib. Def. Paym. Bank Acc" }
+
+    { 1000000012;1;Group  ;
+                Name=Transfer;
+                GroupType=Group }
+
+    { 1000000042;2;Group  ;
+                CaptionML=[ENU=Intermediary BACS;
+                           ENG=Intermediary BACS];
+                GroupType=Group }
+
+    { 1000000024;3;Field  ;
+                SourceExpr="Intermediary Bank Code" }
+
+    { 1000000025;3;Field  ;
+                SourceExpr="Intermediary Entity Bank ID" }
+
+    { 1000000027;3;Field  ;
+                SourceExpr="Intermediary Sort Code" }
+
+    { 1000000029;3;Field  ;
+                SourceExpr="Intermediary SWIFT Code" }
+
+    { 1000000055;3;Field  ;
+                SourceExpr="Intermediary Bank ABA Code" }
+
+    { 1000000031;3;Field  ;
+                SourceExpr="Intermediary Account No." }
+
+    { 1000000033;3;Field  ;
+                SourceExpr="Intermediary IBAN" }
+
+    { 1000000035;3;Field  ;
+                SourceExpr="Intermediary Currency Code" }
+
+    { 1000000037;3;Field  ;
+                SourceExpr="Intermediary Account Name" }
+
+    { 1000000048;2;Group  ;
+                CaptionML=[ENU=BACS;
+                           ENG=BACS];
+                GroupType=Group }
+
+    { 1000000041;3;Field  ;
+                Description=Electron. Pay.;
+                SourceExpr="Bank Statement Import Format" }
+
+    { 1000000039;3;Field  ;
+                Description=Electron. Pay.;
+                SourceExpr="Client Payment Export Format" }
+
+    { 1000000043;3;Field  ;
+                Description=Electron. Pay.;
+                SourceExpr="Bank Name - Data Conversion" }
+
+    { 1000000045;3;Field  ;
+                Description=Electron. Pay.;
+                SourceExpr="Bank Clearing Standard" }
+
+    { 1000000047;3;Field  ;
+                Description=Electron. Pay.;
+                SourceExpr="Bank Clearing Code" }
+
+    { 1000000049;3;Field  ;
+                SourceExpr="Bank Branch No." }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

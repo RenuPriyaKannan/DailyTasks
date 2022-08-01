@@ -1,0 +1,127 @@
+OBJECT Page 50052 DFXVEGA Cue
+{
+  OBJECT-PROPERTIES
+  {
+    Date=29-07-22;
+    Time=18:48:56;
+    Modified=Yes;
+    Version List=DFX VEGA;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table50020;
+    PageType=CardPart;
+    OnInit=BEGIN
+
+             DFXVEGAInterface.RESET;
+             DFXVEGAInterface.SETRANGE("RM User ID",USERID);
+             IF DFXVEGAInterface.FINDSET THEN
+               Vega := DFXVEGAInterface.COUNT;
+           END;
+
+    OnOpenPage=BEGIN
+                 SETRANGE("Current User",USERID);
+               END;
+
+    OnAfterGetRecord=BEGIN
+                       DFXVEGAInterface.RESET;
+                       DFXVEGAInterface.SETRANGE("RM User ID",USERID);
+                       IF DFXVEGAInterface.FINDSET THEN
+                         Vega := DFXVEGAInterface.COUNT;
+                     END;
+
+  }
+  CONTROLS
+  {
+    { 100000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 100000001;1;Group   ;
+                Name=General;
+                GroupType=CueGroup }
+
+    { 100000005;2;Field   ;
+                Name=VEGA Interface;
+                SourceExpr=Vega;
+                OnDrillDown=BEGIN
+                              PAGE.RUN(PAGE::"DFXVega Interface", DFXVEGAInterface);
+                            END;
+                             }
+
+    { 100000007;1;Group   ;
+                Name=Process;
+                GroupType=CueGroup }
+
+    { 100000006;2;Field   ;
+                SourceExpr=Unprocessed;
+                Visible=True;
+                Enabled=True;
+                Editable=True;
+                Style=Subordinate;
+                StyleExpr=TRUE;
+                OnDrillDown=BEGIN
+                              DFXVEGAInterface1.RESET;
+                              DFXVEGAInterface1.SETRANGE(Status,DFXVEGAInterface1.Status::UnProcessed);
+                              PAGE.RUN(PAGE::"DFXVega Interface", DFXVEGAInterface1);
+                            END;
+                             }
+
+    { 100000002;2;Field   ;
+                SourceExpr=Inprocess;
+                Style=Unfavorable;
+                StyleExpr=TRUE;
+                OnDrillDown=BEGIN
+                              DFXVEGAInterface2.RESET;
+                              DFXVEGAInterface2.SETRANGE(Status,DFXVEGAInterface2.Status::InProcess);
+                              PAGE.RUN(PAGE::"DFXVega Interface", DFXVEGAInterface2);
+                            END;
+                             }
+
+    { 100000003;2;Field   ;
+                SourceExpr=InReview;
+                Style=Ambiguous;
+                StyleExpr=TRUE;
+                OnDrillDown=BEGIN
+                              DFXVEGAInterface3.RESET;
+                              DFXVEGAInterface3.SETRANGE(Status,DFXVEGAInterface3.Status::InReview);
+                              PAGE.RUN(PAGE::"DFXVega Interface", DFXVEGAInterface3);
+                            END;
+                             }
+
+    { 100000004;2;Field   ;
+                SourceExpr=Processed;
+                Style=Favorable;
+                StyleExpr=TRUE;
+                OnDrillDown=BEGIN
+                              DFXVEGAInterface4.RESET;
+                              DFXVEGAInterface4.SETRANGE(Status,DFXVEGAInterface4.Status::Processed);
+                              PAGE.RUN(PAGE::"DFXVega Interface", DFXVEGAInterface4);
+                            END;
+                             }
+
+    { 100000008;2;Field   ;
+                SourceExpr=Rejected;
+                OnDrillDown=BEGIN
+                              DFXVEGAInterface5.RESET;
+                              DFXVEGAInterface5.SETFILTER(Status,'%1|%2',DFXVEGAInterface5.Status::Rejected,DFXVEGAInterface5.Status::IdleRejected);
+                              PAGE.RUN(PAGE::"DFXVega Interface", DFXVEGAInterface5);
+                            END;
+                             }
+
+  }
+  CODE
+  {
+    VAR
+      DFXVEGAInterface@100000000 : Record 50020;
+      DFXVEGAInterface1@100000003 : Record 50020;
+      DFXVEGAInterface2@100000005 : Record 50020;
+      DFXVEGAInterface3@100000008 : Record 50020;
+      DFXVEGAInterface4@100000001 : Record 50020;
+      Vega@100000002 : Integer;
+      DFXVEGAInterface5@100000004 : Record 50020;
+
+    BEGIN
+    END.
+  }
+}
+

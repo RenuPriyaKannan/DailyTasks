@@ -1,0 +1,78 @@
+OBJECT Page 50098 DFX Bulk Documents
+{
+  OBJECT-PROPERTIES
+  {
+    Date=07-02-22;
+    Time=18:13:05;
+    Modified=Yes;
+    Version List=NAVLITE;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table50015;
+    PageType=ListPart;
+    OnOpenPage=BEGIN
+                 FileEditable1 := FALSE;
+                 bool1 := TRUE;
+               END;
+
+    OnAfterGetRecord=BEGIN
+                       //FileEditable := TRUE;
+                       //IF Rec.Processed THEN
+                         FileEditable1 := FALSE;
+                         bool1 := TRUE;
+                     END;
+
+    OnAfterGetCurrRecord=BEGIN
+                           //MESSAGE('hello1');
+                         END;
+
+  }
+  CONTROLS
+  {
+    { 100000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 100000001;1;Group   ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 100000002;2;Field   ;
+                SourceExpr="Document Type" }
+
+    { 100000004;2;Field   ;
+                SourceExpr="Document Type Description";
+                Editable=False }
+
+    { 100000003;2;Field   ;
+                SourceExpr="Document Sub Type";
+                Editable=bool1 }
+
+    { 100000005;2;Field   ;
+                SourceExpr="Document Sub Type Description";
+                Editable=False }
+
+    { 100000006;2;Field   ;
+                SourceExpr="File Path";
+                Visible=True }
+
+    { 100000009;2;Field   ;
+                SourceExpr=TAG;
+                Editable=False }
+
+    { 100000007;2;Field   ;
+                SourceExpr="File Name";
+                Editable=False }
+
+  }
+  CODE
+  {
+    VAR
+      FileEditable1@100000000 : Boolean;
+      bool1@100000001 : Boolean;
+
+    BEGIN
+    END.
+  }
+}
+

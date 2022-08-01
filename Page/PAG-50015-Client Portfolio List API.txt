@@ -1,0 +1,165 @@
+OBJECT Page 50015 Client Portfolio List API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=27-11-20;
+    Time=20:49:40;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    CaptionML=ENU=Portfolio List;
+    DeleteAllowed=No;
+    SourceTable=Table9068565;
+    PopulateAllFields=No;
+    PageType=List;
+    CardPageID=Client Portfolio;
+    OnAfterGetRecord=VAR
+                       ClientPortfolioSecurityRec@1000000000 : Record 9068565;
+                     BEGIN
+                     END;
+
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                GroupType=Repeater }
+
+    { 1000000011;2;Field  ;
+                SourceExpr="Client No.";
+                Visible=FALSE }
+
+    { 2   ;2   ;Field     ;
+                SourceExpr="Portfolio No." }
+
+    { 4   ;2   ;Field     ;
+                SourceExpr=Description }
+
+    { 6   ;2   ;Field     ;
+                SourceExpr=Objectives }
+
+    { 1000000026;2;Field  ;
+                SourceExpr="Other Objectives" }
+
+    { 1000000027;2;Field  ;
+                SourceExpr="Global Dimension 1 Code";
+                Visible=FALSE }
+
+    { 1000000025;2;Field  ;
+                SourceExpr="Global Dimension 2 Code";
+                Visible=FALSE }
+
+    { 1000000024;2;Field  ;
+                SourceExpr="Reference No.";
+                Visible=FALSE }
+
+    { 8   ;2   ;Field     ;
+                SourceExpr="Investment Manager" }
+
+    { 1000000020;2;Field  ;
+                SourceExpr="Investment Manager Name" }
+
+    { 10  ;2   ;Field     ;
+                SourceExpr="Investment Advisor" }
+
+    { 1000000022;2;Field  ;
+                SourceExpr="Investment Advisor Name" }
+
+    { 1000000035;2;Field  ;
+                SourceExpr=Custodian;
+                Visible=FALSE }
+
+    { 1000000036;2;Field  ;
+                SourceExpr="Custodian Name";
+                Visible=FALSE }
+
+    { 1000000000;2;Field  ;
+                SourceExpr="Portfolio Dimension Code";
+                Visible=FALSE }
+
+    { 12  ;2   ;Field     ;
+                SourceExpr="Fund Code" }
+
+    { 1000000002;2;Field  ;
+                CaptionML=[ENU=Currency Posting?;
+                           ENG=Currency Posting?];
+                SourceExpr="Inv. Currency Portfolio" }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="Inv. Balance at Date (Units)";
+                Visible=FALSE }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="Inv. Balance at Date (Cost)";
+                Visible=FALSE }
+
+    { 1000000010;2;Field  ;
+                SourceExpr="Inv. Profit/Loss";
+                Visible=FALSE }
+
+    { 1000000012;2;Field  ;
+                SourceExpr="Inv. Income";
+                Visible=FALSE }
+
+    { 1000000014;2;Field  ;
+                SourceExpr="Inv. Purchases (Cost)";
+                Visible=FALSE }
+
+    { 1000000016;2;Field  ;
+                SourceExpr="Inv. Sales (Cost)";
+                Visible=FALSE }
+
+    { 1000000018;2;Field  ;
+                SourceExpr="Current Holding (Units)";
+                Visible=FALSE }
+
+    { 1000000004;2;Field  ;
+                SourceExpr="Inv. Posting Currency" }
+
+    { 1000000028;2;Field  ;
+                SourceExpr="Managed Basis" }
+
+    { 1000000009;2;Field  ;
+                SourceExpr="External Reference No.";
+                Visible=FALSE }
+
+    { 1000000023;2;Field  ;
+                SourceExpr=Closed }
+
+    { 1000000021;2;Field  ;
+                SourceExpr=Blocked }
+
+    { 1000000019;2;Field  ;
+                SourceExpr="Last Review Date" }
+
+    { 1000000033;2;Field  ;
+                SourceExpr="Investment Discretion" }
+
+    { 1000000034;2;Field  ;
+                SourceExpr="Voting Authority" }
+
+    { 1000000042;2;Field  ;
+                Name=General Comment;
+                SourceExpr=Comment }
+
+    { 1000000041;2;Field  ;
+                Name=Warning Comment;
+                SourceExpr="Warning Comments" }
+
+    { 1000000045;2;Field  ;
+                SourceExpr="No. of Linked Signatories";
+                Visible=FALSE }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

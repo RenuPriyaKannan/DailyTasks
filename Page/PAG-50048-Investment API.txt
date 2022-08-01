@@ -1,0 +1,198 @@
+OBJECT Page 50048 Investment API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=02-12-20;
+    Time=18:47:26;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    CaptionML=ENU=Investment List;
+    InsertAllowed=No;
+    DeleteAllowed=No;
+    ModifyAllowed=Yes;
+    SourceTable=Table9068536;
+    PageType=List;
+    RefreshOnActivate=Yes;
+    OnOpenPage=VAR
+                 _InvMast@1000000000 : Record 9068536;
+               BEGIN
+               END;
+
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                Name=QuotedTableBox;
+                Editable=FALSE;
+                GroupType=Repeater }
+
+    { 2   ;2   ;Field     ;
+                SourceExpr=Code }
+
+    { 8   ;2   ;Field     ;
+                SourceExpr=Name }
+
+    { 10  ;2   ;Field     ;
+                SourceExpr=Description }
+
+    { 4   ;2   ;Field     ;
+                SourceExpr="SEDOL Code" }
+
+    { 6   ;2   ;Field     ;
+                SourceExpr="ISIN Code" }
+
+    { 1000000017;2;Field  ;
+                SourceExpr="CUSIP Code" }
+
+    { 1000000014;2;Field  ;
+                SourceExpr="Additional Investment Code 1";
+                Visible=FALSE }
+
+    { 1040007;2;Field     ;
+                SourceExpr="Additional Investment Code 2" }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Ext Sys Name";
+                Visible=FALSE }
+
+    { 12  ;2   ;Field     ;
+                SourceExpr="Search Name" }
+
+    { 1040009;2;Field     ;
+                SourceExpr="Nominal Value" }
+
+    { 1040011;2;Field     ;
+                SourceExpr="Nominal Currency" }
+
+    { 14  ;2   ;Field     ;
+                SourceExpr="Type Code" }
+
+    { 1040013;2;Field     ;
+                SourceExpr="Category Code" }
+
+    { 16  ;2   ;Field     ;
+                SourceExpr="Area Code" }
+
+    { 34  ;2   ;Field     ;
+                SourceExpr="Industry Code" }
+
+    { 27  ;2   ;Field     ;
+                SourceExpr="Industry Subtype" }
+
+    { 29  ;2   ;Field     ;
+                SourceExpr="Tax Jurisdiction" }
+
+    { 1000000009;2;Field  ;
+                SourceExpr="Withholding Tax Rate" }
+
+    { 1000000022;2;Field  ;
+                SourceExpr="Issued Capital Currency" }
+
+    { 1000000023;2;Field  ;
+                SourceExpr="Issued Capital" }
+
+    { 1000000021;2;Field  ;
+                SourceExpr="No. of Issued Shares" }
+
+    { 40  ;2   ;Field     ;
+                SourceExpr="Client / Entity No." }
+
+    { 18  ;2   ;Field     ;
+                SourceExpr="Investment Currency" }
+
+    { 31  ;2   ;Field     ;
+                SourceExpr="Dividend Currency" }
+
+    { 38  ;2   ;Field     ;
+                SourceExpr="Daily Extract";
+                Visible=FALSE }
+
+    { 36  ;2   ;Field     ;
+                ToolTipML=ENG=FTS Active is set each time an investment extract is created.  When ticked this item is included in the extract.;
+                SourceExpr="Price Feed Active";
+                Visible=FALSE }
+
+    { 1000000004;2;Field  ;
+                SourceExpr=Clients;
+                Visible=FALSE }
+
+    { 1000000006;2;Field  ;
+                SourceExpr=Alias;
+                Visible=FALSE }
+
+    { 1040000;2;Field     ;
+                SourceExpr="External System Code" }
+
+    { 1040015;2;Field     ;
+                SourceExpr="Interest Bearing" }
+
+    { 1040017;2;Field     ;
+                SourceExpr="Multiplication Factor" }
+
+    { 1040019;2;Field     ;
+                SourceExpr="Default Posting Group" }
+
+    { 1040021;2;Field     ;
+                SourceExpr="Expiry Date / Maturity Date" }
+
+    { 1040023;2;Field     ;
+                SourceExpr="Interest Rate" }
+
+    { 1040025;2;Field     ;
+                SourceExpr=Denomination }
+
+    { 1040027;2;Field     ;
+                SourceExpr="Parent Security Code" }
+
+    { 1040029;2;Field     ;
+                SourceExpr="Payment Frequency" }
+
+    { 1040031;2;Field     ;
+                SourceExpr="Interest Start Date" }
+
+    { 1040033;2;Field     ;
+                SourceExpr="Maturity Year" }
+
+    { 1040035;2;Field     ;
+                SourceExpr="Country of Withholding Tax" }
+
+    { 1040037;2;Field     ;
+                SourceExpr="Country Code" }
+
+    { 1040039;2;Field     ;
+                SourceExpr="Country of Incorporation" }
+
+    { 1040041;2;Field     ;
+                SourceExpr="Country of Registration" }
+
+    { 1040043;2;Field     ;
+                SourceExpr="Option Type";
+                Visible=FALSE }
+
+    { 1040045;2;Field     ;
+                SourceExpr="Stock Exchange Identifier 1";
+                Visible=FALSE }
+
+    { 1040047;2;Field     ;
+                SourceExpr="Stock Exchange 1 Name";
+                Visible=FALSE }
+
+    { 1000000018;2;Field  ;
+                SourceExpr="External Reference No.";
+                Visible=FALSE }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

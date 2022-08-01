@@ -1,0 +1,80 @@
+OBJECT Page 50079 DFX User Permission
+{
+  OBJECT-PROPERTIES
+  {
+    Date=29-03-21;
+    Time=12:39:52;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table50009;
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 100000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 100000001;1;Group   ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 100000002;2;Field   ;
+                SourceExpr="User ID" }
+
+    { 100000003;2;Field   ;
+                SourceExpr="User Security ID" }
+
+    { 100000004;2;Field   ;
+                SourceExpr="Windows Security ID" }
+
+    { 100000005;2;Field   ;
+                SourceExpr="BC User" }
+
+    { 100000006;2;Field   ;
+                SourceExpr="Role ID" }
+
+    { 100000007;2;Field   ;
+                SourceExpr="Object Type" }
+
+    { 100000008;2;Field   ;
+                SourceExpr="Object ID" }
+
+    { 100000009;2;Field   ;
+                SourceExpr="Object Name" }
+
+    { 100000010;2;Field   ;
+                SourceExpr="Read Permission" }
+
+    { 100000011;2;Field   ;
+                SourceExpr="Insert Permission" }
+
+    { 100000012;2;Field   ;
+                SourceExpr="Modify Permission" }
+
+    { 100000013;2;Field   ;
+                SourceExpr="Delete Permission" }
+
+    { 100000014;2;Field   ;
+                SourceExpr="Execute Permission" }
+
+    { 100000015;2;Field   ;
+                SourceExpr="Security Filter" }
+
+    { 100000016;2;Field   ;
+                SourceExpr="First Partition Code" }
+
+    { 100000017;2;Field   ;
+                SourceExpr="Second Partition Code" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

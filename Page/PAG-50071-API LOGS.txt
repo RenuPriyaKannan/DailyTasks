@@ -1,0 +1,71 @@
+OBJECT Page 50071 API LOGS
+{
+  OBJECT-PROPERTIES
+  {
+    Date=07-06-22;
+    Time=17:09:10;
+    Modified=Yes;
+    Version List=DFX;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table50019;
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 100000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 100000001;1;Group   ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 100000002;2;Field   ;
+                SourceExpr="Entry No." }
+
+    { 100000003;2;Field   ;
+                SourceExpr=API }
+
+    { 100000004;2;Field   ;
+                SourceExpr="Record Type" }
+
+    { 100000005;2;Field   ;
+                SourceExpr="Record No." }
+
+    { 100000006;2;Field   ;
+                SourceExpr="Created Date" }
+
+    { 100000007;2;Field   ;
+                SourceExpr=Status }
+
+    { 100000008;2;Field   ;
+                SourceExpr=Description }
+
+    { 100000009;2;Field   ;
+                SourceExpr=UserID }
+
+    { 100000010;2;Field   ;
+                SourceExpr=Name }
+
+    { 100000011;2;Field   ;
+                SourceExpr=OldPartitionCode }
+
+    { 100000012;2;Field   ;
+                SourceExpr=NewPartitionCode }
+
+    { 100000013;2;Field   ;
+                SourceExpr="Function" }
+
+    { 100000014;2;Field   ;
+                SourceExpr=Flag }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

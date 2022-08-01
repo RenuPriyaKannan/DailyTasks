@@ -1,0 +1,546 @@
+OBJECT Codeunit 50005 DFX Business Rules
+{
+  OBJECT-PROPERTIES
+  {
+    Date=29-07-22;
+    Time=13:12:50;
+    Modified=Yes;
+    Version List=DFX VEGA;
+  }
+  PROPERTIES
+  {
+    TableNo=9069068;
+    OnRun=BEGIN
+            CASE Rec."Function ID" OF
+              'PASS-EXP' : DateOnpassportExpired(Rec);
+              'JFSC-ENT' :  JFSCEntityNotify(Rec);
+              'HMRC-ENT' : HMRCEntityNotify(Rec);
+              'JFSC-HMRC' : JFSC_HMRCEntityNotify(Rec);
+              'PASS-EXP30': DateOnpassportExpired30D(Rec);
+              'PASS-EXP60': DateOnpassportExpired60D(Rec);
+              'PASS-EXP90': DateOnpassportExpired90D(Rec);
+            END;
+          END;
+
+  }
+  CODE
+  {
+    VAR
+      BusinessRulesManagement@1000000000 : Codeunit 9068611;
+
+    LOCAL PROCEDURE JFSCEntityNotify@100000001(VAR ScheduledBusinessRuleReg@100000000 : Record 9069068);
+    VAR
+      DFXSetup@100000001 : Record 50006;
+      ClientEntity@100000002 : Record 9068508;
+      RecordURL@100000003 : Text;
+      StrConvert@100000004 : Text;
+      textLoop@100000005 : Text;
+      i@100000006 : Integer;
+      len@100000007 : Integer;
+    BEGIN
+      DFXSetup.RESET;
+      DFXSetup.GET;
+      IF DFXSetup."JFSC Entity Type" <> '' THEN BEGIN
+          ClientEntity.SETRANGE("Client No.",ScheduledBusinessRuleReg."Attached To No.");
+          ClientEntity.SETFILTER("Entity Type",DFXSetup."JFSC Entity Type");
+          ClientEntity.SETRANGE("Date Appointed",TODAY);
+          IF ClientEntity.FINDSET THEN REPEAT
+            RecordURL := GETURL(CLIENTTYPE::Windows,COMPANYNAME,OBJECTTYPE::Page,PAGE::"Client Entities",ClientEntity);
+            BusinessRulesManagement.CreateBreach(ScheduledBusinessRuleReg,RecordURL,ClientEntity."Client No.",ClientEntity."Entity No.",ClientEntity."Entity Type",'','');
+          UNTIL ClientEntity.NEXT = 0;
+        END;
+    END;
+
+    LOCAL PROCEDURE HMRCEntityNotify@100000027(VAR ScheduledBusinessRuleReg@100000000 : Record 9069068);
+    VAR
+      DFXSetup@100000001 : Record 50006;
+      ClientEntity@100000002 : Record 9068508;
+      RecordURL@100000003 : Text;
+      StrConvert@100000004 : Text;
+      textLoop@100000005 : Text;
+      i@100000006 : Integer;
+      len@100000007 : Integer;
+    BEGIN
+      DFXSetup.RESET;
+      DFXSetup.GET;
+      IF DFXSetup."HMRC Entity Type" <> '' THEN BEGIN
+          ClientEntity.SETRANGE("Client No.",ScheduledBusinessRuleReg."Attached To No.");
+          ClientEntity.SETFILTER("Entity Type",DFXSetup."HMRC Entity Type");
+          ClientEntity.SETRANGE("Date Appointed",TODAY);
+          IF ClientEntity.FINDSET THEN REPEAT
+            RecordURL := GETURL(CLIENTTYPE::Windows,COMPANYNAME,OBJECTTYPE::Page,PAGE::"Client Entities",ClientEntity);
+            BusinessRulesManagement.CreateBreach(ScheduledBusinessRuleReg,RecordURL,ClientEntity."Client No.",ClientEntity."Entity No.",ClientEntity."Entity Type",'','');
+          UNTIL ClientEntity.NEXT = 0;
+        END;
+    END;
+
+    LOCAL PROCEDURE JFSC_HMRCEntityNotify@100000030(VAR ScheduledBusinessRuleReg@100000000 : Record 9069068);
+    VAR
+      DFXSetup@100000001 : Record 50006;
+      ClientEntity@100000002 : Record 9068508;
+      RecordURL@100000003 : Text;
+      StrConvert@100000004 : Text;
+      textLoop@100000005 : Text;
+      i@100000006 : Integer;
+      len@100000007 : Integer;
+    BEGIN
+      DFXSetup.RESET;
+      DFXSetup.GET;
+      IF DFXSetup."JFSC_HMRC Entity Type" <> '' THEN BEGIN
+          ClientEntity.SETRANGE("Client No.",ScheduledBusinessRuleReg."Attached To No.");
+          ClientEntity.SETFILTER("Entity Type",DFXSetup."JFSC_HMRC Entity Type");
+          ClientEntity.SETRANGE("Date Appointed",TODAY);
+          IF ClientEntity.FINDSET THEN REPEAT
+            RecordURL := GETURL(CLIENTTYPE::Windows,COMPANYNAME,OBJECTTYPE::Page,PAGE::"Client Entities",ClientEntity);
+            BusinessRulesManagement.CreateBreach(ScheduledBusinessRuleReg,RecordURL,ClientEntity."Client No.",ClientEntity."Entity No.",ClientEntity."Entity Type",'','');
+          UNTIL ClientEntity.NEXT = 0;
+        END;
+    END;
+
+    LOCAL PROCEDURE DateOnpassportExpired@100000000(VAR ScheduledBusinessRuleReg@100000000 : Record 9069068);
+    VAR
+      Client@100000002 : Record 9068500;
+      RecordURL@100000001 : Text;
+      Entity@100000003 : Record 9068505;
+      Date90@100000005 : Date;
+      Date60@100000004 : Date;
+      EntityRec@100000006 : Record 9068505;
+      DFXSetup@100000007 : Record 50006;
+      ClientEntity@100000008 : Record 9068508;
+      UserDefinedFieldData@100000009 : Record 9068256;
+      DeceasedAdditional@100000010 : Boolean;
+    BEGIN
+      DFXSetup.RESET;
+      DFXSetup.GET;
+      UserDefinedFieldData.RESET;
+      UserDefinedFieldData.SETRANGE("Linked To No.",ScheduledBusinessRuleReg."Attached To No.");
+      UserDefinedFieldData.SETFILTER(Code,'Deceased|DECEASED');
+      IF NOT UserDefinedFieldData.FINDFIRST THEN BEGIN
+        DeceasedAdditional := FALSE;
+        END ELSE
+        DeceasedAdditional := TRUE;
+
+      IF NOT DeceasedAdditional THEN BEGIN
+        ClientEntity.RESET;
+        ClientEntity.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+        ClientEntity.SETFILTER("Entity Type",DFXSetup."Entity Type Allowed");
+        IF ClientEntity.FINDSET THEN BEGIN
+          Entity.RESET;
+          Entity.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+          Entity.SETFILTER("Passport expiry date",'<%1',TODAY);
+          Entity.SETFILTER("Passport number",'<>%1','');
+          Entity.SETFILTER("Date of Death",'=%1',0D);
+          Entity.SETFILTER("Search Name",'<>*%1*','DECEASED');
+          IF Entity.FINDFIRST THEN REPEAT
+              RecordURL := GETURL(CLIENTTYPE::Windows,COMPANYNAME,OBJECTTYPE::Page,PAGE::"Personal Entity Card",Entity);
+              BusinessRulesManagement.CreateBreach(ScheduledBusinessRuleReg,RecordURL,Entity."Entity No.",Entity."Passport number",'First','','');
+              DFXVEGAInsertBreach(Entity,Entity."Passport number",'First');
+          UNTIL Entity.NEXT = 0;
+
+          EntityRec.RESET;
+          EntityRec.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+         EntityRec.SETFILTER("Passport/ID Expiry Date (2)",'<%1',TODAY);
+          EntityRec.SETFILTER("Passport/ID Number (2)",'<>%1','');
+          EntityRec.SETFILTER("Date of Death",'=%1',0D);
+          EntityRec.SETFILTER("Search Name",'<>*%1*','DECEASED');
+          IF EntityRec.FINDFIRST THEN REPEAT
+              RecordURL := GETURL(CLIENTTYPE::Windows,COMPANYNAME,OBJECTTYPE::Page,PAGE::"Personal Entity Card",EntityRec);
+              BusinessRulesManagement.CreateBreach(ScheduledBusinessRuleReg,RecordURL,EntityRec."Entity No.",EntityRec."Passport/ID Number (2)",'Second','','');
+              DFXVEGAInsertBreach(EntityRec,EntityRec."Passport/ID Number (2)",'Second');
+            UNTIL EntityRec.NEXT = 0;
+        END;
+
+        ClientEntity.RESET;
+        ClientEntity.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+        ClientEntity.SETFILTER("Entity Type",DFXSetup."Entity Type Allowed Cont.");
+        IF ClientEntity.FINDSET THEN BEGIN
+          Entity.RESET;
+          Entity.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+          Entity.SETFILTER("Passport expiry date",'<%1',TODAY);
+          Entity.SETFILTER("Passport number",'<>%1','');
+          Entity.SETFILTER("Date of Death",'=%1',0D);
+          Entity.SETFILTER("Search Name",'<>*%1*','DECEASED');
+          IF Entity.FINDFIRST THEN REPEAT
+              RecordURL := GETURL(CLIENTTYPE::Windows,COMPANYNAME,OBJECTTYPE::Page,PAGE::"Personal Entity Card",Entity);
+              BusinessRulesManagement.CreateBreach(ScheduledBusinessRuleReg,RecordURL,Entity."Entity No.",Entity."Passport number",'First','','');
+              DFXVEGAInsertBreach(Entity,Entity."Passport number",'First');
+          UNTIL Entity.NEXT = 0;
+
+          EntityRec.RESET;
+          EntityRec.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+         EntityRec.SETFILTER("Passport/ID Expiry Date (2)",'<%1',TODAY);
+          EntityRec.SETFILTER("Passport/ID Number (2)",'<>%1','');
+          EntityRec.SETFILTER("Date of Death",'=%1',0D);
+          EntityRec.SETFILTER("Search Name",'<>*%1*','DECEASED');
+          IF EntityRec.FINDFIRST THEN REPEAT
+              RecordURL := GETURL(CLIENTTYPE::Windows,COMPANYNAME,OBJECTTYPE::Page,PAGE::"Personal Entity Card",EntityRec);
+              BusinessRulesManagement.CreateBreach(ScheduledBusinessRuleReg,RecordURL,EntityRec."Entity No.",EntityRec."Passport/ID Number (2)",'Second','','');
+              DFXVEGAInsertBreach(EntityRec,EntityRec."Passport/ID Number (2)",'Second');
+            UNTIL EntityRec.NEXT = 0;
+        END;
+      END;
+    END;
+
+    LOCAL PROCEDURE DateOnpassportExpired30D@100000002(VAR ScheduledBusinessRuleReg@100000000 : Record 9069068);
+    VAR
+      RecordURL@100000003 : Text;
+      Entity@100000002 : Record 9068505;
+      Date30@100000001 : Date;
+      EntityRec@100000005 : Record 9068505;
+      ClientEntity@100000006 : Record 9068508;
+      DFXSetup@100000004 : Record 50006;
+      UserDefinedFieldData@100000007 : Record 9068256;
+      DeceasedAdditional@100000008 : Boolean;
+    BEGIN
+      Date30 := CALCDATE('<+30D>',TODAY);
+      DFXSetup.RESET;
+      DFXSetup.GET;
+
+      UserDefinedFieldData.RESET;
+      UserDefinedFieldData.SETRANGE("Linked To No.",ScheduledBusinessRuleReg."Attached To No.");
+      UserDefinedFieldData.SETFILTER(Code,'Deceased|DECEASED');
+      IF NOT UserDefinedFieldData.FINDFIRST THEN BEGIN
+        DeceasedAdditional := FALSE;
+        END ELSE
+        DeceasedAdditional := TRUE;
+
+      IF NOT DeceasedAdditional THEN BEGIN
+          ClientEntity.RESET;
+          ClientEntity.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+          ClientEntity.SETFILTER("Entity Type",DFXSetup."Entity Type Allowed");
+          IF ClientEntity.FINDSET THEN BEGIN
+            Entity.RESET;
+            Entity.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+            Entity.SETFILTER("Passport expiry date",'%1..%2',TODAY,Date30);
+            Entity.SETFILTER("Passport number",'<>%1','');
+            Entity.SETFILTER("Date of Death",'=%1',0D);
+            Entity.SETFILTER("Search Name",'<>*%1*','DECEASED');
+            IF Entity.FINDFIRST THEN REPEAT
+                RecordURL := GETURL(CLIENTTYPE::Windows,COMPANYNAME,OBJECTTYPE::Page,PAGE::"Personal Entity Card",Entity);
+                BusinessRulesManagement.CreateBreach(ScheduledBusinessRuleReg,RecordURL,Entity."Entity No.",Entity."Passport number",'First','','');
+                DFXVEGAInsertBreach(Entity,Entity."Passport number",'First');
+            UNTIL Entity.NEXT = 0;
+
+            EntityRec.RESET;
+            EntityRec.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+            EntityRec.SETFILTER("Passport/ID Expiry Date (2)",'%1..%2',TODAY,Date30);
+            EntityRec.SETFILTER("Passport/ID Number (2)",'<>%1','');
+            EntityRec.SETFILTER("Date of Death",'=%1',0D);
+            EntityRec.SETFILTER("Search Name",'<>*%1*','Deceased');
+            IF EntityRec.FINDFIRST THEN REPEAT
+                RecordURL := GETURL(CLIENTTYPE::Windows,COMPANYNAME,OBJECTTYPE::Page,PAGE::"Personal Entity Card",EntityRec);
+                BusinessRulesManagement.CreateBreach(ScheduledBusinessRuleReg,RecordURL,EntityRec."Entity No.",EntityRec."Passport/ID Number (2)",'Second','','');
+                DFXVEGAInsertBreach(EntityRec,EntityRec."Passport/ID Number (2)",'Second');
+              UNTIL EntityRec.NEXT = 0;
+
+           END;
+
+          ClientEntity.RESET;
+          ClientEntity.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+          ClientEntity.SETFILTER("Entity Type",DFXSetup."Entity Type Allowed Cont.");
+          IF ClientEntity.FINDSET THEN BEGIN
+            Entity.RESET;
+            Entity.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+            Entity.SETFILTER("Passport expiry date",'%1..%2',TODAY,Date30);
+            Entity.SETFILTER("Passport number",'<>%1','');
+            Entity.SETFILTER("Date of Death",'=%1',0D);
+            Entity.SETFILTER("Search Name",'<>*%1*','DECEASED');
+            IF Entity.FINDFIRST THEN REPEAT
+                RecordURL := GETURL(CLIENTTYPE::Windows,COMPANYNAME,OBJECTTYPE::Page,PAGE::"Personal Entity Card",Entity);
+                BusinessRulesManagement.CreateBreach(ScheduledBusinessRuleReg,RecordURL,Entity."Entity No.",Entity."Passport number",'First','','');
+                DFXVEGAInsertBreach(Entity,Entity."Passport number",'First');
+            UNTIL Entity.NEXT = 0;
+
+            EntityRec.RESET;
+            EntityRec.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+            EntityRec.SETFILTER("Passport/ID Expiry Date (2)",'%1..%2',TODAY,Date30);
+            EntityRec.SETFILTER("Passport/ID Number (2)",'<>%1','');
+            EntityRec.SETFILTER("Date of Death",'=%1',0D);
+            EntityRec.SETFILTER("Search Name",'<>*%1*','DECEASED');
+            IF EntityRec.FINDFIRST THEN REPEAT
+                RecordURL := GETURL(CLIENTTYPE::Windows,COMPANYNAME,OBJECTTYPE::Page,PAGE::"Personal Entity Card",EntityRec);
+                BusinessRulesManagement.CreateBreach(ScheduledBusinessRuleReg,RecordURL,EntityRec."Entity No.",EntityRec."Passport/ID Number (2)",'Second','','');
+                DFXVEGAInsertBreach(EntityRec,EntityRec."Passport/ID Number (2)",'Second');
+              UNTIL EntityRec.NEXT = 0;
+
+        END;
+      END;
+    END;
+
+    LOCAL PROCEDURE DateOnpassportExpired60D@100000003(VAR ScheduledBusinessRuleReg@100000000 : Record 9069068);
+    VAR
+      Client@100000004 : Record 9068500;
+      RecordURL@100000003 : Text;
+      Entity@100000002 : Record 9068505;
+      Date60@100000001 : Date;
+      Date30@100000005 : Date;
+      EntityRec@100000006 : Record 9068505;
+      DFXSetup@100000007 : Record 50006;
+      ClientEntity@100000008 : Record 9068508;
+      UserDefinedFieldData@100000009 : Record 9068256;
+    BEGIN
+      Date60 := CALCDATE('<+60D>',TODAY);
+      Date30 := CALCDATE('<+30D>',TODAY);
+      DFXSetup.RESET;
+      DFXSetup.GET;
+
+      UserDefinedFieldData.RESET;
+      UserDefinedFieldData.SETRANGE("Linked To No.",ScheduledBusinessRuleReg."Attached To No.");
+      UserDefinedFieldData.SETFILTER(Code,'Deceased|DECEASED');
+      IF NOT UserDefinedFieldData.FINDFIRST THEN BEGIN
+        ClientEntity.RESET;
+        ClientEntity.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+        ClientEntity.SETFILTER("Entity Type",DFXSetup."Entity Type Allowed");
+        IF ClientEntity.FINDSET THEN BEGIN
+          Entity.RESET;
+          Entity.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+          Entity.SETFILTER("Passport expiry date",'%1..%2',Date30,Date60);
+          Entity.SETFILTER("Passport number",'<>%1','');
+          Entity.SETFILTER("Date of Death",'=%1',0D);
+          Entity.SETFILTER("Search Name",'<>*%1*','DECEASED');
+          IF Entity.FINDFIRST THEN REPEAT
+              RecordURL := GETURL(CLIENTTYPE::Windows,COMPANYNAME,OBJECTTYPE::Page,PAGE::"Personal Entity Card",Entity);
+              BusinessRulesManagement.CreateBreach(ScheduledBusinessRuleReg,RecordURL,Entity."Entity No.",Entity."Passport number",'First','','');
+              DFXVEGAInsertBreach(Entity,Entity."Passport number",'First');
+          UNTIL Entity.NEXT = 0;
+
+          EntityRec.RESET;
+          EntityRec.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+          EntityRec.SETFILTER("Passport/ID Expiry Date (2)",'%1..%2',Date30,Date60);
+          EntityRec.SETFILTER("Passport/ID Number (2)",'<>%1','');
+          EntityRec.SETFILTER("Date of Death",'=%1',0D);
+          EntityRec.SETFILTER("Search Name",'<>*%1*','DECEASED');
+          IF EntityRec.FINDFIRST THEN REPEAT
+              RecordURL := GETURL(CLIENTTYPE::Windows,COMPANYNAME,OBJECTTYPE::Page,PAGE::"Personal Entity Card",EntityRec);
+              BusinessRulesManagement.CreateBreach(ScheduledBusinessRuleReg,RecordURL,EntityRec."Entity No.",EntityRec."Passport/ID Number (2)",'Second','','');
+              DFXVEGAInsertBreach(EntityRec,EntityRec."Passport/ID Number (2)",'Second');
+            UNTIL EntityRec.NEXT = 0;
+        END;
+
+        ClientEntity.RESET;
+        ClientEntity.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+        ClientEntity.SETFILTER("Entity Type",DFXSetup."Entity Type Allowed Cont.");
+        IF ClientEntity.FINDSET THEN BEGIN
+          Entity.RESET;
+          Entity.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+          Entity.SETFILTER("Passport expiry date",'%1..%2',Date30,Date60);
+          Entity.SETFILTER("Passport number",'<>%1','');
+          Entity.SETFILTER("Date of Death",'=%1',0D);
+          Entity.SETFILTER("Search Name",'<>*%1*','DECEASED');
+          IF Entity.FINDFIRST THEN REPEAT
+              RecordURL := GETURL(CLIENTTYPE::Windows,COMPANYNAME,OBJECTTYPE::Page,PAGE::"Personal Entity Card",Entity);
+              BusinessRulesManagement.CreateBreach(ScheduledBusinessRuleReg,RecordURL,Entity."Entity No.",Entity."Passport number",'First','','');
+              DFXVEGAInsertBreach(Entity,Entity."Passport number",'First');
+          UNTIL Entity.NEXT = 0;
+
+          EntityRec.RESET;
+          EntityRec.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+          EntityRec.SETFILTER("Passport/ID Expiry Date (2)",'%1..%2',Date30,Date60);
+          EntityRec.SETFILTER("Passport/ID Number (2)",'<>%1','');
+          EntityRec.SETFILTER("Date of Death",'=%1',0D);
+          EntityRec.SETFILTER("Search Name",'<>*%1*','DECEASED');
+          IF EntityRec.FINDFIRST THEN REPEAT
+              RecordURL := GETURL(CLIENTTYPE::Windows,COMPANYNAME,OBJECTTYPE::Page,PAGE::"Personal Entity Card",EntityRec);
+              BusinessRulesManagement.CreateBreach(ScheduledBusinessRuleReg,RecordURL,EntityRec."Entity No.",EntityRec."Passport/ID Number (2)",'Second','','');
+              DFXVEGAInsertBreach(EntityRec,EntityRec."Passport/ID Number (2)",'Second');
+            UNTIL EntityRec.NEXT = 0;
+        END;
+      END;
+    END;
+
+    LOCAL PROCEDURE DateOnpassportExpired90D@100000004(VAR ScheduledBusinessRuleReg@100000000 : Record 9069068);
+    VAR
+      Client@100000004 : Record 9068500;
+      RecordURL@100000003 : Text;
+      Entity@100000002 : Record 9068505;
+      Date90@100000001 : Date;
+      Date60@100000005 : Date;
+      EntityRec@100000006 : Record 9068505;
+      DFXSetup@100000007 : Record 50006;
+      ClientEntity@100000008 : Record 9068508;
+      UserDefinedFieldData@100000009 : Record 9068256;
+    BEGIN
+      Date90 := CALCDATE('<+90D>',TODAY);
+      Date60 := CALCDATE('<+60D>',TODAY);
+      DFXSetup.RESET;
+      DFXSetup.GET;
+
+      UserDefinedFieldData.RESET;
+      UserDefinedFieldData.SETRANGE("Linked To No.",ScheduledBusinessRuleReg."Attached To No.");
+      UserDefinedFieldData.SETFILTER(Code,'Deceased|DECEASED');
+      IF NOT UserDefinedFieldData.FINDFIRST THEN BEGIN
+        ClientEntity.RESET;
+        ClientEntity.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+        ClientEntity.SETFILTER("Entity Type",DFXSetup."Entity Type Allowed");
+        IF ClientEntity.FINDSET THEN BEGIN
+          Entity.RESET;
+          Entity.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+          Entity.SETFILTER("Passport expiry date",'%1..%2',Date60,Date90);
+          Entity.SETFILTER("Passport number",'<>%1','');
+          Entity.SETFILTER("Date of Death",'=%1',0D);
+          Entity.SETFILTER("Search Name",'<>*%1*','DECEASED');
+          IF Entity.FINDFIRST THEN REPEAT
+              RecordURL := GETURL(CLIENTTYPE::Windows,COMPANYNAME,OBJECTTYPE::Page,PAGE::"Personal Entity Card",Entity);
+              BusinessRulesManagement.CreateBreach(ScheduledBusinessRuleReg,RecordURL,Entity."Entity No.",Entity."Passport number",'First','','');
+              DFXVEGAInsertBreach(Entity,Entity."Passport number",'First');
+          UNTIL Entity.NEXT = 0;
+
+          EntityRec.RESET;
+          EntityRec.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+          EntityRec.SETFILTER("Passport/ID Expiry Date (2)",'%1..%2',Date60,Date90);
+          EntityRec.SETFILTER("Passport/ID Number (2)",'<>%1','');
+          EntityRec.SETFILTER("Date of Death",'=%1',0D);
+          EntityRec.SETFILTER("Search Name",'<>*%1*','DECEASED');
+          IF EntityRec.FINDFIRST THEN REPEAT
+              RecordURL := GETURL(CLIENTTYPE::Windows,COMPANYNAME,OBJECTTYPE::Page,PAGE::"Personal Entity Card",EntityRec);
+              BusinessRulesManagement.CreateBreach(ScheduledBusinessRuleReg,RecordURL,EntityRec."Entity No.",EntityRec."Passport/ID Number (2)",'Second','','');
+              DFXVEGAInsertBreach(EntityRec,EntityRec."Passport/ID Number (2)",'Second');
+            UNTIL EntityRec.NEXT = 0;
+        END;
+
+        ClientEntity.RESET;
+        ClientEntity.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+        ClientEntity.SETFILTER("Entity Type",DFXSetup."Entity Type Allowed Cont.");
+        IF ClientEntity.FINDSET THEN BEGIN
+          Entity.RESET;
+          Entity.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+          Entity.SETFILTER("Passport expiry date",'%1..%2',Date60,Date90);
+          Entity.SETFILTER("Passport number",'<>%1','');
+          Entity.SETFILTER("Date of Death",'=%1',0D);
+          Entity.SETFILTER("Search Name",'<>*%1*','DECEASED');
+          IF Entity.FINDFIRST THEN REPEAT
+              RecordURL := GETURL(CLIENTTYPE::Windows,COMPANYNAME,OBJECTTYPE::Page,PAGE::"Personal Entity Card",Entity);
+              BusinessRulesManagement.CreateBreach(ScheduledBusinessRuleReg,RecordURL,Entity."Entity No.",Entity."Passport number",'First','','');
+              DFXVEGAInsertBreach(Entity,Entity."Passport number",'First');
+          UNTIL Entity.NEXT = 0;
+
+          EntityRec.RESET;
+          EntityRec.SETRANGE("Entity No.",ScheduledBusinessRuleReg."Attached To No.");
+          EntityRec.SETFILTER("Passport/ID Expiry Date (2)",'%1..%2',Date60,Date90);
+          EntityRec.SETFILTER("Passport/ID Number (2)",'<>%1','');
+          EntityRec.SETFILTER("Date of Death",'=%1',0D);
+          EntityRec.SETFILTER("Search Name",'<>*%1*','DECEASED');
+          IF EntityRec.FINDFIRST THEN REPEAT
+              RecordURL := GETURL(CLIENTTYPE::Windows,COMPANYNAME,OBJECTTYPE::Page,PAGE::"Personal Entity Card",EntityRec);
+              BusinessRulesManagement.CreateBreach(ScheduledBusinessRuleReg,RecordURL,EntityRec."Entity No.",EntityRec."Passport/ID Number (2)",'Second','','');
+              DFXVEGAInsertBreach(EntityRec,EntityRec."Passport/ID Number (2)",'Second');
+            UNTIL EntityRec.NEXT = 0;
+        END;
+      END;
+    END;
+
+    LOCAL PROCEDURE DFXVEGAInsertBreach@100000005(pRecEntity@100000000 : Record 9068505;pPassportNo@100000001 : Code[100];pFirstSecond@100000002 : Text) : Boolean;
+    VAR
+      DFXVEGAInterface@100000003 : Record 50020;
+      DFXVEGA@100000005 : Record 50020;
+      DFXVEGALast@100000004 : Record 50020;
+      NoSeriesManagement@100000006 : Codeunit 396;
+      Client@100000011 : Record 9068500;
+      ClientEntity@100000010 : Record 9068508;
+      Resource@100000009 : Record 156;
+      RM@100000008 : Code[20];
+      "RM-Mail"@100000007 : Text;
+      "RM-UserID"@100000012 : Text;
+      ClientRec@100000013 : Record 9068500;
+      AppointmentCount@100000014 : Integer;
+      AddressRec@100000015 : Record 9068451;
+    BEGIN
+      DFXVEGAInterface.RESET;
+      DFXVEGAInterface.SETRANGE("Passport Number",pPassportNo);
+      DFXVEGAInterface.SETFILTER(Status,'<>%1|<>%2',DFXVEGAInterface.Status::Rejected,DFXVEGAInterface.Status::IdleRejected);
+      IF NOT DFXVEGAInterface.FINDFIRST THEN BEGIN
+        DFXVEGA.INIT;
+        DFXVEGA."Entry No." := NoSeriesManagement.GetNextNo('VEGA',TODAY,TRUE);
+        DFXVEGA."Entity No." := pRecEntity."Entity No.";
+        DFXVEGA."Entity Name" := pRecEntity."Formal Name";
+        DFXVEGA.Status := DFXVEGA.Status::UnProcessed;
+
+            AddressRec.RESET;
+            AddressRec.SETRANGE(Type,AddressRec.Type::Entity);
+            AddressRec.SETRANGE("No.",pRecEntity."Entity No.");
+            IF AddressRec.FINDFIRST THEN;
+             {IF AddressRec."E-Mail" = '' THEN BEGIN
+               MESSAGE('Email is NULL! Can''t proceed further');
+             END;}
+        DFXVEGA.Email := AddressRec."E-Mail";
+
+        IF pFirstSecond = 'First' THEN BEGIN
+          IF pRecEntity."Passport number" <> '' THEN BEGIN
+            DFXVEGA."First/Second" := DFXVEGA."First/Second"::First;
+            DFXVEGA."Passport Number" := pRecEntity."Passport number";
+            DFXVEGA."Passport Expiry Date" := pRecEntity."Passport expiry date";
+            DFXVEGA."Passport Issue Date" := pRecEntity."Passport/ID Issue Date";
+            DFXVEGA."Passport Country of Issue" := pRecEntity."Passport country of issue"
+          END
+        END
+        ELSE IF pFirstSecond = 'Second' THEN BEGIN
+          IF pRecEntity."Passport/ID Number (2)" <> '' THEN BEGIN
+            DFXVEGA."First/Second" := DFXVEGA."First/Second"::Second;
+            DFXVEGA."Passport Number" := pRecEntity."Passport/ID Number (2)";
+            DFXVEGA."Passport Expiry Date" := pRecEntity."Passport/ID Expiry Date (2)";
+            DFXVEGA."Passport Issue Date" := pRecEntity."Passport/ID Issue Date (2)";
+            DFXVEGA."Passport Country of Issue" := pRecEntity."Passport/ID Country (2)";
+          END;
+        END;
+
+
+      CLEAR(RM);
+      CLEAR("RM-Mail");
+      CLEAR("RM-UserID");
+
+        ClientEntity.RESET;
+        ClientEntity.SETRANGE("Entity No.",DFXVEGA."Entity No.");
+        AppointmentCount := 0;
+        IF ClientEntity.FINDSET THEN
+          REPEAT
+            AppointmentCount +=1;
+          UNTIL ClientEntity.NEXT = 0;
+
+        IF ClientEntity.FINDSET THEN
+          REPEAT
+
+          IF AppointmentCount = 1 THEN BEGIN
+          Client.RESET;
+          Client.SETRANGE("Client No.",ClientEntity."Client No.");
+          IF Client.FINDFIRST THEN
+            RM := Client.ClientAnalysisB
+         END
+         ELSE BEGIN
+          ClientRec.RESET;
+          ClientRec.SETRANGE("Client No.",ClientEntity."Client No.");
+          ClientRec.SETRANGE("Lead Client" , TRUE);
+          IF ClientRec.FINDFIRST THEN REPEAT
+            RM := ClientRec.ClientAnalysisB;
+          UNTIL ClientRec.NEXT = 0;
+        END;
+          UNTIL ClientEntity.NEXT = 0;
+
+        Resource.RESET;
+        Resource.SETRANGE("No.",RM);
+        IF Resource.FINDFIRST THEN BEGIN
+          "RM-Mail" := Resource."Email Address";
+          "RM-UserID" := Resource."Login User ID";
+        END;
+
+        DFXVEGA.RESET;
+        DFXVEGA."Relationship manager" := RM;
+        DFXVEGA."RM Mail" := "RM-Mail";
+        DFXVEGA."RM User ID" := "RM-UserID";
+
+
+        DFXVEGA.INSERT;
+      END
+    END;
+
+    BEGIN
+    {
+      11.09.20  Unnar Eliasson
+                CRF56144 Function SubStatusOk amended to use VIRRGIN Sub Status
+
+      19.07.22  Renu Priya
+                VECE.01 Addition of CE filter to VEGA for filtering breach with Type
+    }
+    END.
+  }
+}
+
