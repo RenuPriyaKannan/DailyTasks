@@ -1,0 +1,62 @@
+OBJECT Page 50078 Company Client Powers List API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=15-01-21;
+    Time=14:35:08;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9068728;
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1040000;1;Group     ;
+                GroupType=Repeater }
+
+    { 1040001;2;Field     ;
+                SourceExpr="Power Code" }
+
+    { 1040003;2;Field     ;
+                SourceExpr="Clause No." }
+
+    { 1040005;2;Field     ;
+                SourceExpr=Description }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="Exercisable By" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="Additional Deed Required" }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="Non Standard Clause" }
+
+    { 1040015;2;Field     ;
+                SourceExpr=Comment;
+                Editable=FALSE }
+
+    { 1000000000;2;Field  ;
+                SourceExpr="Document Type" }
+
+    { 1000000001;2;Field  ;
+                SourceExpr="Document Sub Type" }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Date Executed" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

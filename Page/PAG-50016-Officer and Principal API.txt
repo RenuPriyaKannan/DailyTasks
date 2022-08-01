@@ -1,0 +1,85 @@
+OBJECT Page 50016 Officer and Principal API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=04-12-20;
+    Time=10:13:37;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    InsertAllowed=No;
+    DeleteAllowed=No;
+    SourceTable=Table9068790;
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1040000;1;Group     ;
+                GroupType=Repeater }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Linked To" }
+
+    { 1000000004;2;Field  ;
+                SourceExpr="Linked To No." }
+
+    { 1040005;2;Field     ;
+                SourceExpr=Type }
+
+    { 1040007;2;Field     ;
+                SourceExpr=Code }
+
+    { 1040017;2;Field     ;
+                CaptionML=[ENU=Name;
+                           ENG=Name];
+                SourceExpr=EntityName;
+                Editable=FALSE }
+
+    { 1040009;2;Field     ;
+                SourceExpr="Entry No.";
+                Visible=FALSE }
+
+    { 1040011;2;Field     ;
+                SourceExpr="Function" }
+
+    { 1040013;2;Field     ;
+                SourceExpr=Status }
+
+    { 1000000000;2;Field  ;
+                SourceExpr="CRS Controlling Person Code" }
+
+    { 1000000001;2;Field  ;
+                SourceExpr="FATCA Substantial Owner" }
+
+    { 1040015;2;Field     ;
+                SourceExpr="Appointment Date" }
+
+    { 1040001;2;Field     ;
+                SourceExpr="Resignation Date" }
+
+    { 1040003;2;Field     ;
+                SourceExpr=Details }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Ben Own/CP" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="Total Units / Shares" }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="Percentage Ownership" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

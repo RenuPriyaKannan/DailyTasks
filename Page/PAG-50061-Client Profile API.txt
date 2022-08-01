@@ -1,0 +1,240 @@
+OBJECT Page 50061 Client Profile API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=21-01-21;
+    Time=14:35:28;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9068511;
+    DataCaptionExpr="Client No." + ' ' + "Client Formal Name";
+    PageType=Document;
+    OnAfterGetCurrRecord=VAR
+                           _ClientRec@1000000000 : Record 9068500;
+                         BEGIN
+                         END;
+
+    ActionList=ACTIONS
+    {
+      { 1000000003;  ;ActionContainer;
+                      ActionContainerType=RelatedInformation }
+      { 1000000010;1 ;ActionGroup;
+                      CaptionML=ENU=Comments }
+      { 1000000005;2 ;Action    ;
+                      CaptionML=ENU=Profile Comments;
+                      RunObject=Page 9068566;
+                      RunPageLink=Type=CONST(Purpose),
+                                  Client No.=FIELD(Client No.);
+                      Promoted=Yes;
+                      Image=ViewComments;
+                      PromotedCategory=Process }
+      { 1000000006;2 ;Action    ;
+                      CaptionML=ENU=Source of Funds Comments;
+                      RunObject=Page 9068566;
+                      RunPageLink=Type=CONST(Cl. SoF),
+                                  Client No.=FIELD(Client No.);
+                      Promoted=Yes;
+                      Image=ViewComments;
+                      PromotedCategory=Process }
+      { 1000000007;2 ;Action    ;
+                      CaptionML=ENU=Expected Activity Comments;
+                      RunObject=Page 9068566;
+                      RunPageLink=Type=CONST(Expected Activity),
+                                  Client No.=FIELD(Client No.);
+                      Promoted=Yes;
+                      Image=ViewComments;
+                      PromotedCategory=Process }
+      { 1000000008;2 ;Action    ;
+                      CaptionML=ENU=Additional Information Comments;
+                      RunObject=Page 9068566;
+                      RunPageLink=Type=CONST(Addition Info.),
+                                  Client No.=FIELD(Client No.);
+                      Promoted=Yes;
+                      Image=ViewComments;
+                      PromotedCategory=Process }
+      { 1000000009;2 ;Action    ;
+                      CaptionML=ENU=Rationale Comments;
+                      RunObject=Page 9068566;
+                      RunPageLink=Type=CONST(Rationale),
+                                  Client No.=FIELD(Client No.);
+                      Promoted=Yes;
+                      Image=ViewComments;
+                      PromotedCategory=Process }
+    }
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1040001;1;Field     ;
+                SourceExpr="Client No.";
+                Editable=FALSE }
+
+    { 1040017;1;Field     ;
+                SourceExpr="Client Formal Name";
+                Editable=FALSE }
+
+    { 1040021;1;Field     ;
+                SourceExpr="Purpose/Objective";
+                Editable=FALSE }
+
+    { 1040069;1;Field     ;
+                DrillDown=No;
+                SourceExpr="Lead Client Link" }
+
+    { 1040012;1;Part      ;
+                CaptionML=ENU=Business Activities;
+                SubPageLink=Client No.=FIELD(Client No.);
+                PagePartID=Page9068987;
+                PartType=Page }
+
+    { 1040020;1;Part      ;
+                CaptionML=ENU=Areas of Business;
+                SubPageLink=Client No.=FIELD(Client No.);
+                PagePartID=Page9068988;
+                PartType=Page }
+
+    { 1900056001;1;Group  ;
+                CaptionML=[ENU=Regulatory;
+                           ENG=Regulatory] }
+
+    { 1000000000;2;Group  ;
+                GroupType=Group }
+
+    { 1040085;3;Field     ;
+                SourceExpr="Managed and Controlled Country" }
+
+    { 1040087;3;Field     ;
+                CaptionML=[ENU=Date First Managed and Controlled in Country;
+                           ENG=Date First Managed and Controlled in Country];
+                SourceExpr="Date Managed Ctrlld in Country" }
+
+    { 1040089;3;Field     ;
+                CaptionML=[ENU=Date Ceased to be Managed and Controlled in Country;
+                           ENG=Date Ceased to be Managed and Controlled in Country];
+                SourceExpr="Date Ceased Mgd Ctrlld Country" }
+
+    { 1000000001;2;Group  ;
+                GroupType=Group }
+
+    { 1040091;3;Field     ;
+                SourceExpr="Resident Shareholders" }
+
+    { 1040093;3;Field     ;
+                SourceExpr="Receipt of Rental Income" }
+
+    { 1040095;3;Field     ;
+                CaptionML=[ENU=Development of Land or Property;
+                           ENG=Development of Land or Property];
+                SourceExpr="Development Land or Property" }
+
+    { 1040097;3;Field     ;
+                SourceExpr="Financial Services Company" }
+
+    { 1040099;3;Field     ;
+                SourceExpr="Utility Company" }
+
+    { 1905749301;1;Group  ;
+                CaptionML=[ENU=Transaction Profile;
+                           ENG=Transaction Profile] }
+
+    { 1040036;2;Group     ;
+                CaptionML=[ENU=Risk Factors;
+                           ENG=Risk Factors] }
+
+    { 1040030;3;Field     ;
+                CaptionML=[ENU=Client Incorporated within last 12 months?;
+                           ENG=Client Incorporated within last 12 months?];
+                SourceExpr="Incorporated in last 12 months" }
+
+    { 1040034;3;Field     ;
+                CaptionML=[ENU=Cash-backed Loans expected?;
+                           ENG=Cash-backed Loans expected?];
+                SourceExpr="Cash-backed Loans expected" }
+
+    { 1040037;3;Field     ;
+                CaptionML=[ENU=Expected Transfers High Risk Countries?;
+                           ENG=Expected Transfers High Risk Countries?];
+                SourceExpr="Exp. tfrs High Risk Countries";
+                MultiLine=Yes }
+
+    { 1040039;3;Field     ;
+                CaptionML=[ENU=Frequent FX Transactions Expected?;
+                           ENG=Frequent FX Transactions Expected?];
+                SourceExpr="Frequent fx trans. expected" }
+
+    { 1040041;3;Field     ;
+                CaptionML=[ENU=Transfers to/from Bureaux de Change, Casas di Cambio, Casinos or Unregulated Money Transmitters?;
+                           ENG=Transfers to/from Bureaux de Change, Casas di Cambio, Casinos or Unregulated Money Transmitters?];
+                SourceExpr="Transfers to/from Bur. de Ch.";
+                MultiLine=Yes }
+
+    { 1040043;2;Group     ;
+                CaptionML=[ENU=AUM Information;
+                           ENG=AUM Information] }
+
+    { 1040048;3;Field     ;
+                SourceExpr="Expected Currency" }
+
+    { 1040044;3;Field     ;
+                SourceExpr="Expected AUM Level" }
+
+    { 1040046;3;Field     ;
+                SourceExpr="Current AUM Level" }
+
+    { 1040060;2;Group     ;
+                CaptionML=[ENU=Cash Transactions;
+                           ENG=Cash Transactions] }
+
+    { 1040061;3;Field     ;
+                CaptionML=[ENU=Cash Transactions Expected?;
+                           ENG=Cash Transactions Expected?];
+                SourceExpr="Cash Transactions Expected" }
+
+    { 1040064;3;Field     ;
+                CaptionML=[ENU=Cash Transactions Max Value;
+                           ENG=Cash Transactions Max Value];
+                SourceExpr="Cash Transaction max value" }
+
+    { 1040050;2;Group     ;
+                CaptionML=[ENU=Level and Flow;
+                           ENG=Level and Flow] }
+
+    { 1040065;3;Field     ;
+                SourceExpr="Account Expected Activity" }
+
+    { 1040058;3;Field     ;
+                SourceExpr="Similar No. of Payments in/out";
+                MultiLine=Yes }
+
+    { 1040056;3;Field     ;
+                SourceExpr="Usual/Expected Trans. Freq";
+                MultiLine=Yes }
+
+    { 1000000011;2;Group  ;
+                CaptionML=ENU=Usual/Expected value of transactions;
+                GroupType=Group }
+
+    { 1040052;3;Field     ;
+                CaptionML=[ENU=Values From;
+                           ENG=Values From];
+                SourceExpr="Usual/Expected Value from" }
+
+    { 1040054;3;Field     ;
+                CaptionML=[ENU=Values To;
+                           ENG=Values To];
+                SourceExpr="Usual/Expected Value to" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

@@ -1,0 +1,68 @@
+OBJECT Page 50090 DFX Hubspot Contact
+{
+  OBJECT-PROPERTIES
+  {
+    Date=08-03-21;
+    Time=12:33:22;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table50011;
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 100000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 100000001;1;Group   ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 100000002;2;Field   ;
+                SourceExpr="No." }
+
+    { 100000003;2;Field   ;
+                SourceExpr=Name }
+
+    { 100000004;2;Field   ;
+                SourceExpr="Name 2" }
+
+    { 100000005;2;Field   ;
+                SourceExpr=City }
+
+    { 100000006;2;Field   ;
+                SourceExpr="Phone No." }
+
+    { 100000007;2;Field   ;
+                SourceExpr="Country/Region Code" }
+
+    { 100000008;2;Field   ;
+                SourceExpr="E-Mail" }
+
+    { 100000009;2;Field   ;
+                SourceExpr="Date Created" }
+
+    { 100000010;2;Field   ;
+                SourceExpr="Date Updated" }
+
+    { 100000011;2;Field   ;
+                SourceExpr=UpdateStatus }
+
+    { 100000012;2;Field   ;
+                SourceExpr=ExecutionId }
+
+    { 100000013;2;Field   ;
+                SourceExpr=HubspotStatus }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

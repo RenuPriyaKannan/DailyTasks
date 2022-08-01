@@ -1,0 +1,2335 @@
+OBJECT Codeunit 50103 DFX DMSLite_Working
+{
+  OBJECT-PROPERTIES
+  {
+    Date=23-03-22;
+    Time=19:45:19;
+    Modified=Yes;
+    Version List=DFX Suite-1;
+  }
+  PROPERTIES
+  {
+    OnRun=VAR
+            FunctionType@1000000000 : ',CreateNew,Update,Delete';
+            AttachedToType@1000000001 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';
+            handtest@1000000003 : TextConst 'ENU="{
+                      ""Action"":{
+          ""Function"": ""HANDSHAKE""},
+                                     ""Records"":[{
+                                     ""EntryNo"":""26"",
+                                                 ""LFUID"":""29239""
+                                                           }
+                                                           ]
+                                                           } "';
+            Createtest@1000000002 : TextConst 'ENU={
+                      "Action":{
+          "Function": "CREATENEW"
+          },
+          "Records":[{
+          "AttachedToType": "Client",
+          "AttachedToNo": "CLI092",
+          "LFEntryID": "12347656",
+          "FileName": "abcd.txt",
+          "DocDescription" : "test",
+          "LFDocType" : "CLREP",
+          "LFDocSubType" : "STATE",
+          "LFUID" : "60000"
+          }
+          ]
+          }';
+            StrCon@1000000004 : Text;
+            StrCheck@1000000005 : Text;
+            Return@100000000 : Boolean;
+          BEGIN
+            //MESSAGE('Success');
+            //LinkDocument(AttachedToType::Client,'CL00001',
+            //HandShake(40797,'processed');
+            //UpdateDocStroreFromExternal(AttachedToType::Client,'CLI0000001',4101018,'','Documents','','sampledoc','Accounting','Distribution Movements',FunctionType::Update,'LF',160821D,020221D,'Investment','INV00003')
+            //UnlinkDocument(AttachedToType::Client,'CLI0000001',12121,'Asset','ASS003');
+            //Return := HandShake(AttachedToType::Client,'CL00005','BOURNE LEISURE','CL00005 - Bourne Leisure - Account Opening',45450);
+            //MESSAGE(FORMAT(Return));
+            //ElasticSearch3;
+            //ES;
+            //LFAPI
+            //SampleAPI1
+            //LFAPI1('TEST','TEST.TXT');
+            //ES1('Sample');
+          END;
+
+  }
+  CODE
+  {
+    VAR
+      DocMgmntCU@100000000 : Codeunit 9068511;
+      HttpWebReq@100000001 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpWebRequest";
+      GlobalProgressDialogEnabled@100000002 : Boolean;
+      TraceLogEnabled@100000004 : Boolean;
+      GlobalSkipCheckHttps@100000003 : Boolean;
+      HttpWebRes@100000005 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpWebResponse";
+      HttpWebReq1@100000006 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpWebRequest";
+      ProcessingWindowMsg@100000007 : TextConst 'ENU=Please wait while the server is processing your request.\This may take several minutes.;ENG=Please wait while the server is processing your request.\This may take several minutes.';
+
+    [EventSubscriber(Table,50016,OnAfterInsertEvent)]
+    PROCEDURE DFXCorresPondenceStoreOnInsert@100000024(VAR Rec@100000000 : Record 50016;RunTrigger@100000001 : Boolean);
+    VAR
+      CorrespondenceStore@100000002 : Record 9068660;
+    BEGIN
+      {IF RunTrigger THEN
+        IF Rec."LaserFiche Entry ID" <> 0 THEN BEGIN
+          IF Rec.Type = Rec.Type::Client THEN
+            CorrespondenceStore.SETRANGE(Type,CorrespondenceStore.Type::Client)
+          ELSE IF Rec.Type = Rec.Type::Entity THEN
+            CorrespondenceStore.SETRANGE(Type,CorrespondenceStore.Type::Entity);
+
+          CorrespondenceStore.SETRANGE("No.",Rec."No.");
+          IF NOT CorrespondenceStore.FINDFIRST THEN BEGIN
+            CorrespondenceStore.Type := Rec.Type;
+            CorrespondenceStore."No." := Rec."No.";
+            CorrespondenceStore.ID := Rec.ID;
+            CorrespondenceStore."External DMS Status" := Rec."External DMS Status";
+            CorrespondenceStore."MS Office Doc Type" := Rec."MS Office Doc Type";
+            CorrespondenceStore.Subject := Rec.Subject;
+            CorrespondenceStore.Info1 := Rec.Info1;
+            CorrespondenceStore.Info2 := Rec.Info2;
+            CorrespondenceStore."Document GUID" := Rec."Document GUID";
+            CorrespondenceStore.Name := Rec.Name;
+            CorrespondenceStore."Last Date Modified" := Rec."Last Date Modified";
+            CorrespondenceStore.Authorised := Rec.Authorised;
+            CorrespondenceStore."Workflow No." := Rec."Workflow No.";
+            CorrespondenceStore."Payment No." := Rec."Payment No.";
+            CorrespondenceStore.FilePath := Rec.FilePath;
+            CorrespondenceStore.FileName := Rec.FileName;
+            CorrespondenceStore."Source of Document" := Rec."Source of Document";
+            CorrespondenceStore."Document Inserted Date" := Rec."Document Inserted Date";
+            CorrespondenceStore."Document Inserted By" := Rec."Document Inserted By";
+            CorrespondenceStore."Last Accessed By" := Rec."Last Accessed By";
+            CorrespondenceStore."Document in Paper Form" := Rec."Document in Paper Form";
+            CorrespondenceStore."Additional Information" := Rec."Additional Information";
+            CorrespondenceStore."Document Type" := Rec."Document Type";
+            CorrespondenceStore."Document Type Text" := Rec."Document Type Text";
+            CorrespondenceStore."Document Sub Type" := Rec."Document Sub Type";
+            CorrespondenceStore."Document Sub Type Text" := Rec."Document Sub Type Text";
+            CorrespondenceStore.Author := Rec.Author;
+            CorrespondenceStore."F2-Restricted" := Rec."F2-Restricted";
+            CorrespondenceStore."Document Date" := Rec."Document Date";
+            CorrespondenceStore."Document Expiry Date" := Rec."Document Expiry Date";
+            CorrespondenceStore."LaserFiche Entry ID" := Rec."LaserFiche Entry ID";
+            CorrespondenceStore.Priority := Rec.Priority;
+
+            CorrespondenceStore.INSERT;
+         END ELSE BEGIN
+            CorrespondenceStore."External DMS Status" := Rec."External DMS Status";
+            CorrespondenceStore."MS Office Doc Type" := Rec."MS Office Doc Type";
+            CorrespondenceStore.Subject := Rec.Subject;
+            CorrespondenceStore.Info1 := Rec.Info1;
+            CorrespondenceStore.Info2 := Rec.Info2;
+            CorrespondenceStore."Document GUID" := Rec."Document GUID";
+            CorrespondenceStore.Name := Rec.Name;
+            CorrespondenceStore."Last Date Modified" := Rec."Last Date Modified";
+            CorrespondenceStore.Authorised := Rec.Authorised;
+            CorrespondenceStore."Workflow No." := Rec."Workflow No.";
+            CorrespondenceStore."Payment No." := Rec."Payment No.";
+            CorrespondenceStore.FilePath := Rec.FilePath;
+            CorrespondenceStore.FileName := Rec.FileName;
+            CorrespondenceStore."Source of Document" := Rec."Source of Document";
+            CorrespondenceStore."Document Inserted Date" := Rec."Document Inserted Date";
+            CorrespondenceStore."Document Inserted By" := Rec."Document Inserted By";
+            CorrespondenceStore."Last Accessed By" := Rec."Last Accessed By";
+            CorrespondenceStore."Document in Paper Form" := Rec."Document in Paper Form";
+            CorrespondenceStore."Additional Information" := Rec."Additional Information";
+            CorrespondenceStore."Document Type" := Rec."Document Type";
+            CorrespondenceStore."Document Type Text" := Rec."Document Type Text";
+            CorrespondenceStore."Document Sub Type" := Rec."Document Sub Type";
+            CorrespondenceStore."Document Sub Type Text" := Rec."Document Sub Type Text";
+            CorrespondenceStore.Author := Rec.Author;
+            CorrespondenceStore."F2-Restricted" := Rec."F2-Restricted";
+            CorrespondenceStore."Document Date" := Rec."Document Date";
+            CorrespondenceStore."Document Expiry Date" := Rec."Document Expiry Date";
+            CorrespondenceStore.Priority := Rec.Priority;
+
+            CorrespondenceStore.MODIFY;
+          END;
+        END;
+
+         }
+    END;
+
+    PROCEDURE LFAPI1@100000013(FileContent@100000026 : Text;FileName@100000034 : Text);
+    VAR
+      HttpWebReqMgt@100000014 : Codeunit 1297;
+      BaseURL@100000013 : Text;
+      User@100000012 : Text;
+      Password@100000011 : Text;
+      payload@100000010 : Text;
+      ResponseBody@100000009 : Text;
+      ErrorMessage@100000008 : Text;
+      ErrorDetails@100000007 : Text;
+      HttpStatusCode@100000006 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpStatusCode";
+      ResponseHeader@100000005 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NameValueCollection";
+      RequestJson@100000004 : Text;
+      ResponseJson@100000003 : Text;
+      HttpError@100000002 : Text;
+      JsonArray@100000001 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JArray";
+      JsonObject@100000000 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      TempBlob@100000015 : Record 99008535;
+      OutStr@100000016 : OutStream;
+      TempBlob1@100000017 : Record 99008535;
+      InStr@100000018 : InStream;
+      ApiResult@100000019 : Text;
+      JSONMgt@100000020 : Codeunit 5459;
+      ApiRequest@100000021 : Text;
+      Base64Text@100000022 : Text;
+      InStr1@100000023 : InStream;
+      TextRead@100000024 : Text;
+      OutStr1@100000027 : OutStream;
+      TempBlob2@100000028 : Record 99008535;
+      Instr2@100000029 : InStream;
+      Bytes@100000030 : DotNet "'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Array";
+      convert@100000031 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Convert";
+      MemoryStream@100000032 : DotNet "'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.MemoryStream";
+      Encoding@100000033 : DotNet "'mscorlib'.System.Text.Encoding";
+      DFXSetup@100000025 : Record 50006;
+      Window@100000036 : Dialog;
+      NoOfRecs@100000035 : Integer;
+      CurrRec@100000038 : Integer;
+      TempPath@100000037 : Text;
+    BEGIN
+      //BaseURL := 'https://dfxdemo.datafabricx.com/DFXDMSLiteV2/DFXwebapi/DMS/UploadFromDnDFile';
+      //BaseURL := 'https://dfxdemo.datafabricx.com/DFXDMSLiteV2/dfxapi/DMS/UploadFromDnDFile';
+      //User := 'svc-dfx-agent';
+      //Password := 'InduData@2021';
+
+      //BaseURL := 'https://winserv2012.datafabricx.com/DFXDMSLite/dfxapi/DMS/UploadFromDnDFile';
+
+      //User := 'demouser';
+      //Password := 'DFX@123';
+
+      //User := 'datafabricx\renupriya';
+      //Password := 'Welcome2dfx$';
+
+      DFXSetup.GET;
+      BaseURL := DFXSetup."LF API URL";
+      User := DFXSetup."API User ID";
+      Password := DFXSetup."API Password";
+
+      {
+      IF FileContent <> '' THEN BEGIN
+      //Bytes := convert.ToBase64String(FileContent);
+      MemoryStream := MemoryStream.MemoryStream(Bytes);
+      TempBlob2.Blob.CREATEOUTSTREAM(OutStr1);
+      MemoryStream.WriteTo(OutStr1);
+      //OutStr1.
+      Base64Text := TempBlob2.ReadAsText('',TEXTENCODING::UTF8);
+      MESSAGE(Base64Text);
+      END;
+      }
+      Base64Text := convert.ToBase64String(Encoding.UTF8.GetBytes(FileContent));
+      //MESSAGE(Base64Text);
+
+      Window.OPEN('Processing data... @1@@@@@@@@@@');
+        NoOfRecs := DFXSetup.COUNT;
+        REPEAT
+          CurrRec += 1;
+          IF NoOfRecs <= 100 THEN
+            Window.UPDATE(1,(CurrRec / NoOfRecs * 10000) DIV 1)
+          ELSE IF CurrRec MOD (NoOfRecs DIV 100) = 0 THEN
+            Window.UPDATE(1,(CurrRec / NoOfRecs * 10000) DIV 1);
+
+
+      HttpWebReqMgt.Initialize(BaseURL);
+      HttpWebReqMgt.DisableUI;
+      HttpWebReqMgt.SetMethod('POST');
+      HttpWebReqMgt.SetContentType('application/json');
+      HttpWebReqMgt.SetReturnType('application/json');
+      HttpWebReqMgt.AddBasicAuthentication(User,Password);
+      //HttpWebReqMgt.CreateNTLMAuthHeader(User,Password);
+      {
+      HttpWebReq := HttpWebReq.Create(BaseURL);
+      HttpWebReq.Method := 'POST';
+      HttpWebReq.Accept := 'application/json';
+      HttpWebReq.ContentType := 'application/json';
+      HttpWebReq.Headers.Add('Authorization',CreateNTLMAuthHeader(User,Password));
+      HttpWebReq.KeepAlive;
+      HttpWebReq.PreAuthenticate := TRUE;
+      HttpWebReq.UnsafeAuthenticatedConnectionSharing := TRUE;
+      }
+
+      //Base64Text := 'c2FtcGxl';
+
+      // You can read from or write to streams by using the InStream and OutStream methods.The Temp Blob codeunit can be used to convert between the two stream types.
+                              // The InStream data type can be used to read bytes from a stream object.The data is read in binary format, and you can use the Read and ReadText functions to read that format.
+      //if (File.UploadIntoStream('Open File', '', 'All Files (*.*)|*.*',FileName, InStr)) then begin
+      // If you use read then while written after read will not read anything because already everything in InStream variable is read -- vice versa
+      //InStr.Read(TextRead);
+      //Message(TextRead);
+
+                                  // Start: Read Each Line one by one
+                                  // while not InStr.EOS() do begin
+                                  //     NumberOfBytesRead := InStr.ReadText(TextRead, 100);
+                                  //     Message('%1\Size: %2', TextRead, NumberOfBytesRead);
+                                  // end;
+                                  // Stop: Read Each Line one by one
+      //end;
+
+
+      TempBlob.INIT;
+      TempBlob.Blob.CREATEOUTSTREAM(OutStr);
+      OutStr.WRITETEXT('{');
+      OutStr.WRITETEXT('"Repository": "'+ DFXSetup.Repository +'",');
+      OutStr.WRITETEXT('"Files":');
+      OutStr.WRITETEXT('[{');
+      OutStr.WRITETEXT('"File": "' + FileName + '",');
+      OutStr.WRITETEXT('"LocalFile": "0",');
+      OutStr.WRITETEXT('"Filename": "",');
+      OutStr.WRITETEXT('"SecCode": "",');
+      OutStr.WRITETEXT('"Properties":[],');
+      OutStr.WRITETEXT('"Tags": ["Systemtag"],');
+      OutStr.WRITETEXT('"Data": "'+ Base64Text + '",');
+      OutStr.WRITETEXT('"VolumeID": "1"');
+      OutStr.WRITETEXT('}]');
+      OutStr.WRITETEXT('}');
+
+
+
+      HttpWebReqMgt.AddBodyBlob(TempBlob);
+      ApiRequest:= TempBlob.ReadAsText('',TEXTENCODING::UTF8);
+      //MESSAGE(ApiRequest);
+      TempBlob1.INIT;
+      TempBlob1.Blob.CREATEINSTREAM(InStr);
+      IF HttpWebReqMgt.GetResponse(InStr,HttpStatusCode,ResponseHeader) THEN BEGIN
+        ApiResult:= TempBlob1.ReadAsText('',TEXTENCODING::UTF8);
+        JSONMgt.InitializeFromString(ApiResult);
+        //MESSAGE(FORMAT(ApiResult));
+      END;
+      //MESSAGE(FORMAT(HttpStatusCode));
+      //MESSAGE(FORMAT(ResponseHeader));
+      UNTIL DFXSetup.NEXT = 0;
+      Window.CLOSE;
+    END;
+
+    LOCAL PROCEDURE ES1@100000021(SearchText@100000029 : Text);
+    VAR
+      HttpWebReqMgt@100000020 : Codeunit 1297;
+      BaseURL@100000019 : Text;
+      User@100000018 : Text;
+      Password@100000017 : Text;
+      payload@100000016 : Text;
+      ResponseBody@100000015 : Text;
+      ErrorMessage@100000014 : Text;
+      ErrorDetails@100000013 : Text;
+      HttpStatusCode@100000012 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpStatusCode";
+      ResponseHeader@100000011 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NameValueCollection";
+      RequestJson@100000010 : Text;
+      ResponseJson@100000009 : Text;
+      HttpError@100000008 : Text;
+      JsonArray@100000007 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JArray";
+      JsonObject@100000006 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      TempBlob@100000005 : Record 99008535;
+      OutStr@100000004 : OutStream;
+      TempBlob1@100000003 : Record 99008535;
+      InStr@100000002 : InStream;
+      ApiResult@100000001 : Text;
+      JSONMgt@100000000 : Codeunit 5459;
+      ApiRequest@100000021 : Text;
+      RequestStr@100000022 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.Stream";
+      BlobStr@100000023 : InStream;
+      TempBlob2@100000024 : Record 99008535;
+      ResStream@100000025 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.Stream";
+      ResStreamReader@100000026 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.StreamReader";
+      Response@100000027 : Text;
+      DFXSetup@100000028 : Record 50006;
+    BEGIN
+
+      //BaseURL := 'https://dfxdemo.datafabricx.com/DFXDMSLiteV2/dfxapi/DMS/UploadFromDnDFile';
+      //BaseURL := 'https://dfxdemo.datafabricx.com/DFXDMSLiteV2/DFXApi/DMS/Documents/Query';
+      //User := 'demouser';
+      //Password := 'DFX@123';
+
+      //BaseURL := 'https://winserv2012.datafabricx.com/DFXDMSLite/dfxapi/DMS/Documents/Query';
+      //User := 'datafabricx\renupriya';
+      //Password := 'Welcome2dfx$';
+
+      DFXSetup.GET;
+      BaseURL := DFXSetup."LF API URL";
+      User := DFXSetup."API User ID";
+      Password := DFXSetup."API Password";
+
+
+      HttpWebReqMgt.Initialize(BaseURL);
+      HttpWebReqMgt.DisableUI;
+      HttpWebReqMgt.SetMethod('POST');
+      HttpWebReqMgt.SetContentType('application/json');
+      HttpWebReqMgt.SetReturnType('application/json');
+      HttpWebReqMgt.AddBasicAuthentication(User,Password);
+      //HttpWebReqMgt.CreateNTLMAuthHeader(User,Password);
+      //HttpWebReqMgt.AddBasicAuthentication(User,Password);
+      {
+
+      HttpWebReq := HttpWebReq.Create(BaseURL);
+      HttpWebReq.Method := 'POST';
+      HttpWebReq.Accept := 'application/json';
+      HttpWebReq.ContentType := 'application/json';
+      HttpWebReq.Headers.Add('Authorization',CreateNTLMAuthHeader(User,Password));
+      HttpWebReq.KeepAlive;
+      HttpWebReq.PreAuthenticate := TRUE;
+      HttpWebReq.UnsafeAuthenticatedConnectionSharing := TRUE;
+      }
+      TempBlob.INIT;
+      TempBlob.Blob.CREATEOUTSTREAM(OutStr);
+      OutStr.WRITETEXT('{');
+      OutStr.WRITETEXT('"Repository":"'+ DFXSetup.Repository +'",');
+      OutStr.WRITETEXT('"Columns":');
+      OutStr.WRITETEXT('[');
+      OutStr.WRITETEXT('[');
+      OutStr.WRITETEXT('{');
+      OutStr.WRITETEXT('"SearchFieldType":0,');
+      OutStr.WRITETEXT('"BaseField":"Text",');
+      OutStr.WRITETEXT('"Value":"'+ SearchText +'",');
+      OutStr.WRITETEXT('"Condition":0');
+      OutStr.WRITETEXT('}');
+      OutStr.WRITETEXT(']');
+      OutStr.WRITETEXT('],');
+      OutStr.WRITETEXT('"Page":1,');
+      OutStr.WRITETEXT('"No":100,');
+      OutStr.WRITETEXT('"ColumnSortType":1,');
+      OutStr.WRITETEXT('"ColumnName":"Client Name",');
+      OutStr.WRITETEXT('"ColumnSortOrder":0');
+      OutStr.WRITETEXT('}');
+
+      //MESSAGE(FORMAT(OutStr));
+
+      HttpWebReqMgt.AddBodyBlob(TempBlob);
+
+      //AddBodyBlob(TempBlob);
+
+
+
+      ApiRequest:= TempBlob.ReadAsText('',TEXTENCODING::UTF8);
+      MESSAGE(ApiRequest);
+      TempBlob1.INIT;
+      TempBlob1.Blob.CREATEINSTREAM(InStr);
+      //MESSAGE(FORMAT('hai'));
+      IF HttpWebReqMgt.GetResponse(InStr,HttpStatusCode,ResponseHeader) THEN BEGIN
+        ApiResult:= TempBlob1.ReadAsText(ResponseBody,TEXTENCODING::UTF8);
+        JSONMgt.InitializeFromString(ApiResult);
+        MESSAGE(FORMAT(ApiResult));
+      END;
+      {
+      HttpWebRes:=HttpWebRes.HttpWebResponse;
+      HttpWebRes:=HttpWebReq.GetResponse();
+      HttpStatusCode:=HttpWebRes.StatusCode();
+      //CLEAR(Response);
+      IF HttpStatusCode=200 THEN BEGIN
+      ResStream:=HttpWebRes.GetResponseStream();
+      ResStreamReader:=ResStreamReader.StreamReader(ResStream);
+      Response:=ResStreamReader.ReadToEnd();
+      END ELSE BEGIN
+      ResStream:=HttpWebRes.GetResponseStream();
+      ResStreamReader:=ResStreamReader.StreamReader(ResStream);
+      Response:=HttpWebRes.StatusDescription;
+      END;
+      }
+    END;
+
+    LOCAL PROCEDURE SampleAPI1@100000027();
+    VAR
+      HttpWebReqMgt@100000014 : Codeunit 1297;
+      BaseURL@100000013 : Text;
+      User@100000012 : Text;
+      Password@100000011 : Text;
+      payload@100000010 : Text;
+      ResponseBody@100000009 : Text;
+      ErrorMessage@100000008 : Text;
+      ErrorDetails@100000007 : Text;
+      HttpStatusCode@100000006 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpStatusCode";
+      ResponseHeader@100000005 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NameValueCollection";
+      RequestJson@100000004 : Text;
+      ResponseJson@100000003 : Text;
+      HttpError@100000002 : Text;
+      JsonArray@100000001 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JArray";
+      JsonObject@100000000 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      TempBlob@100000015 : Record 99008535;
+      OutStr@100000016 : OutStream;
+      TempBlob1@100000017 : Record 99008535;
+      InStr@100000018 : InStream;
+      ApiResult@100000019 : Text;
+      JSONMgt@100000020 : Codeunit 5459;
+    BEGIN
+      BaseURL := 'https://reqres.in/api/user';
+      User := 'demouser';
+      Password := 'DFX@123';
+
+      HttpWebReqMgt.Initialize(BaseURL);
+      HttpWebReqMgt.DisableUI;
+      HttpWebReqMgt.SetMethod('POST');
+      HttpWebReqMgt.SetContentType('application/json');
+      HttpWebReqMgt.SetReturnType('application/json');
+      HttpWebReqMgt.AddBasicAuthentication(User,Password);
+      //HttpWebReqMgt.CreateNTLMAuthHeader(User,Password);
+      TempBlob.INIT;
+      TempBlob.Blob.CREATEOUTSTREAM(OutStr);
+      OutStr.WRITETEXT('{');
+      OutStr.WRITETEXT('"name": "Renu",');
+      OutStr.WRITETEXT('"job": "Software Engineer-001"');
+      OutStr.WRITETEXT('}');
+
+      //MESSAGE(FORMAT(OutStr));
+
+      HttpWebReqMgt.AddBodyBlob(TempBlob);
+      TempBlob1.INIT;
+      TempBlob1.Blob.CREATEINSTREAM(InStr);
+      IF HttpWebReqMgt.GetResponse(InStr,HttpStatusCode,ResponseHeader) THEN BEGIN
+        ApiResult:= TempBlob1.ReadAsText('',TEXTENCODING::UTF8);
+        JSONMgt.InitializeFromString(ApiResult);
+        MESSAGE(FORMAT(HttpStatusCode));
+      END;
+      MESSAGE(FORMAT(ApiResult));
+    END;
+
+    LOCAL PROCEDURE LFAPIXML@100000016();
+    VAR
+      HttpWebReqMgt@100000020 : Codeunit 1297;
+      BaseURL@100000019 : Text;
+      User@100000018 : Text;
+      Password@100000017 : Text;
+      payload@100000016 : Text;
+      ResponseBody@100000015 : Text;
+      ErrorMessage@100000014 : Text;
+      ErrorDetails@100000013 : Text;
+      HttpStatusCode@100000012 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpStatusCode";
+      ResponseHeader@100000011 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NameValueCollection";
+      RequestJson@100000010 : Text;
+      ResponseJson@100000009 : Text;
+      HttpError@100000008 : Text;
+      JsonArray@100000007 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JArray";
+      JsonObject@100000006 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      TempBlob@100000005 : Record 99008535;
+      OutStr@100000004 : OutStream;
+      TempBlob1@100000003 : Record 99008535;
+      InStr@100000002 : InStream;
+      ApiResult@100000001 : Text;
+      JSONMgt@100000000 : Codeunit 5459;
+      XMLRequest@100000021 : DotNet "'System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Xml.XmlDocument";
+      XMLResponse@100000022 : DotNet "'System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Xml.XmlDocument";
+      SuccessNode@100000023 : DotNet "'System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Xml.XmlNode";
+      XMLDOMMgt@100000024 : Codeunit 6224;
+      SuccessNodeInnerText@100000025 : Text;
+      Bytes@100000026 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+    System.Array";
+      FileStream@100000027 : Integer;
+      FilePath2@100000028 : Text;
+      FileMode@100000029 : Integer;
+      convert@100000030 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Convert";
+      Credential@100000031 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.NetworkCredential";
+    BEGIN
+      BaseURL := 'https://dfxdemo.datafabricx.com/DFXDMSLiteV2/DFXwebapi/DMS/UploadFromDnDFile';
+      User := 'demouser';
+      Password := 'DFX@123';
+
+      XMLRequest := XMLRequest.XmlDocument;
+      XMLResponse := XMLResponse.XmlDocument;
+      CreateReq(XMLRequest);
+
+      IF CallWebAPIReq(XMLRequest,XMLResponse,BaseURL,'Soap') THEN BEGIN
+        XMLResponse.Save('C:\DataFabricx');
+        SuccessNode := XMLResponse.FirstChild;
+        SuccessNodeInnerText := SuccessNode.InnerText;
+        IF SuccessNodeInnerText <> ''  THEN BEGIN
+          FilePath2 := 'C:\DataFabricx';
+          Bytes := convert.FromBase64String(SuccessNodeInnerText);
+          //FileStream := FileStream.FileStream(FilePath2,FileMode.Create);
+          //FileStream.write(Bytes,0,Bytes.Length);
+          //FileStream.Close();
+        END;
+      END;
+    END;
+
+    LOCAL PROCEDURE CreateReq@100000022(XMLRequest@100000000 : DotNet "'System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Xml.XmlDocument");
+    VAR
+      XMLResponse@100000010 : DotNet "'System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Xml.XmlDocument";
+      SuccessNode@100000009 : DotNet "'System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Xml.XmlNode";
+      XMLDOMMgt@100000008 : Codeunit 6224;
+      SuccessNodeInnerText@100000007 : Text;
+      Bytes@100000006 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+    System.Array";
+      FileStream@100000005 : Integer;
+      FilePath2@100000004 : Text;
+      FileMode@100000003 : Integer;
+      convert@100000002 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Convert";
+      Credentials@100000001 : Integer;
+      RootNode@100000011 : Text;
+    BEGIN
+      //RootNode := XMLRequest.CreateNode('element','Envelope','');
+      //XMLDOMMgt.AddAttribute(RootNode,'Xmlns',Xmlns);
+        //XMLDOMMgt.AddElement(RootNode,'Body','','',BodyNode);
+      //XMLRequest.AppendChild(RootNode);
+    END;
+
+    LOCAL PROCEDURE CallWebAPIReq@100000023(XMLRequest@100000001 : DotNet "'System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Xml.XmlDocument";XMLResponse@100000000 : DotNet "'System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Xml.XmlDocument";BaseUrl@100000002 : Text;SOAPAction@100000003 : Text) : Boolean;
+    VAR
+      Credential@100000005 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.NetworkCredential";
+      User@100000006 : Text;
+      Password@100000004 : Text;
+    BEGIN
+
+      HttpWebReq := HttpWebReq.Create(BaseUrl);
+      HttpWebReq.UseDefaultCredentials := FALSE;
+      Credential := Credential.NetworkCredential(User,Password);
+
+      HttpWebReq.Credentials := Credential;
+      HttpWebReq.Method := 'POST';
+      HttpWebReq.ContentType := 'application/json' + ';charset="utf-8"';
+      HttpWebReq.PreAuthenticate := TRUE;
+      HttpWebReq.Headers.Add(SOAPAction,SOAPAction);
+      XMLRequest.Save(HttpWebReq.GetRequestStream);
+      HttpWebRes := HttpWebReq.GetResponse;
+      XMLResponse.Load(HttpWebRes.GetResponseStream);
+      IF HttpWebRes.StatusCode = 200 THEN BEGIN
+        EXIT(TRUE)
+      END ELSE
+        EXIT(FALSE);
+    END;
+
+    LOCAL PROCEDURE LFAPI@100000035();
+    VAR
+      HttpWebRequestMgt@100000000 : Codeunit 1297;
+      BaseURL@100000001 : Text;
+      User@100000002 : Text;
+      Password@100000003 : Text;
+      payload@100000004 : Text;
+      ResponseBody@100000009 : Text;
+      ErrorMessage@100000008 : Text;
+      ErrorDetails@100000007 : Text;
+      HttpStatusCode@100000006 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpStatusCode";
+      ResponseHeaders@100000005 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NameValueCollection";
+      RequestJson@100000012 : Text;
+      ResponseJson@100000011 : Text;
+      HttpError@100000010 : Text;
+      JsonArray@100000014 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JArray";
+      JsonObject@100000013 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+    BEGIN
+      CLEARLASTERROR;
+      BaseURL := 'https://dfxdemo.datafabricx.com/DFXDMSLiteV2/DFXwebapi/DMS/UploadFromDnDFile';
+
+      User := 'demouser';
+      Password := 'DFX@123';
+      payload := '{"ServiceURL": "https://dfxdemo.datafabricx.com/DFXDMSLiteV2/DFXwebapi/DMS/UploadFromDnDFile",' +
+      '"URLRequestPath": "https://dfxdemo.datafabricx.com/DFXDMSLiteV2/DFXwebapi/DMS/UploadFromDnDFile",' +
+      '"Method": "POST",' +
+      '"Content": {' +
+      '"Repository ": "DEMOREPO",' +
+      '"Files": [{' +
+      '"File": "1 (6).txt",' +
+      '"LocalFile": "0",' +
+      '"Filename": "1 (6).txt",' +
+      '"Properties":[],' +
+      '"SecCode": "",' +
+      '"Tags": [],' +
+      '"Data": "YWJj",' +
+      '"VolumeID": "1"' +
+      '}]' +
+      '}' +
+      '}';
+
+
+      // payload := '{' +
+      //          '"Repository":"DEMOREPO",' +
+      //          '"Columns":' +
+      //          '[' +
+      //              '[' +
+      //                  '{' +
+      //                      '"SearchFieldType":0,' +
+      //                      '"BaseField":"Text",' +
+      //                      '"Value":"sample text",' +
+      //                      '"Condition":0' +
+      //                  '}' +
+      //              ']' +
+      //          '],' +
+      //          '"Page":1,' +
+      //          '"No":100,' +
+      //          '"ColumnSortType":1,' +
+      //          '"ColumnName":"Client Name",' +
+      //          '"ColumnSortOrder":0' +
+      //      '}';
+
+
+
+      HttpWebRequestMgt.CheckUrl(BaseURL);
+      HttpWebRequestMgt.Initialize(BaseURL);
+      HttpWebRequestMgt.SetContentType('application\json');
+      HttpWebRequestMgt.SetMethod('POST');
+      HttpWebRequestMgt.SetReturnType('application\json');
+      HttpWebRequestMgt.CreateNTLMAuthHeader(User,Password);
+      HttpWebRequestMgt.InvokeJSONRequest(payload,ResponseJson,HttpError);
+
+      //HttpWebRequestMgt.AddBodyAsText(payload);
+      MESSAGE(GETLASTERRORTEXT);
+      MESSAGE(HttpError);
+      //MESSAGE(FORMAT(HttpWebRequestMgt.SendRequestAndReadTextResponse(ResponseBody,ErrorMessage,ErrorDetails,HttpStatusCode,ResponseHeaders)));
+      MESSAGE(ResponseJson);
+    END;
+
+    LOCAL PROCEDURE ES@100000061();
+    VAR
+      HttpWebRequestMgt@100000000 : Codeunit 1297;
+      BaseURL@100000001 : Text;
+      User@100000002 : Text;
+      Password@100000003 : Text;
+      payload@100000004 : Text;
+      ResponseBody@100000009 : Text;
+      ErrorMessage@100000008 : Text;
+      ErrorDetails@100000007 : Text;
+      HttpStatusCode@100000006 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpStatusCode";
+      ResponseHeaders@100000005 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NameValueCollection";
+      RequestJson@100000012 : Text;
+      ResponseJson@100000011 : Text;
+      HttpError@100000010 : Text;
+      JsonArray@100000014 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JArray";
+      JsonObject@100000013 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      Content_JsonObject@100000015 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      JSONManagement@100000016 : Codeunit 5459;
+      JsonTextWriter@100000017 : Codeunit 1234;
+      Column_Array@100000018 : Text;
+    BEGIN
+      CLEARLASTERROR;
+      BaseURL := 'https://dfxdemo.datafabricx.com/DFXDMSLiteV2/DFXApi/DMS/Documents/Query';
+
+      User := 'demouser';
+      Password := 'DFX@123';
+      payload := '{' + '"ServiceURL": "https://dfxdemo.datafabricx.com/DFXDMSLiteV2/DFXApi/DMS/Documents/Query",' + '"URLRequestPath": "",' + '"Method": "POST",' + '"Content": {' + '"Repository ": "DEMOREPO",' + '"Columns": [' + '[{' +
+      '"SearchFieldType": 0,' + '"BaseField": "Text",' + '"Value": "sample text",' + '"Condition": 0' + '}]' + '],' + '"Page": 1,' + '"No": 100,' + '"ColumnSortType": 1,' + '"ColumnName": [{"Client Name": "xyz"}],' + '"ColumnSortOrder": 0' + '}' + '}';
+
+      {
+
+
+      JsonTextWriter.WriteStartObject(payload);
+      JsonTextWriter.WriteStringProperty('ServiceURL','https://dfxdemo.datafabricx.com/DFXDMSLiteV2/DFXApi/DMS/Documents/Query');
+      JsonTextWriter.WriteStringProperty('URLRequestPath','');
+
+      JsonTextWriter.WriteStringProperty('Method','POST');
+
+      JsonTextWriter.WriteStringProperty('Content','');
+      JsonTextWriter.WriteStringProperty('Repository','DEMOREPO');
+      //JsonTextWriter.WriteStringProperty('Columns','');
+      JsonTextWriter.WriteStartObject('Column Sample');
+      JsonTextWriter.WriteStartArray('Columns');
+      JsonTextWriter.WriteProperty('SearchFieldType');
+      JsonTextWriter.WriteValue(0);
+      //JsonTextWriter.WriteStringProperty('BaseField','Text');
+      //JsonTextWriter.WriteStringProperty('Value','sample text');
+      //JsonTextWriter.WriteStringProperty('Condition',0);
+      JsonTextWriter.WriteEndArray;
+      JsonTextWriter.WriteEndObject;
+      JsonTextWriter.WriteStringProperty('Page',1);
+      JsonTextWriter.WriteStringProperty('No',100);
+      JsonTextWriter.WriteStringProperty('ColumnSortType',1);
+      JsonTextWriter.WriteStringProperty('ColumnName','');
+      JsonTextWriter.WriteStringProperty('ColumnSortOrder',0);
+      JsonTextWriter.WriteStringProperty('SearchFieldType',0);
+      JsonTextWriter.WriteStringProperty('BaseField','Text');
+      JsonTextWriter.WriteStringProperty('Value','sample text');
+      JsonTextWriter.WriteStringProperty('Condition',0);
+      JsonTextWriter.WriteStringProperty('Client Name','xyz');
+
+      JsonTextWriter.WriteEndObject;
+
+      MESSAGE(JsonTextWriter.GetJSonAsText);
+
+      }
+
+      // payload := '{' +
+      //          '"Repository":"DEMOREPO",' +
+      //          '"Columns":' +
+      //          '[' +
+      //              '[' +
+      //                  '{' +
+      //                      '"SearchFieldType":0,' +
+      //                      '"BaseField":"Text",' +
+      //                      '"Value":"sample text",' +
+      //                      '"Condition":0' +
+      //                  '}' +
+      //              ']' +
+      //          '],' +
+      //          '"Page":1,' +
+      //          '"No":100,' +
+      //          '"ColumnSortType":1,' +
+      //          '"ColumnName":"Client Name",' +
+      //          '"ColumnSortOrder":0' +
+      //      '}';
+      {
+      JSonResponse := JSonResponse.JObject();
+      JsonTextWriter := JSonResponse.CreateWriter();
+      JsonTextWriter.WritePropertyName('ServiceURL');
+      JsonTextWriter.WriteValue('https://dfxdemo.datafabricx.com/DFXDMSLiteV2/DFXApi/DMS/Documents/QuerY');
+      JsonTextWriter.WritePropertyName('URLRequestPath');
+      JsonTextWriter.WriteValue('');
+      }
+
+      {
+      JsonObject.Add('ServiceURL','https://dfxdemo.datafabricx.com/DFXDMSLiteV2/DFXApi/DMS/Documents/Query');
+      JsonObject.Add('URLRequestPath','');
+      JsonObject.Add('Method','POST');
+      JsonObject.Add('Content',Content_Add(Content_JsonObject));}
+      {
+      JSONManagement.InitializeFromString(payload);
+
+
+
+
+
+      JSONManagement.GetPropertyValueByName('ServiceURL','https://dfxdemo.datafabricx.com/DFXDMSLiteV2/DFXApi/DMS/Documents/Query');
+
+      JSONManagement.GetPropertyValueByName('URLRequestPath','');
+
+      JSONManagement.GetPropertyValueByName('Method','POST');
+
+      JSONManagement.GetPropertyValueByName('Content','');
+      JSONManagement.GetPropertyValueByName('Repository','DEMOREPO');
+      JSONManagement.GetPropertyValueByName('Columns','');
+      JSONManagement.GetPropertyValueByName('Page',1);
+      JSONManagement.GetPropertyValueByName('No',100);
+      JSONManagement.GetPropertyValueByName('ColumnSortType',1);
+      JSONManagement.GetPropertyValueByName('ColumnName','');
+      JSONManagement.GetPropertyValueByName('ColumnSortOrder',0);
+
+
+
+      MESSAGE(payload);
+      }
+
+      HttpWebRequestMgt.CheckUrl(BaseURL);
+      HttpWebRequestMgt.Initialize(BaseURL);
+      HttpWebRequestMgt.SetContentType('application\json');
+      HttpWebRequestMgt.SetMethod('POST');
+      HttpWebRequestMgt.SetReturnType('application\json');
+      HttpWebRequestMgt.CreateNTLMAuthHeader(User,Password);
+      HttpWebRequestMgt.InvokeJSONRequest(FORMAT(payload),ResponseJson,HttpError);
+      //HttpWebRequestMgt.AddBodyAsText(payload);
+      MESSAGE(GETLASTERRORTEXT);
+      MESSAGE(HttpError);
+      //MESSAGE(FORMAT(HttpWebRequestMgt.SendRequestAndReadTextResponse(ResponseBody,ErrorMessage,ErrorDetails,HttpStatusCode,ResponseHeaders)));
+      MESSAGE(ResponseJson);
+    END;
+
+    LOCAL PROCEDURE Content_Add@100000039(Content_JsonObject@100000002 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject");
+    VAR
+      Column_JsonArray@100000001 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JArray";
+      JsonObject@100000000 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+    BEGIN
+      {JsonObject.Add('Repository','DEMOREPO');
+      JsonObject.Add('Columns',Column_Array(Column_JsonArray));
+      JsonObject.Add('Page',1);
+      JsonObject.Add('No',100);
+      JsonObject.Add('ColumnSortType',1);
+      JsonObject.Add('ColumnName',Columname_Array(ColumnName_JsonArray));
+      JsonObject.Add('ColumnSortOrder',0);
+      }
+    END;
+
+    LOCAL PROCEDURE Column_Array@100000040(Column_JsonArray@100000002 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JArray");
+    VAR
+      JsonObject@100000000 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+    BEGIN
+      {JsonObject.Add('SearchFieldType',0);
+      JsonObject.Add('BaseField','Text');
+      JsonObject.Add('Value','sample text');
+      JsonObject.Add('Condition',0);
+
+      Column_JsonArray.Add(JsonObject);
+      }
+    END;
+
+    LOCAL PROCEDURE ColumnName_Array@100000041(ColumnName_JsonArray@100000002 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JArray");
+    VAR
+      JsonObject@100000000 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+    BEGIN
+      {JsonObject.Add('Client Name','xyz');
+
+
+      ColumnName_JsonArray.Add(JsonObject);
+      }
+    END;
+
+    PROCEDURE NumberUpation@1000000001(Type@1000000001 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';No@1000000000 : Text;Name@1000000004 : Text) Number : Text;
+    VAR
+      ClientRec@1000000003 : Record 9068500;
+      EntityRec@1000000002 : Record 9068505;
+    BEGIN
+      IF No <> '' THEN BEGIN
+        CASE Type OF
+              Type::Client : BEGIN
+              ClientRec.RESET;
+              IF ClientRec.GET(No) THEN
+                No := ClientRec."Client No.";
+              END;
+              Type::Entity : BEGIN
+              EntityRec.RESET;
+              IF EntityRec.GET(No) THEN
+                No := EntityRec."Entity No.";
+              END
+        END;
+      END ELSE
+        CASE Type OF
+              Type::Client : BEGIN
+                ClientRec.RESET;
+                ClientRec.SETFILTER(Name,'%1','@*' + Name + '*');
+                IF ClientRec.FINDFIRST THEN
+                No := ClientRec."Client No.";
+              END;
+              Type::Entity : BEGIN
+                EntityRec.RESET;
+                EntityRec.SETFILTER(Name,'%1','@*' + Name + '*');
+                IF EntityRec.FINDFIRST THEN
+                No := EntityRec."Entity No.";
+              END
+        END;
+      EXIT(No);
+    END;
+
+    [External]
+    PROCEDURE UpdateDocStroreFromExternal@1000000011(AttachedToType@1000000000 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';AttachedToNo@1000000001 : Code[20];LFEntryID@1000000002 : Integer;FilePath@1000000011 : Text[250];FileName@1000000003 : Text;FileType@1000000010 : Code[10];DocDescription@1000000004 : Text[150];ExtDocType@1000000005 : Text[150];ExtDocSubType@1000000006 : Text[150];Function@1000000009 : ',CreateNew,Update,Delete';ExternalDMS@1000000016 : Text;DocCreatedDate@1000000018 : Date;DocModifiedDate@1000000017 : Date;LinkType@1000000019 : Text;NavAttribute@1000000020 : Text);
+    VAR
+      CorrespondenceStore@1000000007 : Record 9068660;
+      DocMgmntCU@1000000008 : Codeunit 9068511;
+      No@1000000012 : Text;
+      FunctionType@1000000013 : ',CreateNew,Update,Delete';
+      DocType@1000000014 : Text;
+      DocSubType@1000000015 : Text;
+      ID@100000000 : Text;
+    BEGIN
+      CLEAR(No);
+      CLEAR(DocType);
+      CLEAR(DocSubType);
+
+      No := NumberUpation(AttachedToType,AttachedToNo,'');
+
+      IF "Function" = FunctionType::CreateNew THEN
+      BEGIN
+            CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+            IF NOT CorrespondenceStore.FINDFIRST THEN BEGIN
+            CorrespondenceStore.INIT;
+            CorrespondenceStore."No." := No;
+            CorrespondenceStore."LaserFiche Entry ID" := LFEntryID;
+            CorrespondenceStore."Source of Document" := CorrespondenceStore."Source of Document"::Imported;
+            CorrespondenceStore."Document Inserted By" := ExternalDMS;
+            CorrespondenceStore.FilePath := FilePath;
+            CorrespondenceStore.FileName := FileName;
+            CorrespondenceStore."MS Office Doc Type" := FileType;
+            CorrespondenceStore.Subject := DocDescription;
+            CorrespondenceStore."External DMS Status" := CorrespondenceStore."External DMS Status"::Processed;
+            CorrespondenceStore."Document Date" := DocCreatedDate;
+            CorrespondenceStore."Additional Information" := NavAttribute;//[To be determined] in migration
+            CorrespondenceStore.Meta_Date_1 := DocModifiedDate;
+            ID :=  CorrespondenceStore.ID;
+
+            DocType := GetNAVDocType(ExtDocType);
+            DocSubType := GetNAVDocSubType(ExtDocType,ExtDocSubType);
+            CorrespondenceStore."Document Type" := DocType;
+            CorrespondenceStore."Document Sub Type" := DocSubType;//Link doc type directly from correspondece doc type and doctype sub type table so remove this code
+
+
+           { DocType := GetDocType(ExtDocType);
+            DocSubType := GetDocSubType(ExtDocType,ExtDocSubType);
+            CorrespondenceStore."Document Type" := DocType;
+            CorrespondenceStore."Document Sub Type" := DocSubType;}
+
+
+            IF AttachedToType = AttachedToType::Client THEN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::Client;
+            IF AttachedToType = AttachedToType::Entity THEN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::Entity;
+            IF AttachedToType = AttachedToType::Resource THEN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::Resource;
+            IF AttachedToType = AttachedToType::"Client Owner" THEN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::"Client Owner";
+
+            CorrespondenceStore.ID := DocMgmntCU."Get Next Document Number"(CorrespondenceStore.Type, CorrespondenceStore."No.");
+
+
+            IF CorrespondenceStore.INSERT(TRUE) THEN BEGIN
+
+                  IF AttachedToType = AttachedToType::Entity THEN BEGIN
+                    EntityOwnerLink_Create(AttachedToNo,LFEntryID);
+                    IntermediaryOwnerLink_Create(AttachedToNo,LFEntryID);
+                    ProspectOwnerLink_Create(AttachedToNo,LFEntryID)
+                  END ELSE IF CheckEntryIDExist(AttachedToType,AttachedToNo,LFEntryID) THEN BEGIN
+                    Unlink(AttachedToType,AttachedToNo,ID);
+                    LinkDocument(AttachedToType,AttachedToNo,LFEntryID,LinkType,NavAttribute)
+                  END ELSE
+                    LinkDocument(AttachedToType,AttachedToNo,LFEntryID,LinkType,NavAttribute);
+
+            END;
+
+      END
+          ELSE
+          ERROR('Entry already exists');
+      END
+      ELSE IF "Function" = FunctionType::Update THEN
+      BEGIN
+            CorrespondenceStore.SETRANGE("No.",No);
+            CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+            IF CorrespondenceStore.FINDFIRST THEN BEGIN
+              CorrespondenceStore."Source of Document" := CorrespondenceStore."Source of Document"::Imported;
+              CorrespondenceStore."Document Inserted By" := ExternalDMS;
+              CorrespondenceStore.FileName := FileName;
+              CorrespondenceStore.FilePath := FilePath;
+              CorrespondenceStore.Subject := DocDescription;
+              CorrespondenceStore."MS Office Doc Type" := FileType;
+              CorrespondenceStore."External DMS Status" := CorrespondenceStore."External DMS Status"::Processed;
+              CorrespondenceStore."Document Date" := DocCreatedDate;
+              CorrespondenceStore."Additional Information" := NavAttribute;//[To be determined] in migration
+              CorrespondenceStore.Meta_Date_1 := DocModifiedDate;
+              ID :=  CorrespondenceStore.ID;
+
+              DocType := GetNAVDocType(ExtDocType);
+              DocSubType := GetNAVDocSubType(ExtDocType,ExtDocSubType);
+              CorrespondenceStore."Document Type" := DocType;
+              CorrespondenceStore."Document Sub Type" := DocSubType;//Link doc type directly from correspondece doc type and doctype sub type table so remove this code
+
+
+             { DocType := GetDocType(ExtDocType);
+              DocSubType := GetDocSubType(ExtDocType,ExtDocSubType);
+              CorrespondenceStore."Document Type" := DocType;
+              CorrespondenceStore."Document Sub Type" := DocSubType;}
+
+              IF AttachedToType = AttachedToType::Client THEN
+                CorrespondenceStore.Type := CorrespondenceStore.Type::Client;
+              IF AttachedToType = AttachedToType::Entity THEN
+                CorrespondenceStore.Type := CorrespondenceStore.Type::Entity;
+              IF AttachedToType = AttachedToType::Resource THEN
+                CorrespondenceStore.Type := CorrespondenceStore.Type::Resource;
+              IF AttachedToType = AttachedToType::"Client Owner" THEN
+                CorrespondenceStore.Type := CorrespondenceStore.Type::"Client Owner";
+
+              IF CorrespondenceStore.MODIFY THEN BEGIN
+                IF AttachedToType = AttachedToType::Entity THEN BEGIN
+                    EntityOwnerLink_Update(AttachedToNo,LFEntryID);
+                    IntermediaryOwnerLink_Update(AttachedToNo,LFEntryID);
+                    ProspectOwnerLink_Update(AttachedToNo,LFEntryID)
+                END ELSE
+                IF CheckEntryIDExist(AttachedToType,AttachedToNo,LFEntryID) THEN BEGIN
+                  Unlink(AttachedToType,AttachedToNo,ID);
+                  LinkDocument(AttachedToType,AttachedToNo,LFEntryID,LinkType,NavAttribute)
+                END ELSE
+                  LinkDocument(AttachedToType,AttachedToNo,LFEntryID,LinkType,NavAttribute);
+
+              END
+           END
+           ELSE IF NOT CorrespondenceStore.FINDFIRST THEN BEGIN
+           CorrespondenceStore.INIT;
+            CorrespondenceStore."No." := No;
+            CorrespondenceStore."LaserFiche Entry ID" := LFEntryID;
+            CorrespondenceStore."Source of Document" := CorrespondenceStore."Source of Document"::Imported;
+            CorrespondenceStore."Document Inserted By" := ExternalDMS;
+            CorrespondenceStore.FilePath := FilePath;
+            CorrespondenceStore.FileName := FileName;
+            CorrespondenceStore."MS Office Doc Type" := FileType;
+            CorrespondenceStore.Subject := DocDescription;
+            CorrespondenceStore."External DMS Status" := CorrespondenceStore."External DMS Status"::Processed;
+            CorrespondenceStore."Document Date" := DocCreatedDate;
+            CorrespondenceStore."Additional Information" := NavAttribute;//[To be determined] in migration
+            CorrespondenceStore.Meta_Date_1 := DocModifiedDate;
+
+           DocType := GetNAVDocType(ExtDocType);
+            DocSubType := GetNAVDocSubType(ExtDocType,ExtDocSubType);
+            CorrespondenceStore."Document Type" := DocType;
+            CorrespondenceStore."Document Sub Type" := DocSubType;//Link doc type directly from correspondece doc type and doctype sub type table so remove this code
+
+
+            {DocType := GetDocType(ExtDocType);
+            DocSubType := GetDocSubType(ExtDocType,ExtDocSubType);
+            CorrespondenceStore."Document Type" := DocType;
+            CorrespondenceStore."Document Sub Type" := DocSubType;}
+
+
+            IF AttachedToType = AttachedToType::Client THEN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::Client;
+            IF AttachedToType = AttachedToType::Entity THEN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::Entity;
+            IF AttachedToType = AttachedToType::Resource THEN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::Resource;
+            IF AttachedToType = AttachedToType::"Client Owner" THEN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::"Client Owner";
+
+            CorrespondenceStore.ID := DocMgmntCU."Get Next Document Number"(CorrespondenceStore.Type, CorrespondenceStore."No.");
+
+
+            IF CorrespondenceStore.INSERT(TRUE) THEN BEGIN
+
+
+              IF AttachedToType = AttachedToType::Entity THEN BEGIN
+                EntityOwnerLink_Create(AttachedToNo,LFEntryID);
+                IntermediaryOwnerLink_Create(AttachedToNo,LFEntryID);
+                ProspectOwnerLink_Create(AttachedToNo,LFEntryID)
+              END ELSE IF CheckEntryIDExist(AttachedToType,AttachedToNo,LFEntryID) THEN BEGIN
+                  Unlink(AttachedToType,AttachedToNo,ID);
+                  LinkDocument(AttachedToType,AttachedToNo,LFEntryID,LinkType,NavAttribute)
+               END ELSE
+                LinkDocument(AttachedToType,AttachedToNo,LFEntryID,LinkType,NavAttribute);
+            END;
+      END
+      END
+      ELSE IF "Function" = FunctionType::Delete THEN BEGIN
+              CorrespondenceStore.RESET;
+              CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+              IF CorrespondenceStore.FINDSET THEN BEGIN
+              REPEAT
+                CorrespondenceStore.DELETE
+              UNTIL CorrespondenceStore.NEXT = 0;
+              END ELSE
+                ERROR('Entry Does not exist');
+
+          END;
+    END;
+
+    LOCAL PROCEDURE GetNAVDocType@1000000016(ExtDoctype@1000000000 : Text[150]) : Code[10];
+    VAR
+      ExternalDocTypeRec@1000000001 : Record 50007;
+    BEGIN
+      ExternalDocTypeRec.SETRANGE("External Doc Type", ExtDoctype);
+      IF ExternalDocTypeRec.FINDFIRST THEN
+        EXIT(ExternalDocTypeRec."NAV Doc Type");
+
+      EXIT('');
+    END;
+
+    LOCAL PROCEDURE GetNAVDocSubType@1000000019(ExtDocType@1000000000 : Text[150];ExtDocSubType@1000000001 : Text[150]) : Code[20];
+    VAR
+      ExternalDocSubTypeRec@1000000002 : Record 50008;
+    BEGIN
+      ExternalDocSubTypeRec.SETRANGE("External Doc Type", ExtDocType);
+      ExternalDocSubTypeRec.SETRANGE("External Sub Doc Type", ExtDocSubType);
+      IF ExternalDocSubTypeRec.FINDFIRST THEN
+        EXIT(ExternalDocSubTypeRec."NAV Doc Sub Type");
+
+      EXIT('');
+    END;
+
+    LOCAL PROCEDURE GetDocType@100000003(ExtDoctype@1000000000 : Text[150]) : Text;
+    VAR
+      CorrespondenceDocType@100000000 : Record 9068657;
+    BEGIN
+      CorrespondenceDocType.RESET;
+      CorrespondenceDocType.SETRANGE(Type,ExtDoctype);
+      IF CorrespondenceDocType.FINDFIRST THEN
+        EXIT(CorrespondenceDocType.Type);
+
+      EXIT('');
+    END;
+
+    LOCAL PROCEDURE GetDocSubType@100000002(ExtDocType@1000000000 : Text[150];ExtDocSubType@1000000001 : Text[150]) : Text;
+    VAR
+      DocumentTypeSubType@100000000 : Record 9068463;
+    BEGIN
+      DocumentTypeSubType.RESET;
+      DocumentTypeSubType.SETRANGE("Document Type Description",ExtDocType);
+      DocumentTypeSubType.SETRANGE("Document Sub Type Description",ExtDocSubType);
+      IF DocumentTypeSubType.FINDFIRST THEN
+        EXIT(DocumentTypeSubType."Document Sub Type Description");
+
+      EXIT('');
+    END;
+
+    [External]
+    PROCEDURE LinkDocument@1000000000(AttachedToType@1000000017 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';AttachedToNo@1000000004 : Code[20];LFEntryID@1000000003 : Integer;LinkType@1000000016 : Text;NAVAttribute@1000000005 : Text);
+    VAR
+      CorrespondenceStoreLink@1000000002 : Record 9069078;
+      CorrespondenceStoreLink2@1000000001 : Record 9069078;
+      CorrespondenceStore@1000000000 : Record 9068660;
+      LinkTypeFilter@1000000006 : Text;
+      LinkCodeFilter@1000000007 : Text;
+      NoFilter@1000000008 : Text;
+      StrCon@1000000010 : Text;
+      ClientAccount@1000000009 : Record 9068624;
+      ClientAsset@1000000011 : Record 9068546;
+      ClientPortfolio@1000000012 : Record 9068565;
+      ClientInvestment@1000000013 : Record 9068542;
+      ClientCustomer@1000000014 : Record 9068602;
+      ClientVendor@1000000015 : Record 9068604;
+      LinkCode@100000000 : Text;
+    BEGIN
+      IF NAVAttribute <> '' THEN BEGIN
+        IF LinkType <> '' THEN
+        BEGIN
+
+          CASE AttachedToType OF
+          AttachedToType::Client :
+            CorrespondenceStore.SETFILTER(Type,'Client');
+          AttachedToType::Entity:
+            CorrespondenceStore.SETFILTER(Type,'Entity');
+          AttachedToType::Intermediary:
+            CorrespondenceStore.SETFILTER(Type,'Intermediary');
+          AttachedToType::"Client Owner" :
+            CorrespondenceStore.SETFILTER(Type,'Client Owner');
+          AttachedToType::"Potential Client":
+            CorrespondenceStore.SETFILTER(Type,'Potential Client');
+          AttachedToType::Prospect :
+            CorrespondenceStore.SETFILTER(Type,'Prospect');
+          AttachedToType::Resource :
+            CorrespondenceStore.SETFILTER(Type,'Resource');
+          END;
+
+          CorrespondenceStore.SETFILTER("No.",AttachedToNo);
+          CorrespondenceStore.SETRANGE("Temporary",FALSE);
+
+          StrCon := CONVERTSTR(NAVAttribute,'-',',');
+          LinkCodeFilter := SELECTSTR(1,StrCon);
+
+
+           IF LinkType = 'Account' THEN BEGIN
+             LinkCode := DELSTR(LinkCodeFilter,3);
+             IF LinkCode = 'BK' THEN
+               LinkTypeFilter := 'Bank'
+             ELSE IF LinkCode = 'LN' THEN
+               LinkTypeFilter := 'Loan'
+          END ELSE
+              LinkTypeFilter := LinkType;
+
+          //CorrespondenceStore.SETRANGE("Corresp. Store Link Exists",FALSE);
+          CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+          CorrespondenceStore.FILTERGROUP(0);
+
+          IF CorrespondenceStore.FINDFIRST THEN BEGIN
+
+            IF CorrespondenceStore.ID <> '' THEN BEGIN
+              CorrespondenceStoreLink2.INIT;
+              CorrespondenceStoreLink2.Type        := CorrespondenceStore.Type;
+              CorrespondenceStoreLink2."No."       := CorrespondenceStore."No.";
+
+              IF (LinkTypeFilter = 'Yacht') OR (LinkTypeFilter = 'Property') OR (LinkTypeFilter = 'Aviation') OR (LinkTypeFilter = 'Intellectual Property')
+              OR (LinkTypeFilter = 'Life Assurance') OR (LinkTypeFilter = 'Miscellaneous Asset') THEN BEGIN
+                  EVALUATE(CorrespondenceStoreLink2."Link Type",'Asset');
+              END ELSE
+              EVALUATE(CorrespondenceStoreLink2."Link Type",LinkTypeFilter);
+
+              CorrespondenceStoreLink2."Link Code" := LinkCodeFilter;
+              CorrespondenceStoreLink2.VALIDATE(ID,CorrespondenceStore.ID);
+              CorrespondenceStoreLink2."External DMS Status" := CorrespondenceStoreLink2."External DMS Status"::Processed;
+              CorrespondenceStoreLink2.INSERT(TRUE);
+
+      END;
+      END
+      END ELSE
+            ERROR('Link Type is Empty');
+          END ELSE
+          ERROR('NAVAttribute is Empty');
+    END;
+
+    [External]
+    PROCEDURE HandShakeStatus@1000000002(LFEntryID@1000000000 : Integer;Status@1000000002 : Text);
+    VAR
+      CorrespondenceStore@1000000001 : Record 9068660;
+    BEGIN
+      CorrespondenceStore.RESET;
+      CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+      IF CorrespondenceStore.FINDFIRST THEN BEGIN
+        CorrespondenceStore."Additional Information" := Status;
+        IF CorrespondenceStore."Additional Information" <> 'Processed' THEN
+          CorrespondenceStore.MODIFY
+        ELSE IF CorrespondenceStore."Additional Information" = 'Processed' THEN
+          ERROR('Entry already processed');
+      END
+    END;
+
+    [External]
+    PROCEDURE UnlinkDocument@100000001(AttachedToType@100000005 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';AttachedToNo@100000004 : Code[20];LFEntryID@100000011 : Integer;LinkType@100000002 : Text;NAVAttribute@100000001 : Text);
+    VAR
+      CorrespondenceStoreLink@100000000 : Record 9069078;
+      LinkTypeFilter@100000008 : Text;
+      LinkCodeFilter@100000007 : Text;
+      LinkCode@100000006 : Text;
+      StrCon@100000009 : Text;
+      LinkTypeOption@100000010 : ' ,Asset,Safe Custody,Bank,Loan,Agent,Investment,Client Entity,Client Entity History,Customer,Vendor,Portfolio,Transaction Monitoring,Interaction,Activity,Business Rule,Client Invoice,Meeting';
+      CorrespondenceStore@100000003 : Record 9068660;
+      ID@100000012 : Code[10];
+    BEGIN
+      //IF AttachedToType = AttachedToType::Client THEN
+      IF NAVAttribute <> '' THEN BEGIN
+        IF LinkType <> '' THEN
+        BEGIN
+          StrCon := CONVERTSTR(NAVAttribute,'-',',');
+          LinkCodeFilter := SELECTSTR(1,StrCon);
+
+
+          IF LinkType = 'Account' THEN BEGIN
+            LinkCode := DELSTR(LinkCodeFilter,3);
+            IF LinkCode = 'BK' THEN
+              LinkTypeFilter := 'Bank'
+            ELSE IF LinkCode = 'LN' THEN
+               LinkTypeFilter := 'Loan'
+          END ELSE
+            LinkTypeFilter := LinkType;
+
+          CASE LinkTypeFilter OF
+            'Bank' :
+              LinkTypeOption := LinkTypeOption::Bank;
+            'Asset' :
+              LinkTypeOption := LinkTypeOption::Asset;
+            'Loan':
+              LinkTypeOption := LinkTypeOption::Loan;
+            'Portfolio' :
+              LinkTypeOption := LinkTypeOption::Portfolio;
+            'Investment' :
+              LinkTypeOption := LinkTypeOption::Investment;
+            'Agent' :
+              LinkTypeOption := LinkTypeOption::Agent;
+            'Meeting' :
+              LinkTypeOption := LinkTypeOption::Meeting;
+          END;
+
+          CorrespondenceStore.RESET;
+
+          CASE AttachedToType OF
+          AttachedToType::Client :
+            CorrespondenceStore.SETFILTER(Type,'Client');
+          AttachedToType::Entity:
+            CorrespondenceStore.SETFILTER(Type,'Entity');
+          AttachedToType::Intermediary:
+            CorrespondenceStore.SETFILTER(Type,'Intermediary');
+          AttachedToType::"Client Owner" :
+            CorrespondenceStore.SETFILTER(Type,'Client Owner');
+          AttachedToType::"Potential Client" :
+            CorrespondenceStore.SETFILTER(Type,'Potential Client');
+          AttachedToType::Prospect :
+            CorrespondenceStore.SETFILTER(Type,'Prospect');
+          AttachedToType::Resource :
+            CorrespondenceStore.SETFILTER(Type,'Resource');
+          END;
+
+          CorrespondenceStore.SETFILTER("No.",AttachedToNo);
+          CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+          IF CorrespondenceStore.FINDFIRST THEN
+            ID := CorrespondenceStore.ID;
+
+          CorrespondenceStoreLink.RESET;
+          CorrespondenceStoreLink.SETRANGE("No.",AttachedToNo);
+          CorrespondenceStoreLink.SETRANGE(Type,CorrespondenceStoreLink.Type::Client);
+          CorrespondenceStoreLink.SETRANGE("Link Type",LinkTypeOption);
+          CorrespondenceStoreLink.SETRANGE("Link Code",LinkCodeFilter);
+         // CorrespondenceStoreLink.SETRANGE("Correspondence Store Type",CorrespondenceStoreLink."Correspondence Store Type"::"0");
+          CorrespondenceStoreLink.SETRANGE(ID,ID);
+          IF CorrespondenceStoreLink.FINDFIRST THEN
+            CorrespondenceStoreLink.DELETE
+          ELSE
+            ERROR('Record not found');
+        END ELSE
+            ERROR('Link Type is Empty');
+          END ELSE
+          ERROR('NAVAttribute is Empty');
+    END;
+
+    LOCAL PROCEDURE CheckEntryIDExist@100000000(AttachedToType@100000003 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';AttachedToNo@100000002 : Code[20];LFEntryID@100000001 : Integer) Exists : Boolean;
+    VAR
+      CorrespondenceStore@100000000 : Record 9068660;
+      ID@100000004 : Text;
+    BEGIN
+      CorrespondenceStore.RESET;
+      CorrespondenceStore.SETFILTER(Type,'Client');
+      CorrespondenceStore.SETFILTER("No.",AttachedToNo);
+      CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+      IF CorrespondenceStore.FINDFIRST THEN
+        ID := CorrespondenceStore.ID;
+
+      IF ID <> '' THEN
+        Exists := TRUE
+      ELSE
+        Exists := FALSE;
+
+      EXIT(Exists);
+    END;
+
+    LOCAL PROCEDURE Unlink@100000008(AttachedToType@1000000001 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';AttachedToNo@1000000000 : Code[20];ID@100000001 : Text);
+    VAR
+      CorrespondenceStoreLink@100000000 : Record 9069078;
+    BEGIN
+      CorrespondenceStoreLink.RESET;
+      CorrespondenceStoreLink.SETFILTER(Type,'Client');
+      CorrespondenceStoreLink.SETFILTER("No.",AttachedToNo);
+      CorrespondenceStoreLink.SETRANGE(ID,ID);
+      IF CorrespondenceStoreLink.FINDFIRST THEN
+        CorrespondenceStoreLink.DELETE
+      //ELSE
+       //ERROR('Record not found');
+    END;
+
+    LOCAL PROCEDURE EntityOwnerLink_Create@100000004(AttachedToNo@100000006 : Code[20];LFEntryID@100000005 : Integer);
+    VAR
+      Owner@100000000 : Record 9068443;
+      Entity@100000002 : Record 9068505;
+      AttachedToType@100000001 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';
+      CorrespondenceStore@100000007 : Record 9068660;
+      CorrespondenceStore2@100000008 : Record 9068660;
+    BEGIN
+
+      Entity.GET(AttachedToNo);
+      //Owner.GET(Entity."Owner No.");
+      Owner.RESET;
+      Owner.SETRANGE("No.",Entity."Owner No.");
+      IF Owner.FINDFIRST THEN BEGIN
+        CorrespondenceStore.RESET;
+        CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+        IF CorrespondenceStore.FINDFIRST THEN BEGIN
+          CorrespondenceStore2.INIT;
+          CorrespondenceStore2."No." := Owner."No.";
+          CorrespondenceStore2."LaserFiche Entry ID" := CorrespondenceStore."LaserFiche Entry ID";
+          CorrespondenceStore2."Source of Document" := CorrespondenceStore."Source of Document"::Imported;
+          CorrespondenceStore2."Document Inserted By" := CorrespondenceStore."Document Inserted By";
+          CorrespondenceStore2.FilePath := CorrespondenceStore.FilePath;
+          CorrespondenceStore2.FileName := CorrespondenceStore.FileName;
+          CorrespondenceStore2."MS Office Doc Type" := CorrespondenceStore."MS Office Doc Type";
+          CorrespondenceStore2.Subject := CorrespondenceStore.Subject;
+          CorrespondenceStore2."External DMS Status" := CorrespondenceStore."External DMS Status"::Processed;
+          CorrespondenceStore2."Document Date" := CorrespondenceStore."Document Date";
+          CorrespondenceStore2."Additional Information" := CorrespondenceStore."Additional Information";//[To be determined] in migration
+          CorrespondenceStore2.Meta_Date_1 := CorrespondenceStore.Meta_Date_1;
+          CorrespondenceStore2.Type := CorrespondenceStore.Type::"Client Owner";
+          CorrespondenceStore2."Document Type" := CorrespondenceStore."Document Type";
+          CorrespondenceStore2."Document Sub Type" := CorrespondenceStore."Document Sub Type";
+
+          CorrespondenceStore2.ID := DocMgmntCU."Get Next Document Number"(CorrespondenceStore2.Type, CorrespondenceStore2."No.");
+          CorrespondenceStore2.INSERT(TRUE);
+        END
+      END;
+    END;
+
+    LOCAL PROCEDURE EntityOwnerLink_Update@100000017(AttachedToNo@100000006 : Code[20];LFEntryID@100000005 : Integer);
+    VAR
+      Owner@100000000 : Record 9068443;
+      Entity@100000002 : Record 9068505;
+      AttachedToType@100000001 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';
+      CorrespondenceStore@100000007 : Record 9068660;
+      CorrespondenceStore2@100000008 : Record 9068660;
+    BEGIN
+      Entity.GET(AttachedToNo);
+      //Owner.GET(Entity."Owner No.")
+      Owner.RESET;
+      Owner.SETRANGE("No.",Entity."Owner No.");
+      IF Owner.FINDFIRST THEN BEGIN
+         CorrespondenceStore2.SETRANGE("LaserFiche Entry ID",LFEntryID);
+        CorrespondenceStore2.FINDFIRST;
+        CorrespondenceStore.RESET;
+        CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+        IF CorrespondenceStore.FINDFIRST THEN BEGIN
+          CorrespondenceStore2."No." := Owner."No.";
+          CorrespondenceStore2."LaserFiche Entry ID" := CorrespondenceStore."LaserFiche Entry ID";
+          CorrespondenceStore2."Source of Document" := CorrespondenceStore."Source of Document"::Imported;
+          CorrespondenceStore2."Document Inserted By" := CorrespondenceStore."Document Inserted By";
+          CorrespondenceStore2."Document Inserted Date" := CorrespondenceStore."Document Inserted Date";
+          CorrespondenceStore2.FilePath := CorrespondenceStore.FilePath;
+          CorrespondenceStore2.FileName := CorrespondenceStore.FileName;
+          CorrespondenceStore2."MS Office Doc Type" := CorrespondenceStore."MS Office Doc Type";
+          CorrespondenceStore2.Subject := CorrespondenceStore.Subject;
+          CorrespondenceStore2."External DMS Status" := CorrespondenceStore."External DMS Status"::Processed;
+          CorrespondenceStore2."Document Date" := CorrespondenceStore."Document Date";
+          CorrespondenceStore2."Additional Information" := CorrespondenceStore."Additional Information";//[To be determined] in migration
+          CorrespondenceStore2.Meta_Date_1 := CorrespondenceStore.Meta_Date_1;
+          CorrespondenceStore2.Type := CorrespondenceStore.Type::"Client Owner";
+          CorrespondenceStore2."Document Type" := CorrespondenceStore."Document Type";
+          CorrespondenceStore2."Document Sub Type" := CorrespondenceStore."Document Sub Type";
+          CorrespondenceStore2.ID := CorrespondenceStore2.ID;
+
+          CorrespondenceStore2.MODIFY(TRUE);
+        END
+      END;
+    END;
+
+    LOCAL PROCEDURE IntermediaryOwnerLink_Create@100000015(AttachedToNo@100000006 : Code[20];LFEntryID@100000005 : Integer);
+    VAR
+      Entity@100000002 : Record 9068505;
+      AttachedToType@100000001 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';
+      CorrespondenceStore@100000007 : Record 9068660;
+      CorrespondenceStore2@100000008 : Record 9068660;
+      Intermediary@100000000 : Record 9068447;
+    BEGIN
+
+      Entity.GET(AttachedToNo);
+      //Owner.GET(Entity."Owner No.");
+      Intermediary.RESET;
+      Intermediary.SETRANGE("No.",Entity."Intermediary No.");
+      IF Intermediary.FINDFIRST THEN BEGIN
+      CorrespondenceStore.RESET;
+      CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+      IF CorrespondenceStore.FINDFIRST THEN BEGIN
+        CorrespondenceStore2.INIT;
+        CorrespondenceStore2."No." := Intermediary."No.";
+        CorrespondenceStore2."LaserFiche Entry ID" := CorrespondenceStore."LaserFiche Entry ID";
+        CorrespondenceStore2."Source of Document" := CorrespondenceStore."Source of Document"::Imported;
+        CorrespondenceStore2."Document Inserted By" := CorrespondenceStore."Document Inserted By";
+        CorrespondenceStore2.FilePath := CorrespondenceStore.FilePath;
+        CorrespondenceStore2.FileName := CorrespondenceStore.FileName;
+        CorrespondenceStore2."MS Office Doc Type" := CorrespondenceStore."MS Office Doc Type";
+        CorrespondenceStore2.Subject := CorrespondenceStore.Subject;
+        CorrespondenceStore2."External DMS Status" := CorrespondenceStore."External DMS Status"::Processed;
+        CorrespondenceStore2."Document Date" := CorrespondenceStore."Document Date";
+        CorrespondenceStore2."Additional Information" := CorrespondenceStore."Additional Information";//[To be determined] in migration
+        CorrespondenceStore2.Meta_Date_1 := CorrespondenceStore.Meta_Date_1;
+        CorrespondenceStore2.Type := CorrespondenceStore.Type::Intermediary;
+        CorrespondenceStore2."Document Type" := CorrespondenceStore."Document Type";
+        CorrespondenceStore2."Document Sub Type" := CorrespondenceStore."Document Sub Type";
+
+        CorrespondenceStore2.ID := DocMgmntCU."Get Next Document Number"(CorrespondenceStore2.Type, CorrespondenceStore2."No.");
+        CorrespondenceStore2.INSERT(TRUE);
+      END
+      END;
+    END;
+
+    LOCAL PROCEDURE IntermediaryOwnerLink_Update@100000014(AttachedToNo@100000006 : Code[20];LFEntryID@100000005 : Integer);
+    VAR
+      Intermediary@100000000 : Record 9068447;
+      Entity@100000002 : Record 9068505;
+      AttachedToType@100000001 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';
+      CorrespondenceStore@100000007 : Record 9068660;
+      CorrespondenceStore2@100000008 : Record 9068660;
+    BEGIN
+      Entity.GET(AttachedToNo);
+      //Owner.GET(Entity."Owner No.")
+      Intermediary.RESET;
+      Intermediary.SETRANGE("No.",Entity."Intermediary No.");
+      IF Intermediary.FINDFIRST THEN BEGIN
+        CorrespondenceStore2.SETRANGE("LaserFiche Entry ID",LFEntryID);
+        CorrespondenceStore2.FINDFIRST;
+        CorrespondenceStore.RESET;
+        CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+        IF CorrespondenceStore.FINDFIRST THEN BEGIN
+          CorrespondenceStore2."No." := Intermediary."No.";
+          CorrespondenceStore2."LaserFiche Entry ID" := CorrespondenceStore."LaserFiche Entry ID";
+          CorrespondenceStore2."Source of Document" := CorrespondenceStore."Source of Document"::Imported;
+          CorrespondenceStore2."Document Inserted By" := CorrespondenceStore."Document Inserted By";
+          CorrespondenceStore2."Document Inserted Date" := CorrespondenceStore."Document Inserted Date";
+          CorrespondenceStore2.FilePath := CorrespondenceStore.FilePath;
+          CorrespondenceStore2.FileName := CorrespondenceStore.FileName;
+          CorrespondenceStore2."MS Office Doc Type" := CorrespondenceStore."MS Office Doc Type";
+          CorrespondenceStore2.Subject := CorrespondenceStore.Subject;
+          CorrespondenceStore2."External DMS Status" := CorrespondenceStore."External DMS Status"::Processed;
+          CorrespondenceStore2."Document Date" := CorrespondenceStore."Document Date";
+          CorrespondenceStore2."Additional Information" := CorrespondenceStore."Additional Information";//[To be determined] in migration
+          CorrespondenceStore2.Meta_Date_1 := CorrespondenceStore.Meta_Date_1;
+          CorrespondenceStore2.Type := CorrespondenceStore.Type::Intermediary;
+          CorrespondenceStore2."Document Type" := CorrespondenceStore."Document Type";
+          CorrespondenceStore2."Document Sub Type" := CorrespondenceStore."Document Sub Type";
+          CorrespondenceStore2.ID := CorrespondenceStore2.ID;
+
+          CorrespondenceStore2.MODIFY(TRUE);
+        END
+      END;
+    END;
+
+    LOCAL PROCEDURE ProspectOwnerLink_Create@100000007(AttachedToNo@100000006 : Code[20];LFEntryID@100000005 : Integer);
+    VAR
+      Entity@100000002 : Record 9068505;
+      AttachedToType@100000001 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';
+      CorrespondenceStore@100000007 : Record 9068660;
+      CorrespondenceStore2@100000008 : Record 9068660;
+      Prospect@100000000 : Record 9068440;
+    BEGIN
+
+      Entity.GET(AttachedToNo);
+      //Owner.GET(Entity."Owner No.");
+      Prospect.RESET;
+      Prospect.SETRANGE("No.",Entity."Prospect No.");
+      IF Prospect.FINDFIRST THEN BEGIN
+      CorrespondenceStore.RESET;
+      CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+      IF CorrespondenceStore.FINDFIRST THEN BEGIN
+        CorrespondenceStore2.INIT;
+        CorrespondenceStore2."No." := Prospect."No.";
+        CorrespondenceStore2."LaserFiche Entry ID" := CorrespondenceStore."LaserFiche Entry ID";
+        CorrespondenceStore2."Source of Document" := CorrespondenceStore."Source of Document"::Imported;
+        CorrespondenceStore2."Document Inserted By" := CorrespondenceStore."Document Inserted By";
+        CorrespondenceStore2.FilePath := CorrespondenceStore.FilePath;
+        CorrespondenceStore2.FileName := CorrespondenceStore.FileName;
+        CorrespondenceStore2."MS Office Doc Type" := CorrespondenceStore."MS Office Doc Type";
+        CorrespondenceStore2.Subject := CorrespondenceStore.Subject;
+        CorrespondenceStore2."External DMS Status" := CorrespondenceStore."External DMS Status"::Processed;
+        CorrespondenceStore2."Document Date" := CorrespondenceStore."Document Date";
+        CorrespondenceStore2."Additional Information" := CorrespondenceStore."Additional Information";//[To be determined] in migration
+        CorrespondenceStore2.Meta_Date_1 := CorrespondenceStore.Meta_Date_1;
+        CorrespondenceStore2.Type := CorrespondenceStore.Type::Prospect;
+        CorrespondenceStore2."Document Type" := CorrespondenceStore."Document Type";
+        CorrespondenceStore2."Document Sub Type" := CorrespondenceStore."Document Sub Type";
+
+        CorrespondenceStore2.ID := DocMgmntCU."Get Next Document Number"(CorrespondenceStore2.Type, CorrespondenceStore2."No.");
+        CorrespondenceStore2.INSERT(TRUE);
+      END
+      END;
+    END;
+
+    LOCAL PROCEDURE ProspectOwnerLink_Update@100000006(AttachedToNo@100000006 : Code[20];LFEntryID@100000005 : Integer);
+    VAR
+      Prospect@100000000 : Record 9068440;
+      Entity@100000002 : Record 9068505;
+      AttachedToType@100000001 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';
+      CorrespondenceStore@100000007 : Record 9068660;
+      CorrespondenceStore2@100000008 : Record 9068660;
+    BEGIN
+      Entity.GET(AttachedToNo);
+      //Owner.GET(Entity."Owner No.")
+      Prospect.RESET;
+      Prospect.SETRANGE("No.",Entity."Prospect No.");
+      IF Prospect.FINDFIRST THEN BEGIN
+        CorrespondenceStore2.SETRANGE("LaserFiche Entry ID",LFEntryID);
+        CorrespondenceStore2.FINDFIRST;
+        CorrespondenceStore.RESET;
+        CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+        IF CorrespondenceStore.FINDFIRST THEN BEGIN
+          CorrespondenceStore2."No." := Prospect."No.";
+          CorrespondenceStore2."LaserFiche Entry ID" := CorrespondenceStore."LaserFiche Entry ID";
+          CorrespondenceStore2."Source of Document" := CorrespondenceStore."Source of Document"::Imported;
+          CorrespondenceStore2."Document Inserted By" := CorrespondenceStore."Document Inserted By";
+          CorrespondenceStore2."Document Inserted Date" := CorrespondenceStore."Document Inserted Date";
+          CorrespondenceStore2.FilePath := CorrespondenceStore.FilePath;
+          CorrespondenceStore2.FileName := CorrespondenceStore.FileName;
+          CorrespondenceStore2."MS Office Doc Type" := CorrespondenceStore."MS Office Doc Type";
+          CorrespondenceStore2.Subject := CorrespondenceStore.Subject;
+          CorrespondenceStore2."External DMS Status" := CorrespondenceStore."External DMS Status"::Processed;
+          CorrespondenceStore2."Document Date" := CorrespondenceStore."Document Date";
+          CorrespondenceStore2."Additional Information" := CorrespondenceStore."Additional Information";//[To be determined] in migration
+          CorrespondenceStore2.Meta_Date_1 := CorrespondenceStore.Meta_Date_1;
+          CorrespondenceStore2.Type := CorrespondenceStore.Type::Prospect;
+          CorrespondenceStore2."Document Type" := CorrespondenceStore."Document Type";
+          CorrespondenceStore2."Document Sub Type" := CorrespondenceStore."Document Sub Type";
+          CorrespondenceStore2.ID := CorrespondenceStore2.ID;
+
+          CorrespondenceStore2.MODIFY(TRUE);
+        END
+      END;
+    END;
+
+    LOCAL PROCEDURE CustomValidation@100000010(pDocSetup@1000000000 : Record 9068662);
+    VAR
+      ApplicationSetup@100000000 : Record 9068230;
+    BEGIN
+      IF
+        ApplicationSetup.CheckClientReference('C090') THEN;
+        //C090CustomValidation;
+    END;
+
+    LOCAL PROCEDURE AddLFMessageRecord@1000000015(LaserFicheTemp@1000000000 : Record 9069241;CorrespondenceStore@100000000 : Record 9068660;Function@1000000002 : Code[20]);
+    VAR
+      LFMessages@1000000001 : Record 9069241;
+    BEGIN
+      LFMessages.INIT;
+      LFMessages.TRANSFERFIELDS(LaserFicheTemp);
+      LFMessages."Company Name" := COMPANYNAME;
+      LFMessages."Inserted By" := USERID;
+      LFMessages."Inserted Date" := TODAY;
+      LFMessages."Document Type" := CorrespondenceStore."Document Type";
+      LFMessages."Document Sub Type" := CorrespondenceStore."Document Sub Type";
+
+       IF CorrespondenceStore.Type = CorrespondenceStore.Type::Client THEN
+              LFMessages."Attached To Type" := LFMessages."Attached To Type"::Client;
+            IF CorrespondenceStore.Type = CorrespondenceStore.Type::Entity THEN
+              LFMessages."Attached To Type" := LFMessages."Attached To Type"::Entity;
+            IF CorrespondenceStore.Type = CorrespondenceStore.Type::Resource THEN
+              LFMessages."Attached To Type" := LFMessages."Attached To Type"::Resource;
+            IF CorrespondenceStore.Type = CorrespondenceStore.Type::"Client Owner" THEN
+              LFMessages."Attached To Type" := LFMessages."Attached To Type"::"Client Owner";
+
+      LFMessages."Attached To No" := CorrespondenceStore."No.";
+      LFMessages."NAV Document GUID" := CorrespondenceStore."Document GUID";
+      LFMessages."File Name" := CorrespondenceStore.FileName;
+      LFMessages."Original File Path" := CorrespondenceStore.FilePath;
+      LFMessages."Document Description" := CorrespondenceStore.Subject;
+
+      CASE "Function" OF
+          'CREATENEW' : LFMessages."LaserFiche Status" := LFMessages."LaserFiche Status"::New;
+          'UPDATE'    : LFMessages."LaserFiche Status" := LFMessages."LaserFiche Status"::Update;
+          'DELETE'    : LFMessages."LaserFiche Status" := LFMessages."LaserFiche Status"::Deleted;
+        END;
+
+      IF LFMessages.INSERT(TRUE) THEN;
+         // InsertIntoCorrespondenceStore(LFMessages);
+    END;
+
+    [EventSubscriber(Page,9069346,OnAfterActionEvent,LinkFile)]
+    PROCEDURE SUBOnInsertCorrespondenceStore@100000009(VAR Rec@100000000 : Record 9068660);
+    VAR
+      CorrespondenceStore@100000001 : Record 9068660;
+      LaserFicheMessages@100000002 : Record 9069241;
+    BEGIN
+      CorrespondenceStore.COPY(Rec);
+      CorrespondenceStore.SETFILTER("LaserFiche Entry ID",'%1',0);
+      IF CorrespondenceStore.FINDSET THEN
+        REPEAT
+          AddLFMessageRecord(LaserFicheMessages,CorrespondenceStore,'Create');
+        UNTIL CorrespondenceStore.NEXT = 0;
+    END;
+
+    PROCEDURE HandShake@100000020(AttachedToType@100000002 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';AttachedToNo@100000001 : Code[50];NAme@100000005 : Text;FileName@100000000 : Text;LFEntyId@100000003 : Integer) Success : Boolean;
+    VAR
+      CorrespondenceStore@100000004 : Record 9068660;
+    BEGIN
+      CASE AttachedToType OF
+          AttachedToType::Client :
+            CorrespondenceStore.SETFILTER(Type,'Client');
+          AttachedToType::Entity:
+            CorrespondenceStore.SETFILTER(Type,'Entity');
+          AttachedToType::Intermediary:
+            CorrespondenceStore.SETFILTER(Type,'Intermediary');
+          AttachedToType::"Client Owner" :
+            CorrespondenceStore.SETFILTER(Type,'Client Owner');
+          AttachedToType::"Potential Client":
+            CorrespondenceStore.SETFILTER(Type,'Potential Client');
+          AttachedToType::Prospect :
+            CorrespondenceStore.SETFILTER(Type,'Prospect');
+          AttachedToType::Resource :
+            CorrespondenceStore.SETFILTER(Type,'Resource');
+          END;
+
+      CorrespondenceStore.SETRANGE("No.",AttachedToNo);
+      CorrespondenceStore.SETRANGE(FileName,FileName);
+      CorrespondenceStore.FINDFIRST;
+      IF CorrespondenceStore."LaserFiche Entry ID" = 0 THEN BEGIN
+        CorrespondenceStore."LaserFiche Entry ID" := LFEntyId;
+        IF CorrespondenceStore.MODIFY THEN
+          EXIT(TRUE)
+        ELSE
+          EXIT(FALSE);
+      END;
+
+
+    END;
+
+    LOCAL PROCEDURE ElasticSearch3@100000028();
+    VAR
+      HttpClient@100000002 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.HttpClient";
+      HttpContent@100000001 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.HttpContent";
+      Uri@100000000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Uri";
+      BaseURL@100000003 : Text;
+      RequestHeaders@100000005 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.Headers.HttpRequestHeaders";
+      user@100000004 : Text;
+      Password@100000006 : Text;
+      payload@100000007 : Text;
+      contentHeaders@100000008 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.Headers.HttpContentHeaders";
+      HttpResponseMessage@100000009 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.HttpResponseMessage";
+      String@100000010 : Text;
+      HttpWebReq@100000011 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+    System.Net.HttpWebRequest";
+      RequestStr@100000013 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.Stream";
+      StreamWriter@100000012 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.StreamWriter";
+      Encoding@100000014 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Text.Encoding";
+      HttpWebResponse@100000015 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpWebResponse";
+      Streamwtr@100000016 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.StreamWriter";
+      JSONManagement@100000017 : Codeunit 5459;
+      success@100000018 : Boolean;
+      JsonObject@100000020 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      Responsetxt@100000019 : Text;
+      Requesttxt@100000021 : Text;
+    BEGIN
+      BaseURL := 'https://dfxdemo.datafabricx.com/DFXDMSLiteV2/DFXApi/DMS/Documents/Query';
+
+      CLEARLASTERROR;
+
+      user := 'demouser';
+      Password := 'DFX@123';
+
+
+      payload := '{' +
+                '"Repository":"DEMOREPO",' +
+                '"Columns":' +
+                '[' +
+                    '[' +
+                        '{' +
+                            '"SearchFieldType":l0,' +
+                            '"BaseField":"Text",' +
+                            '"Value":"sample text",' +
+                            '"Condition":0' +
+                        '}' +
+                    ']' +
+                '],' +
+                '"Page":1,' +
+                '"No":100,' +
+                '"ColumnSortType":1,' +
+                '"ColumnName":"Client Name",' +
+                '"ColumnSortOrder":0' +
+            '}';
+
+
+      CLEAR(HttpWebReq);
+      //HttpClieNT := HttpClient.
+
+      HttpWebReq := HttpWebReq.Create(BaseURL);
+      HttpWebReq.Method := 'POST';
+      HttpWebReq.Accept := 'application/json';
+      HttpWebReq.ContentType := 'application/json';
+      HttpWebReq.Headers.Add('Authorization',CreateNTLMAuthHeader(user,Password));
+      HttpWebReq.KeepAlive;
+      HttpWebReq.PreAuthenticate := TRUE;
+      HttpWebReq.UnsafeAuthenticatedConnectionSharing := TRUE;
+
+
+      //MESSAGE(FORMAT(HttpWebReq.Headers));
+
+      {JSONManagement.InitializeObject(payload);
+      success := JSONManagement.ReadProperties;
+      MESSAGE(FORMAT(success));
+      }
+
+      RequestStr := HttpWebReq.GetRequestStream;
+      //StreamWriter := StreamWriter.StreamWriter(RequestStr,Encoding);
+      Streamwtr := Streamwtr.StreamWriter(RequestStr);
+      Streamwtr.Write(payload);
+      Streamwtr.Flush();
+      Streamwtr.Close();
+      Streamwtr.Dispose;
+
+      //JSONManagement.GetJSONObject(JsonObject);
+
+      //MESSAGE(FORMAT(HttpWebReq.GetResponseAsync));
+
+      //MESSAGE(Requesttxt);
+
+      CLEAR(HttpWebResponse);
+      HttpWebResponse := HttpWebResponse.HttpWebResponse;
+
+      MESSAGE(GETLASTERRORTEXT);
+
+      HttpWebResponse := HttpWebReq.GetResponse;
+
+
+      //Responsetxt := HttpWebResponse.GetResponseHeader('Content-Type');
+
+      //MESSAGE(Format(HttpWebResponse.StatusCode));
+
+      //MESSAGE(FORMAT(Responsetxt));
+    END;
+
+    LOCAL PROCEDURE ElasticSearch2@100000030();
+    VAR
+      HttpClient@100000002 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.HttpClient";
+      HttpContent@100000001 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.HttpContent";
+      Uri@100000000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Uri";
+      BaseURL@100000003 : Text;
+      RequestHeaders@100000005 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.Headers.HttpRequestHeaders";
+      user@100000004 : Text;
+      Password@100000006 : Text;
+      payload@100000007 : Text;
+      contentHeaders@100000008 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.Headers.HttpContentHeaders";
+      HttpResponseMessage@100000009 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.HttpResponseMessage";
+      String@100000010 : Text;
+      HttpWebReq@100000011 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+    System.Net.HttpWebRequest";
+      RequestStr@100000013 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.Stream";
+      StreamWriter@100000012 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.StreamWriter";
+      Encoding@100000014 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Text.Encoding";
+      HttpWebResponse@100000015 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpWebResponse";
+      Streamwtr@100000016 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.StreamWriter";
+      JSONManagement@100000017 : Codeunit 5459;
+      success@100000018 : Boolean;
+      JsonObject@100000020 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+    BEGIN
+      BaseURL := 'https://laserfichedemo.datafabricx.com/DFXDMSLiteV3/dfxapi/DMS/Documents/Query';
+
+      user := 'dfxadmin';
+      Password := 'Welcome@123';
+
+
+      payload := '{' +
+                '"Repository":"DEMOREPO",' +
+                '"Columns":' +
+                '[' +
+                    '[' +
+                        '{' +
+                            '"SearchFieldType":l0,' +
+                            '"BaseField":"Text",' +
+                            '"Value":"sample text",' +
+                            '"Condition":0' +
+                        '}' +
+                    ']' +
+                '],' +
+                '"Page":1,' +
+                '"No":100,' +
+                '"ColumnSortType":1,' +
+                '"ColumnName":"Client Name",' +
+                '"ColumnSortOrder":0' +
+            '}';
+
+
+
+
+      HttpWebReq := HttpWebReq.Create(BaseURL);
+      HttpWebReq.Method := 'POST';
+      HttpWebReq.Accept := 'application/json';
+      HttpWebReq.ContentType := 'application/json';
+      HttpWebReq.Headers.Add('Authorization',CreateNTLMAuthHeader(user,Password));
+      HttpWebReq.KeepAlive;
+      HttpWebReq.PreAuthenticate := TRUE;
+      HttpWebReq.UnsafeAuthenticatedConnectionSharing := TRUE;
+
+
+      MESSAGE(FORMAT(HttpWebReq.Headers));
+
+      {JSONManagement.InitializeObject(payload);
+      success := JSONManagement.ReadProperties;
+      MESSAGE(FORMAT(success));
+      }
+
+      RequestStr := HttpWebReq.GetRequestStream;
+      //StreamWriter := StreamWriter.StreamWriter(RequestStr,Encoding);
+      Streamwtr := Streamwtr.StreamWriter(RequestStr);
+      Streamwtr.Write(payload);
+      Streamwtr.Flush();
+      Streamwtr.Close();
+
+
+      //JSONManagement.GetJSONObject(JsonObject);
+
+      HttpWebReq.Connection(FORMAT(RequestStr));
+
+
+      HttpWebResponse := HttpWebResponse.HttpWebResponse;
+
+      HttpResponseMessage := HttpWebResponse.GetResponseStream;
+
+      MESSAGE(FORMAT(HttpResponseMessage));
+    END;
+
+    LOCAL PROCEDURE ElasticSearch@100000005();
+    VAR
+      HttpWebRequest@100000000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpWebRequest";
+      HttpWebResponse@100000001 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpWebResponse";
+      HttpStatusCode@100000002 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpStatusCode";
+      Stream@100000003 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.Stream";
+      TextEncoding@100000004 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Text.Encoding";
+      ResStreamReader@100000005 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.StreamReader";
+      ResStream@100000006 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.Stream";
+      Response@100000007 : Text;
+      RequestData@100000008 : Text;
+      HttpResStatus@100000009 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpStatusCode";
+      OStream@100000010 : OutStream;
+      Tempblob@100000011 : Record 99008535;
+      HttpClient@100000012 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.HttpClient";
+      HttpContent@100000013 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.HttpContent";
+      Uri@100000014 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Uri";
+      BaseURL@100000015 : Text;
+      HttpResponseMessage@100000016 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.HttpResponseMessage";
+      RestMethod@100000017 : Text;
+      Method@100000018 : Text;
+      String@100000019 : Text;
+      user@100000020 : Text;
+      password@100000021 : Text;
+      usernamePassword@100000023 : Text;
+      Convert@100000024 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Convert";
+      Auth@100000022 : Text;
+      Certificates@100000025 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.ClientCertificateOption";
+      Credential@100000026 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.NetworkCredential";
+      HttpHeadersContent@100000027 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.Headers.HttpContentHeaders";
+      RequestHeaders@100000028 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.Headers.HttpRequestHeaders";
+      CacheCredentials@100000029 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.Headers.CacheControlHeaderValue";
+      MSG@100000030 : Text;
+    BEGIN
+      {HttpWebRequest:=HttpWebRequest.HttpWebRequest;
+      HttpWebRequest.ContentType('application/Json');
+      HttpWebRequest.Method:='POST';
+      HttpWebRequest.Create('https://laserfichedemo.datafabricx.com/DFXDMSLiteV2/dfxapi/DMS/Documents/Query');
+      //HttpWebRequest:=WebRequest.Create('http://API_URL');
+
+
+      HttpWebResponse:=HttpWebResponse.HttpWebResponse;
+      HttpWebResponse:=HttpWebRequest.GetResponse();
+      HttpResStatus:=HttpWebResponse.StatusCode();
+      CLEAR(Response);
+      IF HttpResStatus=200 THEN BEGIN
+      ResStream:=HttpWebResponse.GetResponseStream();
+      ResStreamReader:=ResStreamReader.StreamReader(ResStream,TextEncoding.Unicode);
+      Response:=ResStreamReader.ReadToEnd();
+      END ELSE BEGIN
+      ResStream:=HttpWebResponse.GetResponseStream();
+      ResStreamReader:=ResStreamReader.StreamReader(ResStream,TextEncoding.Unicode);
+      Response:=HttpWebResponse.StatusDescription;
+      END;
+
+
+
+      Tempblob.Blob.CREATEOUTSTREAM(OStream);
+      OStream.WRITETEXT('{');
+      OStream.WRITETEXT('"Repository":"DEMOREPO",');
+      OStream.WRITETEXT('"Columns":');
+      OStream.WRITETEXT('[');
+      OStream.WRITETEXT('[');
+      OStream.WRITETEXT('{');
+      OStream.WRITETEXT('"SearchFieldType":0,');
+      OStream.WRITETEXT('"BaseField":"Text",');
+      OStream.WRITETEXT('"Value":"Sample",');
+      OStream.WRITETEXT('"Condition":0');
+      OStream.WRITETEXT('}');
+      OStream.WRITETEXT(']');
+      OStream.WRITETEXT('],');
+      OStream.WRITETEXT('"Page":1,');
+      OStream.WRITETEXT('"No":100,');
+      OStream.WRITETEXT('"ColumnSortType":1,');
+      OStream.WRITETEXT('"ColumnName":"Client Name",');
+      OStream.WRITETEXT('"ColumnSortOrder":0');
+      OStream.WRITE('}');
+      }
+      //BaseURL := 'https://www.thunderclient.io/welcome';
+
+      //BaseURL := 'https://reqbin.com/echo/post/json';
+
+      BaseURL := 'https://laserfichedemo.datafabricx.com/DFXDMSLiteV3/dfxapi/DMS/Documents/Query';
+
+      //HttpContent.ReadAsStreamAsync();
+
+      user := 'dfxadmin';
+      password := 'Welcome@123';
+      //base64String := Convert.ToBase64String( Encoding.ASCII.GetBytes($"{user}:{password}"));
+
+      usernamePassword := user + ':' + password;
+      //Encoding := New-Object System.Text.ASCIIEncoding
+      Auth := 'NTLM ' + usernamePassword;
+
+      //'Basic ' + dfxadmin + ':' + Welcome@123
+
+      MSG := '{\' +
+                '"Repository":"DEMOREPO",\' +
+                '"Columns":\' +
+                '[\' +
+                    '[\' +
+                        '{\' +
+                            '"SearchFieldType":0,\' +
+                            '"BaseField":"Text",\' +
+                            '"Value":"sample text",\' +
+                            '"Condition":0\' +
+                        '}\' +
+                    ']\' +
+                '],\' +
+                '"Page":1,\' +
+                '"No":100,\' +
+                '"ColumnSortType":1,\' +
+                '"ColumnName":"Client Name",\' +
+                '"ColumnSortOrder":0\' +
+            '}';
+
+
+
+      HttpClient := HttpClient.HttpClient();
+      HttpResponseMessage := HttpResponseMessage.HttpResponseMessage();
+      HttpWebResponse := HttpWebResponse.HttpWebResponse;
+
+      HttpWebRequest := HttpWebRequest.Create(BaseURL);
+
+      HttpWebRequest.Method := 'POST';
+      HttpWebRequest.Accept := 'application/json';
+      HttpWebRequest.ContentType := 'application/json';
+      HttpWebRequest.KeepAlive;
+      HttpWebRequest.SendChunked;
+
+      HttpWebRequest.Credentials := Credential.NetworkCredential(user,password);
+      AddBodyAsText(MSG);
+      HttpWebRequest.PreAuthenticate := TRUE;
+      HttpWebRequest.UnsafeAuthenticatedConnectionSharing := TRUE;
+
+      HttpResponseMessage := HttpWebResponse.GetResponseStream;
+
+      MESSAGE(FORMAT(HttpResponseMessage));
+
+      ///String := HttpResponseMessage.Content.ReadAsStringAsync.Result;
+
+      //Credential.
+
+      //RequestHeaders.Add('Authorization',CreateNTLMAuthHeader(user,password));
+      //RequestHeaders.Add('Content-Type','application/json');
+      //RequestHeaders.Add('Accept','application/json');
+      {
+      var credential = new NetworkCredential(username, password, domain);
+      var credentialCache = new CredentialCache();
+      credentialCache.Add(new Uri(url), "NTLM", credential);
+      request.Credentials = credentialCache;
+
+      HttpResponseMessage := HttpClient.PostAsync(Method,HttpContent).Result;
+      }
+
+
+
+
+
+      //HttpClient.DefaultRequestHeaders.Add('Authorization','ZGZ4YWRtaW46V2VsY29tZUAxMjM=');
+
+      //}
+      //HttpResponseMessage.EnsureSuccessStatusCode();
+      //String := HttpResponseMessage.Content.ReadAsStringAsync.Result;
+      MESSAGE(String);
+      //}
+      {
+      HttpContent.CopyToAsync(OStream);
+       //HttpContent.WriteFrom(OStream);
+        // HttpContent.Headers(HttpHeadersContent);
+         HttpHeadersContent.Remove('Content-Type');
+         HttpHeadersContent.Add('Content-Type', 'application/json;charset=utf-8');
+        // HttpHeadersContent.Add('SOAPAction', SoapAction);
+         HttpClient.BaseAddress(Uri);
+         HttpClient.DefaultRequestHeaders.Add('User-Agent', 'Dynamics 365');
+         HttpClient.PostAsync(Uri, HttpContent);
+
+      }
+    END;
+
+    LOCAL PROCEDURE TestAPI@100000032();
+    VAR
+      TempBlob@100000000 : Record 99008535;
+      ReqBodyOutStream@100000001 : OutStream;
+      Url@100000002 : Text;
+      reqText@100000003 : Text;
+      ReqBodyInStream@100000004 : InStream;
+    BEGIN
+      Url := 'http://www.w3schools.com/webservices/tempconvert.asmx';
+      reqText := ' +10+';
+
+
+      // save request text in instream
+      TempBlob."Primary Key" := 1;
+      TempBlob.Blob.CREATEOUTSTREAM(ReqBodyOutStream);
+
+      ReqBodyOutStream.WRITE(reqText);
+      TempBlob.Blob.CREATEINSTREAM(ReqBodyInStream);
+      {
+      // run the WebServReqMgt functions to send the request
+      WebServReqMgt.SetGlobals(ReqBodyInStream,Url,Username,Password);
+      WebServReqMgt.DisableHttpsCheck;
+      WebServReqMgt.RUN;
+
+      // get the response
+      WebServReqMgt.GetResponseContent(RespBodyInStream);
+      ResponseXmlDoc := ResponseXmlDoc.XmlDocument;
+      ResponseXmlDoc.Load(RespBodyInStream);
+      MESSAGE(ResponseXmlDoc.InnerXml);
+      }
+    END;
+
+    LOCAL PROCEDURE CreateNTLMAuthHeader@100000011(Username@100000000 : Text;Password@100000001 : Text) : Text;
+    VAR
+      TempBlob@100000002 : Record 99008535;
+    BEGIN
+
+      TempBlob.WriteAsText(STRSUBSTNO('%1:%2', Username, Password), TEXTENCODING::Windows);
+      EXIT(STRSUBSTNO('NTLM Authentication [Beta] %1', TempBlob.ToBase64String()));
+
+      //EXIT(STRSUBSTNO('NTLM Authentication %1:%2',Username, Password));
+    END;
+
+    LOCAL PROCEDURE ElasticSearch1@100000012();
+    VAR
+      HttpWebRequestMgt@100000000 : Codeunit 1297;
+      URL1@100000001 : Text;
+      MSG@100000002 : Text;
+      TempBlob@100000003 : Record 99008535;
+      instr@100000004 : InStream;
+      HttpStatusCode@100000005 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpStatusCode";
+      ResponseHeaders@100000006 : DotNet "'System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.System.Net.Http.Headers.HttpResponseHeaders";
+      APIRESULT@100000007 : Text;
+      User@100000008 : Text;
+      PassWord@100000009 : Text;
+      Auth@100000010 : Text;
+      SOAPWebServiceRequestMgt@100000012 : Codeunit 1290;
+    BEGIN
+      User := 'dfxadmin';
+      PassWord := 'Welcome@123';
+
+      MSG := '{\' +
+                '"Repository":"DEMOREPO",\' +
+                '"Columns":\' +
+                '[\' +
+                    '[\' +
+                        '{\' +
+                            '"SearchFieldType":0,\' +
+                            '"BaseField":"Text",\' +
+                            '"Value":"sample text",\' +
+                            '"Condition":0\' +
+                        '}' +
+                    ']\' +
+                '],\' +
+                '"Page":1,\' +
+                '"No":100,\' +
+                '"ColumnSortType":1,\' +
+                '"ColumnName":"Client Name",\' +
+                '"ColumnSortOrder":0\' +
+            '}';
+
+      URL1:='https://laserfichedemo.datafabricx.com/DFXDMSLiteV3/dfxapi/DMS/Documents/Query';
+
+      HttpWebRequestMgt.Initialize(URL1);
+      HttpWebRequestMgt.DisableUI;
+      HttpWebRequestMgt.SetMethod('POST');
+      HttpWebRequestMgt.SetContentType('application/json');
+      HttpWebRequestMgt.SetReturnType('application/json');
+      //Auth := CreateNTLMAuthHeader(User,PassWord);
+      //HttpWebRequestMgt.AddHeader('Authorization',Auth);
+
+      //Auth := CreateNTLMAuthHeader(User,PassWord);
+      HttpWebRequestMgt.AddHeader('Authorization',Auth);
+      //HttpWebRequestMgt.AddBasicAuthentication(User,PassWord);
+
+
+
+      HttpWebRequestMgt.AddBodyAsText(MSG);
+      MESSAGE(MSG);
+
+      TempBlob.INIT;
+      TempBlob.Blob.CREATEINSTREAM(instr);
+      IF HttpWebRequestMgt.GetResponse(instr,HttpStatusCode,ResponseHeaders) THEN BEGIN
+      MESSAGE('httpstatuscode : '+HttpStatusCode.ToString);
+      MESSAGE(ResponseHeaders.ToString);
+      APIRESULT := TempBlob.ReadAsText('',TEXTENCODING::UTF8);
+      MESSAGE(APIRESULT);
+      END;
+    END;
+
+    [External]
+    PROCEDURE DisableUI@18();
+    BEGIN
+      GlobalProgressDialogEnabled := FALSE;
+    END;
+
+    [Internal]
+    PROCEDURE Initialize@11(URL@1000 : Text);
+    VAR
+      PermissionManager@1002 : Codeunit 9002;
+    BEGIN
+      IF NOT PermissionManager.SoftwareAsAService THEN
+        OnOverrideUrl(URL);
+
+      HttpWebReq1 := HttpWebReq.Create(URL);
+      //SetDefaults;
+    END;
+
+    [Internal]
+    PROCEDURE SetTimeout@7(NewTimeout@1000 : Integer);
+    BEGIN
+      HttpWebReq1.Timeout := NewTimeout;
+    END;
+
+    [Internal]
+    PROCEDURE SetMethod@4(Method@1000 : Text);
+    BEGIN
+      HttpWebReq1.Method := Method;
+    END;
+
+    [Internal]
+    PROCEDURE SetDecompresionMethod@9(DecompressionMethod@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.DecompressionMethods");
+    BEGIN
+      HttpWebReq1.AutomaticDecompression := DecompressionMethod;
+    END;
+
+    [Internal]
+    PROCEDURE SetContentType@5(ContentType@1000 : Text);
+    BEGIN
+      HttpWebReq1.ContentType := ContentType;
+    END;
+
+    [Internal]
+    PROCEDURE SetReturnType@2(ReturnType@1000 : Text);
+    BEGIN
+      HttpWebReq1.Accept := ReturnType;
+    END;
+
+    [Internal]
+    PROCEDURE AddBodyAsText@26(BodyText@1001 : Text);
+    VAR
+      Encoding@1002 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Text.Encoding";
+    BEGIN
+      // Assume UTF8
+      AddBodyAsTextWithEncoding(BodyText,Encoding.UTF8);
+    END;
+
+    [Internal]
+    PROCEDURE GetResponse@6(VAR ResponseInStream@1005 : InStream;VAR HttpStatusCode@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpStatusCode";VAR ResponseHeaders@1003 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NameValueCollection") : Boolean;
+    VAR
+      WebRequestHelper@1001 : Codeunit 1299;
+      HttpWebResponse@1006 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpWebResponse";
+    BEGIN
+      EXIT(WebRequestHelper.GetWebResponse(HttpWebReq1,HttpWebResponse,ResponseInStream,HttpStatusCode,
+          ResponseHeaders,GlobalProgressDialogEnabled));
+    END;
+
+    [Integration]
+    PROCEDURE OnOverrideUrl@36(VAR Url@1000 : Text);
+    BEGIN
+      // Provides an option to rewrite URL in non SaaS environments.
+    END;
+
+    LOCAL PROCEDURE SetDefaults@12();
+    VAR
+      CookieContainer@1000 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.CookieContainer";
+      User@100000000 : Text;
+      PassWord@100000001 : Text;
+    BEGIN
+      User := 'dfxadmin';
+      PassWord := 'Welcome@123';
+
+      HttpWebReq1.Method := 'Post';
+      HttpWebReq1.KeepAlive := TRUE;
+      HttpWebReq1.AllowAutoRedirect := TRUE;
+      HttpWebReq1.UseDefaultCredentials := TRUE;
+      HttpWebReq1.Timeout := 60000;
+      HttpWebReq1.Accept('application/json');
+      HttpWebReq1.ContentType('application/json');
+      CookieContainer := CookieContainer.CookieContainer;
+      HttpWebReq1.CookieContainer := CookieContainer;
+      HttpWebReq1.Headers.Add('Authorization',CreateNTLMAuthHeader(User,PassWord));
+
+      GlobalSkipCheckHttps := TRUE;
+      GlobalProgressDialogEnabled := GUIALLOWED;
+      TraceLogEnabled := TRUE;
+    END;
+
+    LOCAL PROCEDURE AddBodyAsTextWithEncoding@20(BodyText@1001 : Text;Encoding@1000 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Text.Encoding");
+    VAR
+      RequestStr@1004 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.Stream";
+      StreamWriter@1003 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.StreamWriter";
+    BEGIN
+      RequestStr := HttpWebReq1.GetRequestStream;
+      StreamWriter := StreamWriter.StreamWriter(RequestStr,Encoding);
+      StreamWriter.Write(BodyText);
+      StreamWriter.Flush;
+      StreamWriter.Close;
+      StreamWriter.Dispose;
+    END;
+
+    [Internal]
+    PROCEDURE AddBodyBlob@19(VAR TempBlob@1000 : Record 99008535);
+    VAR
+      RequestStr@1002 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.Stream";
+      BlobStr@1001 : InStream;
+    BEGIN
+      IF NOT TempBlob.Blob.HASVALUE THEN
+        EXIT;
+
+      RequestStr := HttpWebReq.GetRequestStream;
+      TempBlob.Blob.CREATEINSTREAM(BlobStr);
+      COPYSTREAM(RequestStr,BlobStr);
+      RequestStr.Flush;
+      RequestStr.Close;
+      RequestStr.Dispose;
+    END;
+
+    [TryFunction]
+    [Internal]
+    PROCEDURE GetWebResponse@1(VAR HttpWebRequest@1001 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpWebRequest";VAR HttpWebResponse@1004 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpWebResponse";VAR ResponseInStream@1002 : InStream;VAR HttpStatusCode@1005 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpStatusCode";VAR ResponseHeaders@1008 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NameValueCollection";ProgressDialogEnabled@1003 : Boolean);
+    VAR
+      ProcessingWindow@1000 : Dialog;
+    BEGIN
+      IF ProgressDialogEnabled THEN
+        ProcessingWindow.OPEN(ProcessingWindowMsg);
+
+      CLEARLASTERROR;
+      HttpWebResponse := HttpWebRequest.GetResponse;
+      HttpWebResponse.GetResponseStream.CopyTo(ResponseInStream);
+      HttpStatusCode := HttpWebResponse.StatusCode;
+      ResponseHeaders := HttpWebResponse.Headers;
+
+      IF ProgressDialogEnabled THEN
+        ProcessingWindow.CLOSE;
+    END;
+
+    BEGIN
+    {
+      //Create functionality When a document is created in External system it will create,update,delete a entry in Correspondance store
+      //NAV attribute is now on one - one.. 14-09-2021 checked if entry exxists
+      //checked if entry exxists
+      //IF Yes then unlink and link
+      //IF No then Link only
+    }
+    END.
+  }
+}
+

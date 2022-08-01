@@ -1,0 +1,171 @@
+OBJECT Page 50013 Client Acc. List API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=08-12-20;
+    Time=14:03:00;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    CaptionML=ENG=Client Account List;
+    SourceTable=Table9068624;
+    PageType=List;
+    OnOpenPage=VAR
+                 Clientno@1000000000 : Text;
+                 ApplicationSetup@1000000001 : Record 9068230;
+               BEGIN
+               END;
+
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                GroupType=Repeater }
+
+    { 17  ;2   ;Field     ;
+                SourceExpr="Client No.";
+                Visible=FALSE }
+
+    { 2   ;2   ;Field     ;
+                SourceExpr="No." }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="Portfolio No." }
+
+    { 1000000016;2;Field  ;
+                CaptionML=ENU=Treasury Info;
+                Visible=FALSE;
+                Style=StandardAccent;
+                StyleExpr=TRUE }
+
+    { 33  ;2   ;Field     ;
+                SourceExpr="Bank Code";
+                OnLookup=VAR
+                           EntityRec@1040000 : Record 9068505;
+                           EntityBankList@1000000001 : Page 9068935;
+                         BEGIN
+                         END;
+                          }
+
+    { 1040010;2;Field     ;
+                SourceExpr=Type }
+
+    { 1040012;2;Field     ;
+                SourceExpr="Client / Entity No." }
+
+    { 1000000052;2;Field  ;
+                SourceExpr="Client / Entity No. 2" }
+
+    { 105 ;2   ;Field     ;
+                CaptionML=ENU=Account No.;
+                SourceExpr="Bank Account No." }
+
+    { 1000000037;2;Field  ;
+                SourceExpr="Settlement Bank Account" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr=Name }
+
+    { 1000000051;2;Field  ;
+                SourceExpr=IBAN }
+
+    { 1000000018;2;Field  ;
+                SourceExpr="Managed Basis" }
+
+    { 41  ;2   ;Field     ;
+                SourceExpr="Account In Name Of" }
+
+    { 37  ;2   ;Field     ;
+                SourceExpr=Description }
+
+    { 1040000;2;Field     ;
+                CaptionML=[ENU=Additional Description;
+                           ENG=Additional Description];
+                SourceExpr="Description 2" }
+
+    { 8   ;2   ;Field     ;
+                SourceExpr="Currency Code" }
+
+    { 19  ;2   ;Field     ;
+                CaptionML=[ENU=Today Balance;
+                           ENG=Today Balance];
+                SourceExpr="Net Change" }
+
+    { 6   ;2   ;Field     ;
+                DrillDown=Yes;
+                CaptionML=[ENU=Future Balance;
+                           ENG=Future Balance];
+                SourceExpr=Balance }
+
+    { 15  ;2   ;Field     ;
+                SourceExpr="Balance (LCY)";
+                Visible=FALSE }
+
+    { 1000000048;2;Field  ;
+                SourceExpr="Balance at Date";
+                Visible=FALSE }
+
+    { 1030000049;2;Field  ;
+                SourceExpr="Balance at Date (LCY)" }
+
+    { 1000000020;2;Field  ;
+                SourceExpr="Reference No." }
+
+    { 23  ;2   ;Field     ;
+                CaptionML=[ENU=Account Contact;
+                           ENG=Account Contact];
+                SourceExpr=Contact }
+
+    { 95  ;2   ;Field     ;
+                CaptionML=ENU=Our Contact Code;
+                SourceExpr="Our Contact Code" }
+
+    { 1000000057;2;Field  ;
+                SourceExpr="Capital/Income" }
+
+    { 97  ;2   ;Field     ;
+                SourceExpr="Posting Group";
+                Visible=FALSE }
+
+    { 31  ;2   ;Field     ;
+                SourceExpr="Maturity Date" }
+
+    { 99  ;2   ;Field     ;
+                SourceExpr="Global Dimension 1 Code";
+                Visible=FALSE }
+
+    { 101 ;2   ;Field     ;
+                SourceExpr="Global Dimension 2 Code";
+                Visible=FALSE }
+
+    { 103 ;2   ;Field     ;
+                SourceExpr="Language Code" }
+
+    { 10  ;2   ;Field     ;
+                SourceExpr="Search Name" }
+
+    { 1040002;2;Field     ;
+                SourceExpr="Bank Account Type" }
+
+    { 1000000014;2;Field  ;
+                SourceExpr=Blocked;
+                Visible=FALSE }
+
+    { 1000000012;2;Field  ;
+                SourceExpr=Closed;
+                Visible=FALSE }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

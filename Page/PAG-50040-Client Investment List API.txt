@@ -1,0 +1,161 @@
+OBJECT Page 50040 Client Investment List API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=02-12-20;
+    Time=18:46:25;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    Editable=Yes;
+    DeleteAllowed=No;
+    ModifyAllowed=Yes;
+    SourceTable=Table9068542;
+    PageType=List;
+    CardPageID=Client Investment Card;
+    RefreshOnActivate=Yes;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000002;1;Field  ;
+                CaptionML=ENU=Investment Type;
+                Visible=false }
+
+    { 1   ;1   ;Group     ;
+                Editable=FALSE;
+                GroupType=Repeater }
+
+    { 1000000007;2;Field  ;
+                SourceExpr="Client No.";
+                Visible=FALSE }
+
+    { 2   ;2   ;Field     ;
+                Lookup=No;
+                AssistEdit=No;
+                SourceExpr="Asset Code";
+                Editable=FALSE }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="Investment Code" }
+
+    { 4   ;2   ;Field     ;
+                SourceExpr="SEDOL Code" }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="ISIN Code" }
+
+    { 8   ;2   ;Field     ;
+                SourceExpr=Name }
+
+    { 10  ;2   ;Field     ;
+                SourceExpr=Description }
+
+    { 6   ;2   ;Field     ;
+                DecimalPlaces=2:6;
+                SourceExpr="Balance at Date (Units)" }
+
+    { 23  ;2   ;Field     ;
+                SourceExpr="Balance at Date LCY (Cost)" }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="Balance at Date FCY (Cost)";
+                Visible=FALSE }
+
+    { 12  ;2   ;Field     ;
+                SourceExpr="Search Name" }
+
+    { 16  ;2   ;Field     ;
+                SourceExpr="Area Code" }
+
+    { 14  ;2   ;Field     ;
+                SourceExpr="Type Code";
+                Editable=FALSE }
+
+    { 1040000;2;Field     ;
+                SourceExpr="Category Code" }
+
+    { 32  ;2   ;Field     ;
+                SourceExpr="Industry Type Code";
+                Visible=FALSE }
+
+    { 30  ;2   ;Field     ;
+                SourceExpr=Depot }
+
+    { 34  ;2   ;Field     ;
+                SourceExpr="Industry Subtype";
+                Visible=FALSE }
+
+    { 36  ;2   ;Field     ;
+                SourceExpr="Client / Entity No." }
+
+    { 18  ;2   ;Field     ;
+                SourceExpr="Investment Currency" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="Additional Investment Code 1";
+                Visible=FALSE }
+
+    { 1000000009;2;Field  ;
+                Description=TWM90.07#1;
+                SourceExpr="Additional Investment Code 2" }
+
+    { 1040002;2;Field     ;
+                SourceExpr="Country Code" }
+
+    { 1040004;2;Field     ;
+                SourceExpr="Country of Incorporation" }
+
+    { 1040006;2;Field     ;
+                SourceExpr="Country of Registration" }
+
+    { 1000000010;2;Field  ;
+                SourceExpr="Interest Bearing" }
+
+    { 1000000011;2;Field  ;
+                SourceExpr="Fixed / Floating" }
+
+    { 1000000012;2;Field  ;
+                SourceExpr="Last Interest Rate Date" }
+
+    { 1000000020;2;Field  ;
+                CaptionML=ENU=Market Value Info;
+                Visible=FALSE;
+                Editable=FALSE }
+
+    { 1000000019;2;Field  ;
+                CaptionML=ENU=Market Value Currency;
+                Editable=FALSE }
+
+    { 1000000018;2;Field  ;
+                CaptionML=ENU=Market Value;
+                Editable=FALSE }
+
+    { 1000000017;2;Field  ;
+                CaptionML=ENU=Market Value (LCY);
+                Editable=FALSE }
+
+    { 1000000022;2;Field  ;
+                CaptionML=ENU=Market Price Date;
+                Editable=FALSE }
+
+    { 1000000021;2;Field  ;
+                CaptionML=ENU=Market Unit Value;
+                Editable=FALSE }
+
+    { 1000000023;2;Field  ;
+                SourceExpr="External Reference" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

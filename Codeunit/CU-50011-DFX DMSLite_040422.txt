@@ -1,0 +1,1359 @@
+OBJECT Codeunit 50011 DFX DMSLite_040422
+{
+  OBJECT-PROPERTIES
+  {
+    Date=04-04-22;
+    Time=18:20:12;
+    Modified=Yes;
+    Version List=NAVLITE;
+  }
+  PROPERTIES
+  {
+    OnRun=VAR
+            FunctionType@1000000000 : ',CreateNew,Update,Delete';
+            AttachedToType@1000000001 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';
+            handtest@1000000003 : TextConst 'ENU="{
+                      ""Action"":{
+          ""Function"": ""HANDSHAKE""},
+                                     ""Records"":[{
+                                     ""EntryNo"":""26"",
+                                                 ""LFUID"":""29239""
+                                                           }
+                                                           ]
+                                                           } "';
+            Createtest@1000000002 : TextConst 'ENU={
+                      "Action":{
+          "Function": "CREATENEW"
+          },
+          "Records":[{
+          "AttachedToType": "Client",
+          "AttachedToNo": "CLI092",
+          "LFEntryID": "12347656",
+          "FileName": "abcd.txt",
+          "DocDescription" : "test",
+          "LFDocType" : "CLREP",
+          "LFDocSubType" : "STATE",
+          "LFUID" : "60000"
+          }
+          ]
+          }';
+            StrCon@1000000004 : Text;
+            StrCheck@1000000005 : Text;
+            Return@100000000 : Boolean;
+          BEGIN
+            MESSAGE('Success');
+            //LinkDocument(AttachedToType::Client,'CL00001',
+            //UpdateDocStroreFromExternal(AttachedToType::" ",'E00000073',231980,'','','','','','',FunctionType::Update,'LF',Today,Today,'','',Today,'');
+            //UpdateDFXDocStroreFromExternal(AttachedToType::Client,'CLI0000003',282,'','Client and Document Type Details.xlsx','','','C02. Certificate','I02. Introducer Certificate',FunctionType::CreateNew,'LF',TODAY,TODAY,'Investment','INV00001',TODAY,'Test'
+          END;
+
+  }
+  CODE
+  {
+    VAR
+      DocMgmntCU@100000000 : Codeunit 9068511;
+
+    PROCEDURE NumberUpation@1000000001(Type@1000000001 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';No@1000000000 : Text;Name@1000000004 : Text) Number : Text;
+    VAR
+      ClientRec@1000000003 : Record 9068500;
+      EntityRec@1000000002 : Record 9068505;
+    BEGIN
+      IF No <> '' THEN BEGIN
+        CASE Type OF
+              Type::Client : BEGIN
+              ClientRec.RESET;
+              IF ClientRec.GET(No) THEN
+                No := ClientRec."Client No.";
+              END;
+              Type::Entity : BEGIN
+              EntityRec.RESET;
+              IF EntityRec.GET(No) THEN
+                No := EntityRec."Entity No.";
+              END
+        END;
+      END ELSE
+        CASE Type OF
+              Type::Client : BEGIN
+                ClientRec.RESET;
+                ClientRec.SETFILTER(Name,'%1','@*' + Name + '*');
+                IF ClientRec.FINDFIRST THEN
+                No := ClientRec."Client No.";
+              END;
+              Type::Entity : BEGIN
+                EntityRec.RESET;
+                EntityRec.SETFILTER(Name,'%1','@*' + Name + '*');
+                IF EntityRec.FINDFIRST THEN
+                No := EntityRec."Entity No.";
+              END
+        END;
+      EXIT(No);
+    END;
+
+    [External]
+    PROCEDURE UpdateDocStroreFromExternal@1000000011(AttachedToType@1000000000 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';AttachedToNo@1000000001 : Code[20];LFEntryID@1000000002 : Integer;FilePath@1000000011 : Text[250];FileName@1000000003 : Text;FileType@1000000010 : Code[10];DocDescription@1000000004 : Text[150];ExtDocType@1000000005 : Text[150];ExtDocSubType@1000000006 : Text[150];Function@1000000009 : ',CreateNew,Update,Delete';ExternalDMS@1000000016 : Text;CreationDate@1000000018 : Date;ModifiedDate@1000000017 : Date;LinkType@1000000019 : Text;NavAttribute@1000000020 : Text;DocumentDate@100000006 : Date;FreeText@100000007 : Text);
+    VAR
+      CorrespondenceStore@1000000007 : Record 9068660;
+      DocMgmntCU@1000000008 : Codeunit 9068511;
+      No@1000000012 : Text;
+      FunctionType@1000000013 : ',CreateNew,Update,Delete';
+      DocType@1000000014 : Text;
+      DocSubType@1000000015 : Text;
+      ID@100000000 : Text;
+      Owner@100000001 : Record 9068443;
+      Intermediary@100000002 : Record 9068447;
+      Prospect@100000003 : Record 9068440;
+      Entity@100000004 : Record 9068505;
+      CorrespondenceStore2@100000005 : Record 9068660;
+    BEGIN
+      CLEAR(No);
+      CLEAR(DocType);
+      CLEAR(DocSubType);
+
+      No := NumberUpation(AttachedToType,AttachedToNo,'');
+
+      IF AttachedToType = AttachedToType::" " THEN
+        ERROR('Type not specified');
+
+      IF AttachedToNo = '' THEN
+        ERROR('No. is empty');
+
+      IF "Function" = FunctionType::CreateNew THEN
+      BEGIN
+            CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+            IF NOT CorrespondenceStore.FINDFIRST THEN BEGIN
+            CorrespondenceStore.INIT;
+            CorrespondenceStore."No." := No;
+            CorrespondenceStore."LaserFiche Entry ID" := LFEntryID;
+            CorrespondenceStore."Source of Document" := CorrespondenceStore."Source of Document"::Imported;
+            CorrespondenceStore."Document Inserted By" := ExternalDMS;
+            CorrespondenceStore.FilePath := FilePath;
+            CorrespondenceStore.FileName := FileName;
+            CorrespondenceStore."MS Office Doc Type" := FileType;
+            CorrespondenceStore.Subject := DocDescription;
+            CorrespondenceStore."External DMS Status" := CorrespondenceStore."External DMS Status"::Processed;
+            CorrespondenceStore."Additional Information" := NavAttribute;//[To be determined] in migration
+            CorrespondenceStore.Meta_Date_1 := CreationDate;
+            CorrespondenceStore.Meta_Date_2 := ModifiedDate;
+            CorrespondenceStore.Meta_Text_5 := FreeText;
+            CorrespondenceStore."Document Date" := DocumentDate;
+            ID :=  CorrespondenceStore.ID;
+
+           { DocType := GetNAVDocType(ExtDocType);
+            DocSubType := GetNAVDocSubType(ExtDocType,ExtDocSubType);
+            CorrespondenceStore."Document Type" := DocType;
+            CorrespondenceStore."Document Sub Type" := DocSubType;//Link doc type directly from correspondece doc type and doctype sub type table so remove this code
+      }
+
+            DocType := GetDocType(ExtDocType);
+            DocSubType := GetDocSubType(ExtDocType,ExtDocSubType);
+            CorrespondenceStore."Document Type" := DocType;
+            CorrespondenceStore."Document Sub Type" := DocSubType;
+
+
+            IF AttachedToType = AttachedToType::Client THEN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::Client;
+            IF AttachedToType = AttachedToType::Entity THEN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::Entity;
+            IF AttachedToType = AttachedToType::Resource THEN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::Resource;
+            IF AttachedToType = AttachedToType::"Client Owner" THEN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::"Client Owner";
+
+            CorrespondenceStore.ID := DocMgmntCU."Get Next Document Number"(CorrespondenceStore.Type, CorrespondenceStore."No.");
+
+
+            IF CorrespondenceStore.INSERT(TRUE) THEN BEGIN
+
+                  IF AttachedToType = AttachedToType::Entity THEN BEGIN
+                    EntityOwnerLink(AttachedToNo,LFEntryID,FilePath,FileName,FileType,DocDescription,ExtDocType,ExtDocSubType,ExternalDMS,CreationDate,ModifiedDate,DocumentDate,FreeText);
+                    EntityProspectLink(AttachedToNo,LFEntryID,FilePath,FileName,FileType,DocDescription,ExtDocType,ExtDocSubType,ExternalDMS,CreationDate,ModifiedDate,DocumentDate,FreeText);
+                    EntityIntermediaryLink(AttachedToNo,LFEntryID,FilePath,FileName,FileType,DocDescription,ExtDocType,ExtDocSubType,ExternalDMS,CreationDate,ModifiedDate,DocumentDate,FreeText);
+
+                  END ELSE IF CheckEntryIDExist(AttachedToType,AttachedToNo,LFEntryID) THEN BEGIN
+                    Unlink(AttachedToType,AttachedToNo,ID);
+                    LinkDocument(AttachedToType,AttachedToNo,LFEntryID,LinkType,NavAttribute)
+                  END ELSE
+                    LinkDocument(AttachedToType,AttachedToNo,LFEntryID,LinkType,NavAttribute);
+
+            END;
+
+      END
+          ELSE
+          ERROR('Entry already exists');
+      END
+      ELSE IF "Function" = FunctionType::Update THEN
+      BEGIN
+              CorrespondenceStore.RESET;
+              IF AttachedToType = AttachedToType::Client THEN
+                CorrespondenceStore.SETRANGE(Type,CorrespondenceStore.Type::Client);
+              IF AttachedToType = AttachedToType::Entity THEN
+                CorrespondenceStore.SETRANGE(Type,CorrespondenceStore.Type::Entity);
+              IF AttachedToType = AttachedToType::Resource THEN
+                CorrespondenceStore.SETRANGE(Type,CorrespondenceStore.Type::Resource);
+              IF AttachedToType = AttachedToType::"Client Owner" THEN
+                CorrespondenceStore.SETRANGE(Type,CorrespondenceStore.Type::"Client Owner");
+            CorrespondenceStore.SETRANGE("No.",No);
+            CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+            IF CorrespondenceStore.FINDFIRST THEN BEGIN
+              CorrespondenceStore."Source of Document" := CorrespondenceStore."Source of Document"::Imported;
+              CorrespondenceStore."Document Inserted By" := ExternalDMS;
+              CorrespondenceStore.FileName := FileName;
+              CorrespondenceStore.FilePath := FilePath;
+              CorrespondenceStore.Subject := DocDescription;
+              CorrespondenceStore."MS Office Doc Type" := FileType;
+              CorrespondenceStore."External DMS Status" := CorrespondenceStore."External DMS Status"::Processed;
+              CorrespondenceStore."Additional Information" := NavAttribute;//[To be determined] in migration
+              CorrespondenceStore.Meta_Date_1 := CreationDate;
+              CorrespondenceStore.Meta_Date_2 := ModifiedDate;
+              CorrespondenceStore.Meta_Text_5 := FreeText;
+              CorrespondenceStore."Document Date" := DocumentDate;
+              ID :=  CorrespondenceStore.ID;
+
+              DocType := GetNAVDocType(ExtDocType);
+              DocSubType := GetNAVDocSubType(ExtDocType,ExtDocSubType);
+              CorrespondenceStore."Document Type" := DocType;
+              CorrespondenceStore."Document Sub Type" := DocSubType;//Link doc type directly from correspondece doc type and doctype sub type table so remove this code
+
+
+             {DocType := GetDocType(ExtDocType);
+              DocSubType := GetDocSubType(ExtDocType,ExtDocSubType);
+              CorrespondenceStore."Document Type" := DocType;
+              CorrespondenceStore."Document Sub Type" := DocSubType;}
+
+              IF AttachedToType = AttachedToType::Client THEN
+                CorrespondenceStore.Type := CorrespondenceStore.Type::Client;
+              IF AttachedToType = AttachedToType::Entity THEN
+                CorrespondenceStore.Type := CorrespondenceStore.Type::Entity;
+              IF AttachedToType = AttachedToType::Resource THEN
+                CorrespondenceStore.Type := CorrespondenceStore.Type::Resource;
+              IF AttachedToType = AttachedToType::"Client Owner" THEN
+                CorrespondenceStore.Type := CorrespondenceStore.Type::"Client Owner";
+
+              IF CorrespondenceStore.MODIFY THEN BEGIN
+                IF AttachedToType = AttachedToType::Entity THEN BEGIN
+                  EntityOwnerLink(AttachedToNo,LFEntryID,FilePath,FileName,FileType,DocDescription,ExtDocType,ExtDocSubType,ExternalDMS,CreationDate,ModifiedDate,DocumentDate,FreeText);
+                  EntityProspectLink(AttachedToNo,LFEntryID,FilePath,FileName,FileType,DocDescription,ExtDocType,ExtDocSubType,ExternalDMS,CreationDate,ModifiedDate,DocumentDate,FreeText);
+                  EntityIntermediaryLink(AttachedToNo,LFEntryID,FilePath,FileName,FileType,DocDescription,ExtDocType,ExtDocSubType,ExternalDMS,CreationDate,ModifiedDate,DocumentDate,FreeText);
+
+                  END ELSE
+                IF CheckEntryIDExist(AttachedToType,AttachedToNo,LFEntryID) THEN BEGIN
+                  Unlink(AttachedToType,AttachedToNo,ID);
+                  LinkDocument(AttachedToType,AttachedToNo,LFEntryID,LinkType,NavAttribute)
+                END ELSE
+                  LinkDocument(AttachedToType,AttachedToNo,LFEntryID,LinkType,NavAttribute);
+
+              END
+           END
+           ELSE IF NOT CorrespondenceStore.FINDFIRST THEN BEGIN
+            CorrespondenceStore.INIT;
+            CorrespondenceStore."No." := No;
+            CorrespondenceStore."LaserFiche Entry ID" := LFEntryID;
+            CorrespondenceStore."Source of Document" := CorrespondenceStore."Source of Document"::Imported;
+            CorrespondenceStore."Document Inserted By" := ExternalDMS;
+            CorrespondenceStore.FilePath := FilePath;
+            CorrespondenceStore.FileName := FileName;
+            CorrespondenceStore."MS Office Doc Type" := FileType;
+            CorrespondenceStore.Subject := DocDescription;
+            CorrespondenceStore."External DMS Status" := CorrespondenceStore."External DMS Status"::Processed;
+            CorrespondenceStore."Additional Information" := NavAttribute;//[To be determined] in migration
+            CorrespondenceStore.Meta_Date_1 := CreationDate;
+            CorrespondenceStore.Meta_Date_2 := ModifiedDate;
+            CorrespondenceStore.Meta_Text_5 := FreeText;
+            CorrespondenceStore."Document Date" := DocumentDate;
+
+            DocType := GetNAVDocType(ExtDocType);
+            DocSubType := GetNAVDocSubType(ExtDocType,ExtDocSubType);
+            CorrespondenceStore."Document Type" := DocType;
+            CorrespondenceStore."Document Sub Type" := DocSubType;//Link doc type directly from correspondece doc type and doctype sub type table so remove this code
+
+
+            {DocType := GetDocType(ExtDocType);
+            DocSubType := GetDocSubType(ExtDocType,ExtDocSubType);
+            CorrespondenceStore."Document Type" := DocType;
+            CorrespondenceStore."Document Sub Type" := DocSubType;}
+
+
+            IF AttachedToType = AttachedToType::Client THEN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::Client;
+            IF AttachedToType = AttachedToType::Entity THEN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::Entity;
+            IF AttachedToType = AttachedToType::Resource THEN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::Resource;
+            IF AttachedToType = AttachedToType::"Client Owner" THEN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::"Client Owner";
+
+            CorrespondenceStore.ID := DocMgmntCU."Get Next Document Number"(CorrespondenceStore.Type, CorrespondenceStore."No.");
+
+
+            IF CorrespondenceStore.INSERT(TRUE) THEN BEGIN
+
+
+              IF AttachedToType = AttachedToType::Entity THEN BEGIN
+                EntityOwnerLink(AttachedToNo,LFEntryID,FilePath,FileName,FileType,DocDescription,ExtDocType,ExtDocSubType,ExternalDMS,CreationDate,ModifiedDate,DocumentDate,FreeText);
+                EntityProspectLink(AttachedToNo,LFEntryID,FilePath,FileName,FileType,DocDescription,ExtDocType,ExtDocSubType,ExternalDMS,CreationDate,ModifiedDate,DocumentDate,FreeText);
+                EntityIntermediaryLink(AttachedToNo,LFEntryID,FilePath,FileName,FileType,DocDescription,ExtDocType,ExtDocSubType,ExternalDMS,CreationDate,ModifiedDate,DocumentDate,FreeText);
+
+              END ELSE IF CheckEntryIDExist(AttachedToType,AttachedToNo,LFEntryID) THEN BEGIN
+                  Unlink(AttachedToType,AttachedToNo,ID);
+                  LinkDocument(AttachedToType,AttachedToNo,LFEntryID,LinkType,NavAttribute)
+               END ELSE
+                LinkDocument(AttachedToType,AttachedToNo,LFEntryID,LinkType,NavAttribute);
+            END;
+      END
+      END
+      ELSE IF "Function" = FunctionType::Delete THEN BEGIN
+              CorrespondenceStore.RESET;
+              CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+              IF CorrespondenceStore.FINDSET THEN BEGIN
+              REPEAT
+                CorrespondenceStore.DELETE
+              UNTIL CorrespondenceStore.NEXT = 0;
+              END ELSE
+                ERROR('Entry Does not exist');
+
+          END;
+    END;
+
+    LOCAL PROCEDURE GetNAVDocType@1000000016(ExtDoctype@1000000000 : Text[150]) : Code[10];
+    VAR
+      ExternalDocTypeRec@1000000001 : Record 50007;
+    BEGIN
+      ExternalDocTypeRec.SETRANGE("External Doc Type", ExtDoctype);
+      IF ExternalDocTypeRec.FINDFIRST THEN
+        EXIT(ExternalDocTypeRec."NAV Doc Type");
+
+      EXIT('');
+    END;
+
+    LOCAL PROCEDURE GetNAVDocSubType@1000000019(ExtDocType@1000000000 : Text[150];ExtDocSubType@1000000001 : Text[150]) : Code[20];
+    VAR
+      ExternalDocSubTypeRec@1000000002 : Record 50008;
+    BEGIN
+      ExternalDocSubTypeRec.SETRANGE("External Doc Type", ExtDocType);
+      ExternalDocSubTypeRec.SETRANGE("External Sub Doc Type", ExtDocSubType);
+      IF ExternalDocSubTypeRec.FINDFIRST THEN
+        EXIT(ExternalDocSubTypeRec."NAV Doc Sub Type");
+
+      EXIT('');
+    END;
+
+    LOCAL PROCEDURE GetDocType@100000003(ExtDoctype@1000000000 : Text[150]) : Text;
+    VAR
+      CorrespondenceDocType@100000000 : Record 9068657;
+    BEGIN
+      CorrespondenceDocType.RESET;
+      CorrespondenceDocType.SETRANGE(Type,ExtDoctype);
+      IF CorrespondenceDocType.FINDFIRST THEN
+        EXIT(CorrespondenceDocType.Type);
+
+      EXIT('');
+    END;
+
+    LOCAL PROCEDURE GetDocSubType@100000002(ExtDocType@1000000000 : Text[150];ExtDocSubType@1000000001 : Text[150]) : Text;
+    VAR
+      DocumentTypeSubType@100000000 : Record 9068463;
+    BEGIN
+      DocumentTypeSubType.RESET;
+      DocumentTypeSubType.SETRANGE("Document Type Description",ExtDocType);
+      DocumentTypeSubType.SETRANGE("Document Sub Type Description",ExtDocSubType);
+      IF DocumentTypeSubType.FINDFIRST THEN
+        EXIT(DocumentTypeSubType."Document Sub Type Description");
+
+      EXIT('');
+    END;
+
+    [External]
+    PROCEDURE LinkDocument@1000000000(AttachedToType@1000000017 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';AttachedToNo@1000000004 : Code[20];LFEntryID@1000000003 : Integer;LinkType@1000000016 : Text;NAVAttribute@1000000005 : Text);
+    VAR
+      CorrespondenceStoreLink@1000000002 : Record 9069078;
+      CorrespondenceStoreLink2@1000000001 : Record 9069078;
+      CorrespondenceStore@1000000000 : Record 9068660;
+      LinkTypeFilter@1000000006 : Text;
+      LinkCodeFilter@1000000007 : Text;
+      NoFilter@1000000008 : Text;
+      StrCon@1000000010 : Text;
+      ClientAccount@1000000009 : Record 9068624;
+      ClientAsset@1000000011 : Record 9068546;
+      ClientPortfolio@1000000012 : Record 9068565;
+      ClientInvestment@1000000013 : Record 9068542;
+      ClientCustomer@1000000014 : Record 9068602;
+      ClientVendor@1000000015 : Record 9068604;
+      LinkCode@100000000 : Text;
+    BEGIN
+      IF NAVAttribute <> '' THEN BEGIN
+        IF LinkType <> '' THEN
+        BEGIN
+
+      IF NAVAttribute = 'TBD' THEN
+        LinkType := '';
+
+          CASE AttachedToType OF
+          AttachedToType::Client :
+            CorrespondenceStore.SETFILTER(Type,'Client');
+          AttachedToType::Entity:
+            CorrespondenceStore.SETFILTER(Type,'Entity');
+          AttachedToType::Intermediary:
+            CorrespondenceStore.SETFILTER(Type,'Intermediary');
+          AttachedToType::"Client Owner" :
+            CorrespondenceStore.SETFILTER(Type,'Client Owner');
+          AttachedToType::"Potential Client":
+            CorrespondenceStore.SETFILTER(Type,'Potential Client');
+          AttachedToType::Prospect :
+            CorrespondenceStore.SETFILTER(Type,'Prospect');
+          AttachedToType::Resource :
+            CorrespondenceStore.SETFILTER(Type,'Resource');
+          END;
+
+          CorrespondenceStore.SETFILTER("No.",AttachedToNo);
+          CorrespondenceStore.SETRANGE("Temporary",FALSE);
+
+          StrCon := CONVERTSTR(NAVAttribute,'-',',');
+          LinkCodeFilter := SELECTSTR(1,StrCon);
+
+
+           IF LinkType = 'Account' THEN BEGIN
+             LinkCode := DELSTR(LinkCodeFilter,3);
+             IF LinkCode = 'BK' THEN
+               LinkTypeFilter := 'Bank'
+             ELSE IF LinkCode = 'LN' THEN
+               LinkTypeFilter := 'Loan'
+          END
+          ELSE IF LinkType = 'Invoice' THEN
+              LinkTypeFilter := 'Client Invoice'
+          ELSE IF LinkType = 'Payment' THEN
+              LinkTypeFilter := ''
+          ELSE
+              LinkTypeFilter := LinkType;
+
+          //CorrespondenceStore.SETRANGE("Corresp. Store Link Exists",FALSE);
+          CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+          CorrespondenceStore.FILTERGROUP(0);
+
+          IF CorrespondenceStore.FINDFIRST THEN BEGIN
+
+            IF CorrespondenceStore.ID <> '' THEN BEGIN
+              CorrespondenceStoreLink2.INIT;
+              CorrespondenceStoreLink2.Type        := CorrespondenceStore.Type;
+              CorrespondenceStoreLink2."No."       := CorrespondenceStore."No.";
+
+              IF (LinkTypeFilter = 'Yacht') OR (LinkTypeFilter = 'Property') OR (LinkTypeFilter = 'Aviation') OR (LinkTypeFilter = 'Intellectual Property')
+              OR (LinkTypeFilter = 'Life Assurance') OR (LinkTypeFilter = 'Miscellaneous Asset') THEN BEGIN
+                  EVALUATE(CorrespondenceStoreLink2."Link Type",'Asset');
+              END ELSE
+              EVALUATE(CorrespondenceStoreLink2."Link Type",LinkTypeFilter);
+
+              CorrespondenceStoreLink2."Link Code" := LinkCodeFilter;
+              CorrespondenceStoreLink2.VALIDATE(ID,CorrespondenceStore.ID);
+              CorrespondenceStoreLink2."External DMS Status" := CorrespondenceStoreLink2."External DMS Status"::Processed;
+              CorrespondenceStoreLink.RESET;
+              CorrespondenceStoreLink.SETRANGE(Type,CorrespondenceStoreLink2.Type);
+              CorrespondenceStoreLink.SETRANGE("No.",CorrespondenceStoreLink2."No.");
+              CorrespondenceStoreLink.SETRANGE("Link Type",CorrespondenceStoreLink2."Link Type");
+              CorrespondenceStoreLink.SETRANGE("Link Code",CorrespondenceStoreLink2."Link Code");
+              CorrespondenceStoreLink.SETRANGE("Correspondence Store Type",CorrespondenceStoreLink2."Correspondence Store Type");
+              CorrespondenceStoreLink.SETRANGE(ID,CorrespondenceStoreLink2.ID);
+              IF NOT CorrespondenceStoreLink.FINDFIRST THEN
+                CorrespondenceStoreLink2.INSERT(TRUE)
+              ELSE
+                CorrespondenceStoreLink2.MODIFY(TRUE);
+
+      END;
+      END
+      END; {ELSE
+            ERROR('Link Type is Empty');
+          END ELSE
+          ERROR('NAVAttribute is Empty');
+          }
+      END;
+    END;
+
+    [External]
+    PROCEDURE HandShakeStatus@1000000002(LFEntryID@1000000000 : Integer;Status@1000000002 : Text);
+    VAR
+      CorrespondenceStore@1000000001 : Record 9068660;
+    BEGIN
+      CorrespondenceStore.RESET;
+      CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+      IF CorrespondenceStore.FINDFIRST THEN BEGIN
+        CorrespondenceStore."Additional Information" := Status;
+        IF CorrespondenceStore."Additional Information" <> 'Processed' THEN
+          CorrespondenceStore.MODIFY
+        ELSE IF CorrespondenceStore."Additional Information" = 'Processed' THEN
+          ERROR('Entry already processed');
+      END
+    END;
+
+    [External]
+    PROCEDURE UnlinkDocument@100000001(AttachedToType@100000005 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';AttachedToNo@100000004 : Code[20];LFEntryID@100000011 : Integer;LinkType@100000002 : Text;NAVAttribute@100000001 : Text);
+    VAR
+      CorrespondenceStoreLink@100000000 : Record 9069078;
+      LinkTypeFilter@100000008 : Text;
+      LinkCodeFilter@100000007 : Text;
+      LinkCode@100000006 : Text;
+      StrCon@100000009 : Text;
+      LinkTypeOption@100000010 : ' ,Asset,Safe Custody,Bank,Loan,Agent,Investment,Client Entity,Client Entity History,Customer,Vendor,Portfolio,Transaction Monitoring,Interaction,Activity,Business Rule,Client Invoice,Meeting';
+      CorrespondenceStore@100000003 : Record 9068660;
+      ID@100000012 : Code[10];
+    BEGIN
+      //IF AttachedToType = AttachedToType::Client THEN
+      IF NAVAttribute <> '' THEN BEGIN
+        IF LinkType <> '' THEN
+        BEGIN
+          StrCon := CONVERTSTR(NAVAttribute,'-',',');
+          LinkCodeFilter := SELECTSTR(1,StrCon);
+
+
+          IF LinkType = 'Account' THEN BEGIN
+            LinkCode := DELSTR(LinkCodeFilter,3);
+            IF LinkCode = 'BK' THEN
+              LinkTypeFilter := 'Bank'
+            ELSE IF LinkCode = 'LN' THEN
+               LinkTypeFilter := 'Loan'
+          END ELSE
+            LinkTypeFilter := LinkType;
+
+          CASE LinkTypeFilter OF
+            'Bank' :
+              LinkTypeOption := LinkTypeOption::Bank;
+            'Asset' :
+              LinkTypeOption := LinkTypeOption::Asset;
+            'Loan':
+              LinkTypeOption := LinkTypeOption::Loan;
+            'Portfolio' :
+              LinkTypeOption := LinkTypeOption::Portfolio;
+            'Investment' :
+              LinkTypeOption := LinkTypeOption::Investment;
+            'Agent' :
+              LinkTypeOption := LinkTypeOption::Agent;
+            'Meeting' :
+              LinkTypeOption := LinkTypeOption::Meeting;
+          END;
+
+          CorrespondenceStore.RESET;
+
+          CASE AttachedToType OF
+          AttachedToType::Client :
+            CorrespondenceStore.SETFILTER(Type,'Client');
+          AttachedToType::Entity:
+            CorrespondenceStore.SETFILTER(Type,'Entity');
+          AttachedToType::Intermediary:
+            CorrespondenceStore.SETFILTER(Type,'Intermediary');
+          AttachedToType::"Client Owner" :
+            CorrespondenceStore.SETFILTER(Type,'Client Owner');
+          AttachedToType::"Potential Client" :
+            CorrespondenceStore.SETFILTER(Type,'Potential Client');
+          AttachedToType::Prospect :
+            CorrespondenceStore.SETFILTER(Type,'Prospect');
+          AttachedToType::Resource :
+            CorrespondenceStore.SETFILTER(Type,'Resource');
+          END;
+
+          CorrespondenceStore.SETFILTER("No.",AttachedToNo);
+          CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+          IF CorrespondenceStore.FINDFIRST THEN
+            ID := CorrespondenceStore.ID;
+
+          CorrespondenceStoreLink.RESET;
+          CorrespondenceStoreLink.SETRANGE("No.",AttachedToNo);
+          CorrespondenceStoreLink.SETRANGE(Type,CorrespondenceStoreLink.Type::Client);
+          CorrespondenceStoreLink.SETRANGE("Link Type",LinkTypeOption);
+          CorrespondenceStoreLink.SETRANGE("Link Code",LinkCodeFilter);
+         // CorrespondenceStoreLink.SETRANGE("Correspondence Store Type",CorrespondenceStoreLink."Correspondence Store Type"::"0");
+          CorrespondenceStoreLink.SETRANGE(ID,ID);
+          IF CorrespondenceStoreLink.FINDFIRST THEN
+            CorrespondenceStoreLink.DELETE
+          ELSE
+            ERROR('Record not found');
+        END ELSE
+            ERROR('Link Type is Empty');
+          END ELSE
+          ERROR('NAVAttribute is Empty');
+    END;
+
+    LOCAL PROCEDURE CheckEntryIDExist@100000000(AttachedToType@100000003 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';AttachedToNo@100000002 : Code[20];LFEntryID@100000001 : Integer) Exists : Boolean;
+    VAR
+      CorrespondenceStore@100000000 : Record 9068660;
+      ID@100000004 : Text;
+    BEGIN
+      CorrespondenceStore.RESET;
+      CorrespondenceStore.SETFILTER(Type,'Client');
+      CorrespondenceStore.SETFILTER("No.",AttachedToNo);
+      CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+      IF CorrespondenceStore.FINDFIRST THEN
+        ID := CorrespondenceStore.ID;
+
+      IF ID <> '' THEN
+        Exists := TRUE
+      ELSE
+        Exists := FALSE;
+
+      EXIT(Exists);
+    END;
+
+    LOCAL PROCEDURE Unlink@100000008(AttachedToType@1000000001 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';AttachedToNo@1000000000 : Code[20];ID@100000001 : Text);
+    VAR
+      CorrespondenceStoreLink@100000000 : Record 9069078;
+    BEGIN
+      CorrespondenceStoreLink.RESET;
+      CorrespondenceStoreLink.SETFILTER(Type,'Client');
+      CorrespondenceStoreLink.SETFILTER("No.",AttachedToNo);
+      CorrespondenceStoreLink.SETRANGE(ID,ID);
+      IF CorrespondenceStoreLink.FINDFIRST THEN
+        CorrespondenceStoreLink.DELETE
+      //ELSE
+       //ERROR('Record not found');
+    END;
+
+    [External]
+    PROCEDURE HandShake@100000020(AttachedToType@100000002 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';AttachedToNo@100000001 : Code[50];NAme@100000005 : Text;FileName@100000000 : Text;LFEntyId@100000003 : Integer) Success : Boolean;
+    VAR
+      CorrespondenceStore@100000004 : Record 9068660;
+    BEGIN
+      CASE AttachedToType OF
+          AttachedToType::Client :
+            CorrespondenceStore.SETFILTER(Type,'Client');
+          AttachedToType::Entity:
+            CorrespondenceStore.SETFILTER(Type,'Entity');
+          AttachedToType::Intermediary:
+            CorrespondenceStore.SETFILTER(Type,'Intermediary');
+          AttachedToType::"Client Owner" :
+            CorrespondenceStore.SETFILTER(Type,'Client Owner');
+          AttachedToType::"Potential Client":
+            CorrespondenceStore.SETFILTER(Type,'Potential Client');
+          AttachedToType::Prospect :
+            CorrespondenceStore.SETFILTER(Type,'Prospect');
+          AttachedToType::Resource :
+            CorrespondenceStore.SETFILTER(Type,'Resource');
+          END;
+
+      CorrespondenceStore.SETRANGE("No.",AttachedToNo);
+      CorrespondenceStore.SETRANGE(FileName,FileName);
+      CorrespondenceStore.FINDFIRST;
+      IF CorrespondenceStore."LaserFiche Entry ID" = 0 THEN BEGIN
+        CorrespondenceStore."LaserFiche Entry ID" := LFEntyId;
+        IF CorrespondenceStore.MODIFY THEN
+          EXIT(TRUE)
+        ELSE
+          EXIT(FALSE);
+      END;
+
+    END;
+
+    LOCAL PROCEDURE EntityOwnerLink@100000009(AttachedToNo@100000018 : Code[20];LFEntryID@100000017 : Integer;FilePath@100000016 : Text[250];FileName@100000015 : Text;FileType@100000014 : Code[10];DocDescription@100000013 : Text[150];ExtDocType@100000012 : Text[150];ExtDocSubType@100000011 : Text[150];ExternalDMS@100000009 : Text;CreationDate@100000008 : Date;ModifiedDate@100000007 : Date;DocumentDate@100000020 : Date;FreeText@100000010 : Text);
+    VAR
+      Owner@100000006 : Record 9068443;
+      Entity@100000005 : Record 9068505;
+      AttachedToType@100000004 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';
+      CorrespondenceStore@100000003 : Record 9068660;
+      CorrespondenceStore2@100000002 : Record 9068660;
+      ID@100000000 : Text;
+      DocType@100000001 : Text;
+      DocSubType@100000019 : Text;
+    BEGIN
+      Entity.GET(AttachedToNo);
+      IF Entity."Owner No." <> ''  THEN
+        BEGIN
+          Owner.RESET;
+          Owner.SETRANGE("No.",Entity."Owner No.");
+          IF Owner.FINDFIRST THEN BEGIN
+            CorrespondenceStore.RESET;
+            CorrespondenceStore.SETRANGE(Type,CorrespondenceStore.Type::"Client Owner");
+            CorrespondenceStore.SETRANGE("No.",Owner."No.");
+            CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+            IF CorrespondenceStore.FINDFIRST THEN BEGIN
+              CorrespondenceStore."Source of Document" := CorrespondenceStore."Source of Document"::Imported;
+              CorrespondenceStore."Document Inserted By" := ExternalDMS;
+              CorrespondenceStore.FileName := FileName;
+              CorrespondenceStore.FilePath := FilePath;
+              CorrespondenceStore.Subject := DocDescription;
+              CorrespondenceStore."MS Office Doc Type" := FileType;
+              CorrespondenceStore."External DMS Status" := CorrespondenceStore."External DMS Status"::Processed;
+              CorrespondenceStore.Meta_Date_1 := CreationDate;
+              CorrespondenceStore.Meta_Date_2 := ModifiedDate;
+              CorrespondenceStore.Meta_Text_5 := FreeText;
+              CorrespondenceStore."Document Date" := DocumentDate;
+              ID :=  CorrespondenceStore.ID;
+
+              DocType := GetNAVDocType(ExtDocType);
+              DocSubType := GetNAVDocSubType(ExtDocType,ExtDocSubType);
+              CorrespondenceStore."Document Type" := DocType;
+              CorrespondenceStore."Document Sub Type" := DocSubType;
+
+              CorrespondenceStore.MODIFY(TRUE);
+              END
+              ELSE BEGIN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::"Client Owner";
+              CorrespondenceStore."No." := Owner."No.";
+              CorrespondenceStore."LaserFiche Entry ID" := LFEntryID;
+              CorrespondenceStore."Source of Document" := CorrespondenceStore."Source of Document"::Imported;
+              CorrespondenceStore."Document Inserted By" := ExternalDMS;
+              CorrespondenceStore.FileName := FileName;
+              CorrespondenceStore.FilePath := FilePath;
+              CorrespondenceStore.Subject := DocDescription;
+              CorrespondenceStore."MS Office Doc Type" := FileType;
+              CorrespondenceStore."External DMS Status" := CorrespondenceStore."External DMS Status"::Processed;
+              CorrespondenceStore.Meta_Date_1 := CreationDate;
+              CorrespondenceStore.Meta_Date_2 := ModifiedDate;
+              CorrespondenceStore.Meta_Text_5 := FreeText;
+              CorrespondenceStore."Document Date" := DocumentDate;
+              ID :=  CorrespondenceStore.ID;
+
+              DocType := GetNAVDocType(ExtDocType);
+              DocSubType := GetNAVDocSubType(ExtDocType,ExtDocSubType);
+              CorrespondenceStore."Document Type" := DocType;
+              CorrespondenceStore."Document Sub Type" := DocSubType;
+
+              CorrespondenceStore.ID := DocMgmntCU."Get Next Document Number"(CorrespondenceStore.Type, CorrespondenceStore."No.");
+
+              CorrespondenceStore.INSERT(TRUE);
+              END
+          END
+        END
+    END;
+
+    LOCAL PROCEDURE EntityProspectLink@100000019(AttachedToNo@100000011 : Code[20];LFEntryID@100000010 : Integer;FilePath@100000009 : Text[250];FileName@100000008 : Text;FileType@100000007 : Code[10];DocDescription@100000006 : Text[150];ExtDocType@100000005 : Text[150];ExtDocSubType@100000004 : Text[150];ExternalDMS@100000002 : Text;CreationDate@100000001 : Date;ModifiedDate@100000000 : Date;DocumentDate@100000020 : Date;FreeText@100000003 : Text);
+    VAR
+      Prospect@100000019 : Record 9068440;
+      Entity@100000018 : Record 9068505;
+      AttachedToType@100000017 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';
+      CorrespondenceStore@100000016 : Record 9068660;
+      CorrespondenceStore2@100000015 : Record 9068660;
+      ID@100000014 : Text;
+      DocType@100000013 : Text;
+      DocSubType@100000012 : Text;
+    BEGIN
+      Entity.GET(AttachedToNo);
+      IF Entity."Prospect No." <> ''  THEN
+        BEGIN
+          Prospect.RESET;
+          Prospect.SETRANGE("No.",Entity."Prospect No.");
+          IF Prospect.FINDFIRST THEN BEGIN
+            CorrespondenceStore.RESET;
+            CorrespondenceStore.SETRANGE(Type,CorrespondenceStore.Type::Prospect);
+            CorrespondenceStore.SETRANGE("No.",Prospect."No.");
+            CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+            IF CorrespondenceStore.FINDFIRST THEN BEGIN
+              CorrespondenceStore."Source of Document" := CorrespondenceStore."Source of Document"::Imported;
+              CorrespondenceStore."Document Inserted By" := ExternalDMS;
+              CorrespondenceStore.FileName := FileName;
+              CorrespondenceStore.FilePath := FilePath;
+              CorrespondenceStore.Subject := DocDescription;
+              CorrespondenceStore."MS Office Doc Type" := FileType;
+              CorrespondenceStore."External DMS Status" := CorrespondenceStore."External DMS Status"::Processed;
+              CorrespondenceStore.Meta_Date_1 := CreationDate;
+              CorrespondenceStore.Meta_Date_2 := ModifiedDate;
+              CorrespondenceStore.Meta_Text_5 := FreeText;
+              CorrespondenceStore."Document Date" := DocumentDate;
+              ID :=  CorrespondenceStore.ID;
+
+              DocType := GetNAVDocType(ExtDocType);
+              DocSubType := GetNAVDocSubType(ExtDocType,ExtDocSubType);
+              CorrespondenceStore."Document Type" := DocType;
+              CorrespondenceStore."Document Sub Type" := DocSubType;
+
+              CorrespondenceStore.MODIFY(TRUE);
+              END
+              ELSE BEGIN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::Prospect;
+              CorrespondenceStore."No." := Prospect."No.";
+              CorrespondenceStore."LaserFiche Entry ID" := LFEntryID;
+              CorrespondenceStore."Source of Document" := CorrespondenceStore."Source of Document"::Imported;
+              CorrespondenceStore."Document Inserted By" := ExternalDMS;
+              CorrespondenceStore.FileName := FileName;
+              CorrespondenceStore.FilePath := FilePath;
+              CorrespondenceStore.Subject := DocDescription;
+              CorrespondenceStore."MS Office Doc Type" := FileType;
+              CorrespondenceStore."External DMS Status" := CorrespondenceStore."External DMS Status"::Processed;
+              CorrespondenceStore.Meta_Date_1 := CreationDate;
+              CorrespondenceStore.Meta_Date_2 := ModifiedDate;
+              CorrespondenceStore.Meta_Text_5 := FreeText;
+              CorrespondenceStore."Document Date" := DocumentDate;
+              ID :=  CorrespondenceStore.ID;
+
+              DocType := GetNAVDocType(ExtDocType);
+              DocSubType := GetNAVDocSubType(ExtDocType,ExtDocSubType);
+              CorrespondenceStore."Document Type" := DocType;
+              CorrespondenceStore."Document Sub Type" := DocSubType;
+
+              CorrespondenceStore.ID := DocMgmntCU."Get Next Document Number"(CorrespondenceStore.Type, CorrespondenceStore."No.");
+
+              CorrespondenceStore.INSERT(TRUE);
+              END
+          END
+        END
+    END;
+
+    LOCAL PROCEDURE EntityIntermediaryLink@100000021(AttachedToNo@100000011 : Code[20];LFEntryID@100000010 : Integer;FilePath@100000009 : Text[250];FileName@100000008 : Text;FileType@100000007 : Code[10];DocDescription@100000006 : Text[150];ExtDocType@100000005 : Text[150];ExtDocSubType@100000004 : Text[150];ExternalDMS@100000002 : Text;CreationDate@100000001 : Date;ModifiedDate@100000000 : Date;DocumentDate@100000020 : Date;FreeText@100000003 : Text);
+    VAR
+      Entity@100000018 : Record 9068505;
+      AttachedToType@100000017 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client';
+      CorrespondenceStore@100000016 : Record 9068660;
+      CorrespondenceStore2@100000015 : Record 9068660;
+      ID@100000014 : Text;
+      DocType@100000013 : Text;
+      DocSubType@100000012 : Text;
+      Intermediary@100000019 : Record 9068447;
+    BEGIN
+      Entity.GET(AttachedToNo);
+      IF Entity."Intermediary No." <> ''  THEN
+        BEGIN
+          Intermediary.RESET;
+          Intermediary.SETRANGE("No.",Entity."Intermediary No.");
+          IF Intermediary.FINDFIRST THEN BEGIN
+            CorrespondenceStore.RESET;
+            CorrespondenceStore.SETRANGE(Type,CorrespondenceStore.Type::Intermediary);
+            CorrespondenceStore.SETRANGE("No.",Intermediary."No.");
+            CorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+            IF CorrespondenceStore.FINDFIRST THEN BEGIN
+              CorrespondenceStore."Source of Document" := CorrespondenceStore."Source of Document"::Imported;
+              CorrespondenceStore."Document Inserted By" := ExternalDMS;
+              CorrespondenceStore.FileName := FileName;
+              CorrespondenceStore.FilePath := FilePath;
+              CorrespondenceStore.Subject := DocDescription;
+              CorrespondenceStore."MS Office Doc Type" := FileType;
+              CorrespondenceStore."External DMS Status" := CorrespondenceStore."External DMS Status"::Processed;
+              CorrespondenceStore.Meta_Date_1 := CreationDate;
+              CorrespondenceStore.Meta_Date_2 := ModifiedDate;
+              CorrespondenceStore.Meta_Text_5 := FreeText;
+              CorrespondenceStore."Document Date" := DocumentDate;
+              ID :=  CorrespondenceStore.ID;
+
+              DocType := GetNAVDocType(ExtDocType);
+              DocSubType := GetNAVDocSubType(ExtDocType,ExtDocSubType);
+              CorrespondenceStore."Document Type" := DocType;
+              CorrespondenceStore."Document Sub Type" := DocSubType;
+
+              CorrespondenceStore.MODIFY(TRUE);
+              END
+              ELSE BEGIN
+              CorrespondenceStore.Type := CorrespondenceStore.Type::Intermediary;
+              CorrespondenceStore."No." := Intermediary."No.";
+              CorrespondenceStore."LaserFiche Entry ID" := LFEntryID;
+              CorrespondenceStore."Source of Document" := CorrespondenceStore."Source of Document"::Imported;
+              CorrespondenceStore."Document Inserted By" := ExternalDMS;
+              CorrespondenceStore.FileName := FileName;
+              CorrespondenceStore.FilePath := FilePath;
+              CorrespondenceStore.Subject := DocDescription;
+              CorrespondenceStore."MS Office Doc Type" := FileType;
+              CorrespondenceStore."External DMS Status" := CorrespondenceStore."External DMS Status"::Processed;
+              CorrespondenceStore.Meta_Date_1 := CreationDate;
+              CorrespondenceStore.Meta_Date_2 := ModifiedDate;
+              CorrespondenceStore.Meta_Text_5 := FreeText;
+              CorrespondenceStore."Document Date" := DocumentDate;
+              ID :=  CorrespondenceStore.ID;
+
+              DocType := GetNAVDocType(ExtDocType);
+              DocSubType := GetNAVDocSubType(ExtDocType,ExtDocSubType);
+              CorrespondenceStore."Document Type" := DocType;
+              CorrespondenceStore."Document Sub Type" := DocSubType;
+
+              CorrespondenceStore.ID := DocMgmntCU."Get Next Document Number"(CorrespondenceStore.Type, CorrespondenceStore."No.");
+
+              CorrespondenceStore.INSERT(TRUE);
+              END
+          END
+        END
+    END;
+
+    [External]
+    PROCEDURE UpdateDFXDocStroreFromExternal@100000004(AttachedToType@1000000000 : ' ,Prospect,Client Owner,Intermediary,Resource,Entity,Potential Client,Client,Customer,Vendor';AttachedToNo@1000000001 : Code[20];LFEntryID@1000000002 : Integer;FilePath@1000000011 : Text;FileName@1000000003 : Text;FileType@1000000010 : Code[10];DocDescription@1000000004 : Text[150];ExtDocType@1000000005 : Text[150];ExtDocSubType@1000000006 : Text[150];Function@1000000009 : ',CreateNew,Update,Delete';ExternalDMS@1000000016 : Text;CreationDate@1000000018 : Date;ModifiedDate@1000000017 : Date;LinkType@1000000019 : Text;NavAttribute@1000000020 : Text;DocumentDate@100000006 : Date;FreeText@100000007 : Text);
+    VAR
+      CorrespondenceStore@1000000007 : Record 9068660;
+      DocMgmntCU@1000000008 : Codeunit 9068511;
+      No@1000000012 : Text;
+      FunctionType@1000000013 : ',CreateNew,Update,Delete';
+      DocType@1000000014 : Text;
+      DocSubType@1000000015 : Text;
+      ID@100000000 : Text;
+      Owner@100000001 : Record 9068443;
+      Intermediary@100000002 : Record 9068447;
+      Prospect@100000003 : Record 9068440;
+      Entity@100000004 : Record 9068505;
+      CorrespondenceStore2@100000005 : Record 9068660;
+      DFXCorrespondenceStore@100000008 : Record 50016;
+    BEGIN
+      CLEAR(No);
+      CLEAR(DocType);
+      CLEAR(DocSubType);
+
+      IF AttachedToNo = '' THEN
+        ERROR('No. is empty');
+
+      IF AttachedToType = AttachedToType::" " THEN
+        ERROR('Type is empty');
+
+
+      No := NumberUpation(AttachedToType,AttachedToNo,'');
+
+      IF "Function" = FunctionType::CreateNew THEN
+      BEGIN
+            DFXCorrespondenceStore.SETRANGE("No.",AttachedToNo);
+            DFXCorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+            IF NOT DFXCorrespondenceStore.FINDFIRST THEN BEGIN
+            DFXCorrespondenceStore.INIT;
+            DFXCorrespondenceStore."No." := No;
+            DFXCorrespondenceStore."LaserFiche Entry ID" := LFEntryID;
+            DFXCorrespondenceStore."Source of Document" := DFXCorrespondenceStore."Source of Document"::Imported;
+            DFXCorrespondenceStore."Document Inserted By" := ExternalDMS;
+            DFXCorrespondenceStore.FilePath := FilePath;
+            DFXCorrespondenceStore.FileName := FileName;
+            DFXCorrespondenceStore."MS Office Doc Type" := FileType;
+            DFXCorrespondenceStore.Subject := DocDescription;
+            DFXCorrespondenceStore."External DMS Status" := DFXCorrespondenceStore."External DMS Status"::Processed;
+            DFXCorrespondenceStore."Additional Information" := NavAttribute;//[To be determined] in migration
+            DFXCorrespondenceStore.Meta_Date_1 := CreationDate;
+            DFXCorrespondenceStore.Meta_Date_2 := ModifiedDate;
+            DFXCorrespondenceStore.Meta_Text_5 := FreeText;
+            DFXCorrespondenceStore."Document Date" := DocumentDate;
+            ID :=  DFXCorrespondenceStore.ID;
+
+            DocType := GetNAVDocType(ExtDocType);
+            DocSubType := GetNAVDocSubType(ExtDocType,ExtDocSubType);
+            DFXCorrespondenceStore."Document Type" := DocType;
+            DFXCorrespondenceStore."Document Sub Type" := DocSubType;//Link doc type directly from correspondece doc type and doctype sub type table so remove this code
+
+
+           { DocType := GetDocType(ExtDocType);
+            DocSubType := GetDocSubType(ExtDocType,ExtDocSubType);
+            DFXCorrespondenceStore."Document Type" := DocType;
+            DFXCorrespondenceStore."Document Sub Type" := DocSubType;}
+
+
+            IF AttachedToType = AttachedToType::Client THEN
+              DFXCorrespondenceStore.Type := DFXCorrespondenceStore.Type::Client;
+            IF AttachedToType = AttachedToType::Entity THEN
+              DFXCorrespondenceStore.Type := DFXCorrespondenceStore.Type::Entity;
+            IF AttachedToType = AttachedToType::Resource THEN
+              DFXCorrespondenceStore.Type := DFXCorrespondenceStore.Type::Resource;
+            IF AttachedToType = AttachedToType::"Client Owner" THEN
+              DFXCorrespondenceStore.Type := DFXCorrespondenceStore.Type::"Client Owner";
+              IF AttachedToType = AttachedToType::Customer THEN
+              DFXCorrespondenceStore.Type := DFXCorrespondenceStore.Type::Customer;
+              IF AttachedToType = AttachedToType::Vendor THEN
+              DFXCorrespondenceStore.Type := DFXCorrespondenceStore.Type::Vendor;
+
+            DFXCorrespondenceStore.ID := DocMgmntCU."Get Next Document Number"(DFXCorrespondenceStore.Type, DFXCorrespondenceStore."No.");
+
+
+            IF DFXCorrespondenceStore.INSERT(TRUE) THEN BEGIN
+
+                  IF AttachedToType = AttachedToType::Entity THEN BEGIN
+                    EntityOwnerLink(AttachedToNo,LFEntryID,FilePath,FileName,FileType,DocDescription,ExtDocType,ExtDocSubType,ExternalDMS,CreationDate,ModifiedDate,DocumentDate,FreeText);
+                    EntityProspectLink(AttachedToNo,LFEntryID,FilePath,FileName,FileType,DocDescription,ExtDocType,ExtDocSubType,ExternalDMS,CreationDate,ModifiedDate,DocumentDate,FreeText);
+                    EntityIntermediaryLink(AttachedToNo,LFEntryID,FilePath,FileName,FileType,DocDescription,ExtDocType,ExtDocSubType,ExternalDMS,CreationDate,ModifiedDate,DocumentDate,FreeText);
+
+                  END ELSE IF CheckEntryIDExist(AttachedToType,AttachedToNo,LFEntryID) THEN BEGIN
+                    Unlink(AttachedToType,AttachedToNo,ID);
+                    LinkDocument(AttachedToType,AttachedToNo,LFEntryID,LinkType,NavAttribute)
+                  END ELSE
+                    LinkDocument(AttachedToType,AttachedToNo,LFEntryID,LinkType,NavAttribute);
+
+            END;
+
+      END
+          ELSE
+          ERROR('Entry already exists');
+      END
+      ELSE IF "Function" = FunctionType::Update THEN
+      BEGIN
+            DFXCorrespondenceStore.SETRANGE("No.",No);
+            DFXCorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+            IF DFXCorrespondenceStore.FINDFIRST THEN BEGIN
+              DFXCorrespondenceStore."Source of Document" := DFXCorrespondenceStore."Source of Document"::Imported;
+              DFXCorrespondenceStore."Document Inserted By" := ExternalDMS;
+              DFXCorrespondenceStore.FileName := FileName;
+              DFXCorrespondenceStore.FilePath := FilePath;
+              DFXCorrespondenceStore.Subject := DocDescription;
+              DFXCorrespondenceStore."MS Office Doc Type" := FileType;
+              DFXCorrespondenceStore."External DMS Status" := DFXCorrespondenceStore."External DMS Status"::Processed;
+              DFXCorrespondenceStore."Additional Information" := NavAttribute;//[To be determined] in migration
+              DFXCorrespondenceStore.Meta_Date_1 := CreationDate;
+              DFXCorrespondenceStore.Meta_Date_2 := ModifiedDate;
+              DFXCorrespondenceStore.Meta_Text_5 := FreeText;
+              DFXCorrespondenceStore."Document Date" := DocumentDate;
+              ID :=  DFXCorrespondenceStore.ID;
+
+              {DocType := GetNAVDocType(ExtDocType);
+              DocSubType := GetNAVDocSubType(ExtDocType,ExtDocSubType);
+              DFXCorrespondenceStore."Document Type" := DocType;
+              DFXCorrespondenceStore."Document Sub Type" := DocSubType;}//Link doc type directly from correspondece doc type and doctype sub type table so remove this code
+
+
+             DocType := GetDocType(ExtDocType);
+              DocSubType := GetDocSubType(ExtDocType,ExtDocSubType);
+              DFXCorrespondenceStore."Document Type" := DocType;
+              DFXCorrespondenceStore."Document Sub Type" := DocSubType;
+
+              IF AttachedToType = AttachedToType::Client THEN
+                DFXCorrespondenceStore.Type := DFXCorrespondenceStore.Type::Client;
+              IF AttachedToType = AttachedToType::Entity THEN
+                DFXCorrespondenceStore.Type := DFXCorrespondenceStore.Type::Entity;
+              IF AttachedToType = AttachedToType::Resource THEN
+                DFXCorrespondenceStore.Type := DFXCorrespondenceStore.Type::Resource;
+              IF AttachedToType = AttachedToType::"Client Owner" THEN
+                DFXCorrespondenceStore.Type := DFXCorrespondenceStore.Type::"Client Owner";
+              IF AttachedToType = AttachedToType::Customer THEN
+              DFXCorrespondenceStore.Type := DFXCorrespondenceStore.Type::Customer;
+              IF AttachedToType = AttachedToType::Vendor THEN
+              DFXCorrespondenceStore.Type := DFXCorrespondenceStore.Type::Vendor;
+
+              IF DFXCorrespondenceStore.MODIFY THEN BEGIN
+                IF AttachedToType = AttachedToType::Entity THEN BEGIN
+                  EntityOwnerLink(AttachedToNo,LFEntryID,FilePath,FileName,FileType,DocDescription,ExtDocType,ExtDocSubType,ExternalDMS,CreationDate,ModifiedDate,DocumentDate,FreeText);
+                  EntityProspectLink(AttachedToNo,LFEntryID,FilePath,FileName,FileType,DocDescription,ExtDocType,ExtDocSubType,ExternalDMS,CreationDate,ModifiedDate,DocumentDate,FreeText);
+                  EntityIntermediaryLink(AttachedToNo,LFEntryID,FilePath,FileName,FileType,DocDescription,ExtDocType,ExtDocSubType,ExternalDMS,CreationDate,ModifiedDate,DocumentDate,FreeText);
+
+                  END ELSE
+                IF CheckEntryIDExist(AttachedToType,AttachedToNo,LFEntryID) THEN BEGIN
+                  Unlink(AttachedToType,AttachedToNo,ID);
+                  LinkDocument(AttachedToType,AttachedToNo,LFEntryID,LinkType,NavAttribute)
+                END ELSE
+                  LinkDocument(AttachedToType,AttachedToNo,LFEntryID,LinkType,NavAttribute);
+
+              END
+           END
+           ELSE IF NOT DFXCorrespondenceStore.FINDFIRST THEN BEGIN
+            DFXCorrespondenceStore.INIT;
+            DFXCorrespondenceStore."No." := No;
+            DFXCorrespondenceStore."LaserFiche Entry ID" := LFEntryID;
+            DFXCorrespondenceStore."Source of Document" := DFXCorrespondenceStore."Source of Document"::Imported;
+            DFXCorrespondenceStore."Document Inserted By" := ExternalDMS;
+            DFXCorrespondenceStore.FilePath := FilePath;
+            DFXCorrespondenceStore.FileName := FileName;
+            DFXCorrespondenceStore."MS Office Doc Type" := FileType;
+            DFXCorrespondenceStore.Subject := DocDescription;
+            DFXCorrespondenceStore."External DMS Status" := DFXCorrespondenceStore."External DMS Status"::Processed;
+            DFXCorrespondenceStore."Additional Information" := NavAttribute;//[To be determined] in migration
+            DFXCorrespondenceStore.Meta_Date_1 := CreationDate;
+            DFXCorrespondenceStore.Meta_Date_2 := ModifiedDate;
+            DFXCorrespondenceStore.Meta_Text_5 := FreeText;
+            DFXCorrespondenceStore."Document Date" := DocumentDate;
+
+            {DocType := GetNAVDocType(ExtDocType);
+            DocSubType := GetNAVDocSubType(ExtDocType,ExtDocSubType);
+            DFXCorrespondenceStore."Document Type" := DocType;
+            DFXCorrespondenceStore."Document Sub Type" := DocSubType;}//Link doc type directly from correspondece doc type and doctype sub type table so remove this code
+
+
+            DocType := GetDocType(ExtDocType);
+            DocSubType := GetDocSubType(ExtDocType,ExtDocSubType);
+            DFXCorrespondenceStore."Document Type" := DocType;
+            DFXCorrespondenceStore."Document Sub Type" := DocSubType;
+
+
+            IF AttachedToType = AttachedToType::Client THEN
+              DFXCorrespondenceStore.Type := DFXCorrespondenceStore.Type::Client;
+            IF AttachedToType = AttachedToType::Entity THEN
+              DFXCorrespondenceStore.Type := DFXCorrespondenceStore.Type::Entity;
+            IF AttachedToType = AttachedToType::Resource THEN
+              DFXCorrespondenceStore.Type := DFXCorrespondenceStore.Type::Resource;
+            IF AttachedToType = AttachedToType::"Client Owner" THEN
+              DFXCorrespondenceStore.Type := DFXCorrespondenceStore.Type::"Client Owner";
+              IF AttachedToType = AttachedToType::Customer THEN
+              DFXCorrespondenceStore.Type := DFXCorrespondenceStore.Type::Customer;
+              IF AttachedToType = AttachedToType::Vendor THEN
+              DFXCorrespondenceStore.Type := DFXCorrespondenceStore.Type::Vendor;
+
+            DFXCorrespondenceStore.ID := DocMgmntCU."Get Next Document Number"(DFXCorrespondenceStore.Type, DFXCorrespondenceStore."No.");
+
+
+            IF DFXCorrespondenceStore.INSERT(TRUE) THEN BEGIN
+
+
+              IF AttachedToType = AttachedToType::Entity THEN BEGIN
+                EntityOwnerLink(AttachedToNo,LFEntryID,FilePath,FileName,FileType,DocDescription,ExtDocType,ExtDocSubType,ExternalDMS,CreationDate,ModifiedDate,DocumentDate,FreeText);
+                EntityProspectLink(AttachedToNo,LFEntryID,FilePath,FileName,FileType,DocDescription,ExtDocType,ExtDocSubType,ExternalDMS,CreationDate,ModifiedDate,DocumentDate,FreeText);
+                EntityIntermediaryLink(AttachedToNo,LFEntryID,FilePath,FileName,FileType,DocDescription,ExtDocType,ExtDocSubType,ExternalDMS,CreationDate,ModifiedDate,DocumentDate,FreeText);
+
+              END ELSE IF CheckEntryIDExist(AttachedToType,AttachedToNo,LFEntryID) THEN BEGIN
+                  Unlink(AttachedToType,AttachedToNo,ID);
+                  LinkDocument(AttachedToType,AttachedToNo,LFEntryID,LinkType,NavAttribute)
+               END ELSE
+                LinkDocument(AttachedToType,AttachedToNo,LFEntryID,LinkType,NavAttribute);
+            END;
+      END
+      END
+      ELSE IF "Function" = FunctionType::Delete THEN BEGIN
+              DFXCorrespondenceStore.RESET;
+              DFXCorrespondenceStore.SETRANGE("LaserFiche Entry ID",LFEntryID);
+              IF DFXCorrespondenceStore.FINDSET THEN BEGIN
+              REPEAT
+                DFXCorrespondenceStore.DELETE
+              UNTIL DFXCorrespondenceStore.NEXT = 0;
+              END ELSE
+                ERROR('Entry Does not exist');
+
+          END;
+    END;
+
+    [EventSubscriber(Table,50016,OnAfterInsertEvent)]
+    PROCEDURE DFXCorresPondenceStoreOnInsert@100000024(VAR Rec@100000000 : Record 50016;RunTrigger@100000001 : Boolean);
+    VAR
+      CorrespondenceStore@100000002 : Record 9068660;
+    BEGIN
+      IF RunTrigger THEN
+        IF Rec."LaserFiche Entry ID" <> 0 THEN BEGIN
+          IF Rec.Type = Rec.Type::Client THEN
+            CorrespondenceStore.SETRANGE(Type,CorrespondenceStore.Type::Client)
+          ELSE IF Rec.Type = Rec.Type::Entity THEN
+            CorrespondenceStore.SETRANGE(Type,CorrespondenceStore.Type::Entity);
+
+          CorrespondenceStore.SETRANGE("No.",Rec."No.");
+          CorrespondenceStore.SETRANGE("LaserFiche Entry ID",Rec."LaserFiche Entry ID");
+          IF NOT CorrespondenceStore.FINDFIRST THEN BEGIN
+            CorrespondenceStore.Type := Rec.Type;
+            CorrespondenceStore."No." := Rec."No.";
+            CorrespondenceStore.ID := Rec.ID;
+            CorrespondenceStore."External DMS Status" := Rec."External DMS Status";
+            CorrespondenceStore."MS Office Doc Type" := Rec."MS Office Doc Type";
+            CorrespondenceStore.Subject := Rec.Subject;
+            CorrespondenceStore.Info1 := Rec.Info1;
+            CorrespondenceStore.Info2 := Rec.Info2;
+            CorrespondenceStore."Document GUID" := Rec."Document GUID";
+            CorrespondenceStore.Name := Rec.Name;
+            CorrespondenceStore."Last Date Modified" := Rec."Last Date Modified";
+            CorrespondenceStore.Authorised := Rec.Authorised;
+            CorrespondenceStore."Workflow No." := Rec."Workflow No.";
+            CorrespondenceStore."Payment No." := Rec."Payment No.";
+            CorrespondenceStore.FilePath := Rec.FilePath;
+            CorrespondenceStore.FileName := Rec.FileName;
+            CorrespondenceStore."Source of Document" := Rec."Source of Document";
+            CorrespondenceStore."Document Inserted Date" := Rec."Document Inserted Date";
+            CorrespondenceStore."Document Inserted By" := Rec."Document Inserted By";
+            CorrespondenceStore."Last Accessed By" := Rec."Last Accessed By";
+            CorrespondenceStore."Document in Paper Form" := Rec."Document in Paper Form";
+            CorrespondenceStore."Additional Information" := Rec."Additional Information";
+            CorrespondenceStore."Document Type" := Rec."Document Type";
+            CorrespondenceStore."Document Type Text" := Rec."Document Type Text";
+            CorrespondenceStore."Document Sub Type" := Rec."Document Sub Type";
+            CorrespondenceStore."Document Sub Type Text" := Rec."Document Sub Type Text";
+            CorrespondenceStore.Author := Rec.Author;
+            CorrespondenceStore."F2-Restricted" := Rec."F2-Restricted";
+            CorrespondenceStore."Document Date" := Rec."Document Date";
+            CorrespondenceStore."Document Expiry Date" := Rec."Document Expiry Date";
+            CorrespondenceStore."LaserFiche Entry ID" := Rec."LaserFiche Entry ID";
+            CorrespondenceStore.Priority := Rec.Priority;
+
+            CorrespondenceStore.INSERT;
+         END ELSE BEGIN
+            CorrespondenceStore."External DMS Status" := Rec."External DMS Status";
+            CorrespondenceStore."MS Office Doc Type" := Rec."MS Office Doc Type";
+            CorrespondenceStore.Subject := Rec.Subject;
+            CorrespondenceStore.Info1 := Rec.Info1;
+            CorrespondenceStore.Info2 := Rec.Info2;
+            CorrespondenceStore."Document GUID" := Rec."Document GUID";
+            CorrespondenceStore.Name := Rec.Name;
+            CorrespondenceStore."Last Date Modified" := Rec."Last Date Modified";
+            CorrespondenceStore.Authorised := Rec.Authorised;
+            CorrespondenceStore."Workflow No." := Rec."Workflow No.";
+            CorrespondenceStore."Payment No." := Rec."Payment No.";
+            CorrespondenceStore.FilePath := Rec.FilePath;
+            CorrespondenceStore.FileName := Rec.FileName;
+            CorrespondenceStore."Source of Document" := Rec."Source of Document";
+            CorrespondenceStore."Document Inserted Date" := Rec."Document Inserted Date";
+            CorrespondenceStore."Document Inserted By" := Rec."Document Inserted By";
+            CorrespondenceStore."Last Accessed By" := Rec."Last Accessed By";
+            CorrespondenceStore."Document in Paper Form" := Rec."Document in Paper Form";
+            CorrespondenceStore."Additional Information" := Rec."Additional Information";
+            CorrespondenceStore."Document Type" := Rec."Document Type";
+            CorrespondenceStore."Document Type Text" := Rec."Document Type Text";
+            CorrespondenceStore."Document Sub Type" := Rec."Document Sub Type";
+            CorrespondenceStore."Document Sub Type Text" := Rec."Document Sub Type Text";
+            CorrespondenceStore.Author := Rec.Author;
+            CorrespondenceStore."F2-Restricted" := Rec."F2-Restricted";
+            CorrespondenceStore."Document Date" := Rec."Document Date";
+            CorrespondenceStore."Document Expiry Date" := Rec."Document Expiry Date";
+            CorrespondenceStore.Priority := Rec.Priority;
+
+            CorrespondenceStore.MODIFY;
+          END;
+        END;
+
+    END;
+
+    PROCEDURE NAVLFDocumentFlowAPI@100000006(VAR Pcontent@100000044 : Record 99008535;pFileName@100000043 : Text);
+    VAR
+      HttpWebReqMgt@100000038 : Codeunit 1297;
+      BaseURL@100000037 : Text;
+      User@100000036 : Text;
+      Password@100000035 : Text;
+      payload@100000034 : Text;
+      ResponseBody@100000033 : Text;
+      ErrorMessage@100000032 : Text;
+      ErrorDetails@100000031 : Text;
+      HttpStatusCode@100000030 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpStatusCode";
+      ResponseHeader@100000029 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NameValueCollection";
+      RequestJson@100000028 : Text;
+      ResponseJson@100000027 : Text;
+      HttpError@100000026 : Text;
+      JsonArray@100000025 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JArray";
+      JsonObject@100000024 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      TempBlob@100000023 : Record 99008535;
+      OutStr@100000022 : OutStream;
+      TempBlob1@100000021 : Record 99008535;
+      InStr@100000020 : InStream;
+      ApiResult@100000019 : Text;
+      JSONMgt@100000018 : Codeunit 5459;
+      ApiRequest@100000017 : Text;
+      Base64Text@100000016 : Text;
+      InStr1@100000015 : InStream;
+      TextRead@100000014 : Text;
+      OutStr1@100000013 : OutStream;
+      TempBlob2@100000012 : Record 99008535;
+      Instr2@100000011 : InStream;
+      Bytes@100000010 : DotNet "'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Array";
+      convert@100000009 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Convert";
+      MemoryStream@100000008 : DotNet "'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.MemoryStream";
+      Encoding@100000007 : DotNet "'mscorlib'.System.Text.Encoding";
+      DFXSetup@100000006 : Record 50006;
+      Window@100000005 : Dialog;
+      NoOfRecs@100000004 : Integer;
+      CurrRec@100000003 : Integer;
+      TempPath@100000002 : Text;
+      DFXBulkDocumentLink@100000039 : Record 50015;
+      Tempblob5@100000000 : Record 99008535;
+    BEGIN
+      //IF FileContent = '' THEN BEGIN
+        //ERROR('Please select a file with content');
+        //FileName := '';
+      //END;
+      //CLEAR(Base64Text);
+      DFXSetup.GET;
+      BaseURL := DFXSetup."LF API URL";
+      User := DFXSetup."API User ID";
+      Password := DFXSetup."API Password";
+      //Base64Text := convert.ToBase64String(Encoding.UTF8.GetBytes(Pcontent));
+      //Tempblob5.RESET;
+      //Tempblob5.Blob.CREATEOUTSTREAM(Pcontent);
+
+      HttpWebReqMgt.Initialize(BaseURL);
+      HttpWebReqMgt.DisableUI;
+      HttpWebReqMgt.SetMethod('POST');
+      HttpWebReqMgt.SetContentType('application/json');
+      HttpWebReqMgt.SetReturnType('application/json');
+      HttpWebReqMgt.AddBasicAuthentication(User,Password);
+      TempBlob.RESET;
+      TempBlob.INIT;
+      TempBlob.Blob.CREATEOUTSTREAM(OutStr);
+      OutStr.WRITETEXT('{');
+      OutStr.WRITETEXT('"Repository": "'+ DFXSetup.Repository +'",');
+      OutStr.WRITETEXT('"Files":');
+      OutStr.WRITETEXT('[{');
+      OutStr.WRITETEXT('"File": "' + pFileName + '",');
+      OutStr.WRITETEXT('"LocalFile": "0",');
+      OutStr.WRITETEXT('"Filename": "",');
+      OutStr.WRITETEXT('"SecCode": "",');
+      OutStr.WRITETEXT('"Properties":[],');
+      OutStr.WRITETEXT('"Tags": ["Systemtag"],');
+      OutStr.WRITETEXT('"Data": "'+ Pcontent.ToBase64String + '",');
+      OutStr.WRITETEXT('"VolumeID": "1"');
+      OutStr.WRITETEXT('}]');
+      OutStr.WRITETEXT('}');
+
+
+
+      HttpWebReqMgt.AddBodyBlob(TempBlob);
+      ApiRequest:= TempBlob.ReadAsText('',TEXTENCODING::UTF8);
+
+      TempBlob1.INIT;
+      TempBlob1.Blob.CREATEINSTREAM(InStr);
+      IF HttpWebReqMgt.GetResponse(InStr,HttpStatusCode,ResponseHeader) THEN BEGIN
+        ApiResult:= TempBlob1.ReadAsText('',TEXTENCODING::UTF8);
+        JSONMgt.InitializeFromString(ApiResult);
+      END ELSE
+       ERROR('API ISSUE -' +'Status: '+FORMAT(HttpStatusCode));
+    END;
+
+    PROCEDURE ElasticSearchAPI@100000011(SearchText@100000029 : Text);
+    VAR
+      HttpWebReqMgt@100000020 : Codeunit 1297;
+      BaseURL@100000019 : Text;
+      User@100000018 : Text;
+      Password@100000017 : Text;
+      payload@100000016 : Text;
+      ResponseBody@100000015 : Text;
+      ErrorMessage@100000014 : Text;
+      ErrorDetails@100000013 : Text;
+      HttpStatusCode@100000012 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpStatusCode";
+      ResponseHeader@100000011 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NameValueCollection";
+      RequestJson@100000010 : Text;
+      ResponseJson@100000009 : Text;
+      HttpError@100000008 : Text;
+      JsonArray@100000007 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JArray";
+      JsonObject@100000006 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      TempBlob@100000005 : Record 99008535;
+      OutStr@100000004 : OutStream;
+      TempBlob1@100000003 : Record 99008535;
+      InStr@100000002 : InStream;
+      ApiResult@100000001 : Text;
+      JSONMgt@100000000 : Codeunit 5459;
+      ApiRequest@100000021 : Text;
+      RequestStr@100000022 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.Stream";
+      BlobStr@100000023 : InStream;
+      TempBlob2@100000024 : Record 99008535;
+      ResStream@100000025 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.Stream";
+      ResStreamReader@100000026 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.StreamReader";
+      Response@100000027 : Text;
+      DFXSetup@100000028 : Record 50006;
+    BEGIN
+      DFXSetup.GET;
+      BaseURL := DFXSetup."LF API URL";
+      User := DFXSetup."API User ID";
+      Password := DFXSetup."API Password";
+
+
+      HttpWebReqMgt.Initialize(BaseURL);
+      HttpWebReqMgt.DisableUI;
+      HttpWebReqMgt.SetMethod('POST');
+      HttpWebReqMgt.SetContentType('application/json');
+      HttpWebReqMgt.SetReturnType('application/json');
+      HttpWebReqMgt.AddBasicAuthentication(User,Password);
+
+      TempBlob.INIT;
+      TempBlob.Blob.CREATEOUTSTREAM(OutStr);
+      OutStr.WRITETEXT('{');
+      OutStr.WRITETEXT('"Repository":"'+ DFXSetup.Repository +'",');
+      OutStr.WRITETEXT('"Columns":');
+      OutStr.WRITETEXT('[');
+      OutStr.WRITETEXT('[');
+      OutStr.WRITETEXT('{');
+      OutStr.WRITETEXT('"SearchFieldType":0,');
+      OutStr.WRITETEXT('"BaseField":"Text",');
+      OutStr.WRITETEXT('"Value":"'+ SearchText +'",');
+      OutStr.WRITETEXT('"Condition":0');
+      OutStr.WRITETEXT('}');
+      OutStr.WRITETEXT(']');
+      OutStr.WRITETEXT('],');
+      OutStr.WRITETEXT('"Page":1,');
+      OutStr.WRITETEXT('"No":100,');
+      OutStr.WRITETEXT('"ColumnSortType":1,');
+      OutStr.WRITETEXT('"ColumnName":"Client Name",');
+      OutStr.WRITETEXT('"ColumnSortOrder":0');
+      OutStr.WRITETEXT('}');
+
+
+      HttpWebReqMgt.AddBodyBlob(TempBlob);
+
+      ApiRequest:= TempBlob.ReadAsText('',TEXTENCODING::UTF8);
+      TempBlob1.INIT;
+      TempBlob1.Blob.CREATEINSTREAM(InStr);
+      IF HttpWebReqMgt.GetResponse(InStr,HttpStatusCode,ResponseHeader) THEN BEGIN
+        ApiResult:= TempBlob1.ReadAsText(ResponseBody,TEXTENCODING::UTF8);
+        JSONMgt.InitializeFromString(ApiResult);
+      END;
+      MESSAGE(ApiRequest);
+      MESSAGE(ApiResult);
+    END;
+
+    BEGIN
+    {
+      //Create functionality When a document is created in External system it will create,update,delete a entry in Correspondance store
+      //NAV attribute is now on one - one.. 14-09-2021 checked if entry exxists
+      //checked if entry exxists
+      //IF Yes then unlink and link
+      //IF No then Link only
+    }
+    END.
+  }
+}
+

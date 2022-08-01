@@ -1,0 +1,179 @@
+OBJECT Page 50074 Client Agent Account API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=15-01-21;
+    Time=14:18:34;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9068624;
+    SourceTableView=WHERE(Account Type=CONST(Agent));
+    PageType=Card;
+    RefreshOnActivate=Yes;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                CaptionML=ENU=General }
+
+    { 1000000007;2;Group  ;
+                GroupType=Group }
+
+    { 2   ;3   ;Field     ;
+                Lookup=No;
+                SourceExpr="No." }
+
+    { 1000000006;3;Field  ;
+                SourceExpr="Portfolio No." }
+
+    { 4   ;3   ;Field     ;
+                CaptionML=[ENU=Agent Acc. Name/Description;
+                           ENG=Agent Acc. Name/Description];
+                ToolTipML=ENG=Agent Name/Description. Eg. Discretionary Portfolio.;
+                SourceExpr=Name }
+
+    { 1040002;3;Field     ;
+                SourceExpr=Description }
+
+    { 1040037;3;Field     ;
+                SourceExpr=Closed }
+
+    { 1040035;3;Field     ;
+                SourceExpr="Date Closed" }
+
+    { 1000000004;3;Field  ;
+                SourceExpr="Managed Basis" }
+
+    { 8   ;3   ;Field     ;
+                CaptionML=[ENU=Investment Manager;
+                           ENG=Investment Manager];
+                SourceExpr="Investment Manager" }
+
+    { 18  ;3   ;Field     ;
+                CaptionML=ENU=Investment Manager Name;
+                SourceExpr="Investment Manager Name";
+                Editable=true }
+
+    { 10  ;3   ;Field     ;
+                CaptionML=[ENU=Investment Advisor;
+                           ENG=Investment Advisor];
+                SourceExpr="Investment Advisor" }
+
+    { 24  ;3   ;Field     ;
+                CaptionML=ENU=Investment Advisor Name;
+                SourceExpr="Investment Advisor Name";
+                Editable=true }
+
+    { 1000000019;3;Field  ;
+                CaptionML=[ENU=Account No.;
+                           ENG=Account No.];
+                SourceExpr="Bank Account No." }
+
+    { 12  ;3   ;Field     ;
+                CaptionML=[ENU=Reference No.;
+                           ENG=Reference No.];
+                SourceExpr="Reference No." }
+
+    { 1000000022;3;Field  ;
+                SourceExpr="Relationship Manager";
+                TableRelation=Intermediary }
+
+    { 1040006;3;Field     ;
+                SourceExpr="Asset Category" }
+
+    { 1000000003;3;Field  ;
+                SourceExpr="Category Code" }
+
+    { 1000000001;3;Field  ;
+                SourceExpr="Category Description" }
+
+    { 1040023;3;Field     ;
+                SourceExpr="Include in Statement Tracker" }
+
+    { 1000000008;2;Group  ;
+                GroupType=Group }
+
+    { 20  ;3   ;Field     ;
+                SourceExpr="Search Name" }
+
+    { 1040004;3;Field     ;
+                SourceExpr="Agent Asset Type" }
+
+    { 1040008;3;Field     ;
+                SourceExpr="Account Classification" }
+
+    { 28  ;3   ;Field     ;
+                SourceExpr=Blocked }
+
+    { 30  ;3   ;Field     ;
+                SourceExpr="Last Date Modified" }
+
+    { 1904784501;1;Group  ;
+                CaptionML=ENU=Posting }
+
+    { 34  ;2   ;Field     ;
+                SourceExpr="Currency Code" }
+
+    { 1000000013;2;Field  ;
+                SourceExpr="Last Statement No." }
+
+    { 1000000015;2;Field  ;
+                SourceExpr="Balance Last Statement" }
+
+    { 1040033;2;Field     ;
+                SourceExpr="Reconciliation Required" }
+
+    { 1040029;2;Field     ;
+                SourceExpr="Statement Frequency" }
+
+    { 1040028;2;Field     ;
+                SourceExpr="Date Last Reconciled" }
+
+    { 1040027;2;Field     ;
+                SourceExpr="Date Next Reconciliation Due" }
+
+    { 1000000017;2;Field  ;
+                SourceExpr="Unreconciled Entries" }
+
+    { 1040011;2;Field     ;
+                SourceExpr="External System Ref" }
+
+    { 32  ;2   ;Field     ;
+                CaptionML=[ENU=Agent Acc. Posting Group;
+                           ENG=Agent Acc. Posting Group];
+                SourceExpr="Posting Group";
+                LookupPageID=Client Agent Posting Gr. }
+
+    { 1000000000;2;Field  ;
+                SourceExpr="Global Dimension 1 Code" }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Global Dimension 2 Code" }
+
+    { 1040000;2;Field     ;
+                SourceExpr="Capital/Income" }
+
+    { 1040019;2;Field     ;
+                SourceExpr="Revaluation Method" }
+
+    { 1000000127;2;Field  ;
+                SourceExpr="Exclude From Revaluation" }
+
+    { 1040021;2;Field     ;
+                SourceExpr="Unrealised FX at Date" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

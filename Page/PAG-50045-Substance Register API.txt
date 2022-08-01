@@ -1,0 +1,72 @@
+OBJECT Page 50045 Substance Register API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=22-12-20;
+    Time=12:33:56;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    InsertAllowed=No;
+    DeleteAllowed=No;
+    LinksAllowed=No;
+    SourceTable=Table9070255;
+    PageType=List;
+    CardPageID=Substance Card;
+  }
+  CONTROLS
+  {
+    { 1000000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000001;1;Group  ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Client No." }
+
+    { 1000000017;2;Field  ;
+                SourceExpr="Client Name" }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Entry No." }
+
+    { 1000000004;2;Field  ;
+                SourceExpr="Country of Incorporation" }
+
+    { 1000000022;2;Field  ;
+                SourceExpr="Date of Incorporation" }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="Country of Mgmt and Control" }
+
+    { 1000000023;2;Field  ;
+                SourceExpr=Jurisdiction }
+
+    { 1000000024;2;Field  ;
+                SourceExpr=Status }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="Period Start" }
+
+    { 1000000007;2;Field  ;
+                SourceExpr="Period End" }
+
+    { 1000000013;2;Field  ;
+                SourceExpr="Number of Relevant Activities" }
+
+    { 1000000018;2;Field  ;
+                SourceExpr="Initial Conclusion" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

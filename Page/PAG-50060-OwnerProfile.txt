@@ -1,0 +1,86 @@
+OBJECT Page 50060 OwnerProfile
+{
+  OBJECT-PROPERTIES
+  {
+    Date=21-12-20;
+    Time=15:12:11;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    InsertAllowed=No;
+    DeleteAllowed=No;
+    SourceTable=Table9068443;
+    DataCaptionExpr="No." + '  ' + "Formal Name";
+    PageType=Document;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1040025;1;Part      ;
+                CaptionML=ENU=Source of Funds;
+                SubPageLink=Type=CONST(Cl. SoF),
+                            No.=FIELD(No.);
+                PagePartID=Page9068989;
+                Editable=FALSE;
+                PartType=Page;
+                ShowFilter=No }
+
+    { 1040026;1;Part      ;
+                CaptionML=ENU=Expected Activity;
+                SubPageLink=No.=FIELD(No.),
+                            Type=CONST(Expected Activity);
+                PagePartID=Page9068989;
+                Editable=FALSE;
+                PartType=Page;
+                ShowFilter=No }
+
+    { 1040027;1;Part      ;
+                CaptionML=ENU=Additional Information;
+                SubPageLink=No.=FIELD(No.),
+                            Type=CONST(Addition Info.);
+                PagePartID=Page9068989;
+                Editable=FALSE;
+                PartType=Page;
+                ShowFilter=No }
+
+    { 1040028;1;Part      ;
+                Name=<Comments Subform>;
+                CaptionML=ENU=Rationale;
+                SubPageLink=No.=FIELD(No.),
+                            Type=CONST(Rationale);
+                PagePartID=Page9068989;
+                Editable=FALSE;
+                PartType=Page;
+                ShowFilter=No }
+
+    { 1000000011;1;Part   ;
+                Name=SourceofWealth;
+                CaptionML=ENU=Source of Wealth;
+                SubPageLink=No.=FIELD(No.),
+                            Type=CONST(SrcOfWlth);
+                PagePartID=Page9068989;
+                Editable=FALSE;
+                PartType=Page;
+                ShowFilter=No }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    {
+      08.07.19  Hubert Bartkowiak
+                CRF49825 "Owner Profile" action added.
+
+      23.05.19  Dimitar Mashev
+                CRF49799 New Action Source of Wealth comments + new part SourceofWealth
+                CRF49806 New function CopyCommentsToEntityProfile
+    }
+    END.
+  }
+}
+

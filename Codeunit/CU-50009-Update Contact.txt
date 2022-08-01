@@ -1,0 +1,30 @@
+OBJECT Codeunit 50009 Update Contact
+{
+  OBJECT-PROPERTIES
+  {
+    Date=12-01-21;
+    Time=17:07:15;
+    Modified=Yes;
+    Version List=;
+  }
+  PROPERTIES
+  {
+    OnRun=BEGIN
+            IF Contact.FINDSET THEN
+              REPEAT
+                APIFns.ContactIntegration(Contact);
+              UNTIL Contact.NEXT = 0;
+          END;
+
+  }
+  CODE
+  {
+    VAR
+      APIFns@100000000 : Codeunit 50000;
+      Contact@100000001 : Record 5050;
+
+    BEGIN
+    END.
+  }
+}
+

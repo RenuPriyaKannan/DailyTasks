@@ -1,0 +1,93 @@
+OBJECT Page 50072 Client Depot List API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=15-01-21;
+    Time=14:16:35;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9068561;
+    PopulateAllFields=Yes;
+    PageType=List;
+    CardPageID=Client Depot Card;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                GroupType=Repeater }
+
+    { 17  ;2   ;Field     ;
+                SourceExpr="Client No.";
+                Visible=FALSE }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Client Name";
+                Visible=FALSE }
+
+    { 2   ;2   ;Field     ;
+                SourceExpr="No." }
+
+    { 6   ;2   ;Field     ;
+                SourceExpr="System Depot Code" }
+
+    { 4   ;2   ;Field     ;
+                SourceExpr=Name }
+
+    { 35  ;2   ;Field     ;
+                SourceExpr="Name 2" }
+
+    { 37  ;2   ;Field     ;
+                SourceExpr=Description }
+
+    { 87  ;2   ;Field     ;
+                SourceExpr="Post Code" }
+
+    { 89  ;2   ;Field     ;
+                SourceExpr="Country Code";
+                Visible=FALSE }
+
+    { 91  ;2   ;Field     ;
+                SourceExpr="Phone No." }
+
+    { 93  ;2   ;Field     ;
+                SourceExpr="Fax No.";
+                Visible=FALSE }
+
+    { 23  ;2   ;Field     ;
+                Name=Contact;
+                CaptionML=[ENU=Account Contact;
+                           ENG=Account Contact];
+                SourceExpr=Contact }
+
+    { 95  ;2   ;Field     ;
+                SourceExpr="Our Contact Code";
+                Visible=FALSE }
+
+    { 10  ;2   ;Field     ;
+                SourceExpr="Search Name";
+                Visible=FALSE }
+
+    { 1000000000;2;Field  ;
+                SourceExpr="Other Details" }
+
+    { 1000000001;2;Field  ;
+                SourceExpr="Other Details 2" }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Balance Of Holding To Date" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

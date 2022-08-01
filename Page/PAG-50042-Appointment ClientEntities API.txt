@@ -1,0 +1,167 @@
+OBJECT Page 50042 Appointment ClientEntities API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=29-07-21;
+    Time=13:05:44;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    InsertAllowed=Yes;
+    DeleteAllowed=Yes;
+    ModifyAllowed=Yes;
+    SourceTable=Table9068508;
+    SourceTableView=SORTING(Entity Type,Entity No.)
+                    ORDER(Ascending);
+    PageType=List;
+    OnOpenPage=VAR
+                 ClientNo@1000000002 : Text;
+                 _Relmgtsetup@1000000000 : Record 9068462;
+                 ApplicationSetup@1000000001 : Record 9068230;
+               BEGIN
+               END;
+
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                GroupType=Repeater }
+
+    { 1000000017;2;Field  ;
+                SourceExpr="Client No." }
+
+    { 11  ;2   ;Field     ;
+                SourceExpr=Type;
+                Editable=true }
+
+    { 1000000044;2;Field  ;
+                SourceExpr="Client Type" }
+
+    { 24  ;2   ;Field     ;
+                SourceExpr="Entity No.";
+                Editable=True;
+                OnLookup=VAR
+                           _Entity@1000000002 : Record 9068505;
+                           _Client@1000000001 : Record 9068500;
+                           _Resource@1000000000 : Record 156;
+                         BEGIN
+                         END;
+                          }
+
+    { 6   ;2   ;Field     ;
+                SourceExpr="Entity Type";
+                Editable=True }
+
+    { 1000000041;2;Field  ;
+                SourceExpr="Client Status";
+                Visible=True }
+
+    { 1000000043;2;Field  ;
+                SourceExpr="FATCA Reporting FI" }
+
+    { 1000000037;2;Field  ;
+                SourceExpr="FATCA Filer Category" }
+
+    { 1000000047;2;Field  ;
+                SourceExpr="FATCA Substantial Owner" }
+
+    { 1000000039;2;Field  ;
+                SourceExpr="CRS Reporting FI" }
+
+    { 1000000038;2;Field  ;
+                SourceExpr="CRS Controlling Person Code" }
+
+    { 12  ;2   ;Field     ;
+                SourceExpr="Entity Name";
+                Editable=True }
+
+    { 1000000046;2;Field  ;
+                SourceExpr="Entity Initials" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="Entity Forename(s)";
+                Editable=True }
+
+    { 1000000008;2;Field  ;
+                SourceExpr=Comment }
+
+    { 14  ;2   ;Field     ;
+                SourceExpr="Entity Type Description";
+                Editable=True }
+
+    { 16  ;2   ;Field     ;
+                SourceExpr="Date Appointed" }
+
+    { 4   ;2   ;Field     ;
+                SourceExpr="Date Resigned";
+                Editable=True }
+
+    { 1000000000;2;Field  ;
+                SourceExpr="Commission %" }
+
+    { 18  ;2   ;Field     ;
+                SourceExpr=Notes }
+
+    { 1000000031;2;Field  ;
+                CaptionML=[ENU=Total Units;
+                           ENG=Total Units];
+                Editable=True }
+
+    { 1000000016;2;Field  ;
+                SourceExpr="Percentage Ownership" }
+
+    { 1000000034;2;Field  ;
+                SourceExpr="Preferred Address";
+                Visible=True }
+
+    { 1000000035;2;Field  ;
+                SourceExpr="Address Code";
+                Visible=True }
+
+    { 1000000012;2;Field  ;
+                SourceExpr="Entry Date" }
+
+    { 1000000014;2;Field  ;
+                SourceExpr="Entry Time" }
+
+    { 1000000010;2;Field  ;
+                SourceExpr="User ID" }
+
+    { 1000000020;2;Field  ;
+                Name=Compliance Required;
+                SourceExpr="Compliance Required" }
+
+    { 1000000018;2;Field  ;
+                Name=Compliance Category;
+                SourceExpr="Compliance Classification" }
+
+    { 1000000022;2;Field  ;
+                SourceExpr="Signature Rights" }
+
+    { 1000000024;2;Field  ;
+                SourceExpr="Add. Notes" }
+
+    { 1000000019;2;Field  ;
+                SourceExpr="Client Name" }
+
+    { 1000000042;2;Field  ;
+                SourceExpr="Ben Own/CP" }
+
+    { 1000000040;2;Field  ;
+                SourceExpr="BO/CP Manual Overwrite";
+                Visible=True }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

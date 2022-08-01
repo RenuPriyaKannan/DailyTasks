@@ -1,0 +1,240 @@
+OBJECT Page 50027 Misc Asset API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=04-12-20;
+    Time=11:43:39;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    CaptionML=ENU=Client Miscellaneous Asset Card;
+    InsertAllowed=No;
+    SourceTable=Table9068546;
+    PopulateAllFields=Yes;
+    SourceTableView=SORTING(Asset Type)
+                    WHERE(Asset Type=CONST(Miscellaneous Asset));
+    DataCaptionFields=Name;
+    PageType=Card;
+    RefreshOnActivate=Yes;
+    OnNewRecord=BEGIN
+                  "Asset Type" := "Asset Type"::"Miscellaneous Asset";
+                END;
+
+    OnInsertRecord=BEGIN
+                     "Asset Type" := "Asset Type"::"Miscellaneous Asset";
+                   END;
+
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                CaptionML=ENU=General }
+
+    { 1000000003;2;Group  ;
+                GroupType=Group }
+
+    { 1000000000;3;Field  ;
+                SourceExpr="Client No." }
+
+    { 2   ;3   ;Field     ;
+                SourceExpr="Asset Code" }
+
+    { 1000000027;3;Field  ;
+                SourceExpr="Asset Type";
+                Editable=FALSE }
+
+    { 1040018;3;Field     ;
+                SourceExpr="Asset Sub Type" }
+
+    { 33  ;3   ;Field     ;
+                SourceExpr="Portfolio No." }
+
+    { 8   ;3   ;Field     ;
+                SourceExpr=Name }
+
+    { 1000000041;3;Field  ;
+                SourceExpr="Short Name" }
+
+    { 10  ;3   ;Field     ;
+                SourceExpr=Description }
+
+    { 1000000004;2;Group  ;
+                GroupType=Group }
+
+    { 4   ;3   ;Field     ;
+                SourceExpr=Address }
+
+    { 6   ;3   ;Field     ;
+                SourceExpr="Address 2" }
+
+    { 14  ;3   ;Field     ;
+                SourceExpr=City }
+
+    { 16  ;3   ;Field     ;
+                CaptionML=[ENU=County;
+                           ENG=County/Post Code];
+                SourceExpr=County }
+
+    { 25  ;3   ;Field     ;
+                SourceExpr="Post Code" }
+
+    { 23  ;3   ;Field     ;
+                SourceExpr=Country }
+
+    { 1040010;3;Field     ;
+                SourceExpr="Reference No." }
+
+    { 1040016;3;Field     ;
+                SourceExpr="Asset Category" }
+
+    { 1000000009;3;Field  ;
+                SourceExpr="Category Code" }
+
+    { 1000000018;3;Field  ;
+                SourceExpr="Category Description" }
+
+    { 1040020;3;Field     ;
+                SourceExpr="Date Location Last Verified" }
+
+    { 51  ;3   ;Field     ;
+                SourceExpr=Ownership }
+
+    { 1040000;3;Field     ;
+                SourceExpr="Ownership Other Code" }
+
+    { 1000000006;2;Group  ;
+                GroupType=Group }
+
+    { 1000000008;3;Field  ;
+                CaptionML=[ENU=Information Currency;
+                           ENG=Information Currency];
+                SourceExpr="Currency Code" }
+
+    { 1040007;3;Field     ;
+                CaptionML=[ENU=Posting Currency;
+                           ENG=Posting Currency];
+                SourceExpr="Posting Currency Code" }
+
+    { 27  ;3   ;Field     ;
+                CaptionML=[ENU=Asset Posting Group;
+                           ENG=Asset Posting Group];
+                SourceExpr="Property Posting Group" }
+
+    { 12  ;3   ;Field     ;
+                SourceExpr="Global Dimension 1 Code" }
+
+    { 182 ;3   ;Field     ;
+                SourceExpr="Global Dimension 2 Code" }
+
+    { 76  ;3   ;Field     ;
+                SourceExpr=Lease }
+
+    { 1000000026;3;Field  ;
+                SourceExpr="Loc. Title Deeds Ent/Office" }
+
+    { 53  ;3   ;Field     ;
+                SourceExpr="Location Title Deeds" }
+
+    { 1000000051;3;Field  ;
+                SourceExpr="Asset Held By Type" }
+
+    { 1040022;3;Field     ;
+                SourceExpr="Asset Held By" }
+
+    { 1000000015;3;Field  ;
+                SourceExpr=Status }
+
+    { 1040012;3;Field     ;
+                SourceExpr="Date of Acquisition" }
+
+    { 1040014;3;Field     ;
+                SourceExpr="Date of Disposal" }
+
+    { 1000000025;3;Field  ;
+                SourceExpr="Unit Holding" }
+
+    { 1000000028;3;Field  ;
+                Description=TWM90.07#2;
+                SourceExpr="Insurance Required" }
+
+    { 1000000056;3;Field  ;
+                SourceExpr="Last Risk Assessment Date" }
+
+    { 1000000055;3;Field  ;
+                SourceExpr="Current Risk Rating" }
+
+    { 1000000054;3;Field  ;
+                SourceExpr="Current Risk Weight" }
+
+    { 1000000052;3;Field  ;
+                SourceExpr="Next Risk Assessment Due Date" }
+
+    { 1000000002;1;Group  ;
+                CaptionML=ENU=Finance;
+                GroupType=Group }
+
+    { 1040033;2;Field     ;
+                SourceExpr="Include in Statement Tracker" }
+
+    { 1000000046;2;Field  ;
+                SourceExpr="Include In Depreciation" }
+
+    { 1000000045;2;Group  ;
+                CaptionML=ENU=Depreciation Details;
+                GroupType=Group }
+
+    { 1000000044;3;Field  ;
+                SourceExpr="Depreciation Method" }
+
+    { 1000000043;3;Field  ;
+                SourceExpr="Depreciation Start Date" }
+
+    { 1000000042;3;Group  ;
+                Visible="Depreciation Method" = "Depreciation Method"::"Straight Line";
+                GroupType=Group }
+
+    { 1000000040;4;Field  ;
+                SourceExpr="Depreciation End Date" }
+
+    { 1000000039;4;Field  ;
+                SourceExpr="No of Depreciation Years" }
+
+    { 1000000035;3;Group  ;
+                Visible="Depreciation Method" = "Depreciation Method"::"Reducing Balance";
+                GroupType=Group }
+
+    { 1000000034;4;Field  ;
+                SourceExpr="Depn % per Annum" }
+
+    { 1000000033;3;Field  ;
+                SourceExpr="No of Dep Days In Dep Period";
+                Visible=FALSE }
+
+    { 1000000032;3;Field  ;
+                SourceExpr="Depn Calculated On" }
+
+    { 1000000031;3;Group  ;
+                Visible="Depn Calculated On" = "Depn Calculated On"::Manual;
+                GroupType=Group }
+
+    { 1000000030;4;Field  ;
+                SourceExpr="Manual Depn Amount (CCY)";
+                Editable="Posting Currency Code" <> '' }
+
+    { 1000000029;4;Field  ;
+                SourceExpr="Manual Depn Amount (LCY)" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

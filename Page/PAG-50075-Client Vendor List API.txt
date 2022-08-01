@@ -1,0 +1,130 @@
+OBJECT Page 50075 Client Vendor List API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=15-01-21;
+    Time=14:32:33;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9068604;
+    PageType=List;
+    CardPageID=Client Vendor Card;
+    OnOpenPage=VAR
+                 ClientNo@1000000000 : Text;
+                 ApplicationSetup@1000000001 : Record 9068230;
+               BEGIN
+               END;
+
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                GroupType=Repeater }
+
+    { 2   ;2   ;Field     ;
+                SourceExpr="No." }
+
+    { 4   ;2   ;Field     ;
+                SourceExpr=Name }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="Name 2" }
+
+    { 29  ;2   ;Field     ;
+                SourceExpr="Post Code" }
+
+    { 1000000006;2;Field  ;
+                SourceExpr=Balance }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Balance (LCY)" }
+
+    { 1000000009;2;Field  ;
+                SourceExpr="Balance at Date" }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="Balance at Date (LCY)" }
+
+    { 31  ;2   ;Field     ;
+                SourceExpr="Country Code" }
+
+    { 6   ;2   ;Field     ;
+                SourceExpr="Phone No." }
+
+    { 33  ;2   ;Field     ;
+                SourceExpr="Fax No." }
+
+    { 35  ;2   ;Field     ;
+                SourceExpr=Contact }
+
+    { 37  ;2   ;Field     ;
+                SourceExpr="Purchaser Code";
+                Visible=FALSE }
+
+    { 39  ;2   ;Field     ;
+                SourceExpr="Vendor Posting Group";
+                Visible=FALSE }
+
+    { 51  ;2   ;Field     ;
+                SourceExpr="Gen. Bus. Posting Group";
+                Visible=FALSE }
+
+    { 49  ;2   ;Field     ;
+                CaptionML=[ENU=VAT Bus. Posting Group;
+                           ENG=VAT Bus. Posting Group;
+                           ENA=GST Bus. Posting Group];
+                SourceExpr="VAT Bus. Posting Group";
+                Visible=FALSE }
+
+    { 41  ;2   ;Field     ;
+                SourceExpr="Global Dimension 1 Code";
+                Visible=FALSE }
+
+    { 43  ;2   ;Field     ;
+                SourceExpr="Global Dimension 2 Code";
+                Visible=FALSE }
+
+    { 8   ;2   ;Field     ;
+                SourceExpr="Payment Terms Code";
+                Visible=FALSE }
+
+    { 45  ;2   ;Field     ;
+                SourceExpr="Fin. Charge Terms Code";
+                Visible=FALSE }
+
+    { 10  ;2   ;Field     ;
+                SourceExpr="Currency Code";
+                Visible=FALSE }
+
+    { 47  ;2   ;Field     ;
+                SourceExpr="Language Code";
+                Visible=FALSE }
+
+    { 12  ;2   ;Field     ;
+                SourceExpr="Search Name" }
+
+    { 1000000000;2;Field  ;
+                SourceExpr=Blocked }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    {
+      26.10.19  Unnar Eliasson
+                CRF52034 Detail Trial Balance Report has been added to the Client Vendor List and Client Vendor Ledger Entries.
+
+      24.07.19  Unnar Eliasson
+                CRF46854 Data Security Rewrite using Subscribers
+    }
+    END.
+  }
+}
+

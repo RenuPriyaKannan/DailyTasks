@@ -1,0 +1,294 @@
+OBJECT Page 50041 Client Investment API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=21-01-21;
+    Time=14:33:51;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9068542;
+    PageType=Card;
+    RefreshOnActivate=Yes;
+    ShowFilter=Yes;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000034;1;Group  ;
+                CaptionML=[ENU=General;
+                           ENG=General] }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Client No." }
+
+    { 2   ;2   ;Field     ;
+                SourceExpr="Asset Code" }
+
+    { 35  ;2   ;Field     ;
+                SourceExpr="Investment Code" }
+
+    { 27  ;2   ;Field     ;
+                SourceExpr="Investment Posting Group" }
+
+    { 8   ;2   ;Field     ;
+                SourceExpr=Name }
+
+    { 10  ;2   ;Field     ;
+                SourceExpr=Description }
+
+    { 1000000096;2;Field  ;
+                SourceExpr="Last Revaluation Date" }
+
+    { 1040000;2;Field     ;
+                SourceExpr="Asset Category" }
+
+    { 1040002;2;Field     ;
+                SourceExpr="Default Broker Code" }
+
+    { 1040004;2;Field     ;
+                SourceExpr="Default Broker Name" }
+
+    { 1040062;2;Field     ;
+                SourceExpr="Country Code" }
+
+    { 1040064;2;Field     ;
+                SourceExpr="Country of Incorporation" }
+
+    { 1040066;2;Field     ;
+                SourceExpr="Country of Registration" }
+
+    { 18  ;2   ;Field     ;
+                SourceExpr="Investment Currency" }
+
+    { 4   ;2   ;Field     ;
+                Name=Sedol;
+                CaptionML=[ENU=SEDOL Code;
+                           ENG=SEDOL Code];
+                SourceExpr="SEDOL Code" }
+
+    { 6   ;2   ;Field     ;
+                Name=ISIN;
+                CaptionML=[ENU=ISIN Code;
+                           ENG=ISIN Code];
+                SourceExpr="ISIN Code" }
+
+    { 1000000088;2;Field  ;
+                SourceExpr="Additional Investment Code 1" }
+
+    { 12  ;2   ;Field     ;
+                SourceExpr="Global Dimension 1 Code" }
+
+    { 72  ;2   ;Field     ;
+                Name=Project Code;
+                CaptionML=ENU=Project Code;
+                SourceExpr="Global Dimension 2 Code" }
+
+    { 1000000004;2;Field  ;
+                SourceExpr="External Limited Partnerships" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="External PEF Partner Code" }
+
+    { 1000000046;2;Field  ;
+                SourceExpr="External Reference" }
+
+    { 1000000037;2;Field  ;
+                SourceExpr="Last Risk Assessment Date";
+                Editable=FALSE }
+
+    { 1000000036;2;Field  ;
+                SourceExpr="Current Risk Rating";
+                Editable=FALSE }
+
+    { 1000000035;2;Field  ;
+                SourceExpr="Current Risk Weight";
+                Editable=FALSE }
+
+    { 1000000033;2;Field  ;
+                SourceExpr="Next Risk Assessment Due Date";
+                Editable=FALSE }
+
+    { 1905401101;1;Group  ;
+                CaptionML=[ENU=Finance;
+                           ENG=Finance] }
+
+    { 1040053;2;Field     ;
+                SourceExpr="Exclude from Accruals" }
+
+    { 1040051;2;Field     ;
+                SourceExpr="Interest Calculation Method" }
+
+    { 1   ;1   ;Group     ;
+                Name=UnquotedInfo;
+                CaptionML=[ENU=Ownership Information;
+                           ENG=Ownership Information] }
+
+    { 1000000015;2;Field  ;
+                SourceExpr=Sector }
+
+    { 1000000019;2;Field  ;
+                SourceExpr="Ownership % - current" }
+
+    { 1000000023;2;Field  ;
+                SourceExpr="Ownership % - diluted" }
+
+    { 1000000025;2;Field  ;
+                SourceExpr="Registered Office" }
+
+    { 1000000028;2;Field  ;
+                SourceExpr="Registered Number" }
+
+    { 1000000030;2;Field  ;
+                SourceExpr="Tax Reference Number" }
+
+    { 1000000032;2;Field  ;
+                SourceExpr="Investment Stage" }
+
+    { 1000000090;2;Field  ;
+                SourceExpr="Proof of Ownership" }
+
+    { 1000000092;2;Field  ;
+                SourceExpr="Dividend Payments" }
+
+    { 1000000094;2;Field  ;
+                SourceExpr="Dividend Frequency" }
+
+    { 1040007;2;Field     ;
+                SourceExpr="Duration Stake Holding" }
+
+    { 1040009;2;Field     ;
+                SourceExpr="Debt/Equity Ratio" }
+
+    { 1000000026;2;Field  ;
+                SourceExpr="Commitment Currency" }
+
+    { 2000000014;2;Field  ;
+                SourceExpr="Total Commitment" }
+
+    { 1000000011;2;Field  ;
+                SourceExpr="O/S Commitment Date" }
+
+    { 1040056;2;Field     ;
+                SourceExpr="Outstanding Commitment" }
+
+    { 1900127501;1;Group  ;
+                Name=UnquotedInfo2;
+                CaptionML=[ENU=PCS;
+                           ENG=PCS];
+                GroupType=Group }
+
+    { 1000000039;2;Field  ;
+                CaptionML=[ENU=Private Company Shares;
+                           ENG=Private Company Shares];
+                SourceExpr=PCS }
+
+    { 1000000041;2;Field  ;
+                SourceExpr="Jurisdiction of Incorporation" }
+
+    { 1040005;2;Field     ;
+                SourceExpr="Trading Company" }
+
+    { 1000000045;2;Field  ;
+                SourceExpr="Principal Activity" }
+
+    { 1000000047;2;Field  ;
+                SourceExpr="Issued Share Capital" }
+
+    { 1000000049;2;Field  ;
+                SourceExpr="Location of Share Certificate" }
+
+    { 1000000051;2;Field  ;
+                SourceExpr="Held to our order" }
+
+    { 1000000053;2;Field  ;
+                CaptionML=[ENU=Client is Controlling Shareholder;
+                           ENG=Client is Controlling Shareholder];
+                SourceExpr="Client Controlling Shareholder" }
+
+    { 1000000055;2;Field  ;
+                CaptionML=[ENU=Date of last financial Statement;
+                           ENG=Date of last financial Statement];
+                SourceExpr="Date of last financial Statem." }
+
+    { 1000000043;2;Field  ;
+                SourceExpr="Name of Jurisdiction of Incop." }
+
+    { 1000000063;2;Field  ;
+                SourceExpr="Loc. of Shares - Entity Name" }
+
+    { 1000000057;2;Field  ;
+                SourceExpr=Audited }
+
+    { 1000000061;2;Field  ;
+                SourceExpr="Financial statements qualified" }
+
+    { 1000000067;2;Field  ;
+                SourceExpr="Represented on the board" }
+
+    { 1000000069;2;Field  ;
+                SourceExpr="Represented to the board by" }
+
+    { 1000000072;2;Field  ;
+                SourceExpr="Represented by - Entity Name" }
+
+    { 1000000071;2;Field  ;
+                SourceExpr="Detail POAs in place" }
+
+    { 1000000073;2;Field  ;
+                SourceExpr="Key Man insurance in place" }
+
+    { 1000000077;2;Field  ;
+                SourceExpr="Loan account(s)" }
+
+    { 1905709401;1;Group  ;
+                Name=UnquotedInfo4;
+                CaptionML=[ENU=Fixed Interest Information;
+                           ENG=Fixed Interest Information];
+                GroupType=Group }
+
+    { 1040045;2;Field     ;
+                Name=Exclude from Accruals2;
+                CaptionML=ENU=Exclude from Accruals;
+                SourceExpr="Exclude from Accruals" }
+
+    { 1040041;2;Field     ;
+                Name=Interest Calculation Method2;
+                CaptionML=ENU=Interest Calculation Method;
+                SourceExpr="Interest Calculation Method" }
+
+    { 1040047;2;Field     ;
+                SourceExpr="Interest Rate" }
+
+    { 1040049;2;Field     ;
+                SourceExpr="Expiry Date / Maturity Date" }
+
+    { 1040025;2;Field     ;
+                SourceExpr="Payment Frequency" }
+
+    { 1040035;2;Field     ;
+                SourceExpr="Ex Dividend (XD) Date" }
+
+    { 1000000031;2;Field  ;
+                ToolTipML=ENU="Also known as ""First Interest Date"" in Investment Master ";
+                SourceExpr="First Coupon Payment Date" }
+
+    { 1040037;2;Field     ;
+                SourceExpr="Next Payment Date" }
+
+    { 1040043;2;Field     ;
+                SourceExpr="Net or Gross Payment" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

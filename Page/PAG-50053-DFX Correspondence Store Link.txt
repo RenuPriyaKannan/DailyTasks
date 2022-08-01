@@ -1,0 +1,231 @@
+OBJECT Page 50053 DFX Correspondence Store Link
+{
+  OBJECT-PROPERTIES
+  {
+    Date=24-06-22;
+    Time=11:09:32;
+    Modified=Yes;
+    Version List=NAVLITE;
+  }
+  PROPERTIES
+  {
+    Editable=No;
+    InsertAllowed=No;
+    DeleteAllowed=No;
+    ModifyAllowed=No;
+    SourceTable=Table9069078;
+    PageType=List;
+    OnInit=BEGIN
+             ExternalDMSStatusVisible  := TRUE;
+             LinkVisible               := TRUE;
+
+             InitPageDataSecurity;
+           END;
+
+    OnOpenPage=VAR
+                 DocumentSetup@1000000000 : Record 9068662;
+                 ApplicationSetup@1000000003 : Record 9068230;
+               BEGIN
+                 DocumentSetup.GET;
+                 ExternalDMSStatusVisible := DocumentSetup."Use External DMS Status";
+
+                 LinkVisible := GETFILTER("Link Type") <> '';
+
+                 IF ApplicationSetup.CheckClientReference('C109') THEN
+                   DMSBool := TRUE;
+               END;
+
+    OnAfterGetRecord=VAR
+                       CorrespondenceDocType@1000000000 : Record 9068657;
+                       DocumentTypeSubType@1000000001 : Record 9068463;
+                     BEGIN
+                       {
+                       IF "Correspondence Store Type" = "Correspondence Store Type"::"External DMS" THEN BEGIN
+                         "MS Office Doc Type" := '';
+                         Subject := "External Document Subject";
+                         FileName := '';
+                         "Source of Document" := 0;
+                         "Document Inserted Date" := "External Doc Inserted Date";
+                         "Document Inserted By" := "External Doc Inserted By";
+                         "Document Type" := "External Document Type";
+                         IF CorrespondenceDocType.GET("Document Type") THEN
+                           "Document Type Text" := CorrespondenceDocType.Type;
+                         "Document Sub Type" := "External Document Sub Type";
+                         IF DocumentTypeSubType.GET("Document Type", "Document Sub Type") THEN
+                           "Document Sub Type Text" := DocumentTypeSubType."Document Sub Type Description";
+                         "Document Date" := 0D;
+                         "Restricted Combination" := FALSE;
+                       END;
+                       }
+                     END;
+
+    ActionList=ACTIONS
+    {
+      { 1000000014;  ;ActionContainer;
+                      ActionContainerType=ActionItems }
+      { 1000000015;1 ;Action    ;
+                      Name=Open;
+                      CaptionML=[ENU=Open;
+                                 ENG=Open];
+                      Promoted=Yes;
+                      Image=Open;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 CorrStore@1000000003 : Record 9068660;
+                                 DFSetup@1000000002 : Record 9068662;
+                                 LFSetup@1000000001 : Record 9069243;
+                                 url@1000000000 : Text;
+                               BEGIN
+                                 //IF Rec."Correspondence Store Type" = Rec."Correspondence Store Type"::"Correspondence Store" THEN BEGIN
+                                   IF CorrStore.GET(Type,"No.",ID) THEN BEGIN
+                                     IF CorrStore."LaserFiche Entry ID" <> 0 THEN
+                                       DFSetup.GET;
+                                       IF DFSetup."External Doc Management System" = DFSetup."External Doc Management System"::LaserFiche THEN
+                                         BEGIN
+                                             IF LFSetup.GET THEN BEGIN
+                                               url := LFSetup."Web Client URL" + '=' + FORMAT(CorrStore."LaserFiche Entry ID");
+                                               HYPERLINK(url);
+                                              END
+                                         END ELSE
+                                           OpenDocument(Type,"No.",ID);
+                                       END
+                                 //END ELSE
+                                   //OpenDocument(Type,"No.",ID);
+                               END;
+                                }
+      { 1000000017;1 ;Action    ;
+                      Name=Link;
+                      CaptionML=ENU=Link Record From Correspondence Store;
+                      Promoted=Yes;
+                      Visible=LinkVisible;
+                      Image=LinkAccount;
+                      PromotedCategory=Process;
+                      OnAction=BEGIN
+                                 LinkDocument;
+                               END;
+                                }
+      { 1000000026;1 ;Action    ;
+                      Name=LinkRecordFromDMS;
+                      CaptionML=ENU=Link Record From DMS;
+                      Promoted=Yes;
+                      Image=LinkAccount;
+                      PromotedCategory=Process }
+      { 1000000016;1 ;Action    ;
+                      Name=UnLink;
+                      Promoted=Yes;
+                      Image=UnLinkAccount;
+                      PromotedCategory=Process;
+                      OnAction=BEGIN
+                                 UnLinkDocument;
+                               END;
+                                }
+      { 1000000020;  ;ActionContainer;
+                      ActionContainerType=RelatedInformation }
+    }
+  }
+  CONTROLS
+  {
+    { 1000000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000001;1;Group  ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 1000000024;2;Field  ;
+                SourceExpr=ID;
+                Visible=FALSE;
+                Editable=FALSE }
+
+    { 1000000013;2;Field  ;
+                SourceExpr="Link Type";
+                Visible=LinkVisible }
+
+    { 1000000018;2;Field  ;
+                SourceExpr="Link Code";
+                Visible=LinkVisible }
+
+    { 1000000019;2;Field  ;
+                Name=Asset Type;
+                SourceExpr=ReturnAssetType;
+                Visible=LinkVisible }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="External DMS Status";
+                Visible=ExternalDMSStatusVisible }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Document Type" }
+
+    { 1000000004;2;Field  ;
+                SourceExpr="Document Type Text" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr=Subject }
+
+    { 1000000006;2;Field  ;
+                SourceExpr=FileName }
+
+    { 1000000007;2;Field  ;
+                SourceExpr="Document Inserted Date" }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="Document Inserted By" }
+
+    { 1000000009;2;Field  ;
+                SourceExpr="Source of Document" }
+
+    { 1000000010;2;Field  ;
+                SourceExpr="Document Sub Type" }
+
+    { 1000000011;2;Field  ;
+                SourceExpr="Document Sub Type Text" }
+
+    { 1000000012;2;Field  ;
+                SourceExpr="Document Date" }
+
+  }
+  CODE
+  {
+    VAR
+      InfoTxt1Visible@1000000001 : Boolean INDATASET;
+      ExternalDMSStatusVisible@1000000000 : Boolean;
+      InfoText@1000000002 : TextConst 'ENU=This is a filtered list of documents for reference. To add documents to this list, use the Documents option on the Client Card Ribbon or the relevant option from the Resource or Entity card.;ENG=This is a filtered list of documents for reference. To add documents to this list, use the Documentation tab on the Client card or the relevant option from the Resource or Entity card.';
+      LinkVisible@1000000003 : Boolean;
+      DMSBool@1000000004 : Boolean;
+
+    PROCEDURE ReturnAssetType@1000000000() : Text;
+    VAR
+      ClientAsset@1000000000 : Record 9068546;
+    BEGIN
+      IF "Link Type" = "Link Type"::Asset THEN BEGIN
+        IF ClientAsset.GET("No.","Link Code") THEN
+          EXIT(FORMAT(ClientAsset."Asset Type"));
+      END;
+    END;
+
+    LOCAL PROCEDURE InitPageDataSecurity@1000000002();
+    BEGIN
+      InfoTxt1Visible := TRUE;
+
+      OnAfterInitPageDataSecurity;
+    END;
+
+    [Integration(DEFAULT,TRUE)]
+    LOCAL PROCEDURE OnAfterInitPageDataSecurity@1000000003();
+    BEGIN
+    END;
+
+    BEGIN
+    {
+      18.08.20  Ritam Majumdar
+                CRF54043  Laserfiche integration
+      24.07.19  Unnar Eliasson
+                CRF46854 Data Security Rewrite using Subscribers
+      03.07.19  Radek Zebrowski
+                #CRF50932 Data security code moved to Data Security CU
+    }
+    END.
+  }
+}
+

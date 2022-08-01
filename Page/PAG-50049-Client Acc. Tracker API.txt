@@ -1,0 +1,377 @@
+OBJECT Page 50049 Client Acc. Tracker API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=02-12-20;
+    Time=18:28:20;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9068655;
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 1000000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000001;1;Group  ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Client No." }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Entry No." }
+
+    { 1000000004;2;Field  ;
+                SourceExpr="Fiscal Period Completed Date" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="Global Dimension 1 Code" }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="Global Dimension 2 Code" }
+
+    { 1000000007;2;Field  ;
+                SourceExpr="Client Name" }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="Client Status" }
+
+    { 1000000009;2;Field  ;
+                SourceExpr=ClientAnalysisA }
+
+    { 1000000010;2;Field  ;
+                SourceExpr=ClientAnalysisB }
+
+    { 1000000011;2;Field  ;
+                SourceExpr=ClientAnalysisC }
+
+    { 1000000012;2;Field  ;
+                SourceExpr=ClientAnalysisD }
+
+    { 1000000013;2;Field  ;
+                SourceExpr=ClientAnalysisE }
+
+    { 1000000014;2;Field  ;
+                SourceExpr=ClientAnalysisF }
+
+    { 1000000015;2;Field  ;
+                SourceExpr="Lead Client Link" }
+
+    { 1000000016;2;Field  ;
+                SourceExpr="Last Signed Fin. Statements" }
+
+    { 1000000017;2;Field  ;
+                SourceExpr="Last Date Modified" }
+
+    { 1000000018;2;Field  ;
+                SourceExpr="Tracking Process Comments" }
+
+    { 1000000019;2;Field  ;
+                SourceExpr="Field 1" }
+
+    { 1000000020;2;Field  ;
+                SourceExpr="Field 2" }
+
+    { 1000000021;2;Field  ;
+                SourceExpr="Field 3" }
+
+    { 1000000022;2;Field  ;
+                SourceExpr="Field 4" }
+
+    { 1000000023;2;Field  ;
+                SourceExpr="Field 5" }
+
+    { 1000000024;2;Field  ;
+                SourceExpr="Field 6" }
+
+    { 1000000025;2;Field  ;
+                SourceExpr="Field 7" }
+
+    { 1000000026;2;Field  ;
+                SourceExpr="Field 8" }
+
+    { 1000000027;2;Field  ;
+                SourceExpr="Field 9" }
+
+    { 1000000028;2;Field  ;
+                SourceExpr="Field 10" }
+
+    { 1000000029;2;Field  ;
+                SourceExpr="Field 11" }
+
+    { 1000000030;2;Field  ;
+                SourceExpr="Field 12" }
+
+    { 1000000031;2;Field  ;
+                SourceExpr="Field 13" }
+
+    { 1000000032;2;Field  ;
+                SourceExpr="Field 14" }
+
+    { 1000000033;2;Field  ;
+                SourceExpr="Field 15" }
+
+    { 1000000034;2;Field  ;
+                SourceExpr="Field 16" }
+
+    { 1000000035;2;Field  ;
+                SourceExpr="Field 17" }
+
+    { 1000000036;2;Field  ;
+                SourceExpr="Suspend Work" }
+
+    { 1000000037;2;Field  ;
+                SourceExpr="General Information" }
+
+    { 1000000038;2;Field  ;
+                SourceExpr="Financial Statements Type" }
+
+    { 1000000039;2;Field  ;
+                SourceExpr="Bookkeeper Type" }
+
+    { 1000000040;2;Field  ;
+                SourceExpr="Client Bookkeeper" }
+
+    { 1000000041;2;Field  ;
+                SourceExpr="External Bookkeeping" }
+
+    { 1000000042;2;Field  ;
+                SourceExpr="No Bookkeeping Required" }
+
+    { 1000000043;2;Field  ;
+                SourceExpr="Bookkeeping Completed to" }
+
+    { 1000000044;2;Field  ;
+                SourceExpr="Internal Fees" }
+
+    { 1000000045;2;Field  ;
+                SourceExpr="External Fees" }
+
+    { 1000000046;2;Field  ;
+                SourceExpr="Tracker Period Status" }
+
+    { 1000000047;2;Field  ;
+                SourceExpr="Fiscal/Current F.S. Start Date" }
+
+    { 1000000048;2;Field  ;
+                SourceExpr="Fiscal/Current F.S. End Date" }
+
+    { 1000000049;2;Field  ;
+                SourceExpr="First F.S. Year Start Date" }
+
+    { 1000000050;2;Field  ;
+                SourceExpr="Period Closed by" }
+
+    { 1000000051;2;Field  ;
+                SourceExpr="First Fin. Statements" }
+
+    { 1000000052;2;Field  ;
+                SourceExpr="No F.S. to be Prepared" }
+
+    { 1000000053;2;Field  ;
+                SourceExpr="External Fin. Statements" }
+
+    { 1000000054;2;Field  ;
+                SourceExpr="Fin. Statements Preparer Type" }
+
+    { 1000000055;2;Field  ;
+                SourceExpr="Fin. Statements Preparer" }
+
+    { 1000000056;2;Field  ;
+                SourceExpr="Current F.S. Deadline Date" }
+
+    { 1000000057;2;Field  ;
+                SourceExpr="General Comments" }
+
+    { 1000000058;2;Field  ;
+                SourceExpr="Suspend Comments" }
+
+    { 1000000059;2;Field  ;
+                SourceExpr="Fin. Statements Comments" }
+
+    { 1000000060;2;Field  ;
+                SourceExpr="Bookkeeping Comments" }
+
+    { 1000000061;2;Field  ;
+                SourceExpr="Tracker Status" }
+
+    { 1000000062;2;Field  ;
+                SourceExpr="Tracker Status Description" }
+
+    { 1000000063;2;Field  ;
+                SourceExpr="Tracker Status Date" }
+
+    { 1000000064;2;Field  ;
+                SourceExpr="Tracker Status Completed by" }
+
+    { 1000000065;2;Field  ;
+                SourceExpr="Warning Comment" }
+
+    { 1000000066;2;Field  ;
+                SourceExpr="Field 1 Completed By" }
+
+    { 1000000067;2;Field  ;
+                SourceExpr="Field 2 Completed By" }
+
+    { 1000000068;2;Field  ;
+                SourceExpr="Field 3 Completed By" }
+
+    { 1000000069;2;Field  ;
+                SourceExpr="Field 4 Completed By" }
+
+    { 1000000070;2;Field  ;
+                SourceExpr="Field 5 Completed By" }
+
+    { 1000000071;2;Field  ;
+                SourceExpr="Field 6 Completed By" }
+
+    { 1000000072;2;Field  ;
+                SourceExpr="Field 7 Completed By" }
+
+    { 1000000073;2;Field  ;
+                SourceExpr="Field 8 Completed By" }
+
+    { 1000000074;2;Field  ;
+                SourceExpr="Field 9 Completed By" }
+
+    { 1000000075;2;Field  ;
+                SourceExpr="Field 10 Completed By" }
+
+    { 1000000076;2;Field  ;
+                SourceExpr="Field 11 Completed By" }
+
+    { 1000000077;2;Field  ;
+                SourceExpr="Field 12 Completed By" }
+
+    { 1000000078;2;Field  ;
+                SourceExpr="Field 13 Completed By" }
+
+    { 1000000079;2;Field  ;
+                SourceExpr="Field 14 Completed By" }
+
+    { 1000000080;2;Field  ;
+                SourceExpr="Field 15 Completed By" }
+
+    { 1000000081;2;Field  ;
+                SourceExpr="Field 16 Completed By" }
+
+    { 1000000082;2;Field  ;
+                SourceExpr="Field 17 Completed By" }
+
+    { 1000000083;2;Field  ;
+                SourceExpr="General Comments 1st" }
+
+    { 1000000084;2;Field  ;
+                SourceExpr="Suspend Comments 1st" }
+
+    { 1000000085;2;Field  ;
+                SourceExpr="Fin. Statements Comments 1st" }
+
+    { 1000000086;2;Field  ;
+                SourceExpr="Bookkeeping Comments 1st" }
+
+    { 1000000087;2;Field  ;
+                SourceExpr="Warning Comment 1st" }
+
+    { 1000000088;2;Field  ;
+                SourceExpr="Tracking Process Comments 1st" }
+
+    { 1000000089;2;Field  ;
+                SourceExpr="Client Jurisdiction" }
+
+    { 1000000090;2;Field  ;
+                SourceExpr="Client Type" }
+
+    { 1000000091;2;Field  ;
+                SourceExpr=Frequency }
+
+    { 1000000092;2;Field  ;
+                SourceExpr="Date Last Audited" }
+
+    { 1000000093;2;Field  ;
+                SourceExpr="Audit Status" }
+
+    { 1000000094;2;Field  ;
+                SourceExpr="Audit Status Date" }
+
+    { 1000000095;2;Field  ;
+                SourceExpr=Auditor }
+
+    { 1000000096;2;Field  ;
+                SourceExpr="Auditor Name" }
+
+    { 1000000097;2;Field  ;
+                SourceExpr="No F.S. Required Date" }
+
+    { 1000000098;2;Field  ;
+                SourceExpr="Accounting Basis" }
+
+    { 1000000099;2;Field  ;
+                SourceExpr="Acc. Preparer Dim. Filter" }
+
+    { 1000000100;2;Field  ;
+                SourceExpr="Bookkeeper Dim. Filter" }
+
+    { 1000000101;2;Field  ;
+                SourceExpr="Client Type Type" }
+
+    { 1000000102;2;Field  ;
+                SourceExpr="Proper Law" }
+
+    { 1000000103;2;Field  ;
+                SourceExpr="Work Type Filter" }
+
+    { 1000000104;2;Field  ;
+                SourceExpr="Job Analysis Dim 1" }
+
+    { 1000000105;2;Field  ;
+                SourceExpr="Job Analysis Dim 2" }
+
+    { 1000000106;2;Field  ;
+                SourceExpr="Posted Time Start Date" }
+
+    { 1000000107;2;Field  ;
+                SourceExpr="Posted Time End Date" }
+
+    { 1000000108;2;Field  ;
+                SourceExpr="Fee Basis" }
+
+    { 1000000109;2;Field  ;
+                SourceExpr="Fixed / Estimated Fee Amount" }
+
+    { 1000000110;2;Field  ;
+                SourceExpr="Estimated Time Spent - Units" }
+
+    { 1000000111;2;Field  ;
+                SourceExpr="Estimated Time Spent - Value" }
+
+    { 1000000112;2;Field  ;
+                SourceExpr="Actual Time Spent - Units" }
+
+    { 1000000113;2;Field  ;
+                SourceExpr="Actual Time Spent - Value" }
+
+    { 1000000114;2;Field  ;
+                SourceExpr="Over/(Under) - Units" }
+
+    { 1000000115;2;Field  ;
+                SourceExpr="Over/(Under) - Value" }
+
+    { 1000000116;2;Field  ;
+                SourceExpr="F10-Restricted" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

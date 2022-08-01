@@ -1,0 +1,324 @@
+OBJECT Codeunit 50007 DFX CRM Integration
+{
+  OBJECT-PROPERTIES
+  {
+    Date=13-07-22;
+    Time=13:42:47;
+    Modified=Yes;
+    Version List=;
+  }
+  PROPERTIES
+  {
+    OnRun=VAR
+            sample@100000000 : TextConst 'ENU={
+            "no":"CO5436543",
+            "name": "Renu",
+            "currencyCode": "string",
+            "parentalConsentReceived": "string",
+            "minor": "string",
+            "privacyBlocked": "string",
+            "region": "string",
+            "area": "string",
+            "territoryCode": "string",
+            "workFaxNo": "string",
+            "workPhoneNo": "string",
+            "dateCreated": "2022-07-01T05:24:23.632Z",
+            "dateOfBirth": "2022-07-01T05:24:23.632Z",
+            "externalID": "string",
+            "currency_Code": "string",
+            "vATRegistrationNo": "string",
+            "languageCode": "string",
+            "homePage": "string",
+            "faxNo": "string",
+            "email": "string",
+            "mobileNo": "9988765332",
+            "phoneNo": "0988765",
+            "county": "string",
+            "city": "Salem",
+            "name2": "Priya",
+            "type": 0,
+            "salesPersonCode": "string",
+            "address": "string",
+            "address2": "string",
+            "address3": "string",
+            "country_Region": "string",
+            "postCode": "string",
+            "option": "string"}';
+            Function@100000001 : 'Create,Update,Delete';
+            delete@100000002 : TextConst 'ENU={
+            "no": "CON76543"}';
+            Update@100000003 : TextConst 'ENU={
+          
+              "no":"1",
+          
+            "name": "ASh",
+          
+            "currencyCode": "INR",
+          
+            "parentalConsentReceived": true,
+          
+            "minor": true,
+          
+            "privacyBlocked": true,
+          
+            "territoryCode": "string",
+          
+            "workFaxNo": "string",
+          
+            "workPhoneNo": "string",
+          
+            "dateCreated": "2022-07-12",
+          
+            "dateOfBirth": "2022-07-12",
+          
+            "externalID": "string",
+          
+            "vATRegistrationNo": "string",
+          
+            "languageCode": "ENG",
+          
+            "homePage": "www.google.com",
+          
+            "faxNo": "string",
+          
+            "email": "string",
+          
+            "mobileNo": "7010927957",
+          
+            "phoneNo": "045452410410",
+          
+            "county": "India",
+          
+            "city": "Palani",
+          
+            "name2": "Suresh",
+          
+            "type": 0,
+          
+            "address": "41 Gandhi Road,",
+          
+            "address2": "string",
+          
+            "address3": "string",
+          
+            "country_Region": "Asia",
+          
+            "postCode": "624601",
+          
+            "option": "update"
+          
+          }';
+            Create@100000004 : TextConst 'ENU={
+          
+            "name": "Amuthan",
+          
+            "currencyCode": "string",
+          
+            "parentalConsentReceived": true,
+          
+            "minor": true,
+          
+            "privacyBlocked": true,
+          
+            "territoryCode": "string",
+          
+            "workFaxNo": "string",
+          
+            "workPhoneNo": "04412312121",
+          
+            "dateCreated": "2022-07-05T04:11:41.634Z",
+          
+            "dateOfBirth": "2022-07-05T04:11:41.634Z",
+          
+            "externalID": "string",
+          
+            "vATRegistrationNo": "string",
+          
+            "languageCode": "string",
+          
+            "homePage": "www.google.com",
+          
+            "faxNo": "string",
+          
+            "email": "amuthasakaran@datafabricx.com",
+          
+            "mobileNo": "string",
+          
+            "phoneNo": "9952401981",
+          
+            "county": "string",
+          
+            "city": "string",
+          
+            "name2": "string",
+          
+            "type": 0,
+          
+            "address": "string",
+          
+            "address2": "string",
+          
+            "address3": "string",
+          
+            "country_Region": "string",
+          
+            "postCode": "string",
+          
+            "option": "create"
+          
+          }';
+          BEGIN
+            //CreateContact('rr4332','Kavikannan');
+
+            //Contact(Update,"Function"::Update);
+            //Contact(Create,"Function"::Create);
+             MESSAGE('SUCCESS');
+          END;
+
+  }
+  CODE
+  {
+    VAR
+      JSONMgt@100000000 : Codeunit 5459;
+
+    [Internal]
+    PROCEDURE CreateContact@100000001(No@100000000 : Code[20];Name@100000001 : Text[100];Name2@100000023 : Text[100];Type@100000014 : Integer;SalesPersonCode@100000003 : Code[10];Address@100000004 : Text;Address2@100000005 : Text;Address3@100000006 : Text;Country_Region@100000007 : Text;PostCode@100000008 : Text;City@100000009 : Text;County@100000010 : Text;PhoneNo@100000011 : Text;MobileNo@100000012 : Text;Email@100000013 : Text;FaxNo@100000015 : Text;HomePage@100000016 : Text;LanguageCode@100000017 : Text;VATRegistrationNo@100000018 : Text;CurrencyCode@100000019 : Text;ExternalID@100000020 : Code[20];DateOfBirth@100000021 : Date;DateCreated@100000022 : Date;WorkPhoneNo@100000024 : Text;WorkFaxNo@100000025 : Text;TerritoryCode@100000026 : Text;Area@100000027 : Text;Region@100000028 : Text;PrivacyBlocked@100000029 : Text;Minor@100000030 : Text) : Boolean;
+    VAR
+      Contact@100000002 : Record 5050;
+    BEGIN
+      Contact.RESET;
+      Contact.SETRANGE("No.",No);
+      IF NOT Contact.FINDFIRST THEN BEGIN
+        Contact.INIT;
+        Contact."No." := No;
+        Contact.Name := Name;
+        IF Contact.INSERT(TRUE) THEN
+          EXIT(TRUE)
+        ELSE
+          EXIT(FALSE)
+      END ELSE
+        ERROR('Contact already Exists!');
+    END;
+
+    [External]
+    PROCEDURE Contact@100000000(Json@1000000000 : Text;Function@1000000003 : Text) : Code[250];
+    VAR
+      RecordRef@1000000002 : RecordRef;
+      Contact@100000000 : Record 5050;
+      RecContact@100000001 : Record 5050;
+      contact1@100000002 : Record 5050;
+      No@100000003 : Code[20];
+      DocMgmntCU@100000004 : Codeunit 9068511;
+      NoSeriesManagement@100000005 : Codeunit 396;
+    BEGIN
+      IF NOT JSONMgt.InitializeFromString(Json) THEN
+        EXIT('JSON is invalid');
+
+      IF "Function" = 'create' THEN BEGIN
+          WITH Contact DO BEGIN
+            CLEAR(Contact);
+            RecordRef.GETTABLE(Contact);
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'name', FIELDNO(Name));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'name2', FIELDNO("Name 2"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'type', FIELDNO(Type));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'salesPersonCode', FIELDNO("Salesperson Code"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'address', FIELDNO(Address));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'address2', FIELDNO("Address 2"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'address3', FIELDNO("Address 3"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'country_Region', FIELDNO("Country/Region Code"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'postCode', FIELDNO("Post Code"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'city', FIELDNO(City));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'county', FIELDNO(County));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'phoneNo', FIELDNO("Phone No."));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'mobileNo', FIELDNO("Mobile Phone No."));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'email', FIELDNO("E-Mail"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'faxNo', FIELDNO("Fax No."));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'homePage', FIELDNO("Home Page"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'languageCode', FIELDNO("Language Code"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'vATRegistrationNo', FIELDNO("VAT Registration No."));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'currencyCode', FIELDNO("Currency Code"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'externalID', FIELDNO("External ID"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'dateOfBirth', FIELDNO("Date of Birth"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'dateCreated', FIELDNO("Date Created"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'workPhoneNo', FIELDNO("Work Phone No."));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'workFaxNo', FIELDNO("Work Fax No."));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'territoryCode', FIELDNO("Territory Code"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'privacyBlocked', FIELDNO("Privacy Blocked"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'minor', FIELDNO(Minor));
+            RecordRef.SETTABLE(Contact);
+            No := NoSeriesManagement.GetNextNo('CONTACT',TODAY,TRUE);
+            Contact."No." := No;
+            IF Contact.INSERT(TRUE)THEN
+              EXIT(Contact."No.");
+            IF Contact.Name = '' THEN
+              ERROR('Name is Mandatory!');
+            //IF Contact."Salesperson Code" = '' THEN
+           //   ERROR('SalespersonCode is mandatory!');
+
+          END;
+        END
+        ELSE IF "Function" = 'update' THEN BEGIN
+          WITH Contact DO BEGIN
+            CLEAR(Contact);
+            RecordRef.GETTABLE(Contact);
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'no', FIELDNO("No."));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'name', FIELDNO(Name));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'name2', FIELDNO("Name 2"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'type', FIELDNO(Type));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'salesPersonCode', FIELDNO("Salesperson Code"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'address', FIELDNO(Address));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'address2', FIELDNO("Address 2"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'address3', FIELDNO("Address 3"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'country_Region', FIELDNO("Country/Region Code"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'postCode', FIELDNO("Post Code"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'city', FIELDNO(City));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'county', FIELDNO(County));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'phoneNo', FIELDNO("Phone No."));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'mobileNo', FIELDNO("Mobile Phone No."));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'email', FIELDNO("E-Mail"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'faxNo', FIELDNO("Fax No."));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'homePage', FIELDNO("Home Page"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'languageCode', FIELDNO("Language Code"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'vATRegistrationNo', FIELDNO("VAT Registration No."));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'currencyCode', FIELDNO("Currency Code"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'externalID', FIELDNO("External ID"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'dateOfBirth', FIELDNO("Date of Birth"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'dateCreated', FIELDNO("Date Created"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'workPhoneNo', FIELDNO("Work Phone No."));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'workFaxNo', FIELDNO("Work Fax No."));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'territoryCode', FIELDNO("Territory Code"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'area', FIELDNO(Area));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'region', FIELDNO(Region));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'privacyBlocked', FIELDNO("Privacy Blocked"));
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'minor', FIELDNO(Minor));
+            RecordRef.SETTABLE(Contact);
+            RecContact.RESET;
+            RecContact.SETRANGE("No.",Contact."No.");
+            IF RecContact.FINDFIRST THEN BEGIN
+              IF Contact.MODIFY(TRUE) THEN
+                EXIT(Contact."No.");
+            END ELSE
+            ERROR('Contact doesn''t exist: %1',Contact."No.");
+            END;
+        END
+        ELSE IF "Function" = 'delete' THEN BEGIN
+        WITH Contact DO BEGIN
+            CLEAR(Contact);
+            RecordRef.GETTABLE(Contact);
+            JSONMgt.GetValueAndSetToRecFieldNo(RecordRef, 'no', FIELDNO("No."));
+            RecordRef.SETTABLE(Contact);
+          RecContact.RESET;
+          RecContact.GET(Contact."No.");
+          IF RecContact.DELETE THEN
+            EXIT(Contact."No.")
+          ELSE
+            ERROR('Contact doesn''t exist: %1',Contact."No.");
+          END
+        END;
+    END;
+
+    BEGIN
+    END.
+  }
+}
+

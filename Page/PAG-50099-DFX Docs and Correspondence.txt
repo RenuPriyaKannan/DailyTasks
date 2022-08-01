@@ -1,0 +1,1094 @@
+OBJECT Page 50099 DFX Docs and Correspondence
+{
+  OBJECT-PROPERTIES
+  {
+    Date=12-07-22;
+    Time=12:57:13;
+    Modified=Yes;
+    Version List=NAVLITE;
+  }
+  PROPERTIES
+  {
+    Permissions=TableData 9068469=r;
+    SaveValues=Yes;
+    MultipleNewLines=No;
+    InsertAllowed=Yes;
+    DeleteAllowed=No;
+    ModifyAllowed=Yes;
+    SourceTable=Table50016;
+    DelayedInsert=Yes;
+    SourceTableView=WHERE(Temporary=FILTER(No));
+    DataCaptionFields=Type,No.;
+    PageType=List;
+    ShowFilter=Yes;
+    OnInit=BEGIN
+             Meta_DateTime_2Visible := TRUE;
+             Meta_DateTime_1Visible := TRUE;
+             Meta_Time_2Visible := TRUE;
+             Meta_Time_1Visible := TRUE;
+             Meta_Date_2Visible := TRUE;
+             Meta_Date_1Visible := TRUE;
+             Meta_Decimal_2Visible := TRUE;
+             Meta_Decimal_1Visible := TRUE;
+             Meta_Code_4Visible := TRUE;
+             Meta_Code_3Visible := TRUE;
+             Meta_Code_2Visible := TRUE;
+             Meta_Code_1Visible := TRUE;
+             Meta_Text_6Visible := TRUE;
+             Meta_Text_5Visible := TRUE;
+             Meta_Text_4Visible := TRUE;
+             Meta_Text_3Visible := TRUE;
+             Meta_Text_2Visible := TRUE;
+             Meta_Text_1Visible := TRUE;
+             Meta_Int_3Visible := TRUE;
+             Meta_Int_2Visible := TRUE;
+             Meta_Int_1Visible := TRUE;
+             "Document TypeEditable" := TRUE;
+             iManageMsgVisible := FALSE;
+             MainTableVisible := TRUE;
+             SPButtonVisible := FALSE;
+             btnEmailCAROfficeVisible := FALSE;
+             "Additional InformationVisible" := TRUE;
+             SubjectVisible := TRUE;
+             "Document Inserted ByVisible" := TRUE;
+             DatastoreVisible := FALSE;
+             FunctionsVisible := TRUE;
+             DocumentVisible := TRUE;
+             MetaInt1Editable := TRUE;
+             MetaInt2Editable := TRUE;
+             MetaInt3Editable := TRUE;
+             MetaText1Editable := TRUE;
+             MetaText2Editable := TRUE;
+             MetaText3Editable := TRUE;
+             MetaText4Editable := TRUE;
+             MetaText5Editable := TRUE;
+             MetaText6Editable := TRUE;
+             MetaCode1Editable := TRUE;
+             MetaCode2Editable := TRUE;
+             MetaCode3Editable := TRUE;
+             MetaCode4Editable := TRUE;
+             MetaDec1Editable := TRUE;
+             MetaDec2Editable := TRUE;
+             MetaDate1Editable := TRUE;
+             MetaDate2Editable := TRUE;
+             MetaTime1Editable := TRUE;
+             MetaTime2Editable := TRUE;
+             MetaDT1Editable := TRUE;
+             MetaDT2Editable := TRUE;
+             DocumentPreviewVisible := FALSE;
+             DragDropTreeVisible := ShowDragDropControl;
+             ExternalDMSStatusEnabled := FALSE;
+             OpenHyperlinkVisible := TRUE;
+           END;
+
+    OnOpenPage=BEGIN
+                 DocSetup.GET();
+                 ExternalDMSStatusEnabled := DocSetup."Use External DMS Status";
+
+                 SETCURRENTKEY("Document Date");
+                 ASCENDING(FALSE);
+
+                 IF Type = Type::" " THEN
+                   EVALUATE(Type, GETFILTER(Type));
+
+                 IF "No." = '' THEN
+                   "No." := GETFILTER("No.");
+
+                 gLinkType:=FORMAT(Type);
+                 gLinkCode:="No.";
+
+                 InitiatePageFilters;
+
+                 SetCustomVisible;
+
+                 IF Rec.FIND('-') THEN;
+                 SetMetaDataVisible;
+
+                 LinkToOtherRecordsVisible := Type IN [Type::Client];
+
+                 FILTERGROUP(2);
+                 EVALUATE(RecipientType, GETFILTER(Type));
+                 CurrPage.DragDropTreeView.PAGE.SetFilters(RecipientType,GETFILTER("No."),'');
+                 FILTERGROUP(0);
+               END;
+
+    OnAfterGetRecord=VAR
+                       CorrespondenceStoreLink@1000000000 : Record 9069078;
+                     BEGIN
+                       IF DocSetup."External Doc Management System" = DocSetup."External Doc Management System"::"C076 FileNet" THEN
+                         EXIT;
+
+                       IF DocSetup."External Doc Management System" = DocSetup."External Doc Management System"::"C067 Hyperlink" THEN
+                         EXIT;
+
+                       OwnerConv.SETRANGE("Original Prospect No", "No.");
+                       IF OwnerConv.FIND ('-') THEN BEGIN
+                         DocumentVisible := FALSE;
+                         FunctionsVisible := FALSE;
+                       END ELSE BEGIN
+                         DocumentVisible := TRUE;
+                         FunctionsVisible := TRUE;
+                       END;
+
+                       IF Type = Type::Client THEN
+                         MetaCodeSingleInstance.SetClientNo("No.");
+                       linkDate := 0D;
+                       linkUser := '';
+                       CorrespondenceStoreLink.SETFILTER(ID,Rec.ID);
+                       CorrespondenceStoreLink.SETFILTER("No.",Rec."No.");
+                       IF CorrespondenceStoreLink.FINDSET(FALSE,FALSE) THEN REPEAT
+                         IF CorrespondenceStoreLink."Date Linked" > linkDate THEN BEGIN
+                           linkDate := CorrespondenceStoreLink."Date Linked";
+                           linkUser := CorrespondenceStoreLink."User Linked";
+                         END;
+                       UNTIL CorrespondenceStoreLink.NEXT = 0;
+                     END;
+
+    OnAfterGetCurrRecord=VAR
+                           rDocSetup@1000000000 : Record 9068662;
+                           CorrespondenceStoreLink@1000000001 : Record 9069078;
+                         BEGIN
+                         END;
+
+    ActionList=ACTIONS
+    {
+      { 1900000004;0 ;ActionContainer;
+                      ActionContainerType=ActionItems }
+      { 1000000058;1 ;Action    ;
+                      Name=btnEmailCAROffice;
+                      CaptionML=ENU=Email CAR Office;
+                      Visible=btnEmailCAROfficeVisible;
+                      Image=Email }
+      { 1040008 ;1   ;Action    ;
+                      Name=SPButton;
+                      CaptionML=ENU=Open Folder Location;
+                      Visible=SPButtonVisible;
+                      Image=ExplodeRouting }
+      { 1000000013;1 ;Action    ;
+                      Name=Datastore;
+                      CaptionML=ENU=DataStore;
+                      Visible=DatastoreVisible;
+                      Image=Database;
+                      OnAction=VAR
+                                 DocMan@1000000000 : Codeunit 9068511;
+                               BEGIN
+                                 IF COPYSTR(RecipientKeyValues,1,6) = 'Client' THEN
+                                   IF "No." = '' THEN BEGIN
+                                     Type := Type::Client;
+                                     END;
+
+                                 IF COPYSTR(RecipientKeyValues,1,6) = 'Entity' THEN
+                                   IF "No." = '' THEN BEGIN
+                                     Type := Type::Entity;
+                                     END;
+
+                                 PAGE.RUNMODAL(89743,Rec);
+                               END;
+                                }
+      { 1000000003;1 ;ActionGroup;
+                      Name=Document;
+                      CaptionML=ENU=&Document;
+                      Visible=DocumentVisible }
+      { 1000000004;2 ;Action    ;
+                      Name=CreateFromTemplate;
+                      CaptionML=ENU=&Create From Template;
+                      Promoted=Yes;
+                      Image=ApplyTemplate;
+                      OnAction=VAR
+                                 _DocumentFolderSetupRec@1000000002 : Record 9068662;
+                                 _CreateDocPage@1000000000 : Page 9069351;
+                               BEGIN
+                                 _DocumentFolderSetupRec.GET;
+                                 IF ((_DocumentFolderSetupRec."External Doc Management System" <>
+                                      _DocumentFolderSetupRec."External Doc Management System"::"C062 FileNet") AND
+                                     (_DocumentFolderSetupRec."External Doc Management System" <>
+                                      _DocumentFolderSetupRec."External Doc Management System"::Hummingbird)) THEN BEGIN
+                                   _CreateDocPage.SetRecipient(RecipientNo, RecipientType, RecipientKeyValues);
+                                   _CreateDocPage.RUNMODAL;
+                                   CurrPage.UPDATE;
+                                 END ELSE BEGIN
+                                   MESSAGE('This option is disabled as documents must be created from within a Workflow');
+                                 END;
+                               END;
+                                }
+      { 14      ;1   ;ActionGroup;
+                      Name=Functions;
+                      CaptionML=ENU=F&unctions;
+                      Visible=FunctionsVisible }
+      { 1040023 ;2   ;Action    ;
+                      Name=OpenSubForm;
+                      CaptionML=ENU=Open;
+                      Promoted=Yes;
+                      PromotedIsBig=Yes;
+                      Image=Open;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 _DocumentFolderSetupRec@1000000002 : Record 9068662;
+                                 LFSetup@1000000001 : Record 9069243;
+                                 url@1000000000 : Text;
+                               BEGIN
+                                 IF Rec."LaserFiche Entry ID" <> 0 THEN BEGIN
+                                   _DocumentFolderSetupRec.GET;
+                                   IF _DocumentFolderSetupRec."External Doc Management System" = _DocumentFolderSetupRec."External Doc Management System"::LaserFiche THEN
+                                     BEGIN
+                                         IF LFSetup.GET THEN BEGIN
+                                           url := LFSetup."Web Client URL" + '=' + FORMAT(Rec."LaserFiche Entry ID");
+                                           HYPERLINK(url);
+                                         END
+                                     END
+                                 END ELSE
+                                     OpenDocument(RecipientType,RecipientNo,RecipientKeyValues);
+                               END;
+                                }
+      { 26      ;2   ;Action    ;
+                      Name=Unlink;
+                      CaptionML=ENU=Unlink;
+                      Promoted=Yes;
+                      Image=UnLinkAccount;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 _DocFolderSetuprec@1000000001 : Record 9068662;
+                                 _DocMgtFunctions@1000000002 : Codeunit 9068511;
+                                 IsHandled@1000000000 : Boolean;
+                               BEGIN
+                                 OnBeforeUnLinkDocument(Rec,IsHandled);
+                                 IF IsHandled THEN
+                                   EXIT;
+
+                                 _DocFolderSetuprec.GET;
+                                 IF _DocFolderSetuprec."External Doc Management System" =
+                                   _DocFolderSetuprec."External Doc Management System"::"Synergy " THEN BEGIN
+                                   MESSAGE('Please use the Synergy Interface for Unlinking Documents.');
+                                 END ELSE IF _DocFolderSetuprec."External Doc Management System" =
+                                    _DocFolderSetuprec."External Doc Management System"::Hummingbird THEN BEGIN
+                                   MESSAGE('You can not Unlink Documents from Hummingbird.');
+                                 END ELSE IF _DocFolderSetuprec."External Doc Management System" =
+                                    _DocFolderSetuprec."External Doc Management System"::"C103 eDocs" THEN BEGIN
+                                   MESSAGE('Please use eDocs for Unlinking Documents.');
+                                 END ELSE IF _DocFolderSetuprec."External Doc Management System" =
+                                    _DocFolderSetuprec."External Doc Management System"::Sharepoint THEN BEGIN
+                                    IF CONFIRM('Are you sure you want to unlink %1?',FALSE,FileName) THEN
+                                      DELETE(TRUE);
+                                 END ELSE BEGIN
+                                   IF ID = '' THEN
+                                     EXIT;
+                                   IF CONFIRM('Are you sure you want to unlink %1?',FALSE,FileName) THEN BEGIN
+                                     _DocMgtFunctions.FileSetReadOnly( FilePath + FileName, FALSE );
+                                     IF _DocFolderSetuprec."External Doc Management System" = _DocFolderSetuprec."External Doc Management System"::"C062 FileNet"
+                                     THEN
+                                       DELETE(TRUE)
+                                     ELSE IF _DocFolderSetuprec."External Doc Management System" = _DocFolderSetuprec."External Doc Management System"::"C102 LiveLink"
+                                     THEN
+                                       DELETE(TRUE)
+                                     ELSE
+                                       DELETE;
+                                   END;
+                                 END;
+                               END;
+                                }
+      { 1000000001;2 ;Action    ;
+                      Name=LinkFile;
+                      CaptionML=ENU=Link File;
+                      Promoted=Yes;
+                      PromotedIsBig=Yes;
+                      Image=Link;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 temptype@1000000002 : ' ,Client,Entity,Prospect,Intermediary,Client Owner,Resource,,Dimension,,,External Bank Payment,,,,Potential Client';
+                                 _DocFolderSetupRec@1000000003 : Record 9068662;
+                                 TMPDocStore@1000000000 : TEMPORARY Record 9068660;
+                               BEGIN
+                                 _DocFolderSetupRec.GET;
+                                 IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::"Synergy " THEN
+                                 BEGIN
+                                   MESSAGE('Please use the Synergy Interface for linking Documents.')
+                                 END ELSE
+                                 IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::"C062 FileNet" THEN
+                                 BEGIN
+                                   MESSAGE('Please use the FileNet Interface for linking Documents.')
+                                 END ELSE
+                                 IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::"C103 eDocs" THEN
+                                 BEGIN
+                                   MESSAGE('Please use the eDoc''s for linking Documents.')
+                                 END ELSE
+                                 IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::Hummingbird THEN
+                                 BEGIN
+                                   MESSAGE('Please use the Hummingbird interface for linking Documents.')
+                                 END ELSE BEGIN
+                                   FILTERGROUP(2);
+                                   IF "No." <> '' THEN BEGIN
+                                     TMPDocStore.Type := Type;
+                                     TMPDocStore."No." := "No.";
+                                     TMPDocStore.INSERT;
+                                   END ELSE BEGIN
+                                     EVALUATE(temptype, GETFILTER(Type));
+                                     TMPDocStore.Type := temptype;
+                                     TMPDocStore."No." := "No.";
+                                     TMPDocStore.INSERT;
+
+                                   END;
+                                   FILTERGROUP(0);
+                                  { //#CRF48955
+                                   CASE _DocFolderSetupRec."Doc. Type Mandatory" OF
+                                     _DocFolderSetupRec."Doc. Type Mandatory"::"Doc Type Only" : BEGIN
+                                           IF "Document Type" = '' THEN
+                                             ERROR(ErrDocumentTypeBlank)
+                                         END;
+                                     _DocFolderSetupRec."Doc. Type Mandatory"::"Doc Type Only" : BEGIN
+                                           IF ("Document Type" = '') OR ("Document Sub Type" = '') THEN
+                                             ERROR(ErrSubDocumentTypeBlank)
+                                         END;
+
+                                   END;}
+                                   DFXCorrespondenceStore.RESET;
+                                   DFXCorrespondenceStore.COPY(TMPDocStore);
+                                   //#CRF48955
+                                   IF PAGE.RUNMODAL(PAGE::Page50102,DFXCorrespondenceStore) = ACTION::OK THEN
+                                     CurrPage.UPDATE;
+                                 END;
+                               END;
+                                }
+      { 1000000002;2 ;Action    ;
+                      Name=LinkEMail;
+                      CaptionML=ENU=Link E-Mail;
+                      Promoted=Yes;
+                      PromotedIsBig=Yes;
+                      Image=Email;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 DocMan@1000000000 : Codeunit 9068511;
+                                 temptype@1000000002 : ' ,Client,Entity,Prospect,Intermediary,Client Owner,Resource,,Dimension,,,External Bank Payment,,,,Potential Client';
+                                 _DocFolderSetupRec@1000000003 : Record 9068662;
+                                 _TmpType@1000000005 : ' ,Client,Entity,Prospect,Intermediary,Client Owner,Resource,,Dimension,,,External Bank Payment,,,,Potential Client';
+                               BEGIN
+                                 _DocFolderSetupRec.GET;
+                                 IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::"C076 FileNet" THEN
+                                   ERROR('Please link Emails directly in FileNet!');
+
+
+                                 IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::"Synergy " THEN
+                                 BEGIN
+                                   MESSAGE('Please use the Synergy Interface for linking Emails.')
+                                 END ELSE
+                                 IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::"C062 FileNet" THEN
+                                 BEGIN
+                                   MESSAGE('Please use the FileNet Interface for linking Emails.')
+                                 END ELSE
+                                 IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::"C103 eDocs" THEN
+                                 BEGIN
+                                   MESSAGE('Please use eDocs for linking Emails.')
+                                 END ELSE
+                                 IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::Hummingbird THEN
+                                 BEGIN
+                                   MESSAGE('Please use the Hummingbird Interface for linking Emails.')
+                                 END ELSE
+                                 IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::"C102 LiveLink" THEN
+                                 BEGIN
+                                   MESSAGE('Please use the Drag and Drop functionality for linking Documents.')
+                                 END ELSE BEGIN
+                                   IF NOT CONFIRM ('To link E-Mails to Navision, open the relevant e-mail in outlook   \' +
+                                                   'and then press Yes to Proceed.\\' +
+                                                   'Please note : The mail must be open, not just previewed, and must\' +
+                                                   'be the active window in outlook.\\' +
+                                                   '(Press No to cancel this process.)') THEN EXIT;
+
+                                   FILTERGROUP(2);
+
+                                   IF "No." <> '' THEN
+                                     _TmpType := Type
+                                   ELSE
+                                     EVALUATE(_TmpType, GETFILTER(Type));
+
+                                   IF "No." <> '' THEN
+                                     DocMan."Import Link E-Mail 2000"(Type, "No.")
+                                   ELSE BEGIN
+                                     EVALUATE(temptype, GETFILTER(Type));
+                                     DocMan."Import Link E-Mail 2000"(temptype, GETFILTER("No."));
+                                   END;
+                                   FILTERGROUP(0);
+                                 END;
+                               END;
+                                }
+      { 13      ;2   ;Action    ;
+                      Name=LinkThisDocToOTherCase;
+                      CaptionML=ENU=Link this document to other Case(s);
+                      Promoted=Yes;
+                      Visible=False;
+                      Image=Links;
+                      PromotedCategory=Process;
+                      OnAction=BEGIN
+                                 MESSAGE('Not ready');
+                               END;
+                                }
+      { 1000000012;2 ;Action    ;
+                      Name=ToggleArchived;
+                      CaptionML=ENU=Toggle Archived;
+                      Promoted=Yes;
+                      Image=ToggleBreakpoint;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 _DocFolderSetupRec@1000000001 : Record 9068662;
+                                 _CorrespondenceStore@1000000002 : Record 9068660;
+                               BEGIN
+                                 _DocFolderSetupRec.GET;
+                                 IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::"C076 FileNet" THEN
+                                   ERROR('Please use FileNet for Archiving Documents');
+
+                                 IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::"C062 FileNet" THEN
+                                 BEGIN
+                                   MESSAGE('Please use the FileNet Interface for Archiving Documents.')
+                                 END ELSE BEGIN
+                                 IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::Hummingbird THEN
+                                 BEGIN
+                                   MESSAGE('Please use the Hummingbird Interface for Archiving Documents.')
+                                 END ELSE BEGIN
+                                 IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::"C103 eDocs" THEN
+                                 BEGIN
+                                   MESSAGE('Please use eDocs for Archiving Documents.')
+                                 END ELSE BEGIN
+
+                                   CurrPage.SETSELECTIONFILTER(_CorrespondenceStore);
+                                   IF _CorrespondenceStore.FIND('-') THEN BEGIN
+                                     IF Archived THEN BEGIN
+                                       IF CONFIRM('Do you wish to un-archive selected file(s)?') THEN
+                                         REPEAT
+                                           _CorrespondenceStore.Archived:= FALSE;
+                                           _CorrespondenceStore."Archived Date" := 0D;
+                                           _CorrespondenceStore."Archived By" := '';
+
+                                           IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::"C102 LiveLink" THEN
+                                             _CorrespondenceStore.MODIFY(TRUE)
+                                           ELSE
+                                             _CorrespondenceStore.MODIFY;
+
+                                         UNTIL _CorrespondenceStore.NEXT = 0
+                                       ELSE
+                                         ERROR('Cancelled.');
+                                     END ELSE BEGIN
+                                       IF CONFIRM('Do you wish to archive selected file(s)?') THEN
+                                         REPEAT
+                                           _CorrespondenceStore.Archived:= TRUE;
+                                           _CorrespondenceStore."Archived Date" := TODAY;
+                                           _CorrespondenceStore."Archived By" := USERID;
+
+                                           IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::"C102 LiveLink" THEN
+                                             _CorrespondenceStore.MODIFY(TRUE)
+                                           ELSE
+                                             _CorrespondenceStore.MODIFY;
+
+                                         UNTIL _CorrespondenceStore.NEXT = 0
+                                       ELSE
+                                         ERROR('Cancelled.');
+                                     END;
+                                   END;
+                                   CurrPage.UPDATE;
+                                 END;
+                                 END;
+                                 END;
+                               END;
+                                }
+      { 1000000005;2 ;Action    ;
+                      Name=OpenDocRepository;
+                      CaptionML=ENU=Open Document Repository;
+                      OnAction=VAR
+                                 FinalLink@1000000000 : Text;
+                               BEGIN
+                                 FinalLink:=DocSetup.GenerateLink(DocSetup."Hyperlink Path",DocSetup."Replace For Record Type",
+                                                                   gLinkType,DocSetup."Replace For Record No.",gLinkCode);
+                                 HYPERLINK(FinalLink);
+                               END;
+                                }
+      { 1000000043;2 ;Action    ;
+                      Name=linkToOtherRecords;
+                      CaptionML=ENU=Link to Other Records;
+                      RunObject=Page 9069852;
+                      RunPageLink=ID=FIELD(ID),
+                                  No.=FIELD(No.),
+                                  Type=FIELD(Type);
+                      Promoted=Yes;
+                      Visible=LinkToOtherRecordsVisible;
+                      Image=CopyFromChartOfAccounts;
+                      PromotedCategory=Process }
+      { 1000000010;2 ;Action    ;
+                      Name=PublishToPortal;
+                      CaptionML=ENU=Publish To Portal;
+                      Promoted=Yes;
+                      Visible=PublishToPortalVisible;
+                      PromotedIsBig=Yes;
+                      Image=Web;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 ClientPortalSiteCompList@100000000 : Page 9072296;
+                                 ClientPortalSiteCompany@100000001 : Record 9072282;
+                                 FileManagement@100000009 : Codeunit 419;
+                                 Convert@100000008 : DotNet "'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Convert";
+                                 _File@100000007 : DotNet "'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.File";
+                                 FileStream@100000006 : DotNet "'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.FileStream";
+                                 Bytes@100000005 : DotNet "'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Array";
+                                 ClientPortalPublishedDoc@100000003 : Record 9072287;
+                                 TempBlob@100000002 : Record 99008535;
+                                 ServerTempFileName@100000011 : Text;
+                                 ClientTempFileName@100000010 : Text;
+                               BEGIN
+                                 ClientPortalSiteCompany.FINDFIRST;
+                                 ClientPortalSiteCompList.SETTABLEVIEW(ClientPortalSiteCompany);
+                                 ClientPortalSiteCompList.SETRECORD(ClientPortalSiteCompany);
+                                 ClientPortalSiteCompList.LOOKUPMODE(TRUE);
+                                 IF ClientPortalSiteCompList.RUNMODAL = ACTION::LookupOK THEN BEGIN
+                                   ClientPortalSiteCompList.GETRECORD(ClientPortalSiteCompany);
+
+                                   ServerTempFileName := FileManagement.ServerTempFileName(FileManagement.GetExtension(FilePath + FileName));
+                                   ClientTempFileName := FileManagement.ClientTempFileName(FileManagement.GetExtension(FilePath + FileName));
+                                   FileManagement.CopyServerFile(FilePath + FileName, ServerTempFileName, TRUE);
+                                   FileManagement.DownloadToFile(ServerTempFileName, ClientTempFileName);
+
+                                   ClientPortalPublishedDoc.INIT;
+                                   ClientPortalPublishedDoc."Site Code" := ClientPortalSiteCompany."Site Code";
+                                   ClientPortalPublishedDoc."Company Name" := ClientPortalSiteCompany."Company Name";
+                                   ClientPortalPublishedDoc."Client No." := "No.";
+                                   ClientPortalPublishedDoc."Document Title" := Subject;
+                                   ClientPortalPublishedDoc."Document Description" := "Additional Information";
+                                   ClientPortalPublishedDoc.FileName := FileName;
+                                   ClientPortalPublishedDoc.FileExtension := "MS Office Doc Type";
+
+                                   FileManagement.BLOBImportFromServerFile(TempBlob,ServerTempFileName);
+
+                                   ClientPortalPublishedDoc.Document := TempBlob.Blob;
+                                   ClientPortalPublishedDoc.INSERT(TRUE);
+
+                                   FileManagement.DeleteServerFile(ServerTempFileName);
+
+                                   MESSAGE('Document %1 will be published to selected portal(s) on next portal data sync',FileName);
+                                 END;
+                               END;
+                                }
+      { 1000000035;1 ;ActionGroup;
+                      Name=E-Mail }
+      { 1000000037;2 ;Action    ;
+                      Name=CreateE-mailandAttachSelected;
+                      CaptionML=ENU=Create E-mail and Attach Selected;
+                      Image=Attach }
+      { 1000000047;1 ;ActionGroup;
+                      CaptionML=ENU=C102 Functions }
+      { 1000000045;2 ;Action    ;
+                      Name=MoveDocument;
+                      CaptionML=ENU=Move Document;
+                      Promoted=Yes;
+                      Image=MovementWorksheet;
+                      PromotedCategory=Process }
+    }
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                Name=MainTable;
+                Visible=MainTableVisible;
+                GroupType=Repeater }
+
+    { 100000000;2;Field   ;
+                SourceExpr=Type }
+
+    { 100000001;2;Field   ;
+                SourceExpr="No." }
+
+    { 1000000049;2;Field  ;
+                SourceExpr=ID;
+                Visible=FALSE;
+                Editable=FALSE }
+
+    { 1000000017;2;Field  ;
+                SourceExpr="External DMS Status";
+                Visible=ExternalDMSStatusEnabled;
+                Enabled=ExternalDMSStatusEnabled }
+
+    { 1000000000;2;Field  ;
+                SourceExpr="Document Type";
+                Editable="Document TypeEditable" }
+
+    { 1000000059;2;Field  ;
+                SourceExpr="Document Type Text" }
+
+    { 1040009;2;Field     ;
+                SourceExpr="Document Sub Type";
+                Visible=FALSE;
+                Editable="Document TypeEditable" }
+
+    { 1040011;2;Field     ;
+                SourceExpr="Document Sub Type Text";
+                Visible=FALSE;
+                Editable=FALSE }
+
+    { 1000000019;2;Field  ;
+                SourceExpr="LaserFiche Entry ID" }
+
+    { 1040017;2;Field     ;
+                SourceExpr="Restricted Combination";
+                Visible=FALSE;
+                Editable=FALSE }
+
+    { 2   ;2   ;Field     ;
+                SourceExpr=Subject;
+                Visible=SubjectVisible }
+
+    { 4   ;2   ;Field     ;
+                SourceExpr=FileName;
+                Editable=FALSE }
+
+    { 6   ;2   ;Field     ;
+                CaptionML=[ENU=Type (File);
+                           ENG=Type (File)];
+                SourceExpr="MS Office Doc Type";
+                Visible=TRUE;
+                Editable=FALSE }
+
+    { 8   ;2   ;Field     ;
+                CaptionML=[ENU=Inserted Date;
+                           ENG=Inserted Date];
+                SourceExpr="Document Inserted Date";
+                Editable=FALSE }
+
+    { 1000000008;2;Field  ;
+                CaptionML=[ENU=Inserted By;
+                           ENG=Inserted By];
+                SourceExpr="Document Inserted By";
+                Visible="Document Inserted ByVisible" }
+
+    { 10  ;2   ;Field     ;
+                CaptionML=[ENU=Accessed Via Navision Date;
+                           ENG=Accessed Via Navision Date];
+                SourceExpr="Last Accessed Via Navision";
+                Editable=FALSE }
+
+    { 31  ;2   ;Field     ;
+                SourceExpr="Additional Information";
+                Visible="Additional InformationVisible" }
+
+    { 1000000056;2;Field  ;
+                SourceExpr="Archived Date" }
+
+    { 1000000061;2;Field  ;
+                SourceExpr=Author }
+
+    { 1040006;2;Field     ;
+                SourceExpr="Document Date" }
+
+    { 1000000044;2;Field  ;
+                SourceExpr=Meta_Date_1;
+                Visible=Meta_Date_1Visible }
+
+    { 1040019;2;Field     ;
+                SourceExpr="Document Copy_" }
+
+    { 1040004;2;Field     ;
+                SourceExpr="Document Expiry Date" }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="No. of Linked Records" }
+
+    { 1000000014;2;Field  ;
+                SourceExpr=Meta_Int_1;
+                Visible=Meta_Int_1Visible }
+
+    { 1000000016;2;Field  ;
+                SourceExpr=Meta_Int_2;
+                Visible=Meta_Int_2Visible }
+
+    { 1000000018;2;Field  ;
+                SourceExpr=Meta_Int_3;
+                Visible=Meta_Int_3Visible }
+
+    { 1000000020;2;Field  ;
+                SourceExpr=Meta_Text_1 }
+
+    { 1000000022;2;Field  ;
+                SourceExpr=Meta_Text_2;
+                Visible=Meta_Text_2Visible }
+
+    { 1000000024;2;Field  ;
+                SourceExpr=Meta_Text_3;
+                Visible=Meta_Text_3Visible }
+
+    { 1000000026;2;Field  ;
+                SourceExpr=Meta_Text_4;
+                Visible=Meta_Text_4Visible }
+
+    { 1000000028;2;Field  ;
+                SourceExpr=Meta_Text_5;
+                Visible=Meta_Text_5Visible }
+
+    { 1000000030;2;Field  ;
+                SourceExpr=Meta_Text_6;
+                Visible=Meta_Text_6Visible }
+
+    { 1000000032;2;Field  ;
+                SourceExpr=Meta_Code_1;
+                Visible=Meta_Code_1Visible }
+
+    { 1000000034;2;Field  ;
+                SourceExpr=Meta_Code_2;
+                Visible=Meta_Code_2Visible }
+
+    { 1000000036;2;Field  ;
+                SourceExpr=Meta_Code_3;
+                Visible=Meta_Code_3Visible }
+
+    { 1000000038;2;Field  ;
+                SourceExpr=Meta_Code_4;
+                Visible=Meta_Code_4Visible }
+
+    { 1000000040;2;Field  ;
+                SourceExpr=Meta_Decimal_1;
+                Visible=Meta_Decimal_1Visible }
+
+    { 1000000042;2;Field  ;
+                SourceExpr=Meta_Decimal_2;
+                Visible=Meta_Decimal_2Visible }
+
+    { 1000000048;2;Field  ;
+                SourceExpr=Meta_Time_1;
+                Visible=Meta_Time_1Visible }
+
+    { 1000000050;2;Field  ;
+                SourceExpr=Meta_Time_2;
+                Visible=Meta_Time_2Visible }
+
+    { 1000000052;2;Field  ;
+                SourceExpr=Meta_DateTime_1;
+                Visible=Meta_DateTime_1Visible }
+
+    { 1000000054;2;Field  ;
+                SourceExpr=Meta_DateTime_2;
+                Visible=Meta_DateTime_2Visible }
+
+    { 1000000046;2;Field  ;
+                SourceExpr=Meta_Date_2;
+                Visible=Meta_Date_2Visible }
+
+    { 1040013;2;Field     ;
+                SourceExpr=Info1 }
+
+    { 1040015;2;Field     ;
+                SourceExpr=Info2 }
+
+    { 1000000011;2;Field  ;
+                SourceExpr="Complaint No." }
+
+    { 1000000015;2;Field  ;
+                SourceExpr="Litigation No." }
+
+    { 1000000031;1;Group  ;
+                CaptionML=ENU=iManage;
+                Visible=iManageMsgVisible;
+                GroupType=Group }
+
+    { 1000000033;2;Field  ;
+                Name=iManageMsg;
+                CaptionClass=Text19062521;
+                Visible=iManageMsgVisible;
+                MultiLine=Yes }
+
+    { 1000000007;;Container;
+                CaptionML=ENU=Drag Drop Documents;
+                ContainerType=FactBoxArea }
+
+    { 1000000009;1;Part   ;
+                Name=DragDropTreeView;
+                CaptionML=ENG=Drag and Drop Documents;
+                PagePartID=Page9069377;
+                Visible=DragDropTreeVisible;
+                PartType=Page }
+
+  }
+  CODE
+  {
+    VAR
+      MetaCodeSingleInstance@1000000064 : Codeunit 9068573;
+      GLSetup@1000000035 : Record 98;
+      gLinkType@1000000004 : Text;
+      gLinkCode@1000000005 : Text;
+      DocSetup@1000000002 : Record 9068662;
+      OwnerConv@1000000001 : Record 9068469 SECURITYFILTERING(Ignored);
+      RecipientType@1000000000 : ' ,Client,Entity,Prospect,Intermediary,Client Owner,Resource,,Dimension,,,External Bank Payment,,,,Potential Client';
+      RecipientNo@1000000006 : Code[20];
+      RecipientKeyValues@1000000008 : Text[250];
+      DocumentVisible@19050198 : Boolean INDATASET;
+      FunctionsVisible@19046342 : Boolean INDATASET;
+      DatastoreVisible@19008349 : Boolean INDATASET;
+      "Document Inserted ByVisible"@19024345 : Boolean INDATASET;
+      SubjectVisible@19079800 : Boolean INDATASET;
+      "Additional InformationVisible"@19043148 : Boolean INDATASET;
+      btnEmailCAROfficeVisible@19064105 : Boolean INDATASET;
+      LinkToOtherRecordsVisible@1000000034 : Boolean;
+      SPButtonVisible@19051889 : Boolean INDATASET;
+      MainTableVisible@19078929 : Boolean INDATASET;
+      iManageMsgVisible@19011492 : Boolean INDATASET;
+      "Document TypeEditable"@19007804 : Boolean INDATASET;
+      Meta_Int_1Visible@19070337 : Boolean INDATASET;
+      Meta_Int_2Visible@19074945 : Boolean INDATASET;
+      Meta_Int_3Visible@19076993 : Boolean INDATASET;
+      Meta_Text_1Visible@19079848 : Boolean INDATASET;
+      Meta_Text_2Visible@19005057 : Boolean INDATASET;
+      Meta_Text_3Visible@19046386 : Boolean INDATASET;
+      Meta_Text_4Visible@19058891 : Boolean INDATASET;
+      Meta_Text_5Visible@19002556 : Boolean INDATASET;
+      Meta_Text_6Visible@19035781 : Boolean INDATASET;
+      Meta_Code_1Visible@19053806 : Boolean INDATASET;
+      Meta_Code_2Visible@19056307 : Boolean INDATASET;
+      Meta_Code_3Visible@19010340 : Boolean INDATASET;
+      Meta_Code_4Visible@19012129 : Boolean INDATASET;
+      Meta_Decimal_1Visible@19014520 : Boolean INDATASET;
+      Meta_Decimal_2Visible@19012472 : Boolean INDATASET;
+      Meta_Date_1Visible@19013017 : Boolean INDATASET;
+      Meta_Date_2Visible@19004802 : Boolean INDATASET;
+      Meta_Time_1Visible@19037571 : Boolean INDATASET;
+      Meta_Time_2Visible@19020428 : Boolean INDATASET;
+      Meta_DateTime_1Visible@19033238 : Boolean INDATASET;
+      Meta_DateTime_2Visible@19025023 : Boolean INDATASET;
+      MetaInt1Editable@1000000003 : Boolean INDATASET;
+      MetaInt2Editable@1000000009 : Boolean INDATASET;
+      MetaInt3Editable@1000000010 : Boolean INDATASET;
+      MetaText1Editable@1000000011 : Boolean INDATASET;
+      MetaText2Editable@1000000012 : Boolean INDATASET;
+      MetaText3Editable@1000000014 : Boolean INDATASET;
+      MetaText4Editable@1000000015 : Boolean INDATASET;
+      MetaText5Editable@1000000016 : Boolean INDATASET;
+      MetaText6Editable@1000000017 : Boolean INDATASET;
+      MetaCode1Editable@1000000018 : Boolean INDATASET;
+      MetaCode2Editable@1000000019 : Boolean INDATASET;
+      MetaCode3Editable@1000000020 : Boolean INDATASET;
+      MetaCode4Editable@1000000021 : Boolean INDATASET;
+      MetaDec1Editable@1000000022 : Boolean INDATASET;
+      MetaDec2Editable@1000000023 : Boolean INDATASET;
+      MetaDate1Editable@1000000024 : Boolean INDATASET;
+      MetaDate2Editable@1000000025 : Boolean INDATASET;
+      MetaTime1Editable@1000000026 : Boolean INDATASET;
+      MetaTime2Editable@1000000027 : Boolean INDATASET;
+      MetaDT1Editable@1000000028 : Boolean INDATASET;
+      MetaDT2Editable@1000000029 : Boolean INDATASET;
+      Text19074505@1000000038 : TextConst 'ENU=The System is currently set with FileNet as the External Document Management System.  Click OK and then click the Open Button to view the FileNet Workspace.;ENG=The System is currently set with FileNet as the External Document Management System. \ \ \ \ \ \Click the Open Button to view the iManage Workspace.';
+      Text19062521@1000000036 : TextConst 'ENU=The System is currently set with iManage as the External Document Management System.  Click OK and then click the Open Button to view the iManage Workspace.;ENG=The System is currently set with iManage as the External Document Management System. \ \ \ \ \ \Click the Open Button to view the iManage Workspace.';
+      TEXT00000001@1000000013 : TextConst 'ENG=Invalid Document Type filter';
+      DragDropTreeVisible@1000000031 : Boolean;
+      DocumentPreviewVisible@1000000030 : Boolean;
+      ExternalDMSStatusEnabled@1000000032 : Boolean;
+      TEXT00000002@1000000037 : TextConst 'ENU=<Invalid Document Sub Type filter>;ENG=Invalid Document Type filter';
+      C090DragDropTreeViewVisibleALL@1000000134 : Boolean;
+      C090DragDropTreeViewVisibleCI_CUS@1000000133 : Boolean;
+      C090DragDropTreeViewVisibleCI_FID@1000000107 : Boolean;
+      C090DragDropTreeViewVisibleCI_FCDD@1000000105 : Boolean;
+      OpenHyperlinkVisible@1000000007 : Boolean;
+      ApplicationSetup@1000000033 : Record 9068230;
+      linkDate@1000000039 : Date;
+      linkUser@1000000040 : Code[50];
+      ErrDocumentTypeBlank@1000000041 : TextConst 'ENU=Document Type is mandatory to complete';
+      ErrSubDocumentTypeBlank@1000000042 : TextConst 'ENU=Document Type and Sub Type is mandatory to complete';
+      PublishToPortalVisible@1000000043 : Boolean;
+      DFXCorrespondenceStore@100000000 : Record 50016;
+
+    PROCEDURE SetFilters@1000000000(_Type@1000000000 : ' ,Client,Entity,Prospect,Intermediary,Client Owner,Resource,,Dimension,,,External Bank Payment,,,,Potential Client,Custom1';"_No."@1000000001 : Code[20];_KeyValues@1000000002 : Text[250]);
+    BEGIN
+      FILTERGROUP(2);
+      SETRANGE(Type,_Type);
+      SETRANGE("No.","_No.");
+      FILTERGROUP(0);
+      RecipientType := _Type;
+      RecipientNo := "_No.";
+      RecipientKeyValues := _KeyValues;
+    END;
+
+    PROCEDURE UpdateNow@1040000();
+    BEGIN
+      CurrPage.UPDATE;
+    END;
+
+    PROCEDURE SetMetaDataVisible@1000000001();
+    VAR
+      _DocumentFolderSetupRec@1000000000 : Record 9068662;
+    BEGIN
+      _DocumentFolderSetupRec.GET;
+      Meta_Int_1Visible := _DocumentFolderSetupRec."Use Meta-Int 1";
+      Meta_Int_2Visible := _DocumentFolderSetupRec."Use Meta-Int 2";
+      Meta_Int_3Visible := _DocumentFolderSetupRec."Use Meta-Int 3";
+      Meta_Text_1Visible := _DocumentFolderSetupRec."Use Meta-Text 1";
+      Meta_Text_2Visible := _DocumentFolderSetupRec."Use Meta-Text 2";
+      Meta_Text_3Visible := _DocumentFolderSetupRec."Use Meta-Text 3";
+      Meta_Text_4Visible := _DocumentFolderSetupRec."Use Meta-Text 4";
+      Meta_Text_5Visible := _DocumentFolderSetupRec."Use Meta-Text 5";
+      Meta_Text_6Visible := _DocumentFolderSetupRec."Use Meta-Text 6";
+      Meta_Code_1Visible := _DocumentFolderSetupRec."Use Meta-Code 1";
+      Meta_Code_2Visible := _DocumentFolderSetupRec."Use Meta-Code 2";
+      Meta_Code_3Visible := _DocumentFolderSetupRec."Use Meta-Code 3";
+      Meta_Code_4Visible := _DocumentFolderSetupRec."Use Meta-Code 4";
+      Meta_Decimal_1Visible := _DocumentFolderSetupRec."Use Meta-Decimal 1";
+      Meta_Decimal_2Visible := _DocumentFolderSetupRec."Use Meta-Decimal 2";
+      Meta_Date_1Visible := _DocumentFolderSetupRec."Use Meta-Date 1";
+      Meta_Date_2Visible := _DocumentFolderSetupRec."Use Meta-Date 2";
+      Meta_Time_1Visible := _DocumentFolderSetupRec."Use Meta-Time 1";
+      Meta_Time_2Visible := _DocumentFolderSetupRec."Use Meta-Time 2";
+      Meta_DateTime_1Visible := _DocumentFolderSetupRec."Use Meta-DateTime 1";
+      Meta_DateTime_2Visible := _DocumentFolderSetupRec."Use Meta-DateTime 2";
+      MetaInt1Editable := _DocumentFolderSetupRec."Meta-Int 1 Editable";
+      MetaInt2Editable := _DocumentFolderSetupRec."Meta-Int 2 Editable";
+      MetaInt3Editable := _DocumentFolderSetupRec."Meta-Int 3 Editable";
+      MetaText1Editable := _DocumentFolderSetupRec."Meta-Text 1 Editable";
+      MetaText2Editable := _DocumentFolderSetupRec."Meta-Text 2 Editable";
+      MetaText3Editable  := _DocumentFolderSetupRec."Meta-Text 3 Editable";
+      MetaText4Editable  := _DocumentFolderSetupRec."Meta-Text 4 Editable";
+      MetaText5Editable  := _DocumentFolderSetupRec."Meta-Text 5 Editable";
+      MetaText6Editable  := _DocumentFolderSetupRec."Meta-Text 6 Editable";
+      MetaCode1Editable := _DocumentFolderSetupRec."Meta-Code 1 Editable";
+      MetaCode2Editable := _DocumentFolderSetupRec."Meta-Code 2 Editable";
+      MetaCode3Editable := _DocumentFolderSetupRec."Meta-Code 3 Editable";
+      MetaCode4Editable := _DocumentFolderSetupRec."Meta-Code 4 Editable";
+      MetaDec1Editable := _DocumentFolderSetupRec."Meta-Decimal 1 Editable";
+      MetaDec2Editable := _DocumentFolderSetupRec."Meta-Decimal 2 Editable";
+      MetaDate1Editable := _DocumentFolderSetupRec."Meta-Date 1 Editable";;
+      MetaDate2Editable := _DocumentFolderSetupRec."Meta-Date 2 Editable";
+      MetaTime1Editable := _DocumentFolderSetupRec."Meta-Time 1 Editable";
+      MetaTime2Editable := _DocumentFolderSetupRec."Meta-Time 2 Editable";
+      MetaDT1Editable := _DocumentFolderSetupRec."Meta-DateTime 1 Editable";
+      MetaDT2Editable := _DocumentFolderSetupRec."Meta-DateTime 2 Editable";
+    END;
+
+    PROCEDURE ShowDragDropControl@1000000002() : Boolean;
+    VAR
+      _DocFolderSetupRec@1000000000 : Record 9068662;
+    BEGIN
+      _DocFolderSetupRec.GET;
+
+      IF _DocFolderSetupRec."Link Doc. Keep Orginal Path" THEN
+        EXIT(FALSE);
+
+      IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::"C076 FileNet" THEN
+        EXIT(FALSE);
+
+      IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::"Synergy " THEN
+        EXIT(FALSE);
+
+      IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::"C062 FileNet" THEN
+        EXIT(FALSE);
+
+      IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::"C103 eDocs" THEN
+        EXIT(TRUE);
+
+      IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::Hummingbird THEN
+        EXIT(FALSE);
+
+      IF _DocFolderSetupRec."External Doc Management System" = _DocFolderSetupRec."External Doc Management System"::iManage THEN
+        EXIT(FALSE);
+
+
+      IF DocSetup."External Doc Management System" = DocSetup."External Doc Management System"::"C067 Hyperlink" THEN
+        EXIT(TRUE);
+
+      EXIT(TRUE);
+    END;
+
+    LOCAL PROCEDURE SetCustomVisible@1000000029();
+    BEGIN
+      IF DocSetup."External Doc Management System" = DocSetup."External Doc Management System"::DataStore THEN
+        DataStoreSetVisible;
+
+      IF DocSetup."External Doc Management System" = DocSetup."External Doc Management System"::iManage THEN
+        iManageSetVisible;
+
+      IF DocSetup."External Doc Management System" = DocSetup."External Doc Management System"::Hummingbird THEN
+        HummingbirdSetVisible;
+
+      IF DocSetup."External Doc Management System" = DocSetup."External Doc Management System"::Sharepoint THEN
+        SharepointSetVisible;
+    END;
+
+    LOCAL PROCEDURE DataStoreSetVisible@1000000006();
+    BEGIN
+      DatastoreVisible := TRUE;
+    END;
+
+    LOCAL PROCEDURE HummingbirdSetVisible@1000000008();
+    BEGIN
+      SubjectVisible := FALSE;
+      "Additional InformationVisible" := FALSE;
+      "Document TypeEditable" := FALSE;
+    END;
+
+    LOCAL PROCEDURE SharepointSetVisible@1000000012();
+    BEGIN
+      SPButtonVisible := TRUE;
+    END;
+
+    LOCAL PROCEDURE iManageSetVisible@1000000013();
+    VAR
+      iManageSetup@1000000000 : Record 9072380;
+    BEGIN
+      iManageSetup.GET;
+      "Document Inserted ByVisible" := FALSE;
+      SubjectVisible := FALSE;
+      "Additional InformationVisible" := FALSE;
+      "Document TypeEditable" := FALSE;
+      FunctionsVisible := FALSE;
+      DocumentVisible := TRUE;
+
+      IF iManageSetup."Show Document List" THEN BEGIN
+        MainTableVisible := TRUE;
+        iManageMsgVisible := FALSE;
+      END ELSE BEGIN
+        MainTableVisible := FALSE;
+        iManageMsgVisible := TRUE;
+      END;
+    END;
+
+    LOCAL PROCEDURE InitiatePageFilters@1000000007();
+    BEGIN
+      SETRANGE(Archived, FALSE);
+      SetCustomPageFilters;
+    END;
+
+    LOCAL PROCEDURE SetCustomPageFilters@1000000016();
+    BEGIN
+      IF DocSetup."External Doc Management System" = DocSetup."External Doc Management System"::Hummingbird THEN
+        HummingbirdFilters;
+    END;
+
+    LOCAL PROCEDURE HummingbirdFilters@1000000018();
+    BEGIN
+      SETRANGE(Archived);
+      SETFILTER("Archived Date", '%1', 0D);
+    END;
+
+    [Integration]
+    LOCAL PROCEDURE OnBeforeUnLinkDocument@1000000005(VAR CorrespondenceStore@1000000000 : Record 50016;VAR IsHandled@1000000001 : Boolean);
+    BEGIN
+    END;
+
+    BEGIN
+    {
+      23.10.20  Nigel O'Brien
+                Set OwnerConv to SecurityFiltering Ignored
+
+      24.06.20  Ritam Majumdar
+                CRF54046 Added LF documents on Open page action
+
+      15.11.19  Ritam Majumdar
+                compile error "Document Type Mandatory" changed to "Doc. Type Mandatory"
+
+      30.07.19  Gregory Kordowski
+                CRF49718 Re-Link functionality visible only for Type: Client
+
+      24.07.19  Unnar Eliasson
+                CRF46854 Data Security Rewrite using Subscribers
+      03.07.19  Radek Zebrowski
+                #CRF50932 Data security code moved to Data Security CU
+
+      10.05.19  Mark Bisson
+                Removed Document Preview as not used and casuing issue
+
+      19.09.19  Nitin Matta
+                #CRF48955 Code to Check Document Type Mandatory Field and error if conditions are not met
+    }
+    END.
+  }
+}
+

@@ -1,0 +1,71 @@
+OBJECT Page 50069 Loan Covenant Register API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=18-03-21;
+    Time=12:39:29;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    InsertAllowed=No;
+    SourceTable=Table9068729;
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1040000;1;Group     ;
+                GroupType=Repeater }
+
+    { 1040001;2;Field     ;
+                SourceExpr="Client No.";
+                CaptionClass=FIELDCAPTION("Client No.");
+                Editable=FALSE }
+
+    { 1040003;2;Field     ;
+                SourceExpr="Loan No.";
+                CaptionClass=FIELDCAPTION("Loan No.");
+                Editable=FALSE }
+
+    { 1040005;2;Field     ;
+                SourceExpr="Covenant Code";
+                CaptionClass=FIELDCAPTION("Covenant Code");
+                Editable=FALSE }
+
+    { 1040007;2;Field     ;
+                SourceExpr="Covenant Review date";
+                CaptionClass=FIELDCAPTION("Covenant Review date");
+                Editable=FALSE }
+
+    { 1040009;2;Field     ;
+                DrillDown=No;
+                AssistEdit=No;
+                SourceExpr="Covenant Description";
+                CaptionClass=FIELDCAPTION("Covenant Description");
+                Editable=FALSE }
+
+    { 1040011;2;Field     ;
+                SourceExpr="Loan Blocked";
+                Editable=FALSE }
+
+    { 1040013;2;Field     ;
+                SourceExpr="Account Closed";
+                Editable=FALSE }
+
+    { 1040015;2;Field     ;
+                SourceExpr=Comment;
+                Editable=FALSE }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

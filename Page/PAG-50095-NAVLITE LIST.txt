@@ -1,0 +1,451 @@
+OBJECT Page 50095 NAVLITE LIST
+{
+  OBJECT-PROPERTIES
+  {
+    Date=07-01-22;
+    Time=14:53:40;
+    Modified=Yes;
+    Version List=NAVLITE;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table50004;
+    PageType=List;
+    CardPageID=NAVLITE;
+    OnAfterGetRecord=BEGIN
+                       DocumentFolderSetup.GET;
+
+                       "External Doc Management System" := DocumentFolderSetup."External Doc Management System";
+                     END;
+
+    OnInsertRecord=BEGIN
+                     "Entity Owner" := USERID;
+                     ID := TODAY;
+                   END;
+
+    ActionList=ACTIONS
+    {
+      { 100000020;   ;ActionContainer;
+                      CaptionML=ENU=test;
+                      ActionContainerType=NewDocumentItems }
+      { 100000021;1  ;Action    ;
+                      Name=Upload;
+                      Promoted=Yes;
+                      PromotedIsBig=Yes;
+                      Image=Link;
+                      OnAction=VAR
+                                 _DocSetup@100000003 : Record 9068662;
+                                 _DocType@100000002 : Code[50];
+                                 _TempCode@100000001 : Code[20];
+                                 TxtConfirmOverwriteFile@100000004 : TextConst 'ENU=Do you want to overwrite existing file?';
+                                 TxtErrDocNotLinked@100000000 : TextConst 'ENU=Document not linked.';
+                                 DocMan@100000005 : Codeunit 9068511;
+                                 DEFAULT_MSG_SUCCESS@100000006 : TextConst 'ENU=Document linked.';
+                                 DFXDMSLITE@100000007 : Record 50004;
+                                 TempPath@100000008 : Text;
+                                 Window@100000009 : Dialog;
+                                 NoOfRecs@100000010 : Integer;
+                                 CurrRec@100000011 : Integer;
+                                 DFXDMSLITE2@100000012 : Record 50004;
+                               BEGIN
+
+                                 _DocSetup.GET;
+
+                                 CurrPage.SETSELECTIONFILTER(DFXDMSLITE);
+                                 IF DFXDMSLITE.FINDSET THEN
+                                 DFXDMSLITE2.COPY(DFXDMSLITE);
+
+                                   Window.OPEN('Processing data... @1@@@@@@@@@@');
+                                   NoOfRecs := DFXDMSLITE.COUNT;
+                                   REPEAT
+                                     CurrRec += 1;
+                                     IF NoOfRecs <= 100 THEN
+                                       Window.UPDATE(1,(CurrRec / NoOfRecs * 10000) DIV 1)
+                                     ELSE IF CurrRec MOD (NoOfRecs DIV 100) = 0 THEN
+                                       Window.UPDATE(1,(CurrRec / NoOfRecs * 10000) DIV 1);
+
+                                 IF DFXDMSLITE2.FINDSET THEN
+                                   REPEAT
+                                     IF CheckFileExists(DFXDMSLITE2.Type, DFXDMSLITE2."No.", DFXDMSLITE2."External Doc Management System") THEN ;
+                                        // IF NOT CONFIRM(TxtConfirmOverwriteFile, FALSE) THEN
+                                          // ERROR(TxtErrDocNotLinked);
+
+                                       TempPath := MoveDocument(DFXDMSLITE2.Type, DFXDMSLITE2."No.", DFXDMSLITE2."External Doc Management System",TRUE);
+                                       COMMIT;
+
+                                       _DocType := Jurisdiction;
+
+
+                                       IF "First Partition Code" <> '' THEN
+                                         _DocType := _DocType + '|' + "First Partition Code";
+
+                                       DFXDMSLITE2."Multi Type" := TempPath;
+                                       DFXDMSLITE2."File Name" := TempFileName;
+                                       DFXDMSLITE2.MODIFY;
+                                       COMMIT;
+                                       //MESSAGE(DEFAULT_MSG_SUCCESS);
+                                 UNTIL DFXDMSLITE2.NEXT = 0;
+
+                                 UNTIL DFXDMSLITE.NEXT = 0;
+                                 Window.CLOSE;
+                               END;
+                                }
+      { 100000025;1  ;Action    ;
+                      Name=Excel Export;
+                      RunObject=XMLport 50004;
+                      Image=ExportToExcel }
+      { 100000026;1  ;Action    ;
+                      Name=Excel Import;
+                      RunObject=XMLport 50004;
+                      Image=ImportExcel }
+    }
+  }
+  CONTROLS
+  {
+    { 100000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 100000001;1;Group   ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 100000002;2;Field   ;
+                SourceExpr=Type }
+
+    { 100000004;2;Field   ;
+                SourceExpr=Name }
+
+    { 100000005;2;Field   ;
+                SourceExpr=Jurisdiction }
+
+    { 100000006;2;Field   ;
+                SourceExpr="First Partition Code" }
+
+    { 100000007;2;Field   ;
+                SourceExpr="Second Partition Code" }
+
+    { 100000008;2;Field   ;
+                SourceExpr=NAVUserID }
+
+    { 100000028;2;Field   ;
+                SourceExpr=TAG }
+
+    { 100000009;2;Field   ;
+                SourceExpr=AttributeType }
+
+    { 100000010;2;Field   ;
+                SourceExpr=Attribute }
+
+    { 100000011;2;Field   ;
+                SourceExpr="Document Date" }
+
+    { 100000012;2;Field   ;
+                SourceExpr="Entity Owner" }
+
+    { 100000013;2;Field   ;
+                SourceExpr="Entity Prospect" }
+
+    { 100000014;2;Field   ;
+                SourceExpr="Entity Intermediary" }
+
+    { 100000015;2;Field   ;
+                SourceExpr="External Doc Management System" }
+
+    { 100000016;2;Field   ;
+                SourceExpr=ID }
+
+    { 100000017;2;Field   ;
+                SourceExpr="Link Type" }
+
+    { 100000018;2;Field   ;
+                SourceExpr="Multi No." }
+
+    { 100000019;2;Field   ;
+                SourceExpr="Multi Name" }
+
+    { 100000022;2;Field   ;
+                SourceExpr="Multi Type" }
+
+    { 100000023;2;Field   ;
+                SourceExpr="File Name" }
+
+    { 100000024;2;Field   ;
+                SourceExpr=Processed }
+
+    { 100000027;2;Field   ;
+                SourceExpr="External Doc Management System" }
+
+  }
+  CODE
+  {
+    VAR
+      TempFileName@100000000 : Text;
+      DocumentFolderSetup@100000001 : Record 9068662;
+
+    PROCEDURE CheckFileExists@1000000011(EntityType@1000000003 : ' ,Client,Entity,Prospect,Intermediary,Client Owner,Resource,,Dimension,,,External Bank Payment,,,,Potential Client';EntityNo@1000000002 : Code[20];FullPath@1000000001 : Text[250]) : Boolean;
+    VAR
+      _NewPath@1000000013 : Text[250];
+      _FileType@1000000011 : Code[10];
+      _OldFileName@1000000010 : Text[250];
+      _OldFilePath@1000000009 : Text[250];
+      FileManagement@1000000007 : Codeunit 419;
+      _DocumentFolderSetup@1000000006 : Record 9068662;
+      _PathFileName@1000000000 : Text[250];
+    BEGIN
+      _DocumentFolderSetup.GET();
+
+      IF NOT _DocumentFolderSetup."Link Doc. Keep Orginal Path" THEN BEGIN
+        "Get Document Path"(EntityType,EntityNo, '', _NewPath, FALSE);
+        "Get File Details From FullPath"(FullPath, _FileType, _OldFileName, _OldFilePath);
+        TempFileName := _OldFileName;
+        _PathFileName := _NewPath + _OldFileName;
+        END
+      ELSE
+        _PathFileName := FullPath;
+
+
+      IF EXISTS(_PathFileName) THEN
+        EXIT(TRUE)
+      ELSE EXIT(FALSE);
+
+      //server path + filename = _NewPath + _OldFilename
+    END;
+
+    PROCEDURE "Get Document Path"@1(EntityType@1000000009 : ' ,Client,Entity,Prospect,Intermediary,Client Owner,Resource,,Dimension,,,External Bank Payment,,,,Potential Client';EntityNo@1000000001 : Code[20];FileType@1000000002 : Code[10];VAR "Document Path"@1000000003 : Text[250];Silent@1000000004 : Boolean) Success@1000000000 : Boolean;
+    VAR
+      DocFolderSetup@1000000006 : Record 9068662;
+      FileTest@1000000008 : File;
+      InteractionTemplate@1100000000 : Record 9068692;
+      ClientRec@1000000005 : Record 9068500;
+      _WordManagement@1000000007 : Codeunit 9068508;
+      FileManagement@1100000008 : Codeunit 419;
+    BEGIN
+
+      "Document Path" := '';
+
+      IF NOT DocFolderSetup.GET THEN
+        EXIT(FALSE);
+
+      IF DocFolderSetup."Folder Paths" = DocFolderSetup."Folder Paths"::Standard THEN BEGIN
+
+      CASE EntityType OF
+        EntityType::Client : BEGIN
+          DocFolderSetup.TESTFIELD("Client Path");
+          "Document Path" := DocFolderSetup."Client Path";
+        END;
+        EntityType::Prospect : BEGIN
+          DocFolderSetup.TESTFIELD("Prospect Path");
+          "Document Path" := DocFolderSetup."Prospect Path";
+        END;
+        EntityType::Intermediary : BEGIN
+          DocFolderSetup.TESTFIELD("Intermediary Path");
+          "Document Path" := DocFolderSetup."Intermediary Path";
+        END;
+        EntityType::"Client Owner" : BEGIN
+          DocFolderSetup.TESTFIELD("Client Owner Path");
+          "Document Path" := DocFolderSetup."Client Owner Path";
+        END;
+        EntityType::Entity : BEGIN
+          DocFolderSetup.TESTFIELD("Entity Path");
+          "Document Path" := DocFolderSetup."Entity Path";
+        END;
+        EntityType::"External Bank Payment" : BEGIN
+          DocFolderSetup.TESTFIELD("External Bank Payment Path");
+          "Document Path" := DocFolderSetup."External Bank Payment Path";
+        END;
+        EntityType::Resource : BEGIN
+          DocFolderSetup.TESTFIELD("Resource Path");
+          "Document Path" := DocFolderSetup."Resource Path";
+        END;
+        EntityType::"Potential Client" : BEGIN
+          DocFolderSetup.TESTFIELD("Potential Client Path");
+          "Document Path" := DocFolderSetup."Potential Client Path";
+        END;
+      END;
+
+      END ELSE
+        "Document Path" := _WordManagement.CustomDocFilename(EntityNo,EntityType);
+
+      IF "Document Path" = '' THEN BEGIN
+        IF NOT Silent THEN
+          ERROR ('Document Paths are not correctly set up.')
+        ELSE EXIT (FALSE);
+      END;
+
+      IF CheckFolder ("Document Path" + '\') = FALSE THEN
+        ERROR ('The main document path cannot be accessed\Check the document path set-up.\' + "Document Path");
+
+      IF EntityType = EntityType::Client THEN BEGIN
+        ClientRec.GET(EntityNo);
+        IF ClientRec."Document Folder" <> '' THEN BEGIN
+          MakeFolder ("Document Path",  ClientRec."Document Folder", FALSE);
+          "Document Path" := "Document Path" + '\' + ClientRec."Document Folder";
+        END ELSE BEGIN
+          MakeFolder ("Document Path",  EntityNo, FALSE);
+          "Document Path" := "Document Path" + '\' + EntityNo;
+        END;
+
+      END
+      ELSE BEGIN
+      MakeFolder ("Document Path",  EntityNo, FALSE);
+      IF EntityNo <> '' THEN
+        "Document Path" := "Document Path" + '\' + EntityNo;
+      END;
+
+
+      IF InteractionTemplate.GET(FileType) THEN BEGIN
+        IF InteractionTemplate."Folder Name" <> '' THEN BEGIN
+          MakeFolder("Document Path", InteractionTemplate."Folder Name", FALSE);
+          IF InteractionTemplate."Folder Name" <> '' THEN
+            "Document Path" := "Document Path" + '\' + InteractionTemplate."Folder Name";
+        END;
+      END;
+
+      "Document Path" := "Document Path" + '\';
+
+      IF NOT FileManagement.ServerDirectoryExists("Document Path") THEN BEGIN
+        ERROR ('The File Folder does not exist, and cannot be created.\\' + "Document Path")
+      END;
+    END;
+
+    PROCEDURE "Get File Details From FullPath"@8(FullPath@1000000001 : Text[250];VAR Type@1000000002 : Code[10];VAR FileName@1000000003 : Text[250];VAR FilePath@1000000004 : Text[250]) Success@1000000000 : Boolean;
+    VAR
+      L@1000000005 : Integer;
+      P@1000000006 : Integer;
+    BEGIN
+      L := STRLEN (FullPath);
+      IF L < 5 THEN EXIT;
+      P := L;
+      REPEAT
+        P := P - 1;
+      UNTIL (COPYSTR(FullPath,P,1) = '.') OR (P = 1);
+      IF (P = 1) OR ((L - P) >10) THEN
+        EXIT(FALSE);
+      Type := COPYSTR(FullPath,P,(L-(P-1)));
+      REPEAT
+        P := P - 1
+      UNTIL (COPYSTR(FullPath,P,1) = '\') OR (P = 1);
+      IF P = 1 THEN
+        EXIT(FALSE);
+      FileName := COPYSTR(FullPath,(P+1),(L-P));
+      FilePath := COPYSTR(FullPath,1,P);
+      EXIT (TRUE);
+    END;
+
+    PROCEDURE CheckFolder@12(FolderPath@1000000001 : Text[250]) FolderExists@1000000000 : Boolean;
+    VAR
+      FileTest@1000000002 : File;
+      adetest@1000000003 : Codeunit 419;
+    BEGIN
+      FileTest.WRITEMODE(TRUE);
+      IF NOT EXISTS(FolderPath + 'Navision.TXT') THEN BEGIN
+        FileTest.WRITEMODE(TRUE);
+        FileTest.TEXTMODE(TRUE);
+        IF NOT FileTest.CREATE(FolderPath + 'Navision.TXT') THEN
+          EXIT (FALSE)
+        ELSE
+          FileTest.WRITE('Please Note. This folder may contain Files or Folders which are recorded in Navision.');
+          FileTest.CLOSE;
+        EXIT (TRUE);
+      END;
+      EXIT (TRUE);
+    END;
+
+    PROCEDURE MakeFolder@11(BaseFolder@1000000001 : Text[250];NewFolder@1000000002 : Text[250];Silent@1000000003 : Boolean) Success@1000000000 : Boolean;
+    VAR
+      "Au-ScriptFilesystem"@1000000004 : Automation "{420B2830-E718-11CF-893D-00A0C9054228} 1.0:{0D43FE01-F093-11CF-8940-00A0C9054228}:'Microsoft Scripting Runtime'.FileSystemObject";
+      "Au-ScriptFolder"@1000000005 : Automation "{420B2830-E718-11CF-893D-00A0C9054228} 1.0:{C7C3F5B3-88A3-11D0-ABCB-00A0C90FFFC0}:'Microsoft Scripting Runtime'.Folder";
+      "Au-ScriptFolders"@1000000006 : Automation "{420B2830-E718-11CF-893D-00A0C9054228} 1.0:{C7C3F5B4-88A3-11D0-ABCB-00A0C90FFFC0}:'Microsoft Scripting Runtime'.Folders";
+      L@1000000007 : Integer;
+      P@1000000008 : Integer;
+      TempP@1000000009 : Integer;
+      SubDirs@1000000010 : ARRAY [10] OF Text[250];
+      X@1000000011 : Integer;
+    BEGIN
+
+      IF MakeFolder2(BaseFolder, NewFolder) THEN
+        EXIT (TRUE)
+      ELSE IF Silent = FALSE THEN
+        ERROR ('The required folder does not exist and could not be created.\This could be due to user permissions,' +
+          'folder setup or file access.\' +
+          BaseFolder +'\\' + NewFolder);
+    END;
+
+    PROCEDURE MakeFolder2@15(BaseFolder@1000000001 : Text[250];NewFolder@1000000002 : Text[250]) Success@1000000000 : Boolean;
+    VAR
+      SystemIODirectory@1000000004 : DotNet "'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.Directory";
+      L@1000000006 : Integer;
+      P@1000000007 : Integer;
+      TempP@1000000008 : Integer;
+      SubDirs@1000000009 : ARRAY [10] OF Text[100];
+      X@1000000010 : Integer;
+    BEGIN
+      IF NOT (COPYSTR(BaseFolder, STRLEN(BaseFolder), 1) = '\') THEN
+        BaseFolder += '\';
+
+      IF NOT SystemIODirectory.Exists(BaseFolder) THEN
+        EXIT(FALSE);
+
+      REPEAT
+        IF STRPOS(NewFolder, '\') <> 0 THEN BEGIN
+          IF NOT SystemIODirectory.Exists(BaseFolder + '\' + COPYSTR(NewFolder,1, STRPOS(NewFolder, '\')-1)) THEN
+            SystemIODirectory.CreateDirectory (COPYSTR(NewFolder,1, STRPOS(NewFolder, '\')-1));
+          BaseFolder += COPYSTR(NewFolder, 1 , STRPOS(NewFolder, '\'));
+          NewFolder := COPYSTR(NewFolder,STRPOS(NewFolder, '\')+1, STRLEN(NewFolder));
+        END ELSE BEGIN
+          IF NOT SystemIODirectory.Exists(BaseFolder + '\' + NewFolder) THEN
+            SystemIODirectory.CreateDirectory (BaseFolder + '\' + NewFolder);
+          NewFolder := '';
+        END;
+      UNTIL NewFolder = '';
+      EXIT (TRUE);
+    END;
+
+    PROCEDURE MoveDocument@16(EntityType@1000000009 : ' ,Client,Entity,Prospect,Intermediary,Client Owner,Resource,,Dimension,,,External Bank Payment,,,,Potential Client';EntityNo@1000000000 : Code[20];VAR FullPath@1000000001 : Text[250];Silent@1000000012 : Boolean) Path : Text[250];
+    VAR
+      _NewPath@1000000003 : Text[250];
+      _File@1000000004 : File;
+      _FileType@1000000005 : Code[10];
+      _OldFileName@1000000006 : Text[250];
+      _OldFilePath@1000000007 : Text[250];
+      _OptionNumber@1000000008 : Integer;
+      FileManagement@1000000002 : Codeunit 419;
+      _DocumentFolderSetup@1000000010 : Record 9068662;
+      _servertempFileName@1000000011 : Text;
+      ApplicationSetupRec@1000000013 : Record 9068230;
+    BEGIN
+      _DocumentFolderSetup.GET();
+
+      IF NOT _DocumentFolderSetup."Link Doc. Keep Orginal Path" THEN BEGIN
+        "Get Document Path"(EntityType,EntityNo, '', _NewPath, FALSE);
+        "Get File Details From FullPath"(FullPath, _FileType, _OldFileName, _OldFilePath);
+
+        IF NOT Silent THEN
+          _OptionNumber := STRMENU('Copy file to new location,Move file to new location')
+        ELSE
+          _OptionNumber := 1;
+
+        CASE _OptionNumber OF
+          0 : ERROR('Document linking was cancelled');
+          1 :   BEGIN
+                  _servertempFileName := FileManagement.UploadFileSilent(FullPath); //AA
+                  FileManagement.CopyServerFile(_servertempFileName, _NewPath+_OldFileName, TRUE); //AA
+                  FileManagement.DeleteServerFile(_servertempFileName); //AA
+                END;
+          2 :   BEGIN
+                  _servertempFileName := FileManagement.UploadFileSilent(FullPath); //AA
+                  FileManagement.CopyServerFile(_servertempFileName, _NewPath+_OldFileName, TRUE); //AA
+                  FileManagement.DeleteClientFile(FullPath); //AA
+                  FileManagement.DeleteServerFile(_servertempFileName); //AA
+                END;
+        END;
+        FullPath := _NewPath+_OldFileName;
+       EXIT(FullPath);
+      END;
+    END;
+
+    BEGIN
+    END.
+  }
+}
+

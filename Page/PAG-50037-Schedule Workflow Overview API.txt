@@ -1,0 +1,85 @@
+OBJECT Page 50037 Schedule Workflow Overview API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=11-12-20;
+    Time=10:08:16;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    InsertAllowed=Yes;
+    DeleteAllowed=No;
+    ModifyAllowed=Yes;
+    SourceTable=Table9073650;
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000002;1;Group  ;
+                GroupType=Repeater }
+
+    { 1000000000;2;Field  ;
+                SourceExpr="Line No." }
+
+    { 1000000001;2;Field  ;
+                SourceExpr="Scheduled Workflow Entry No." }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Primary Key" }
+
+    { 1000000004;2;Field  ;
+                SourceExpr="Person Responsible" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="Table No." }
+
+    { 1000000006;2;Field  ;
+                SourceExpr=Description }
+
+    { 1000000007;2;Field  ;
+                SourceExpr=Code }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="Field No." }
+
+    { 1000000009;2;Field  ;
+                SourceExpr="Table Date Value" }
+
+    { 1000000010;2;Field  ;
+                SourceExpr="Registry Created Date" }
+
+    { 1000000011;2;Field  ;
+                SourceExpr="Registry Created Time" }
+
+    { 1000000012;2;Field  ;
+                SourceExpr="Starting Date" }
+
+    { 1000000013;2;Field  ;
+                SourceExpr="Recurring Frequency" }
+
+    { 1000000014;2;Field  ;
+                SourceExpr="Resource Group No" }
+
+    { 1000000015;2;Field  ;
+                SourceExpr="Attached To No." }
+
+    { 1000000016;2;Field  ;
+                SourceExpr="Attached To Type" }
+
+    { 1000000017;2;Field  ;
+                SourceExpr="Person Responsible Override" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

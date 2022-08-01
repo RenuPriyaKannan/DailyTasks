@@ -1,0 +1,113 @@
+OBJECT Page 50091 LaserficheMessages
+{
+  OBJECT-PROPERTIES
+  {
+    Date=12-04-21;
+    Time=17:24:28;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9069241;
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 100000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 100000001;1;Group   ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 100000002;2;Field   ;
+                SourceExpr="Entry No" }
+
+    { 100000003;2;Field   ;
+                SourceExpr=Status }
+
+    { 100000004;2;Field   ;
+                SourceExpr="Attached To Type" }
+
+    { 100000005;2;Field   ;
+                SourceExpr="Attached To No" }
+
+    { 100000006;2;Field   ;
+                SourceExpr="Attached To Name" }
+
+    { 100000007;2;Field   ;
+                SourceExpr="Document Type" }
+
+    { 100000008;2;Field   ;
+                SourceExpr="Document Sub Type" }
+
+    { 100000009;2;Field   ;
+                SourceExpr="Company Name" }
+
+    { 100000010;2;Field   ;
+                SourceExpr="Original File Path" }
+
+    { 100000011;2;Field   ;
+                SourceExpr="File Name" }
+
+    { 100000012;2;Field   ;
+                SourceExpr="Client Analysis A" }
+
+    { 100000013;2;Field   ;
+                SourceExpr="Client Analysis B" }
+
+    { 100000014;2;Field   ;
+                SourceExpr="Client Analysis C" }
+
+    { 100000015;2;Field   ;
+                SourceExpr="Client Analysis D" }
+
+    { 100000016;2;Field   ;
+                SourceExpr="Client Analysis E" }
+
+    { 100000017;2;Field   ;
+                SourceExpr="Client Analysis F" }
+
+    { 100000018;2;Field   ;
+                SourceExpr="Document Description" }
+
+    { 100000019;2;Field   ;
+                SourceExpr="Inserted By" }
+
+    { 100000020;2;Field   ;
+                SourceExpr="Inserted Date" }
+
+    { 100000021;2;Field   ;
+                SourceExpr="NAV Document GUID" }
+
+    { 100000022;2;Field   ;
+                SourceExpr="File Type" }
+
+    { 100000023;2;Field   ;
+                SourceExpr="LaserFiche Entry ID" }
+
+    { 100000024;2;Field   ;
+                SourceExpr="LaserFiche Document Type" }
+
+    { 100000025;2;Field   ;
+                SourceExpr="LaserFiche Document Sub Type" }
+
+    { 100000026;2;Field   ;
+                SourceExpr="LaserFiche Path" }
+
+    { 100000027;2;Field   ;
+                SourceExpr="Workflow No" }
+
+    { 100000028;2;Field   ;
+                SourceExpr="LaserFiche Status" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

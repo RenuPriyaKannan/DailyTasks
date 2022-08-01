@@ -1,0 +1,339 @@
+OBJECT Page 50094 NAVLITE
+{
+  OBJECT-PROPERTIES
+  {
+    Date=16-06-22;
+    Time=12:16:30;
+    Modified=Yes;
+    Version List=NAVLITE;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table50004;
+    PageType=Card;
+    RefreshOnActivate=Yes;
+    OnOpenPage=BEGIN
+                 MultiEditable := TRUE;
+               END;
+
+    OnAfterGetRecord=BEGIN
+
+                       DocumentFolderSetup.GET;
+                       "External Doc Management System" := DocumentFolderSetup."External Doc Management System";
+                     END;
+
+    OnQueryClosePage=VAR
+                       _DocSetup@100000002 : Record 9068662;
+                       _DocType@100000001 : Code[50];
+                       _TempCode@100000000 : Code[20];
+                       TxtConfirmOverwriteFile@100000004 : TextConst 'ENU=Do you want to overwrite existing file?';
+                       TxtErrDocNotLinked@100000003 : TextConst 'ENU=Document not linked.';
+                       DocMan@100000005 : Codeunit 9068511;
+                       DEFAULT_MSG_SUCCESS@100000006 : TextConst 'ENU=Document Linked.';
+                     BEGIN
+                     END;
+
+    ActionList=ACTIONS
+    {
+      { 100000021;   ;ActionContainer;
+                      CaptionML=ENU=Process-1;
+                      ActionContainerType=NewDocumentItems }
+      { 100000022;1  ;Action    ;
+                      Name=Upload;
+                      Promoted=Yes;
+                      Visible=false;
+                      PromotedIsBig=Yes;
+                      Image=Link;
+                      OnAction=VAR
+                                 _DocSetup@100000003 : Record 9068662;
+                                 _DocType@100000002 : Code[50];
+                                 _TempCode@100000001 : Code[20];
+                                 TxtConfirmOverwriteFile@100000004 : TextConst 'ENU=Do you want to overwrite existing file?';
+                                 TxtErrDocNotLinked@100000000 : TextConst 'ENU=Document not linked.';
+                                 DocMan@100000005 : Codeunit 9068511;
+                                 DEFAULT_MSG_SUCCESS@100000006 : TextConst 'ENU=Document linked.';
+                                 DFXBulkDocumentLink@100000007 : Record 50015;
+                                 DFXBulkDocumentLink1@100000008 : Record 50015;
+                                 Window@100000011 : Dialog;
+                                 NoOfRecs@100000010 : Integer;
+                                 CurrRec@100000009 : Integer;
+                                 TempPath@100000012 : Text;
+                                 DFXDMSLite@100000013 : Codeunit 50004;
+                                 Outstr@100000014 : OutStream;
+                                 TempBlob@100000015 : Record 99008535;
+                               BEGIN
+                                 //DFXBulkDocumentLink.NAVLFAPI(Rec);
+                                 {DFXBulkDocumentLink.RESET;
+                                 DFXBulkDocumentLink.SETRANGE(Type,Type);
+                                 DFXBulkDocumentLink.SETRANGE("No.","No.");
+                                 DFXBulkDocumentLink.SETRANGE(ID,ID);
+                                 IF DFXBulkDocumentLink.FINDSET THEN
+                                   REPEAT
+                                     Window.OPEN('Processing data... @1@@@@@@@@@@');
+                                   NoOfRecs := DFXBulkDocumentLink.COUNT;
+                                     CurrRec += 1;
+                                     IF NoOfRecs <= 100 THEN
+                                       Window.UPDATE(1,(CurrRec / NoOfRecs * 10000) DIV 1)
+                                     ELSE IF CurrRec MOD (NoOfRecs DIV 100) = 0 THEN
+                                       Window.UPDATE(1,(CurrRec / NoOfRecs * 10000) DIV 1);
+
+
+                                    DFXBulkDocumentLink."Content Blob".CREATEOUTSTREAM(Outstr);
+
+
+                                    DFXDMSLite.NAVLFDocumentFlowAPI(Outstr,DFXBulkDocumentLink."File Name");
+                                   UNTIL DFXBulkDocumentLink.NEXT = 0;
+
+
+                                 Window.CLOSE;
+                                 }
+
+                                 //GetFileDetails;
+
+                                 {
+                                 _DocSetup.GET;
+                                 IF CheckFileExists(Type, "No.", "File Path") THEN
+                                   IF NOT CONFIRM(TxtConfirmOverwriteFile, FALSE) THEN
+                                     ERROR(TxtErrDocNotLinked);
+
+                                 MoveDocument(Type, "No.", "File Path",TRUE);
+                                 } // OLD Code
+                                 {
+                                 _DocSetup.GET;
+                                 IF CheckFileExists(Type, "No.", ClientType) THEN
+                                   IF NOT CONFIRM(TxtConfirmOverwriteFile, FALSE) THEN
+                                     ERROR(TxtErrDocNotLinked);
+
+                                 MoveDocument1(Type, "No.", ClientType,TRUE);
+
+
+                                 _DocSetup.GET;
+
+
+                                 DFXBulkDocumentLink.SETRANGE(Type,Type);
+                                 DFXBulkDocumentLink.SETRANGE("No.","No.");
+                                 DFXBulkDocumentLink1.COPY(DFXBulkDocumentLink);
+                                 IF DFXBulkDocumentLink1.FINDFIRST THEN
+
+                                   Window.OPEN('Processing data... @1@@@@@@@@@@');
+                                   NoOfRecs := DFXBulkDocumentLink1.COUNT;
+                                   REPEAT
+                                     CurrRec += 1;
+                                     IF NoOfRecs <= 100 THEN
+                                       Window.UPDATE(1,(CurrRec / NoOfRecs * 10000) DIV 1)
+                                     ELSE IF CurrRec MOD (NoOfRecs DIV 100) = 0 THEN
+                                       Window.UPDATE(1,(CurrRec / NoOfRecs * 10000) DIV 1);
+
+                                 IF DFXBulkDocumentLink.FINDSET THEN
+                                   REPEAT
+                                     IF CheckFileExists(DFXBulkDocumentLink.Type, DFXBulkDocumentLink."No.", DFXBulkDocumentLink."File Path") THEN ;
+                                        // IF NOT CONFIRM(TxtConfirmOverwriteFile, FALSE) THEN
+                                          // ERROR(TxtErrDocNotLinked);
+
+                                       TempPath := MoveDocument(DFXBulkDocumentLink.Type, DFXBulkDocumentLink."No." ,DFXBulkDocumentLink."File Path",TRUE);
+                                       COMMIT;
+
+                                       _DocType := Jurisdiction;
+
+
+                                       IF "First Partition Code" <> '' THEN
+                                         _DocType := _DocType + '|' + "First Partition Code";
+
+                                       //DFXBulkDocumentLink."Network Path" := TempPath;
+                                       DFXBulkDocumentLink."File Name" := TempFileName;
+                                       DFXBulkDocumentLink.MODIFY;
+                                       COMMIT;
+                                       //MESSAGE(DEFAULT_MSG_SUCCESS);
+                                 UNTIL DFXBulkDocumentLink.NEXT = 0;
+
+                                 UNTIL DFXBulkDocumentLink1.NEXT = 0;
+                                 Window.CLOSE;
+                                 }
+                               END;
+                                }
+      { 100000019;1  ;Action    ;
+                      Name=Documents;
+                      Promoted=Yes;
+                      PromotedIsBig=Yes;
+                      Image=Document;
+                      OnAction=VAR
+                                 ClientRec@100000000 : Record 9068500;
+                                 EntityRec@100000001 : Record 9068505;
+                                 CustomerrRec@100000002 : Record 18;
+                                 VendorRec@100000003 : Record 23;
+                                 DFXCorrespondenceClient@100000004 : Record 50016;
+                                 DFXCorrespondenceEntity@100000005 : Record 50016;
+                                 DFXCorrespondenceCustomer@100000006 : Record 50016;
+                                 DFXCorrespondenceVendor@100000007 : Record 50016;
+                               BEGIN
+                                 CASE Type OF
+                                   Type::Client:
+                                     BEGIN
+                                       DFXCorrespondenceClient.RESET;
+                                       DFXCorrespondenceClient.SETRANGE(Type,DFXCorrespondenceClient.Type::Client);
+                                       DFXCorrespondenceClient.SETRANGE("No.","No.");
+                                       PAGE.RUN(PAGE::"DFX Docs and Correspondence", DFXCorrespondenceClient);
+                                     END;
+                                   Type::Entity:
+                                     BEGIN
+                                       DFXCorrespondenceEntity.RESET;
+                                       DFXCorrespondenceEntity.SETRANGE(Type,DFXCorrespondenceClient.Type::Entity);
+                                       DFXCorrespondenceEntity.SETRANGE("No.","No.");
+                                       PAGE.RUN(PAGE::"DFX Docs and Correspondence", DFXCorrespondenceEntity);
+                                     END;
+                                   Type::Customer:
+                                     BEGIN
+                                       DFXCorrespondenceCustomer.RESET;
+                                       DFXCorrespondenceCustomer.SETRANGE(Type,DFXCorrespondenceClient.Type::Customer);
+                                       DFXCorrespondenceCustomer.SETRANGE("No.","No.");
+                                       PAGE.RUN(PAGE::"DFX Docs and Correspondence", DFXCorrespondenceCustomer);
+                                     END;
+                                   Type::Vendor:
+                                     BEGIN
+                                       DFXCorrespondenceVendor.RESET;
+                                       DFXCorrespondenceVendor.SETRANGE(Type,DFXCorrespondenceClient.Type::Vendor);
+                                       DFXCorrespondenceVendor.SETRANGE("No.","No.");
+                                       PAGE.RUN(PAGE::"DFX Docs and Correspondence", DFXCorrespondenceVendor);
+                                     END;
+                                 END;
+                               END;
+                                }
+      { 100000016;1  ;Action    ;
+                      Name=ElasticSearch;
+                      Visible=True;
+                      OnAction=VAR
+                                 DFXDMSLite@100000000 : Codeunit 50004;
+                               BEGIN
+                                 DFXDMSLite.ElasticSearchAPI('Sample',Rec);;
+                               END;
+                                }
+    }
+  }
+  CONTROLS
+  {
+    { 100000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 100000001;1;Group   ;
+                Name=General;
+                GroupType=Group }
+
+    { 100000002;2;Field   ;
+                SourceExpr=Type;
+                OnValidate=BEGIN
+                             IF Type = Type::Client THEN
+                               ClientEditable := TRUE
+                             ELSE
+                               ClientEditable := FALSE
+                           END;
+                            }
+
+    { 100000003;2;Field   ;
+                SourceExpr="No." }
+
+    { 100000004;2;Field   ;
+                SourceExpr=Name;
+                Editable=false }
+
+    { 100000005;2;Field   ;
+                SourceExpr=Jurisdiction;
+                Editable=False }
+
+    { 100000006;2;Field   ;
+                SourceExpr="First Partition Code";
+                Editable=False }
+
+    { 100000007;2;Field   ;
+                SourceExpr="Second Partition Code";
+                Editable=False }
+
+    { 100000009;1;Group   ;
+                Name=Details;
+                GroupType=Group }
+
+    { 100000020;2;Field   ;
+                SourceExpr=AttributeType;
+                Visible=false;
+                Enabled=false;
+                Editable=True }
+
+    { 100000010;2;Field   ;
+                SourceExpr=Attribute;
+                Visible=false;
+                Enabled=false;
+                Editable=True }
+
+    { 100000012;2;Field   ;
+                SourceExpr="Entity Owner";
+                Editable=False }
+
+    { 100000013;2;Field   ;
+                SourceExpr="Entity Prospect";
+                Editable=False }
+
+    { 100000014;2;Field   ;
+                SourceExpr="Entity Intermediary";
+                Editable=False }
+
+    { 100000017;2;Field   ;
+                SourceExpr="Link Type";
+                Editable=MultiEditable }
+
+    { 100000018;2;Field   ;
+                SourceExpr="Multi No.";
+                Editable=MultiEditable;
+                OnValidate=BEGIN
+
+                             IF "Multi No." <> '' THEN
+                               MultiEditable := FALSE
+                             ELSE
+                               MultiEditable := TRUE;
+                           END;
+                            }
+
+    { 100000015;2;Field   ;
+                SourceExpr="Multi Name";
+                Visible=False;
+                Editable=False }
+
+    { 100000024;2;Field   ;
+                Name=External Doc Management System;
+                CaptionML=ENU=External Doc Management System;
+                SourceExpr="External Doc Management System";
+                Editable=False }
+
+    { 100000008;2;Field   ;
+                SourceExpr=NAVUserID;
+                Editable=False }
+
+    { 100000011;2;Field   ;
+                SourceExpr="Document Date";
+                Editable=false }
+
+    { 100000028;1;Part    ;
+                SubPageLink=ID=FIELD(ID);
+                PagePartID=Page50098;
+                PartType=Page }
+
+  }
+  CODE
+  {
+    VAR
+      FileName@100000000 : Text;
+      DocumentFolderSetup@100000001 : Record 9068662;
+      ClientEditable@100000002 : Boolean;
+      NoText@100000003 : Text;
+      "No.1"@100000004 : Code[30];
+      Entity@100000005 : Record 9068505;
+      ClientRec@100000006 : Record 9068500;
+      TextLoop@100000007 : Text;
+      LinkExists@100000008 : Boolean;
+      ClientEntityRec@100000009 : Record 9068508;
+      TempFileName@100000010 : Text;
+      MultiEditable@100000011 : Boolean;
+
+    BEGIN
+    END.
+  }
+}
+

@@ -1,0 +1,260 @@
+OBJECT Codeunit 50001 DFX Permission
+{
+  OBJECT-PROPERTIES
+  {
+    Date=09-04-21;
+    Time=11:18:58;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    OnRun=VAR
+            PermissionTypeTemp@100000000 : 'Read,Modify,Insert,Delete';
+          BEGIN
+            Result := GetUserPermission('DATAFABRICX\renupriya',403,PermissionTypeTemp::Read);
+            MESSAGE(FORMAT(Result));
+          END;
+
+  }
+  CODE
+  {
+    VAR
+      Result@1000000000 : Boolean;
+
+    [External]
+    PROCEDURE GetUserPermission@100000000(User_ID@100000001 : Code[50];TableId@100000000 : Integer;PermissionType@100000002 : 'Read,Modify,Insert,Delete') : Boolean;
+    VAR
+      User@100000003 : Record 2000000120;
+      Resource@100000004 : Record 156;
+      DFXUserPermission@100000005 : Record 50009;
+      DFXUser@100000006 : Record 50010;
+      FirstPartition@100000007 : Code[20];
+      SecondPartition@100000008 : Code[20];
+      Permission@100000009 : Record 2000000005;
+      ALLObj@100000010 : Record 2000000038;
+      DFXUserPermission1@100000011 : Record 50009;
+    BEGIN
+      User.SETRANGE("User Name",User_ID);
+      IF User.FINDFIRST THEN BEGIN
+        IF GetInternalUserPermission(User_ID,TableId,PermissionType) THEN
+          EXIT(TRUE) //Internal User
+      END ELSE BEGIN
+        IF GetExternalUserPermission(User_ID,TableId,PermissionType) THEN
+          EXIT(FALSE); //External User
+      END;
+    END;
+
+    LOCAL PROCEDURE GetInternalUserPermission@100000002(User_ID@100000014 : Code[50];TableId@100000013 : Integer;PermissionType@100000012 : 'Read,Modify,Insert,Delete') : Boolean;
+    VAR
+      User@100000009 : Record 2000000120;
+      Resource@100000008 : Record 156;
+      DFXUserPermission@100000007 : Record 50009;
+      DFXUser@100000006 : Record 50010;
+      FirstPartition@100000005 : Code[20];
+      SecondPartition@100000004 : Code[20];
+      Permission@100000003 : Record 2000000005;
+      ALLObj@100000002 : Record 2000000038;
+      DFXUserPermission1@100000001 : Record 50009;
+      AccessControl@100000010 : Record 2000000053;
+      TenantPermission@100000011 : Record 2000000166;
+    BEGIN
+      User.RESET;
+      User.SETRANGE("User Name",User_ID);
+      IF User.FINDFIRST THEN BEGIN
+        AccessControl.RESET;
+        AccessControl.SETRANGE("User Security ID",User."User Security ID");
+        IF AccessControl.FINDFIRST THEN
+          BEGIN
+          Permission.RESET;
+          Permission.SETRANGE("Role ID",AccessControl."Role ID");
+          Permission.SETRANGE("Object Type",Permission."Object Type"::"Table Data");
+          Permission.SETRANGE("Object ID",TableId);
+          IF Permission.FINDSET THEN
+            EXIT(TRUE);
+
+            {
+          REPEAT
+              DFXUserPermission.INIT;
+              DFXUserPermission."User ID" := User_ID;
+              DFXUserPermission."User Security ID" := User."User Security ID";
+              DFXUserPermission."Windows Security ID":= User."Windows Security ID";
+              DFXUserPermission."BC User" := TRUE;
+              DFXUserPermission."Role ID" := AccessControl."Role ID";
+              DFXUserPermission."Object Type" := Permission."Object Type";
+              DFXUserPermission."Object ID" := Permission."Object ID";
+              DFXUserPermission."Object Name" := Permission."Object Name";
+              DFXUserPermission."Read Permission" := DFXUserPermission."Read Permission"::"  ";
+              DFXUserPermission."Modify Permission" := DFXUserPermission."Modify Permission"::"  ";
+              DFXUserPermission."Insert Permission" := DFXUserPermission."Insert Permission"::"  ";
+              DFXUserPermission."Delete Permission" := DFXUserPermission."Delete Permission"::"  ";
+              CASE PermissionType OF
+                PermissionType::Read:
+                  DFXUserPermission."Read Permission" := Permission."Read Permission";
+                PermissionType::Modify:
+                  DFXUserPermission."Modify Permission" := Permission."Modify Permission";
+                PermissionType::Insert:
+                  DFXUserPermission."Insert Permission" := Permission."Insert Permission";
+                PermissionType::Delete:
+                  DFXUserPermission."Delete Permission" := Permission."Delete Permission";
+             END;
+              DFXUserPermission."Security Filter" := Permission."Security Filter";
+              DFXUserPermission.INSERT(TRUE);
+            UNTIL Permission.NEXT = 0;
+          }
+
+          TenantPermission.RESET;
+          TenantPermission.SETRANGE("Role ID",AccessControl."Role ID");
+          TenantPermission.SETRANGE("Object Type",Permission."Object Type"::"Table Data");
+          TenantPermission.SETRANGE("Object ID",TableId);
+          IF TenantPermission.FINDSET THEN
+            EXIT(TRUE);
+            {
+            REPEAT
+              DFXUserPermission.INIT;
+              DFXUserPermission."User ID" := User_ID;
+              DFXUserPermission."User Security ID" := User."User Security ID";
+              DFXUserPermission."Windows Security ID":= User."Windows Security ID";
+              DFXUserPermission."Role ID" := AccessControl."Role ID";
+              DFXUserPermission."BC User" := TRUE;
+              DFXUserPermission."Object Type" := TenantPermission."Object Type";
+              DFXUserPermission."Object ID" := TenantPermission."Object ID";
+              DFXUserPermission."Object Name" := TenantPermission."Object Name";
+              DFXUserPermission."Read Permission" := DFXUserPermission."Read Permission"::"  ";
+              DFXUserPermission."Modify Permission" := DFXUserPermission."Modify Permission"::"  ";
+              DFXUserPermission."Insert Permission" := DFXUserPermission."Insert Permission"::"  ";
+              DFXUserPermission."Delete Permission" := DFXUserPermission."Delete Permission"::"  ";
+              CASE PermissionType OF
+                PermissionType::Read:
+                  DFXUserPermission."Read Permission" := TenantPermission."Read Permission";
+                PermissionType::Modify:
+                  DFXUserPermission."Modify Permission" := TenantPermission."Modify Permission";
+                PermissionType::Insert:
+                  DFXUserPermission."Insert Permission" := TenantPermission."Insert Permission";
+                PermissionType::Delete:
+                  DFXUserPermission."Delete Permission" := TenantPermission."Delete Permission";
+              END;
+              DFXUserPermission."Security Filter" := TenantPermission."Security Filter";
+              DFXUserPermission.INSERT(TRUE);
+
+            UNTIL TenantPermission.NEXT = 0;
+            }
+            IF AccessControl."Role ID" = 'SUPER' THEN
+              EXIT(TRUE);
+        END;
+      END;
+    END;
+
+    LOCAL PROCEDURE GetExternalUserPermission@100000001(User_ID@100000002 : Code[50];TableId@100000001 : Integer;PermissionType@100000000 : 'Read,Modify,Insert,Delete') : Boolean;
+    VAR
+      User@100000011 : Record 2000000120;
+      Resource@100000010 : Record 156;
+      DFXUserPermission@100000009 : Record 50009;
+      DFXUser@100000008 : Record 50010;
+      FirstPartition@100000007 : Code[20];
+      SecondPartition@100000006 : Code[20];
+      Permission@100000005 : Record 2000000005;
+      ALLObj@100000004 : Record 2000000038;
+      DFXUserPermission1@100000003 : Record 50009;
+    BEGIN
+      DFXUserPermission.RESET;
+      DFXUserPermission.SETRANGE("User ID",User_ID);
+      IF DFXUserPermission.FINDFIRST THEN
+        EXIT(TRUE);
+        {
+        BEGIN
+          DFXUserPermission.INIT;
+          DFXUserPermission."User ID" := User_ID;
+          DFXUserPermission."BC User" := FALSE;
+          DFXUserPermission."Object Type" := DFXUserPermission."Object Type"::"Table Data";
+          DFXUserPermission."Object ID" := TableId;
+          DFXUserPermission."Object Name" := DFXUserPermission."Object Name";
+          DFXUserPermission."Read Permission" := DFXUserPermission."Read Permission"::"  ";
+          DFXUserPermission."Modify Permission" := DFXUserPermission."Modify Permission"::"  ";
+          DFXUserPermission."Insert Permission" := DFXUserPermission."Insert Permission"::"  ";
+          DFXUserPermission."Delete Permission" := DFXUserPermission."Delete Permission"::"  ";
+          CASE PermissionType OF
+            PermissionType::Read:
+              DFXUserPermission."Read Permission" := DFXUserPermission."Read Permission"::Yes;
+            PermissionType::Modify:
+              DFXUserPermission."Modify Permission" := DFXUserPermission."Modify Permission"::Yes;
+            PermissionType::Insert:
+              DFXUserPermission."Insert Permission" := DFXUserPermission."Insert Permission"::Yes;
+            PermissionType::Delete:
+              DFXUserPermission."Delete Permission" := DFXUserPermission."Delete Permission"::Yes;
+          END;
+          DFXUserPermission."Security Filter" := DFXUserPermission."Security Filter";
+          DFXUserPermission.INSERT(TRUE);
+        END;
+        }
+    END;
+
+    [External]
+    PROCEDURE GetUserFirstPartitions@100000003(User_ID@100000000 : Code[50]) FirstPartitionCodes : Text[500];
+    VAR
+      DFXUser@100000001 : Record 50010;
+    BEGIN
+      IF DFXUser.GET(User_ID) THEN
+        EXIT(DFXUser."First Partition Code");
+    END;
+
+    [External]
+    PROCEDURE GetUserSecondPartitions@100000005(User_ID@100000000 : Code[50]) SecondPartitionCodes : Text[500];
+    VAR
+      DFXUser@100000001 : Record 50010;
+    BEGIN
+      IF DFXUser.GET(User_ID) THEN
+        EXIT(DFXUser."Second Partition Code");
+    END;
+
+    PROCEDURE CreateDFXPartioning@100000007();
+    VAR
+      Resource@100000000 : Record 156;
+      DFXUser@100000001 : Record 50010;
+      BusinessGroupRole@100000002 : Record 9068252;
+      Counter@100000003 : Integer;
+      Counter1@100000004 : Integer;
+      BusinessGroupRole1@100000005 : Record 9068252;
+    BEGIN
+      IF Resource.FINDFIRST THEN REPEAT
+        IF Resource."Login User ID" <> '' THEN BEGIN
+          DFXUser.INIT;
+          DFXUser."User ID" := Resource."Login User ID";
+          DFXUser."Resource No." := Resource."No.";
+          DFXUser."BC User" := TRUE;
+          IF Resource."Partition Group" <> '' THEN BEGIN
+            BusinessGroupRole.SETRANGE("Business Group Code",Resource."Partition Group");
+            BusinessGroupRole.SETRANGE("Table No.",DATABASE::Client);
+            BusinessGroupRole.SETRANGE("Business Group Type",BusinessGroupRole."Business Group Type"::"First Partition");
+            IF BusinessGroupRole.FINDSET THEN BEGIN
+              Counter := 0;
+              REPEAT
+                IF Counter = 0 THEN
+                  DFXUser."First Partition Code" := BusinessGroupRole.Role
+                ELSE
+                  DFXUser."First Partition Code" := DFXUser."First Partition Code" + '|' + BusinessGroupRole.Role;
+                Counter += 1;
+              UNTIL BusinessGroupRole.NEXT = 0;
+            END;
+            BusinessGroupRole.SETRANGE("Business Group Type",BusinessGroupRole."Business Group Type"::"Second Partition");
+            IF BusinessGroupRole.FINDSET THEN BEGIN
+              Counter := 0;
+              REPEAT
+                IF Counter = 0 THEN
+                  DFXUser."Second Partition Code" := BusinessGroupRole.Role
+                ELSE
+                  DFXUser."Second Partition Code" := DFXUser."First Partition Code" + '|' + BusinessGroupRole.Role;
+                Counter += 1;
+              UNTIL BusinessGroupRole.NEXT = 0;
+            END;
+          END;
+          IF DFXUser.INSERT THEN;
+        END;
+      UNTIL Resource.NEXT = 0;
+    END;
+
+    BEGIN
+    END.
+  }
+}
+
