@@ -1,0 +1,105 @@
+OBJECT Table 50020 DFX VEGA Interface
+{
+  OBJECT-PROPERTIES
+  {
+    Date=29-07-22;
+    Time=12:31:28;
+    Modified=Yes;
+    Version List=DFX VEGA;
+  }
+  PROPERTIES
+  {
+    OnInsert=BEGIN
+               {DFXVEGAInterface.RESET;
+               DFXVEGAInterface.SETRANGE(Status,DFXVEGAInterface.Status::UnProcessed);
+               IF DFXVEGAInterface.FINDSET THEN
+                 UnProcessed := DFXVEGAInterface.COUNT;
+
+
+               DFXVEGAInterface1.RESET;
+               DFXVEGAInterface1.SETRANGE(Status,DFXVEGAInterface1.Status::InReview);
+               IF DFXVEGAInterface1.FINDSET THEN
+                 InReview := DFXVEGAInterface1.COUNT;
+
+               DFXVEGAInterface2.RESET;
+               DFXVEGAInterface2.SETRANGE(Status,DFXVEGAInterface1.Status::Processed);
+               IF DFXVEGAInterface2.FINDSET THEN
+                 Processed := DFXVEGAInterface2.COUNT;
+               }
+             END;
+
+  }
+  FIELDS
+  {
+    { 1   ;   ;Entry No.           ;Code50        ;DataClassification=ToBeClassified }
+    { 2   ;   ;Entity No.          ;Code20        ;DataClassification=ToBeClassified }
+    { 3   ;   ;Entity Name         ;Text250       ;DataClassification=ToBeClassified }
+    { 4   ;   ;First/Second        ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=,First,Second }
+    { 5   ;   ;Status              ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=,UnProcessed,InProcess,InReview,Processed,Rejected,IdleRejected }
+    { 6   ;   ;Case ID             ;Code50        ;DataClassification=ToBeClassified }
+    { 7   ;   ;Passport Number     ;Code30        ;DataClassification=ToBeClassified }
+    { 8   ;   ;Passport Issue Date ;Date          ;DataClassification=ToBeClassified }
+    { 9   ;   ;Passport Expiry Date;Date          ;DataClassification=ToBeClassified }
+    { 10  ;   ;Passport Country of Issue;Code20   ;DataClassification=ToBeClassified }
+    { 11  ;   ;Email               ;Text50        ;DataClassification=ToBeClassified }
+    { 12  ;   ;Status Message      ;Text250       ;DataClassification=ToBeClassified }
+    { 13  ;   ;External Case ID    ;Text30        ;DataClassification=ToBeClassified }
+    { 1000;   ;New Passport Number ;Code30        ;DataClassification=ToBeClassified }
+    { 1001;   ;New Passport Issue Date;Date       ;DataClassification=ToBeClassified }
+    { 1002;   ;New Passport Expiry Date;Date      ;DataClassification=ToBeClassified }
+    { 1003;   ;New Passport Country of Issue;Code20;
+                                                   DataClassification=ToBeClassified }
+    { 1004;   ;Document Data       ;BLOB          ;DataClassification=ToBeClassified }
+    { 3001;   ;API Status          ;Text50        ;DataClassification=ToBeClassified;
+                                                   Description=//API Response write }
+    { 3002;   ;Error Message       ;Text100       ;DataClassification=ToBeClassified }
+    { 3003;   ;Object Reference    ;Text30        ;DataClassification=ToBeClassified }
+    { 3004;   ;Case Status         ;Text30        ;DataClassification=ToBeClassified }
+    { 3005;   ;Percentage Complete ;Decimal       ;DataClassification=ToBeClassified }
+    { 3006;   ;Data                ;Text250       ;DataClassification=ToBeClassified }
+    { 3007;   ;File Name           ;Text250       ;DataClassification=ToBeClassified }
+    { 3008;   ;Flag                ;Boolean       ;DataClassification=ToBeClassified }
+    { 3009;   ;Review URL          ;Text250       ;DataClassification=ToBeClassified }
+    { 5001;   ;Unprocessed         ;Integer       ;FieldClass=FlowField;
+                                                   CalcFormula=Count("DFX VEGA Interface" WHERE (Status=FILTER(UnProcessed),
+                                                                                                 RM User ID=FIELD(Current User)));
+                                                   Description=//For Cue }
+    { 5002;   ;Inprocess           ;Integer       ;FieldClass=FlowField;
+                                                   CalcFormula=Count("DFX VEGA Interface" WHERE (Status=FILTER(InProcess),
+                                                                                                 RM User ID=FIELD(Current User))) }
+    { 5003;   ;InReview            ;Integer       ;FieldClass=FlowField;
+                                                   CalcFormula=Count("DFX VEGA Interface" WHERE (Status=FILTER(InReview),
+                                                                                                 RM User ID=FIELD(Current User))) }
+    { 5004;   ;Processed           ;Integer       ;FieldClass=FlowField;
+                                                   CalcFormula=Count("DFX VEGA Interface" WHERE (Status=FILTER(Processed),
+                                                                                                 RM User ID=FIELD(Current User))) }
+    { 5005;   ;Rejected            ;Integer       ;FieldClass=FlowField;
+                                                   CalcFormula=Count("DFX VEGA Interface" WHERE (Status=FILTER(Rejected|IdleRejected),
+                                                                                                 RM User ID=FIELD(Current User))) }
+    { 5007;   ;Current User        ;Code50        ;FieldClass=FlowFilter }
+    { 6001;   ;Relationship manager;Code30        ;DataClassification=ToBeClassified;
+                                                   Description=//CE RM link }
+    { 6002;   ;RM Mail             ;Text100       ;DataClassification=ToBeClassified }
+    { 6003;   ;RM User ID          ;Text50        ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;Entry No.                               ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+    VAR
+      DFXVEGAInterface@100000000 : Record 50020;
+      DFXVEGAInterface1@100000001 : Record 50020;
+      DFXVEGAInterface2@100000002 : Record 50020;
+
+    BEGIN
+    END.
+  }
+}
+

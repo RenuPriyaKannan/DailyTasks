@@ -1,0 +1,64 @@
+OBJECT Table 50003 Notice Of Meeting
+{
+  OBJECT-PROPERTIES
+  {
+    Date=02-06-22;
+    Time=15:23:57;
+    Modified=Yes;
+    Version List=NOM;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Master Client No.   ;Code20        ;DataClassification=ToBeClassified }
+    { 2   ;   ;Corporate Director/Trustee;Code20  ;DataClassification=ToBeClassified }
+    { 3   ;   ;Fiduciary Director/Trustee;Code20  ;DataClassification=ToBeClassified }
+    { 4   ;   ;Individual Director/Trustee;Code20 ;DataClassification=ToBeClassified }
+    { 5   ;   ;Director/Trustee    ;Code20        ;DataClassification=ToBeClassified }
+    { 6   ;   ;Appointment Type    ;Code20        ;DataClassification=ToBeClassified }
+    { 7   ;   ;Type                ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=Client,Personal Entity,Corporate Entity,Resource }
+    { 10  ;   ;Master Client Name  ;Text150       ;DataClassification=ToBeClassified }
+    { 11  ;   ;Corp Director/Trustee Name;Text150 ;DataClassification=ToBeClassified }
+    { 12  ;   ;Fid Director/Trustee Name;Text150  ;DataClassification=ToBeClassified }
+    { 13  ;   ;Indv Director/Trust Name;Text150   ;DataClassification=ToBeClassified }
+    { 14  ;   ;Director/Trustee name;Text150      ;DataClassification=ToBeClassified }
+    { 15  ;   ;Director Quorum     ;Integer       ;DataClassification=ToBeClassified }
+    { 16  ;   ;Client Type         ;Text50        ;CaptionML=ENU=Client Type Type;
+                                                   Editable=Yes }
+    { 17  ;   ;First Partition Code;Code20        ;DataClassification=ToBeClassified }
+    { 18  ;   ;Partition Group     ;Code30        ;DataClassification=ToBeClassified }
+    { 19  ;   ;Purpose-Activity Code;Code20       ;OnValidate=VAR
+                                                                _PurposeActivity@1000000000 : Record 9069136;
+                                                              BEGIN
+                                                              END;
+
+                                                   OnLookup=VAR
+                                                              _PurposeRec@1000000000 : Record 9069136;
+                                                              _PurposePage@1000000001 : Page 9069829;
+                                                            BEGIN
+                                                            END;
+
+                                                   DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Purpose-Activity Code }
+    { 20  ;   ;Purpose/Objective   ;Text150       ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Purpose/Objective }
+  }
+  KEYS
+  {
+    {    ;Master Client No.,Corporate Director/Trustee,Individual Director/Trustee,Director/Trustee;
+                                                   Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

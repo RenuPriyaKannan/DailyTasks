@@ -1,0 +1,54 @@
+OBJECT Table 50014 DFX NAV Outbox
+{
+  OBJECT-PROPERTIES
+  {
+    Date=21-09-21;
+    Time=21:59:55;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Company Name        ;Text30        ;DataClassification=ToBeClassified }
+    { 2   ;   ;Record Type         ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=Entity,Client }
+    { 3   ;   ;Record No           ;Code20        ;DataClassification=ToBeClassified }
+    { 4   ;   ;Record Sub Type     ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=[ ,Appointment,Account,Asset,Portfolio] }
+    { 5   ;   ;Record Sub No       ;Code20        ;DataClassification=ToBeClassified }
+    { 21  ;   ;Modifed Date        ;Date          ;DataClassification=ToBeClassified }
+    { 22  ;   ;Modifed Time        ;Time          ;DataClassification=ToBeClassified }
+    { 23  ;   ;Modifed DateTime    ;DateTime      ;DataClassification=ToBeClassified }
+    { 101 ;   ;Record Name         ;Text150       ;DataClassification=ToBeClassified }
+    { 102 ;   ;Client Entity Type  ;Code20        ;DataClassification=ToBeClassified }
+    { 103 ;   ;Client Entity Type Dec;Text30      ;DataClassification=ToBeClassified }
+    { 201 ;   ;Attribute 1         ;Text100       ;DataClassification=ToBeClassified }
+    { 202 ;   ;Attribute 2         ;Text100       ;DataClassification=ToBeClassified }
+    { 203 ;   ;Attribute 3         ;Text100       ;DataClassification=ToBeClassified }
+    { 204 ;   ;Attribute 4         ;Text100       ;DataClassification=ToBeClassified }
+    { 205 ;   ;Attribute 5         ;Text100       ;DataClassification=ToBeClassified }
+    { 206 ;   ;Attribute 6         ;Text100       ;DataClassification=ToBeClassified }
+    { 207 ;   ;Attribute 7         ;Text100       ;DataClassification=ToBeClassified }
+    { 208 ;   ;Attribute 8         ;Text100       ;DataClassification=ToBeClassified }
+    { 209 ;   ;Attribute 9         ;Text100       ;DataClassification=ToBeClassified }
+    { 210 ;   ;Attribute 10        ;Text100       ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;Company Name,Record Type,Record No,Record Sub Type,Record Sub No;
+                                                   Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

@@ -1,0 +1,35 @@
+OBJECT Table 50010 DFX User
+{
+  OBJECT-PROPERTIES
+  {
+    Date=31-03-21;
+    Time=16:06:25;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;User ID             ;Code50        ;DataClassification=ToBeClassified }
+    { 2   ;   ;Resource No.        ;Code20        ;DataClassification=ToBeClassified }
+    { 10  ;   ;BC User             ;Boolean       ;DataClassification=ToBeClassified }
+    { 50  ;   ;First Partition Code;Text500       ;DataClassification=ToBeClassified }
+    { 51  ;   ;Second Partition Code;Text500      ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;User ID                                 ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
