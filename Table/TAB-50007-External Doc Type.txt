@@ -1,0 +1,46 @@
+OBJECT Table 50007 External Doc Type
+{
+  OBJECT-PROPERTIES
+  {
+    Date=21-06-21;
+    Time=14:03:21;
+    Modified=Yes;
+    Version List=DFX Suite-1;
+  }
+  PROPERTIES
+  {
+    LookupPageID=Page9070343;
+    DrillDownPageID=Page9070343;
+  }
+  FIELDS
+  {
+    { 1   ;   ;NAV Doc Type        ;Code10        ;TableRelation="Correspondence Doc Type";
+                                                   NotBlank=Yes }
+    { 2   ;   ;NAV Doc Type Description;Text75    ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Doc Type".Type WHERE (Code=FIELD(NAV Doc Type)));
+                                                   Editable=No }
+    { 10  ;   ;External Doc Type   ;Text150       ;OnValidate=VAR
+                                                                ExtDocType@1000000000 : Record 50007;
+                                                              BEGIN
+                                                                ExtDocType.SETFILTER("NAV Doc Type",'<>%1',"NAV Doc Type");
+                                                                ExtDocType.SETFILTER("External Doc Type",'@' + "External Doc Type");
+                                                                IF NOT ExtDocType.ISEMPTY THEN
+                                                                  ERROR('LaserFiche Doc type is already defined');
+                                                              END;
+                                                               }
+  }
+  KEYS
+  {
+    {    ;NAV Doc Type                            ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

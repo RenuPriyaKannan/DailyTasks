@@ -1,0 +1,144 @@
+OBJECT Table 50013 Client Details Line
+{
+  OBJECT-PROPERTIES
+  {
+    Date=17-06-21;
+    Time=11:28:12;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Master Client  No.  ;Code20        ;DataClassification=ToBeClassified }
+    { 2   ;   ;Client/Entity No.   ;Code20        ;DataClassification=ToBeClassified }
+    { 3   ;   ;Type                ;Option        ;OnValidate=BEGIN
+                                                                {
+                                                                IF ( xRec.Type <> Type ) AND ( "Portfolio No." <> '' ) THEN
+                                                                  VALIDATE("No.",'');
+                                                                }
+                                                              END;
+
+                                                   DataClassification=ToBeClassified;
+                                                   OptionString=Investment,Property,Miscellaneous Asset,Bank,Loan,Agent Account,Yacht,Aviation,Intellectual Property,Life Assurance,Customer,Vendor,FX Contract,Director,Shareholder,Banker,Auditor,Secretary,Settlor,Beneficiary,Trustee,ChairMan,Protector,Power of Attouney,Alternate Director,Entity,Invoice,Investment Manager }
+    { 4   ;   ;No.                 ;Code20        ;ValidateTableRelation=No;
+                                                   DataClassification=ToBeClassified }
+    { 5   ;   ;Account Type        ;Option        ;OnValidate=BEGIN
+                                                                {
+                                                                IF ( xRec.Type <> Type ) AND ( "Portfolio No." <> '' ) THEN
+                                                                  VALIDATE("No.",'');
+                                                                  }
+                                                              END;
+
+                                                   DataClassification=ToBeClassified;
+                                                   OptionString=Investment,Property,Miscellaneous Asset,Bank,Loan,Agent Account,,,,Yacht,Aviation,Intellectual Property,Life Assurance,Customer,Vendor,FX Contract }
+    { 6   ;   ;Account No.         ;Code20        ;OnValidate=VAR
+                                                                _ClientBankAccountRec@1000000000 : Record 9068624 SECURITYFILTERING(Ignored);
+                                                              BEGIN
+                                                                {
+                                                                CASE Type OF
+                                                                  Type::Investment :
+                                                                    IF ClientInvestment.GET("Client No.","No.") THEN BEGIN
+                                                                      Description := ClientInvestment.Description;
+                                                                      Name := ClientInvestment.Name;
+                                                                      "Area Code" := ClientInvestment."Area Code";
+                                                                      "Investment Code" := ClientInvestment."Investment Code";
+                                                                      "SEDOL Code" := ClientInvestment."SEDOL Code";
+                                                                      "ISIN Code" := ClientInvestment."ISIN Code";
+                                                                      "CUSIP Code" := ClientInvestment."CUSIP Code";
+                                                                    END ELSE BEGIN
+                                                                      Description := '';
+                                                                      Name := '';
+                                                                    END;
+                                                                  Type::Property, Type::"Miscellaneous Asset", Type::Yacht, Type::Aviation,
+                                                                   Type::"Intellectual Property" ,Type::"Life Assurance":
+                                                                    IF ClientProperty.GET("Client No.","No.") THEN BEGIN
+                                                                      Description := ClientProperty.Description;
+                                                                      Name := ClientProperty.Name;
+                                                                    END ELSE BEGIN
+                                                                      Description := '';
+                                                                      Name := '';
+                                                                    END;
+                                                                  Type::Bank, Type::Loan, Type::"Agent Account" :
+                                                                    IF _ClientBankAccountRec.GET("Client No.","No.") THEN BEGIN
+                                                                      Description := COPYSTR(_ClientBankAccountRec.Description, 1, MAXSTRLEN(Description));
+                                                                      Name := _ClientBankAccountRec.Name;
+                                                                    END ELSE BEGIN
+                                                                      Description := '';
+                                                                      Name := '';
+                                                                    END;
+                                                                END;
+                                                                }
+                                                              END;
+
+                                                   DataClassification=ToBeClassified;
+                                                   NotBlank=Yes }
+    { 7   ;   ;Account Balance     ;Decimal       ;DataClassification=ToBeClassified;
+                                                   Editable=Yes }
+    { 8   ;   ;Account Balance (LCY);Decimal      ;DataClassification=ToBeClassified;
+                                                   Editable=Yes }
+    { 9   ;   ;Account Currency    ;Code10        ;DataClassification=ToBeClassified;
+                                                   Editable=Yes }
+    { 33  ;   ;Tax Code            ;Code10        ;TableRelation="Tax Codes";
+                                                   DataClassification=ToBeClassified }
+    { 34  ;   ;Tax Return Country Code;Code10     ;TableRelation="Tax Code Country Details"."Country Code" WHERE (Tax Code=FIELD(Tax Code));
+                                                   DataClassification=ToBeClassified }
+    { 35  ;   ;Tax Name            ;Text30        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Tax Codes".Name WHERE (Code=FIELD(Tax Code))) }
+    { 36  ;   ;Tax Description     ;Text50        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Tax Codes".Description WHERE (Code=FIELD(Tax Code))) }
+    { 37  ;   ;TIN Type            ;Code20        ;TableRelation="TIN Types"."TIN Type" WHERE (Country Code=FIELD(Tax Return Country Code));
+                                                   DataClassification=ToBeClassified }
+    { 38  ;   ;TIN                 ;Code20        ;OnValidate=VAR
+                                                                _TaxCodeValidMgmt@1000000000 : Codeunit 9068618;
+                                                              BEGIN
+                                                              END;
+
+                                                   DataClassification=ToBeClassified }
+    { 39  ;   ;AB. Adjusted Amount ;Decimal       ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Account Balance Adjusted Amount;
+                                                   Editable=Yes }
+    { 40  ;   ;Reporting Currency  ;Code10        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Tax Code Country Details"."Tax Reporting Currency" WHERE (Tax Code=FIELD(Tax Code),
+                                                                                                                                 Country Code=FIELD(Tax Return Country Code)));
+                                                   Editable=No }
+    { 41  ;   ;Client Name         ;Text100       ;DataClassification=ToBeClassified }
+    { 42  ;   ;Client/Entity Name  ;Text100       ;DataClassification=ToBeClassified }
+    { 43  ;   ;Portfolio No.       ;Code20        ;DataClassification=ToBeClassified }
+    { 44  ;   ;Registered No.      ;Text40        ;DataClassification=ToBeClassified }
+    { 45  ;   ;Incorporated Date   ;Date          ;DataClassification=ToBeClassified }
+    { 46  ;   ;Incorporated Country;Text100       ;DataClassification=ToBeClassified }
+    { 47  ;   ;Address             ;Text50        ;DataClassification=ToBeClassified }
+    { 48  ;   ;Address 2           ;Text50        ;DataClassification=ToBeClassified }
+    { 49  ;   ;City                ;Text50        ;DataClassification=ToBeClassified }
+    { 50  ;   ;County              ;Text50        ;DataClassification=ToBeClassified;
+                                                   CaptionML=[ENG=County;
+                                                              ENA=State] }
+    { 51  ;   ;Country             ;Text30        ;TableRelation=Country/Region.Code;
+                                                   DataClassification=ToBeClassified }
+    { 52  ;   ;Post Code           ;Code20        ;TableRelation="Post Code";
+                                                   ValidateTableRelation=No;
+                                                   TestTableRelation=No;
+                                                   DataClassification=ToBeClassified }
+    { 53  ;   ;Phone No.           ;Text30        ;DataClassification=ToBeClassified }
+    { 54  ;   ;Fax No.             ;Text30        ;DataClassification=ToBeClassified }
+    { 55  ;   ;E-mail              ;Text80        ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;Master Client  No.,Client/Entity No.,Type;
+                                                   Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

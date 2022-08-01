@@ -1,0 +1,53 @@
+OBJECT Table 50018 WSID
+{
+  OBJECT-PROPERTIES
+  {
+    Date=24-03-22;
+    Time=13:31:27;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Type                ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=,Client,Entity }
+    { 2   ;   ;ClientNo/EntityNo   ;Code20        ;TableRelation=IF (Type=CONST(Client)) Client."Client No."
+                                                                 ELSE IF (Type=CONST(Entity)) Entity."Entity No.";
+                                                   OnValidate=VAR
+                                                                ClientRec@1000000000 : Record 9068500;
+                                                                EntityRec@1000000001 : Record 9068505;
+                                                              BEGIN
+                                                                CASE Type OF
+                                                                Type::Client : BEGIN
+                                                                ClientRec.GET("ClientNo/EntityNo");
+                                                                WSID := ClientRec.Name;
+                                                                END;
+                                                                Type::Entity : BEGIN
+                                                                EntityRec.GET("ClientNo/EntityNo");
+                                                                WSID := EntityRec."Name 2" + ' '+ EntityRec.Name;
+                                                                END
+                                                                END;
+                                                              END;
+
+                                                   DataClassification=ToBeClassified }
+    { 3   ;   ;WSID                ;Text100        }
+    { 4   ;   ;WebPageLink         ;Text250       ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;Type,ClientNo/EntityNo                  ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

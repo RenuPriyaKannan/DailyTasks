@@ -1,0 +1,90 @@
+OBJECT Table 50019 API Log
+{
+  OBJECT-PROPERTIES
+  {
+    Date=21-07-22;
+    Time=15:28:09;
+    Modified=Yes;
+    Version List=DFX;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Entry No.           ;Integer       ;AutoIncrement=Yes;
+                                                   DataClassification=ToBeClassified }
+    { 2   ;   ;API                 ;Text100       ;DataClassification=ToBeClassified }
+    { 3   ;   ;API URL             ;Text250       ;DataClassification=ToBeClassified }
+    { 4   ;   ;Record Id           ;RecordID      ;DataClassification=ToBeClassified }
+    { 5   ;   ;Record Type         ;Text50        ;DataClassification=ToBeClassified }
+    { 6   ;   ;Record No.          ;Code20        ;DataClassification=ToBeClassified }
+    { 7   ;   ;Created Date        ;DateTime      ;DataClassification=ToBeClassified }
+    { 8   ;   ;Status              ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=Failure,Success }
+    { 9   ;   ;Description         ;Text250       ;DataClassification=ToBeClassified }
+    { 10  ;   ;UserID              ;Text100       ;TableRelation=User."User Name";
+                                                   ValidateTableRelation=No;
+                                                   DataClassification=ToBeClassified }
+    { 1000;   ;Name                ;Text100       ;DataClassification=ToBeClassified;
+                                                   Description=//Partition code change }
+    { 1001;   ;OldPartitionCode    ;Text250       ;DataClassification=ToBeClassified }
+    { 1002;   ;NewPartitionCode    ;Text250       ;DataClassification=ToBeClassified }
+    { 1003;   ;Function            ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=Insert,Delete,Modify,Rename }
+    { 1004;   ;Flag                ;Boolean       ;DataClassification=ToBeClassified }
+    { 1005;   ;OldPartitionGroup   ;Text250       ;DataClassification=ToBeClassified }
+    { 1006;   ;NewPartitionGroup   ;Text250       ;DataClassification=ToBeClassified }
+    { 2000;   ;OldName             ;Text250       ;DataClassification=ToBeClassified;
+                                                   Description=//Entity Name Change }
+    { 2001;   ;NewName             ;Text250       ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;Entry No.                               ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    PROCEDURE LogEntries@100000000(pAPI@100000000 : Text;pAPIURL@100000001 : Text;pRecordType@100000002 : Text;"pRecordNo."@100000003 : Code[20];pStatus@100000004 : Boolean;pErrorMsg@100000005 : Text[250];pOldName@100000006 : Text;pNewName@100000009 : Text;POldPartitionCode@100000010 : Text;PNewPartitionCode@100000011 : Text;POldPartitionGroup@100000013 : Text;PNewPartitionGroup@100000012 : Text);
+    VAR
+      ErrorLog@100000007 : Record 50019;
+      ErrorLog1@100000008 : Record 50019;
+    BEGIN
+      ErrorLog.INIT;
+
+
+      ErrorLog.API := pAPI;
+      ErrorLog."Created Date" := CREATEDATETIME(TODAY,TIME);
+      ErrorLog.UserID := UserID;
+      ErrorLog."Record Type" := pRecordType;
+      ErrorLog."Record No." := "pRecordNo.";
+      ErrorLog."API URL" := pAPIURL;
+      ErrorLog.OldName := pOldName;
+      ErrorLog.NewName := pNewName;
+      ErrorLog.OldPartitionCode := POldPartitionCode;
+      ErrorLog.NewPartitionCode := PNewPartitionCode;
+      ErrorLog.OldPartitionGroup := POldPartitionGroup;
+      ErrorLog.NewPartitionGroup := PNewPartitionGroup;
+        IF pStatus THEN BEGIN
+          ErrorLog.Status := ErrorLog.Status::Success;
+          ErrorLog.Description := pErrorMsg;//'Record - ' + ErrorLog."Record Type" + ' - ' + ErrorLog."Record No." + ' - ' + FORMAT(ErrorLog.Status);
+        END
+        ELSE BEGIN
+          ErrorLog.Status := ErrorLog.Status::Failure;
+          ErrorLog.Description := pErrorMsg;//GETLASTERRORTEXT();
+        END;
+
+        IF ErrorLog1.FINDLAST THEN
+          ErrorLog."Entry No." := ErrorLog1."Entry No." + 1;
+       ErrorLog.INSERT(TRUE);
+    END;
+
+    BEGIN
+    END.
+  }
+}
+

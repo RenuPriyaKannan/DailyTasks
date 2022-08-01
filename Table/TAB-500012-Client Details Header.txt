@@ -1,0 +1,78 @@
+OBJECT Table 50012 Client Details Header
+{
+  OBJECT-PROPERTIES
+  {
+    Date=17-06-21;
+    Time=11:27:54;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Master Client  No.  ;Code20        ;DataClassification=ToBeClassified }
+    { 2   ;   ;Client No.          ;Code20        ;DataClassification=ToBeClassified }
+    { 3   ;   ;Windows Security ID ;Text119       ;DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Windows Security ID;
+                                                              ENG=Windows Security ID] }
+    { 4   ;   ;Client  Name        ;Text100       ;DataClassification=ToBeClassified }
+    { 5   ;   ;Master Client Name  ;Text100       ;DataClassification=ToBeClassified }
+    { 6   ;   ;Registered No.      ;Text40        ;DataClassification=ToBeClassified }
+    { 7   ;   ;Incorporated Date   ;Date          ;DataClassification=ToBeClassified }
+    { 8   ;   ;Number of Shares/Units;Integer     ;DataClassification=ToBeClassified }
+    { 9   ;   ;Address             ;Text50         }
+    { 10  ;   ;Address 2           ;Text50         }
+    { 11  ;   ;City                ;Text50         }
+    { 12  ;   ;County              ;Text50        ;CaptionML=[ENG=County;
+                                                              ENA=State] }
+    { 13  ;   ;Country             ;Text30        ;TableRelation=Country/Region.Code }
+    { 14  ;   ;Post Code           ;Code20        ;TableRelation="Post Code";
+                                                   ValidateTableRelation=No;
+                                                   TestTableRelation=No }
+    { 15  ;   ;Phone No.           ;Text30         }
+    { 16  ;   ;Fax No.             ;Text30         }
+    { 17  ;   ;E-mail              ;Text80         }
+    { 18  ;   ;Home Page           ;Text80         }
+    { 19  ;   ;Telex No.           ;Text20         }
+    { 20  ;   ;Bank Account No     ;Text30        ;DataClassification=ToBeClassified }
+    { 21  ;   ;Meeting No.         ;Integer       ;DataClassification=ToBeClassified;
+                                                   Editable=No }
+    { 22  ;   ;Meeting Date        ;Date          ;DataClassification=ToBeClassified }
+    { 23  ;   ;Meeting Time        ;Time          ;DataClassification=ToBeClassified }
+    { 24  ;   ;Meeting Type        ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=[ ,Directors,Shareholders] }
+    { 25  ;   ;Meeting Address     ;Code10        ;TableRelation="Office Address".Code;
+                                                   DataClassification=ToBeClassified }
+    { 26  ;   ;No. of Attendees    ;Integer       ;Editable=Yes }
+    { 27  ;   ;Quorom Met          ;Boolean       ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Quorom Met? }
+    { 28  ;   ;No. of Attendees at Loc;Integer    ;CaptionML=ENU=No. of Attendees at Meeting Location;
+                                                   Editable=Yes }
+    { 29  ;   ;Resolutions Approved;Integer       ;Editable=Yes }
+    { 30  ;   ;Date Minutes Signed ;Date          ;DataClassification=ToBeClassified }
+    { 31  ;   ;Jurisdiction        ;Code20        ;Editable=Yes }
+    { 32  ;   ;Status              ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=In Progress,Signed Off }
+    { 33  ;   ;Settked on          ;Date          ;DataClassification=ToBeClassified }
+    { 34  ;   ;Initial Fund        ;Decimal       ;DataClassification=ToBeClassified }
+    { 35  ;   ;Incorporated Country;Text100       ;DataClassification=ToBeClassified }
+    { 50  ;   ;First Partition Code;Code10        ;DataClassification=ToBeClassified }
+    { 51  ;   ;Second Partition Code;Code10       ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;Master Client  No.,Client No.           ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

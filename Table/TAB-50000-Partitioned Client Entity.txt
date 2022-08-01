@@ -1,0 +1,104 @@
+OBJECT Table 50000 Partitioned Client Entity
+{
+  OBJECT-PROPERTIES
+  {
+    Date=25-08-21;
+    Time=10:55:32;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Table Name          ;Code10        ;DataClassification=ToBeClassified }
+    { 2   ;   ;USER ID             ;Code50        ;DataClassification=ToBeClassified }
+    { 3   ;   ;Client No._Entity No.;Code20       ;DataClassification=ToBeClassified }
+    { 4   ;   ;First Partition Code;Code100       ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=First Partition Code }
+    { 5   ;   ;Second Partition Code;Code100      ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Second Partition Code }
+    { 1001;   ;Client Type         ;Code10        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Type }
+    { 1002;   ;Client Name         ;Text50        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Name }
+    { 1003;   ;CL Country of Incorporation;Code10 ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Country of Incorporation }
+    { 1004;   ;CL Date of Incorporation;Date      ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Date of Incorporation }
+    { 1005;   ;Registered Number   ;Text40        ;DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Registered Number;
+                                                              ENG=Registered Number;
+                                                              ENA=ABN] }
+    { 1006;   ;Currency Code       ;Code10        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Currency Code;
+                                                   Editable=No }
+    { 1007;   ;Administrative Office;Code10       ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Administrative Office }
+    { 1008;   ;Registered Office   ;Code10        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Registered Office }
+    { 1009;   ;Global Dimension 1 Code;Code20     ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Global Dimension 1 Code }
+    { 1010;   ;ClientAnalysisA     ;Code20        ;DataClassification=ToBeClassified;
+                                                   CaptionClass='50,1,A' }
+    { 1011;   ;ClientAnalysisB     ;Code20        ;DataClassification=ToBeClassified;
+                                                   CaptionClass='50,1,B' }
+    { 1012;   ;ClientAnalysisC     ;Code20        ;DataClassification=ToBeClassified;
+                                                   CaptionClass='50,1,C' }
+    { 1013;   ;ClientAnalysisD     ;Code20        ;DataClassification=ToBeClassified;
+                                                   CaptionClass='50,1,D' }
+    { 1014;   ;ClientAnalysisE     ;Code20        ;DataClassification=ToBeClassified;
+                                                   CaptionClass='50,1,E' }
+    { 1015;   ;ClientAnalysisF     ;Code20        ;DataClassification=ToBeClassified;
+                                                   CaptionClass='50,1,F' }
+    { 2001;   ;EN Name             ;Text50        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Name }
+    { 2002;   ;Date of Birth       ;Date          ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Date of Birth }
+    { 2003;   ;Nationality         ;Code10        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Nationality }
+    { 2004;   ;Profession          ;Code10        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Profession }
+    { 2005;   ;Domicile            ;Code10        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Domicile }
+    { 2006;   ;Residence           ;Code10        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Residence }
+    { 2007;   ;Title               ;Text30        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Title }
+    { 2008;   ;Name 2              ;Text50        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Name 2 }
+    { 2009;   ;Entity Type         ;Option        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Entity Type;
+                                                   OptionString=[ ,Bank] }
+    { 2010;   ;Marital Status      ;Option        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Marital Status;
+                                                   OptionString=[ ,Single,Married,Separated,Divorced,Widowed,Civil Partnership,Engaged,Unknown] }
+    { 2011;   ;Gender              ;Option        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Gender;
+                                                   OptionString=[ ,Male,Female] }
+    { 2012;   ;Initials            ;Text5         ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Initials }
+    { 2013;   ;Personal/Corporate  ;Option        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Personal/Corporate;
+                                                   OptionString=Personal,Corporate }
+    { 2014;   ;EN Country of Incorporation;Code10 ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Country of Incorporation }
+    { 2015;   ;EN Jurisdiction     ;Code10        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Jurisdiction }
+  }
+  KEYS
+  {
+    {    ;Table Name,USER ID,Client No._Entity No.;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

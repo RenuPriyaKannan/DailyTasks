@@ -1,0 +1,52 @@
+OBJECT Table 50008 External Doc Sub Type
+{
+  OBJECT-PROPERTIES
+  {
+    Date=26-07-21;
+    Time=21:53:24;
+    Modified=Yes;
+    Version List=DFX Suite-1;
+  }
+  PROPERTIES
+  {
+    LookupPageID=Page9070344;
+    DrillDownPageID=Page9070344;
+  }
+  FIELDS
+  {
+    { 1   ;   ;NAV Doc Type        ;Code10        ;TableRelation="Correspondence Doc Type";
+                                                   OnValidate=VAR
+                                                                ExtDocType@1000000000 : Record 50007;
+                                                              BEGIN
+                                                                IF ExtDocType.GET("NAV Doc Type") THEN
+                                                                  "External Doc Type" := ExtDocType."External Doc Type";
+                                                              END;
+
+                                                   NotBlank=Yes }
+    { 2   ;   ;NAV Doc Sub Type    ;Code20        ;TableRelation="Document Type Sub Type"."Document Sub Type" WHERE (Document Type=FIELD(NAV Doc Type));
+                                                   NotBlank=Yes }
+    { 11  ;   ;NAV Doc Type Description;Text75    ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Doc Type".Type WHERE (Code=FIELD(NAV Doc Type)));
+                                                   Editable=No }
+    { 12  ;   ;NAV Doc Sub Type Description;Text75;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Document Type Sub Type"."Document Sub Type Description" WHERE (Document Type=FIELD(NAV Doc Type),
+                                                                                                                                      Document Sub Type=FIELD(NAV Doc Sub Type)));
+                                                   Editable=No }
+    { 20  ;   ;External Doc Type   ;Text150        }
+    { 30  ;   ;External Sub Doc Type;Text150       }
+  }
+  KEYS
+  {
+    {    ;NAV Doc Type,NAV Doc Sub Type           ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

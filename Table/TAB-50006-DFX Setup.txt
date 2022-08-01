@@ -1,0 +1,60 @@
+OBJECT Table 50006 DFX Setup
+{
+  OBJECT-PROPERTIES
+  {
+    Date=20-07-22;
+    Time=20:47:39;
+    Modified=Yes;
+    Version List=NAVLITE;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Primary Key         ;Code10        ;DataClassification=ToBeClassified }
+    { 2   ;   ;Create/Update Contact;Boolean      ;DataClassification=ToBeClassified }
+    { 3   ;   ;Update URL          ;Text250       ;DataClassification=ToBeClassified }
+    { 4   ;   ;Create URL          ;Text250       ;DataClassification=ToBeClassified }
+    { 5   ;   ;Hapi Key            ;Text250       ;DataClassification=ToBeClassified }
+    { 6   ;   ;Resource Group No.  ;Text30        ;DataClassification=ToBeClassified }
+    { 7   ;   ;Comapny Name        ;Text30        ;DataClassification=ToBeClassified }
+    { 10  ;   ;DFX Client          ;Code50        ;DataClassification=ToBeClassified }
+    { 100 ;   ;LF API URL          ;Text100       ;DataClassification=ToBeClassified }
+    { 101 ;   ;Elastic Serarch API URL;Text100    ;DataClassification=ToBeClassified }
+    { 102 ;   ;API User ID         ;Text50        ;DataClassification=ToBeClassified }
+    { 103 ;   ;API Password        ;Text30        ;ExtendedDatatype=Masked;
+                                                   DataClassification=ToBeClassified }
+    { 104 ;   ;Repository          ;Text100       ;DataClassification=ToBeClassified }
+    { 105 ;   ;Client Code         ;Code20        ;DataClassification=ToBeClassified }
+    { 106 ;   ;Partition Code URL  ;Text200       ;DataClassification=ToBeClassified }
+    { 107 ;   ;Name Change URL     ;Text250       ;DataClassification=ToBeClassified }
+    { 200 ;   ;JFSC Entity Type    ;Text250       ;DataClassification=ToBeClassified }
+    { 201 ;   ;HMRC Entity Type    ;Text30        ;DataClassification=ToBeClassified }
+    { 202 ;   ;JFSC_HMRC Entity Type;Text250      ;DataClassification=ToBeClassified }
+    { 300 ;   ;VEGA CreateCase     ;Text100       ;DataClassification=ToBeClassified }
+    { 301 ;   ;VEGA GETStatus      ;Text100       ;DataClassification=ToBeClassified }
+    { 302 ;   ;VEGA UserID         ;Text50        ;DataClassification=ToBeClassified }
+    { 303 ;   ;VEGA Password       ;Text50        ;ExtendedDatatype=Masked;
+                                                   DataClassification=ToBeClassified }
+    { 304 ;   ;Entity Type Allowed ;Text250       ;DataClassification=ToBeClassified }
+    { 305 ;   ;Entity Type Not Allowed;Text250    ;DataClassification=ToBeClassified }
+    { 306 ;   ;Entity Type Allowed Cont.;Text250  ;DataClassification=ToBeClassified }
+    { 307 ;   ;Entity Type Not Allowed Cont.;Text250;
+                                                   DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;Primary Key                             ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

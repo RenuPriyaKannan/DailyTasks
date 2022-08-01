@@ -1,0 +1,71 @@
+OBJECT Table 50002 Entity Details
+{
+  OBJECT-PROPERTIES
+  {
+    Date=16-11-20;
+    Time=15:51:21;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Entity No.          ;Code20        ;DataClassification=ToBeClassified }
+    { 2   ;   ;Entry No.           ;Integer       ;DataClassification=ToBeClassified }
+    { 10  ;   ;Name                ;Text50        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Type }
+    { 20  ;   ;Name 2              ;Text50        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Name }
+    { 30  ;   ;Personal/Corporate  ;Option        ;CaptionML=ENU=Personal/Corporate;
+                                                   OptionString=Personal,Corporate }
+    { 40  ;   ;Jurisdiction        ;Code10        ;CaptionML=ENU=Jurisdiction }
+    { 41  ;   ;Residence           ;Code10        ;CaptionML=ENU=Proper law }
+    { 500 ;   ;Passport number     ;Code30        ;DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Passport/ID Card Number;
+                                                              ENG=Passport/ID Card Number] }
+    { 510 ;   ;Passport/ID Issue Date;Date        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Passport/ID Issue Date }
+    { 520 ;   ;Passport expiry date;Date          ;DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Passport/ID Card Expiry Date;
+                                                              ENG=Passport/ID Card Expiry Date] }
+    { 530 ;   ;Passport country of issue;Code10   ;TableRelation=Country/Region;
+                                                   DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Passport/ID Card Country of Issue;
+                                                              ENG=Passport/ID Card Country of Issue] }
+    { 550 ;   ;Passport/ID Number (2);Code30      ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Passport/ID Card Number (2) }
+    { 560 ;   ;Passport/ID Country (2);Code10     ;TableRelation=Country/Region;
+                                                   DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Passport/ID Card Country of Issue (2) }
+    { 570 ;   ;Passport/ID Issue Date (2);Date    ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Passport/ID Issue Date (2) }
+    { 580 ;   ;Passport/ID Expiry Date (2);Date   ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Passport/ID Card Expiry Date (2) }
+    { 1000;   ;FATCA Classification;Code20        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=FATCA Account Classification }
+    { 1010;   ;CRS Classification  ;Code20        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=CRS Account Classification }
+    { 1020;   ;Tax Code            ;Code10        ;DataClassification=ToBeClassified }
+    { 1030;   ;Tax Return Country Code;Code10     ;DataClassification=ToBeClassified }
+    { 1040;   ;TIN Type            ;Code20        ;DataClassification=ToBeClassified }
+    { 1050;   ;TIN                 ;Code20        ;DataClassification=ToBeClassified }
+    { 1060;   ;Tax Category        ;Code20        ;DataClassification=ToBeClassified }
+    { 1061;   ;WSID                ;Text100       ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;Entity No.,Entry No.                    ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
