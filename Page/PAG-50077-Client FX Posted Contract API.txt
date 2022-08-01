@@ -1,0 +1,88 @@
+OBJECT Page 50077 Client FX Posted Contract API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=21-01-21;
+    Time=16:40:25;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    InsertAllowed=No;
+    DeleteAllowed=No;
+    ModifyAllowed=Yes;
+    SourceTable=Table9068870;
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1040000;1;Group     ;
+                Editable=FALSE;
+                GroupType=Repeater }
+
+    { 1040001;2;Field     ;
+                SourceExpr="Document No." }
+
+    { 1040036;2;Field     ;
+                SourceExpr="Deal Reference" }
+
+    { 1040003;2;Field     ;
+                SourceExpr="Contract Type" }
+
+    { 1040005;2;Field     ;
+                SourceExpr="Portfolio No." }
+
+    { 1040007;2;Field     ;
+                SourceExpr=Description }
+
+    { 1040009;2;Field     ;
+                SourceExpr=Status }
+
+    { 1040011;2;Field     ;
+                SourceExpr="Dealing Date" }
+
+    { 1040013;2;Field     ;
+                SourceExpr="Maturity Date" }
+
+    { 1040015;2;Field     ;
+                Name=Status2;
+                CaptionML=ENU=Status;
+                SourceExpr=Status }
+
+    { 1040017;2;Field     ;
+                SourceExpr="Sell Currency Code" }
+
+    { 1040038;2;Field     ;
+                SourceExpr="Sell Account No." }
+
+    { 1040019;2;Field     ;
+                SourceExpr="Sell Amount" }
+
+    { 1040021;2;Field     ;
+                SourceExpr="Buy Currency Code" }
+
+    { 1040040;2;Field     ;
+                SourceExpr="Buy Account No." }
+
+    { 1040023;2;Field     ;
+                SourceExpr="Buy Amount" }
+
+    { 1040025;2;Field     ;
+                SourceExpr="Exchange Rate" }
+
+    { 1040027;2;Field     ;
+                SourceExpr=Reciprocal }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

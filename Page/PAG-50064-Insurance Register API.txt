@@ -1,0 +1,133 @@
+OBJECT Page 50064 Insurance Register API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=15-01-21;
+    Time=14:11:34;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9068704;
+    PageType=List;
+    OnOpenPage=VAR
+                 ClientNo@1000000000 : Text;
+                 ApplicationSetup@1000000001 : Record 9068230;
+               BEGIN
+               END;
+
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                Editable=FALSE;
+                GroupType=Repeater }
+
+    { 1000000000;2;Field  ;
+                SourceExpr="Client No." }
+
+    { 1040020;2;Field     ;
+                DrillDown=No;
+                SourceExpr="Client Name" }
+
+    { 2   ;2   ;Field     ;
+                SourceExpr="Insurance Company" }
+
+    { 4   ;2   ;Field     ;
+                SourceExpr="Policy No." }
+
+    { 1000000002;2;Field  ;
+                SourceExpr=Status }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Cancelled Date";
+                Visible=FALSE }
+
+    { 6   ;2   ;Field     ;
+                SourceExpr="Next Premium Due" }
+
+    { 1000000004;2;Field  ;
+                CaptionML=ENU=Days Until Renewal;
+                Editable=FALSE }
+
+    { 8   ;2   ;Field     ;
+                SourceExpr="Cover Start" }
+
+    { 10  ;2   ;Field     ;
+                SourceExpr="Cover End" }
+
+    { 19  ;2   ;Field     ;
+                SourceExpr="Premium Payable By" }
+
+    { 21  ;2   ;Field     ;
+                SourceExpr=Broker }
+
+    { 23  ;2   ;Field     ;
+                SourceExpr="Noted Interest" }
+
+    { 25  ;2   ;Field     ;
+                SourceExpr="Letter of Undertaking Obtained" }
+
+    { 27  ;2   ;Field     ;
+                SourceExpr="Total Annual Premium Payable" }
+
+    { 1000000001;2;Field  ;
+                Description=TWM90.07#1;
+                SourceExpr="Total Ann. Premium Pay. (LCY)";
+                Visible=FALSE }
+
+    { 29  ;2   ;Field     ;
+                SourceExpr="Premium Currency" }
+
+    { 31  ;2   ;Field     ;
+                SourceExpr="Premium Frequency" }
+
+    { 35  ;2   ;Field     ;
+                SourceExpr="Insurance Company name" }
+
+    { 37  ;2   ;Field     ;
+                SourceExpr="Broker Name" }
+
+    { 1040016;2;Field     ;
+                SourceExpr="Asset Code" }
+
+    { 1040018;2;Field     ;
+                SourceExpr="Asset Name" }
+
+    { 1040000;2;Field     ;
+                SourceExpr=ClientAnalysisA }
+
+    { 1040002;2;Field     ;
+                SourceExpr=ClientAnalysisB }
+
+    { 1040004;2;Field     ;
+                SourceExpr=ClientAnalysisC }
+
+    { 1040006;2;Field     ;
+                SourceExpr=ClientAnalysisD }
+
+    { 1040008;2;Field     ;
+                SourceExpr=ClientAnalysisE }
+
+    { 1040010;2;Field     ;
+                SourceExpr=ClientAnalysisF }
+
+    { 1040012;2;Field     ;
+                SourceExpr="Global Dimension 1 Code" }
+
+    { 1040014;2;Field     ;
+                SourceExpr="Global Dimension 2 Code" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

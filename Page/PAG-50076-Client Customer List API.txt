@@ -1,0 +1,132 @@
+OBJECT Page 50076 Client Customer List API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=15-01-21;
+    Time=14:33:19;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9068602;
+    PageType=List;
+    OnOpenPage=VAR
+                 ClientNo@1000000000 : Text;
+                 ApplicationSetup@1000000001 : Record 9068230;
+               BEGIN
+               END;
+
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                GroupType=Repeater }
+
+    { 2   ;2   ;Field     ;
+                SourceExpr="No." }
+
+    { 4   ;2   ;Field     ;
+                SourceExpr=Name }
+
+    { 1000000002;2;Field  ;
+                SourceExpr=Balance }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="Balance (LCY)" }
+
+    { 1000000007;2;Field  ;
+                SourceExpr="Balance at Date" }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="Balance at Date (LCY)" }
+
+    { 54  ;2   ;Field     ;
+                SourceExpr="Post Code" }
+
+    { 1000000004;2;Field  ;
+                SourceExpr="Phone No." }
+
+    { 34  ;2   ;Field     ;
+                SourceExpr=Contact }
+
+    { 12  ;2   ;Field     ;
+                SourceExpr="Search Name" }
+
+    { 30  ;2   ;Field     ;
+                SourceExpr="Country Code" }
+
+    { 32  ;2   ;Field     ;
+                SourceExpr="Fax No." }
+
+    { 36  ;2   ;Field     ;
+                SourceExpr="Salesperson Code";
+                Visible=FALSE }
+
+    { 38  ;2   ;Field     ;
+                SourceExpr="Customer Posting Group";
+                Visible=FALSE }
+
+    { 56  ;2   ;Field     ;
+                SourceExpr="Gen. Bus. Posting Group";
+                Visible=FALSE }
+
+    { 52  ;2   ;Field     ;
+                CaptionML=[ENU=VAT Bus. Posting Group;
+                           ENG=VAT Bus. Posting Group;
+                           ENA=GST Bus. Posting Group];
+                SourceExpr="VAT Bus. Posting Group";
+                Visible=FALSE }
+
+    { 40  ;2   ;Field     ;
+                SourceExpr="Global Dimension 1 Code";
+                Visible=FALSE }
+
+    { 42  ;2   ;Field     ;
+                SourceExpr="Global Dimension 2 Code";
+                Visible=FALSE }
+
+    { 44  ;2   ;Field     ;
+                SourceExpr="Location Code";
+                Visible=TRUE }
+
+    { 46  ;2   ;Field     ;
+                SourceExpr="Price Group Code";
+                Visible=FALSE }
+
+    { 8   ;2   ;Field     ;
+                SourceExpr="Payment Terms Code";
+                Visible=FALSE }
+
+    { 61  ;2   ;Field     ;
+                SourceExpr="Reminder Terms Code";
+                Visible=FALSE }
+
+    { 48  ;2   ;Field     ;
+                SourceExpr="Fin. Charge Terms Code";
+                Visible=FALSE }
+
+    { 10  ;2   ;Field     ;
+                SourceExpr="Currency Code";
+                Visible=FALSE }
+
+    { 50  ;2   ;Field     ;
+                SourceExpr="Language Code";
+                Visible=FALSE }
+
+    { 1000000000;2;Field  ;
+                SourceExpr=Blocked;
+                Visible=FALSE }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

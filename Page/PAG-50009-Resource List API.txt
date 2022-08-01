@@ -1,0 +1,215 @@
+OBJECT Page 50009 Resource List API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=27-11-20;
+    Time=12:58:46;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    CaptionML=[ENU=Resources;
+               ENG=Resources];
+    ApplicationArea=#Jobs;
+    SourceTable=Table156;
+    PageType=List;
+    UsageCategory=Lists;
+    AdditionalSearchTermsML=[ENU=capacity,job,project;
+                             ENG=capacity,job,project];
+    CardPageID=Resource Card;
+    PromotedActionCategoriesML=[ENU=New,Process,Report,Resource,Navigate;
+                                ENG=New,Process,Report,Resource,Navigate];
+    OnOpenPage=VAR
+                 CRMIntegrationManagement@1000 : Codeunit 5330;
+                 ApplicationSetupManagement@1000000000 : Codeunit 9068230;
+                 ApplicationSetup@1000000001 : Record 9068230;
+               BEGIN
+               END;
+
+    OnAfterGetCurrRecord=VAR
+                           CRMCouplingManagement@1001 : Codeunit 5331;
+                         BEGIN
+                         END;
+
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                GroupType=Repeater }
+
+    { 2   ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the number of the involved entry or record, according to the specified number series.;
+                           ENG=Specifies the number of the involved entry or record, according to the specified number series.];
+                ApplicationArea=#Jobs;
+                SourceExpr="No." }
+
+    { 6   ;2   ;Field     ;
+                CaptionML=ENU=Surname;
+                ToolTipML=[ENU=Specifies a description of the resource.;
+                           ENG=Specifies a description of the resource.];
+                ApplicationArea=#Jobs;
+                SourceExpr=Name }
+
+    { 1000000000;2;Field  ;
+                CaptionML=[ENU=Forename(s);
+                           ENG=Forename(s)];
+                SourceExpr="Name 2" }
+
+    { 4   ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies whether the resource is a person or a machine.;
+                           ENG=Specifies whether the resource is a person or a machine.];
+                ApplicationArea=#Jobs;
+                SourceExpr=Type }
+
+    { 12  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the base unit used to measure the resource, such as hour, piece, or kilometer.;
+                           ENG=Specifies the base unit used to measure the resource, such as hour, piece, or kilometer.];
+                ApplicationArea=#Jobs;
+                SourceExpr="Base Unit of Measure" }
+
+    { 10  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the resource group that this resource is assigned to.;
+                           ENG=Specifies the resource group that this resource is assigned to.];
+                ApplicationArea=#Jobs;
+                SourceExpr="Resource Group No.";
+                Visible=FALSE }
+
+    { 1000000001;2;Field  ;
+                SourceExpr="Business Group";
+                Visible=false }
+
+    { 41  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the cost of one unit of the selected item or resource.;
+                           ENG=Specifies the cost of one unit of the selected item or resource.];
+                ApplicationArea=#Jobs;
+                SourceExpr="Direct Unit Cost";
+                Visible=FALSE }
+
+    { 43  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the percentage of the item's last purchase cost that includes indirect costs, such as freight that is associated with the purchase of the item.;
+                           ENG=Specifies the percentage of the item's last purchase cost that includes indirect costs, such as freight that is associated with the purchase of the item.];
+                ApplicationArea=#Jobs;
+                SourceExpr="Indirect Cost %";
+                Visible=FALSE }
+
+    { 14  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the cost of one unit of the item or resource on the line.;
+                           ENG=Specifies the cost of one unit of the item or resource on the line.];
+                ApplicationArea=#Jobs;
+                SourceExpr="Unit Cost" }
+
+    { 47  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the relationship between the Unit Cost, Unit Price, and Profit Percentage fields associated with this resource.;
+                           ENG=Specifies the relationship between the Unit Cost, Unit Price, and Profit Percentage fields associated with this resource.];
+                ApplicationArea=#Jobs;
+                SourceExpr="Price/Profit Calculation" }
+
+    { 45  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the profit margin that you want to sell the resource at. You can enter a profit percentage manually or have it entered according to the Price/Profit Calculation field;
+                           ENG=Specifies the profit margin that you want to sell the resource at. You can enter a profit percentage manually or have it entered according to the Price/Profit Calculation field];
+                ApplicationArea=#Jobs;
+                SourceExpr="Profit %" }
+
+    { 16  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the price of one unit of the item or resource. You can enter a price manually or have it entered according to the Price/Profit Calculation field on the related card.;
+                           ENG=Specifies the price of one unit of the item or resource. You can enter a price manually or have it entered according to the Price/Profit Calculation field on the related card.];
+                ApplicationArea=#Jobs;
+                SourceExpr="Unit Price" }
+
+    { 26  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the item's product type to link transactions made for this item with the appropriate general ledger account according to the general posting setup.;
+                           ENG=Specifies the item's product type to link transactions made for this item with the appropriate general ledger account according to the general posting setup.];
+                ApplicationArea=#Jobs;
+                SourceExpr="Gen. Prod. Posting Group" }
+
+    { 51  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the VAT specification of the involved item or resource to link transactions made for this record with the appropriate general ledger account according to the VAT posting setup.;
+                           ENG=Specifies the VAT specification of the involved item or resource to link transactions made for this record with the appropriate general ledger account according to the VAT posting setup.];
+                ApplicationArea=#Jobs;
+                SourceExpr="VAT Prod. Posting Group";
+                Visible=FALSE }
+
+    { 90  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies whether to limit access to data for the data subject during daily operations. This is useful, for example, when protecting data from changes while it is under privacy review.;
+                           ENG=Specifies whether to limit access to data for the data subject during daily operations. This is useful, for example, when protecting data from changes while it is under privacy review.];
+                ApplicationArea=#Jobs;
+                SourceExpr="Privacy Blocked";
+                Visible=FALSE }
+
+    { 8   ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies an alternate name that you can use to search for the record in question when you cannot remember the value in the Name field.;
+                           ENG=Specifies an alternate name that you can use to search for the record in question when you cannot remember the value in the Name field.];
+                ApplicationArea=#Jobs;
+                SourceExpr="Search Name" }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Authorisation Level";
+                Visible=false }
+
+    { 1000000009;2;Field  ;
+                SourceExpr="Ext. HR Employee No." }
+
+    { 1000000007;2;Field  ;
+                SourceExpr="External Reference No";
+                Visible=FALSE }
+
+    { 1000000015;2;Field  ;
+                SourceExpr="E-Mail";
+                Visible=FALSE }
+
+    { 1000000016;2;Field  ;
+                SourceExpr="Phone No.";
+                Visible=FALSE }
+
+    { 9   ;2   ;Field     ;
+                CaptionML=[ENU=Default Deferral Template;
+                           ENG=Default Deferral Template];
+                ToolTipML=[ENU=Specifies the default template that governs how to defer revenues and expenses to the periods when they occurred.;
+                           ENG=Specifies the default template that governs how to defer revenues and expenses to the periods when they occurred.];
+                ApplicationArea=#Jobs;
+                SourceExpr="Default Deferral Template Code" }
+
+    { 1000000020;2;Field  ;
+                Description=TWM90.07#1;
+                SourceExpr=Blocked;
+                Visible=FALSE }
+
+    { 1000000019;2;Field  ;
+                Description=TWM90.07#1;
+                SourceExpr="Employment Date";
+                Visible=FALSE }
+
+    { 1000000018;2;Field  ;
+                Description=TWM90.07#1;
+                SourceExpr="Employment End Date";
+                Visible=FALSE }
+
+    { 1000000024;2;Field  ;
+                SourceExpr="Resource Group Level";
+                Visible=False }
+
+    { 1000000017;2;Field  ;
+                Description=TWM90.07#1;
+                SourceExpr="Partition Group";
+                Visible=FALSE }
+
+    { 1000000021;2;Field  ;
+                SourceExpr="Entity No." }
+
+    { 1000000025;2;Field  ;
+                SourceExpr="Login User ID";
+                Visible=false }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

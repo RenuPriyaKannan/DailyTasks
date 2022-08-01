@@ -1,0 +1,194 @@
+OBJECT Page 50011 Contact List API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=13-07-22;
+    Time=13:27:16;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    CaptionML=[ENU=Contacts;
+               ENG=Contacts];
+    ApplicationArea=#Basic,#Suite,#Service;
+    InsertAllowed=Yes;
+    SourceTable=Table5050;
+    SourceTableView=SORTING(Company Name,Company No.,Type,Name);
+    PageType=List;
+    UsageCategory=Lists;
+    OnOpenPage=VAR
+                 CRMIntegrationManagement@1000 : Codeunit 5330;
+               BEGIN
+               END;
+
+    OnNewRecord=BEGIN
+                  IF xRec."Company No." <> '' THEN BEGIN
+                  //  Type := xRec.Type;
+                    "Company No." := xRec."Company No.";
+                  END;
+                END;
+
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                GroupType=Repeater }
+
+    { 1000000004;2;Field  ;
+                SourceExpr=Type }
+
+    { 2   ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the number of the involved entry or record, according to the specified number series.;
+                           ENG=Specifies the number of the involved entry or record, according to the specified number series.];
+                ApplicationArea=#All;
+                SourceExpr="No." }
+
+    { 4   ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the name of the contact. If the contact is a person, you can click the field to see the Name Details window.;
+                           ENG=Specifies the name of the contact. If the contact is a person, you can click the field to see the Name Details window.];
+                ApplicationArea=#All;
+                SourceExpr=Name }
+
+    { 1000000014;2;Field  ;
+                SourceExpr="Name 2" }
+
+    { 14  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the code of the salesperson who normally handles this contact.;
+                           ENG=Specifies the code of the salesperson who normally handles this contact.];
+                ApplicationArea=#Suite;
+                SourceExpr="Salesperson Code" }
+
+    { 1000000001;2;Field  ;
+                SourceExpr=Address }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Address 2" }
+
+    { 100000004;2;Field   ;
+                SourceExpr="Address 3" }
+
+    { 8   ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the country/region of the address.;
+                           ENG=Specifies the country/region of the address.];
+                ApplicationArea=#Basic,#Suite;
+                SourceExpr="Country/Region Code";
+                Visible=FALSE }
+
+    { 6   ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the postal code.;
+                           ENG=Specifies the postcode.];
+                ApplicationArea=#Basic,#Suite;
+                SourceExpr="Post Code";
+                Visible=FALSE }
+
+    { 1000000000;2;Field  ;
+                SourceExpr=City }
+
+    { 1000000003;2;Field  ;
+                SourceExpr=County }
+
+    { 10  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the contact's phone number.;
+                           ENG=Specifies the contact's phone number.];
+                ApplicationArea=#Basic,#Suite;
+                SourceExpr="Phone No." }
+
+    { 24  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the contact's mobile telephone number.;
+                           ENG=Specifies the contact's mobile telephone number.];
+                ApplicationArea=#Basic,#Suite;
+                SourceExpr="Mobile Phone No.";
+                Visible=FALSE }
+
+    { 48  ;2   ;Field     ;
+                ExtendedDatatype=E-Mail;
+                ToolTipML=[ENU=Specifies the contact's email.;
+                           ENG=Specifies the contact's email.];
+                ApplicationArea=#Basic,#Suite;
+                SourceExpr="E-Mail" }
+
+    { 12  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the contact's fax number.;
+                           ENG=Specifies the contact's fax number.];
+                ApplicationArea=#Basic,#Suite;
+                SourceExpr="Fax No.";
+                Visible=FALSE }
+
+    { 100000000;2;Field   ;
+                SourceExpr="Home Page" }
+
+    { 20  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the language that is used when translating specified text on documents to foreign business partner, such as an item description on an order confirmation.;
+                           ENG=Specifies the language that is used when translating specified text on documents to foreign business partner, such as an item description on an order confirmation.];
+                ApplicationArea=#Basic,#Suite;
+                SourceExpr="Language Code";
+                Visible=FALSE }
+
+    { 100000001;2;Field   ;
+                SourceExpr="VAT Registration No." }
+
+    { 18  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the currency code for the contact.;
+                           ENG=Specifies the currency code for the contact.];
+                ApplicationArea=#Suite;
+                SourceExpr="Currency Code";
+                Visible=FALSE }
+
+    { 100000002;2;Field   ;
+                SourceExpr="External ID" }
+
+    { 1000000010;2;Field  ;
+                SourceExpr="Date of Birth" }
+
+    { 100000003;2;Field   ;
+                SourceExpr="Date Created" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="Work Phone No." }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="Work Fax No." }
+
+    { 16  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies the territory code for the contact.;
+                           ENG=Specifies the territory code for the contact.];
+                ApplicationArea=#RelationshipMgmt;
+                SourceExpr="Territory Code" }
+
+    { 95  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies whether to limit access to data for the data subject during daily operations. This is useful, for example, when protecting data from changes while it is under privacy review.;
+                           ENG=Specifies whether to limit access to data for the data subject during daily operations. This is useful, for example, when protecting data from changes while it is under privacy review.];
+                ApplicationArea=#Basic,#Suite;
+                SourceExpr="Privacy Blocked";
+                Importance=Additional;
+                Visible=FALSE }
+
+    { 96  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies that the person's age is below the definition of adulthood as recognized by law. Data for minors is blocked until a parent or guardian of the minor provides parental consent. You unblock the data by selecting the Parental Consent Received check box.;
+                           ENG=Specifies that the person's age is below the definition of adulthood as recognised by law. Data for minors is blocked until a parent or guardian of the minor provides parental consent. You unblock the data by selecting the Parental Consent Received check box.];
+                ApplicationArea=#Basic,#Suite;
+                SourceExpr=Minor;
+                Importance=Additional;
+                Visible=FALSE }
+
+    { 97  ;2   ;Field     ;
+                ToolTipML=[ENU=Specifies that a parent or guardian of the minor has provided their consent to allow the minor to use this service. When this check box is selected, data for the minor can be processed.;
+                           ENG=Specifies that a parent or guardian of the minor has provided their consent to allow the minor to use this service. When this check box is selected, data for the minor can be processed.];
+                ApplicationArea=#Basic,#Suite;
+                SourceExpr="Parental Consent Received";
+                Importance=Additional;
+                Visible=FALSE }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

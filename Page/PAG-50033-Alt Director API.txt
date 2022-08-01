@@ -1,0 +1,78 @@
+OBJECT Page 50033 Alt Director API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=04-12-20;
+    Time=11:48:05;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    CaptionML=ENU=Alternate Directors;
+    SourceTable=Table9068670;
+    DelayedInsert=No;
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                GroupType=Repeater }
+
+    { 1000000000;2;Field  ;
+                SourceExpr="Client No." }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Client Name" }
+
+    { 11  ;2   ;Field     ;
+                SourceExpr=Type }
+
+    { 24  ;2   ;Field     ;
+                SourceExpr="Entity No." }
+
+    { 12  ;2   ;Field     ;
+                SourceExpr="Entity Name" }
+
+    { 27  ;2   ;Field     ;
+                SourceExpr="Entity Forename(s)" }
+
+    { 16  ;2   ;Field     ;
+                SourceExpr="Date Appointed" }
+
+    { 2   ;2   ;Field     ;
+                SourceExpr="Date Resigned" }
+
+    { 18  ;2   ;Field     ;
+                SourceExpr=Notes }
+
+    { 4   ;2   ;Field     ;
+                SourceExpr="Resignation Notes" }
+
+    { 1000000001;2;Field  ;
+                SourceExpr="Related Entity No." }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Related Entity Type" }
+
+    { 1000000004;2;Field  ;
+                SourceExpr="Date of Retirement" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="Entity Title" }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="Related Type" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

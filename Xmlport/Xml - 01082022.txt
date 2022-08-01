@@ -1,0 +1,186 @@
+OBJECT XMLport 50000 50000
+{
+  OBJECT-PROPERTIES
+  {
+    Date=12-03-20;
+    Time=15:47:58;
+    Modified=Yes;
+    Version List=;
+  }
+  PROPERTIES
+  {
+  }
+  ELEMENTS
+  {
+    { [{026DF295-DF33-4503-B203-EC898ABF4A00}];  ;Root                ;Element ;Text     }
+
+    { [{2E0DF6C1-5CFB-4E1A-94C0-228147AAD261}];1 ;test                ;Element ;Text    ;
+                                                  VariableName=test }
+
+  }
+  EVENTS
+  {
+  }
+  REQUESTPAGE
+  {
+    PROPERTIES
+    {
+    }
+    CONTROLS
+    {
+    }
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT XMLport 50004 DFX DMSLITE
+{
+  OBJECT-PROPERTIES
+  {
+    Date=14-06-22;
+    Time=15:54:48;
+    Modified=Yes;
+    Version List=NAVLITE-1;
+  }
+  PROPERTIES
+  {
+    Format=Variable Text;
+  }
+  ELEMENTS
+  {
+    { [{FCDF895E-644B-47BB-BAD1-8FA4ED9093F6}];  ;root                ;Element ;Text     }
+
+    { [{D9F249A2-971E-4E9A-BEB2-494407109D7F}];1 ;DMSLITE             ;Element ;Table   ;
+                                                  SourceTable=Table50004 }
+
+    { [{6E6237E5-6C0C-49DD-948F-25D8C0A5E510}];2 ;Type                ;Element ;Field   ;
+                                                  DataType=Option;
+                                                  SourceField=NAVLITE::Type }
+
+    { [{10C8070F-BC29-4D35-9AAD-A07FFED5E663}];2 ;No                  ;Element ;Field   ;
+                                                  DataType=Code;
+                                                  FieldValidate=Yes;
+                                                  SourceField=NAVLITE::No. }
+
+    { [{F91ED41E-3C24-4327-A70D-05DAFBDEE189}];2 ;Jurisdiction        ;Element ;Field   ;
+                                                  DataType=Code;
+                                                  FieldValidate=Yes;
+                                                  SourceField=NAVLITE::Jurisdiction }
+
+    { [{F25F86DF-B9D3-4230-8C63-A60A085BBC7A}];2 ;FirstPartitionCode  ;Element ;Field   ;
+                                                  DataType=Code;
+                                                  FieldValidate=Yes;
+                                                  SourceField=NAVLITE::First Partition Code }
+
+    { [{2611D0F5-734A-4B8F-8595-B8A2486237D7}];2 ;SecondPartitionCode ;Element ;Field   ;
+                                                  DataType=Code;
+                                                  SourceField=NAVLITE::Second Partition Code }
+
+    { [{1C4077BD-254F-45AA-89BD-A5B757980A64}];2 ;AttritubeType       ;Element ;Field   ;
+                                                  DataType=Option;
+                                                  SourceField=NAVLITE::AttributeType }
+
+    { [{D9032EB1-DB92-4BCA-B90E-11E1917CBDCF}];2 ;Attribute           ;Element ;Field   ;
+                                                  DataType=Text;
+                                                  SourceField=NAVLITE::Attribute }
+
+  }
+  EVENTS
+  {
+  }
+  REQUESTPAGE
+  {
+    PROPERTIES
+    {
+    }
+    CONTROLS
+    {
+    }
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT XMLport 50101 REFERENCE
+{
+  OBJECT-PROPERTIES
+  {
+    Date=01-06-22;
+    Time=12:57:33;
+    Modified=Yes;
+    Version List=;
+  }
+  PROPERTIES
+  {
+    OnPreXMLport=BEGIN
+                   //TWMPayments.GET("Payment Reference");
+                 END;
+
+  }
+  ELEMENTS
+  {
+    { [{11320B09-4A20-4CC7-A7E1-749EF3A58C71}];  ;root                ;Element ;Text     }
+
+    { [{34DA670B-91B6-415C-B99F-DB5A93138E1C}];1 ;TWMPayments         ;Element ;Table   ;
+                                                  SourceTable=Table9072144;
+                                                  Export::OnPreXMLItem=BEGIN
+                                                                         CLEAR(ErrorCnt);
+                                                                         CLEAR(ErrorCount);
+                                                                       END;
+
+                                                  Export::OnAfterGetRecord=BEGIN
+                                                                             CLEAR(ErrorCnt);
+                                                                             CLEAR(ErrorCount);
+                                                                             RecTWMPayments.SETRANGE(Reference,"TWM Payments".Reference);
+                                                                             //REPEAT
+                                                                             ErrorCnt := CUTWMPayments.UpdateValidatePayFileFields(RecTWMPayments);
+                                                                             ErrorCount:=(FORMAT(ErrorCnt));
+                                                                             //UNTIL RecTWMPayments.NEXT = 0;
+                                                                           END;
+                                                                            }
+
+    { [{352BB0A9-0304-46FE-B53D-F60E78F89C3D}];2 ;Reference           ;Element ;Field   ;
+                                                  DataType=Code;
+                                                  SourceField=TWM Payments::Reference }
+
+    { [{59649B05-271D-4F2D-884D-8E57A76D49EF}];2 ;Status              ;Element ;Field   ;
+                                                  DataType=Option;
+                                                  SourceField=TWM Payments::Status }
+
+    { [{41F8757F-62A2-4C8F-AD95-5F39D2015FE1}];2 ;ErrorCount          ;Element ;Text    ;
+                                                  VariableName=ErrorCount }
+
+  }
+  EVENTS
+  {
+  }
+  REQUESTPAGE
+  {
+    PROPERTIES
+    {
+    }
+    CONTROLS
+    {
+    }
+  }
+  CODE
+  {
+    VAR
+      ErrorCnt@100000000 : Integer;
+      RecTWMPayments@100000003 : Record 9072144;
+      CUTWMPayments@100000002 : Codeunit 9072130;
+
+    BEGIN
+    END.
+  }
+}
+

@@ -1,0 +1,139 @@
+OBJECT Page 50036 Data Privacy Register API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=04-12-20;
+    Time=11:50:17;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    Editable=No;
+    InsertAllowed=No;
+    DeleteAllowed=No;
+    ModifyAllowed=Yes;
+    SourceTable=Table9070200;
+    PageType=List;
+    CardPageID=Data Privacy Register Card;
+  }
+  CONTROLS
+  {
+    { 1000000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000001;1;Group  ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 1000000035;1;Field  ;
+                SourceExpr="Register Entry No." }
+
+    { 1000000034;1;Field  ;
+                SourceExpr=Status }
+
+    { 1000000033;1;Field  ;
+                SourceExpr="Related To Type" }
+
+    { 1000000032;1;Field  ;
+                SourceExpr="Related To No." }
+
+    { 1000000031;1;Field  ;
+                SourceExpr=Categorisation }
+
+    { 1000000030;1;Field  ;
+                SourceExpr="Created By" }
+
+    { 1000000029;1;Field  ;
+                SourceExpr="Created Date" }
+
+    { 1000000028;1;Field  ;
+                SourceExpr="Created Time" }
+
+    { 1000000027;1;Field  ;
+                SourceExpr="Last Modified By" }
+
+    { 1000000026;1;Field  ;
+                SourceExpr="Last Modified Date" }
+
+    { 1000000025;1;Field  ;
+                SourceExpr="Last Modified Time" }
+
+    { 1000000024;1;Field  ;
+                SourceExpr="No. Series" }
+
+    { 1000000023;1;Field  ;
+                SourceExpr="Request Received By" }
+
+    { 1000000022;1;Field  ;
+                SourceExpr="Request Received Date" }
+
+    { 1000000021;1;Field  ;
+                SourceExpr="Has Data Been Rectified?" }
+
+    { 1000000020;1;Field  ;
+                SourceExpr="Date Data Rectified" }
+
+    { 1000000019;1;Field  ;
+                SourceExpr="Data Rectified By" }
+
+    { 1000000018;1;Field  ;
+                SourceExpr="Search String" }
+
+    { 1000000017;1;Field  ;
+                SourceExpr=Match }
+
+    { 1000000016;1;Field  ;
+                SourceExpr="Match Case" }
+
+    { 1000000015;1;Field  ;
+                SourceExpr="No. of Saved Searches" }
+
+    { 1000000014;1;Field  ;
+                SourceExpr="Client Formal Name" }
+
+    { 1000000013;1;Field  ;
+                SourceExpr="Entity Formal Name" }
+
+    { 1000000012;1;Field  ;
+                SourceExpr="Owner Formal Name" }
+
+    { 1000000011;1;Field  ;
+                SourceExpr="Prospect Formal Name" }
+
+    { 1000000010;1;Field  ;
+                SourceExpr="Resource Name" }
+
+    { 1000000009;1;Field  ;
+                SourceExpr="Intermediary Formal  Name" }
+
+    { 1000000008;1;Field  ;
+                SourceExpr="Contact Name" }
+
+    { 1000000007;1;Field  ;
+                SourceExpr="Date to Erase On" }
+
+    { 1000000006;1;Field  ;
+                SourceExpr="Erase Initiated By" }
+
+    { 1000000005;1;Field  ;
+                SourceExpr="User that Performed Erase" }
+
+    { 1000000004;1;Field  ;
+                SourceExpr="Potential Client Formal Name" }
+
+    { 1000000003;1;Field  ;
+                SourceExpr="Export Type" }
+
+    { 1000000002;1;Field  ;
+                SourceExpr="Data Classification to Export" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

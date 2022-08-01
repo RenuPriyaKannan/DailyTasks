@@ -1,0 +1,437 @@
+OBJECT Page 50056 Payment
+{
+  OBJECT-PROPERTIES
+  {
+    Date=21-01-21;
+    Time=14:34:55;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    Permissions=TableData 15=r,
+                TableData 17=ri,
+                TableData 18=r,
+                TableData 21=ri,
+                TableData 80=rimd,
+                TableData 81=rim,
+                TableData 98=r,
+                TableData 232=rim,
+                TableData 270=r,
+                TableData 271=rim,
+                TableData 9071880=r,
+                TableData 9071886=rimd,
+                TableData 89500=rm,
+                TableData 89502=rimd;
+    InsertAllowed=No;
+    DeleteAllowed=No;
+    SourceTable=Table9072144;
+    DelayedInsert=No;
+    PageType=Card;
+    PromotedActionCategoriesML=ENU=New,Process,Report,Validation/Authorisation,Journals,Information,Amendment,Comments;
+    OnOpenPage=VAR
+                 BankingIntegrationSetup@1000000000 : Record 9071880;
+               BEGIN
+               END;
+
+    OnAfterGetRecord=VAR
+                       BISetup@1000000000 : Record 9071880;
+                       _WorkflowLinked@1000000001 : Record 9073631;
+                       _WorkflowLinkedHist@1000000002 : Record 9073653;
+                       Workflow@1000000003 : Record 9073608;
+                     BEGIN
+                     END;
+
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000000;1;Group  ;
+                CaptionML=[ENU=General;
+                           ENG=General] }
+
+    { 1000000025;2;Group  ;
+                GroupType=Group }
+
+    { 1000000133;3;Field  ;
+                CaptionML=ENU=Reference;
+                SourceExpr=Reference;
+                Editable=FALSE }
+
+    { 1000000135;3;Field  ;
+                CaptionML=ENU=Payment Administrator;
+                SourceExpr="Created By Resource" }
+
+    { 1000000001;3;Field  ;
+                CaptionML=ENU=Internal / External;
+                SourceExpr="Internal / External" }
+
+    { 1000000062;3;Group  ;
+                GroupType=Group }
+
+    { 1000000037;4;Group  ;
+                GroupType=Group }
+
+    { 1000000139;5;Field  ;
+                Name=TransferType;
+                CaptionML=ENU=Type;
+                SourceExpr="Internal Transfer Type" }
+
+    { 1000000038;4;Group  ;
+                GroupType=Group }
+
+    { 1000000141;5;Field  ;
+                Name=Payment Type;
+                CaptionML=ENU=Type;
+                SourceExpr="External Payment Type" }
+
+    { 1000000067;3;Group  ;
+                GroupType=Group }
+
+    { 1000000066;4;Group  ;
+                GroupType=Group }
+
+    { 1000000065;5;Field  ;
+                Name=TransferTypePractice;
+                CaptionML=ENU=Type;
+                OptionCaptionML=ENU=" ,Transfer to Account,,,,,,,,,Transfer To Client";
+                SourceExpr="Internal Transfer Type" }
+
+    { 1000000064;4;Group  ;
+                GroupType=Group }
+
+    { 1000000063;5;Field  ;
+                Name=Payment TypePractice;
+                CaptionML=ENU=Type;
+                OptionCaptionML=ENU=" ,,,,,,,,,,,,,,,BACS,CHAPS,,,SWIFT,,,,Cheque,,,,,Draft";
+                SourceExpr="External Payment Type" }
+
+    { 1000000002;2;Group  ;
+                GroupType=Group }
+
+    { 1040022;3;Field     ;
+                CaptionML=ENU=Purpose;
+                SourceExpr=Purpose }
+
+    { 1040024;3;Field     ;
+                CaptionML=ENU=Purpose Description;
+                SourceExpr="Purpose Description";
+                Editable=FALSE }
+
+    { 1000000046;3;Group  ;
+                GroupType=Group }
+
+    { 1000000053;4;Field  ;
+                Name=txtOFAC;
+                CaptionML=ENU=txtOFAC;
+                Editable=FALSE;
+                MultiLine=Yes;
+                Style=StrongAccent;
+                StyleExpr=TRUE }
+
+    { 1000000004;1;Group  ;
+                CaptionML=ENU=From Account Information;
+                GroupType=Group }
+
+    { 1000000012;2;Group  ;
+                GroupType=Group }
+
+    { 1000000011;3;Field  ;
+                CaptionML=ENU=From Client;
+                SourceExpr="From Client";
+                OnLookup=VAR
+                           ClientRec@1000000000 : Record 9068500;
+                           ClientPage@1000000001 : Page 9068560;
+                         BEGIN
+                         END;
+                          }
+
+    { 1000000016;3;Field  ;
+                CaptionML=ENU=From Client Name;
+                SourceExpr="From Client Name" }
+
+    { 1000000090;3;Field  ;
+                SourceExpr="On Behalf Of" }
+
+    { 1000000093;3;Field  ;
+                SourceExpr="On Behalf Of Name" }
+
+    { 1000000123;3;Field  ;
+                CaptionML=[ENU=From Narrative;
+                           ENG=From Narrative];
+                SourceExpr="Debit Narrative" }
+
+    { 1000000024;2;Group  ;
+                GroupType=Group }
+
+    { 1000000047;3;Group  ;
+                GroupType=Group }
+
+    { 1040027;4;Field     ;
+                CaptionML=[ENU=From Bank Account;
+                           ENG=From Bank Account];
+                OnLookup=VAR
+                           BankRec@1000000001 : Record 270;
+                           BankPage@1000000002 : Page 371;
+                         BEGIN
+                         END;
+                          }
+
+    { 1000000026;4;Field  ;
+                CaptionML=ENU=From Bank Account Name;
+                Editable=FALSE }
+
+    { 1000000080;4;Field  ;
+                CaptionML=ENU=From Bank Account Number;
+                SourceExpr="From Bank Acc. No. (Practice)" }
+
+    { 1000000068;4;Field  ;
+                Name=DebitPracticeNarrative;
+                CaptionML=[ENU=From Narrative;
+                           ENG=From Narrative];
+                SourceExpr="Debit Narrative" }
+
+    { 1000000048;3;Group  ;
+                GroupType=Group }
+
+    { 1000000013;4;Field  ;
+                CaptionML=ENU=From Bank Account;
+                SourceExpr="From Bank Account (Source)";
+                OnLookup=VAR
+                           ClientBank@1000000002 : Record 9068624;
+                         BEGIN
+                         END;
+                          }
+
+    { 1000000081;4;Field  ;
+                CaptionML=ENU=From Bank Account Name;
+                Editable=FALSE }
+
+    { 1000000076;4;Field  ;
+                CaptionML=ENU=From Bank Account Number;
+                SourceExpr="From Bank Account No. (Source)" }
+
+    { 1000000010;1;Group  ;
+                CaptionML=ENU=To Account Information;
+                GroupType=Group }
+
+    { 1000010041;2;Group  ;
+                GroupType=Group }
+
+    { 1000000019;3;Field  ;
+                Name=Transfer To Practice;
+                CaptionML=ENU=Transfer To Practice;
+                SourceExpr='Transfer To Company Account';
+                Editable=FALSE }
+
+    { 1000000014;2;Group  ;
+                GroupType=Group }
+
+    { 1000000020;3;Field  ;
+                Name=TransferToClient;
+                Lookup=Yes;
+                CaptionML=ENU=Transfer To Client;
+                SourceExpr="Transfer To Client";
+                LookupPageID=CM Client List }
+
+    { 1000000018;3;Field  ;
+                CaptionML=ENU=Transfer To Client Name;
+                SourceExpr="Transfer To Client Name" }
+
+    { 1000000034;2;Group  ;
+                GroupType=Group }
+
+    { 1000000051;3;Group  ;
+                GroupType=Group }
+
+    { 1000000137;4;Field  ;
+                Name=TransferToCredit;
+                CaptionML=[ENU=To Narrative;
+                           ENG=To Narrative];
+                SourceExpr="Credit Narrative" }
+
+    { 1000000027;2;Group  ;
+                GroupType=Group }
+
+    { 1000000003;3;Field  ;
+                Name=TransferToBank;
+                CaptionML=[ENU=To Bank Account;
+                           ENG=To Bank Account];
+                SourceExpr="Transfer To Client Bank Acc";
+                OnLookup=VAR
+                           ClientBank@1000000003 : Record 9068624;
+                           PracticeBank@1000000000 : Record 270;
+                         BEGIN
+                         END;
+                          }
+
+    { 1000000028;3;Field  ;
+                CaptionML=ENU=To Bank Account Name;
+                Editable=FALSE;
+                OnValidate=VAR
+                             ApplicationSetup@1000000000 : Record 9068230;
+                             TWMPaymentsExtension@1000000001 : Record 9072145;
+                             TransactionBackgroundDetail@1000000002 : Record 9073104;
+                           BEGIN
+                           END;
+                            }
+
+    { 1100000096;3;Field  ;
+                Name=<ToBankNumber>;
+                CaptionML=ENU=To Bank Account Number;
+                OnValidate=VAR
+                             ApplicationSetup@1000000000 : Record 9068230;
+                             TWMPaymentsExtension@1000000001 : Record 9072145;
+                           BEGIN
+                           END;
+                            }
+
+    { 1000000032;1;Group  ;
+                CaptionML=ENU=Amounts;
+                GroupType=Group }
+
+    { 1000000181;2;Field  ;
+                CaptionML=ENU=Manual Value Date;
+                SourceExpr="Manual Value Date" }
+
+    { 1000000007;2;Field  ;
+                CaptionML=ENU=Value Date;
+                SourceExpr="Value Date" }
+
+    { 1000000079;2;Field  ;
+                CaptionML=ENU=Manual FX Rate;
+                SourceExpr="Manual FX Rate" }
+
+    { 1000000017;2;Field  ;
+                Lookup=No;
+                DrillDown=No;
+                CaptionML=ENU=From Currency;
+                SourceExpr="From Currency";
+                Editable=FALSE }
+
+    { 1000000015;2;Field  ;
+                Name=FromAmount;
+                CaptionML=ENU=From Amount;
+                SourceExpr="Amount in Source Currency" }
+
+    { 1000000023;2;Field  ;
+                Name=PayCurrency;
+                CaptionML=ENU=To Currency;
+                SourceExpr="To Currency" }
+
+    { 1000000092;2;Field  ;
+                Name=ToAmount;
+                CaptionML=ENU=To Amount;
+                SourceExpr="Payment Amount" }
+
+    { 1000000094;2;Field  ;
+                CaptionML=ENU=Exchange Rate;
+                SourceExpr="Exchange Rate";
+                Editable=FALSE }
+
+    { 1000000091;2;Field  ;
+                CaptionML=ENU=Exchange Rate Info;
+                SourceExpr='(' + ReturnExRateInfo + ')';
+                Editable=FALSE }
+
+    { 1000000085;2;Group  ;
+                Name=ManualEnterExchangeRateFrame;
+                CaptionML=[ENU=Enter Manual Exchange Rate;
+                           ENG=Enter Manual Exchange Rate];
+                GroupType=Group }
+
+    { 1000000108;3;Field  ;
+                CaptionML=ENU=Manual Exchange Rate Booked;
+                SourceExpr="Manual Exchange Rate Booked" }
+
+    { 1000000088;3;Field  ;
+                CaptionML=ENU=Exchange Rate % diff from Sys;
+                DecimalPlaces=2:4;
+                SourceExpr="Exchange Rate % diff from Sys";
+                Editable=FALSE }
+
+    { 1000000086;3;Field  ;
+                CaptionML=[ENU=Dealer && Time;
+                           ENG=Dealer && Time];
+                SourceExpr="Ex Rate Dealer & Time Ref" }
+
+    { 1000000101;2;Group  ;
+                Name=EnterExchangeRateFrame;
+                CaptionML=ENU=Enter Exchange Rate (Book rate with Dealers) }
+
+    { 1000000103;3;Field  ;
+                CaptionML=ENU=Exchange Rate Booked;
+                SourceExpr="Exchange Rate Booked" }
+
+    { 1000000099;3;Field  ;
+                Name=<Exchange Rate % diff from Sys2>;
+                CaptionML=ENU=% Diff from system rate;
+                DecimalPlaces=2:4;
+                SourceExpr="Exchange Rate % diff from Sys";
+                Editable=FALSE }
+
+    { 1000000148;3;Field  ;
+                Name=<Ex Rate Dealer & Time Ref2>;
+                CaptionML=ENU=Dealer && Time;
+                SourceExpr="Ex Rate Dealer & Time Ref" }
+
+    { 1000011021;2;Group  ;
+                CaptionML=ENU=Exchange Rates;
+                GroupType=Group }
+
+    { 1000000044;3;Field  ;
+                CaptionML=ENU=Ex Rate Received Back;
+                SourceExpr="Ex Rate Received Back";
+                Editable=FALSE }
+
+    { 1000000177;3;Field  ;
+                CaptionML=[ENU=Customer Rate;
+                           ENG=Customer Rate];
+                SourceExpr="Presentation Ex Rate" }
+
+    { 1000000033;3;Field  ;
+                CaptionML=ENU=Treasury FX Rate;
+                DecimalPlaces=2:8;
+                SourceExpr="Treasury FX Rate" }
+
+    { 1000000042;3;Field  ;
+                CaptionML=ENU=Customer Spread;
+                DecimalPlaces=2:8;
+                SourceExpr="Customer Spread" }
+
+    { 1000000060;2;Group  ;
+                Visible="External Payment Type" = "External Payment Type"::Cheque;
+                GroupType=Group }
+
+    { 1000000054;3;Field  ;
+                CaptionML=[ENU=Cheque Number;
+                           ENG=Cheque Number];
+                SourceExpr="Cheque Number" }
+
+    { 1000000039;2;Group  ;
+                Visible="External Payment Type" = "External Payment Type"::Draft;
+                GroupType=Group }
+
+    { 1000000041;3;Field  ;
+                Name=Draft Number;
+                CaptionML=[ENU=Draft Number;
+                           ENG=Draft Number];
+                SourceExpr="Cheque Number" }
+
+    { 1000000055;1;Field  ;
+                Name=FeesSweep;
+                CaptionML=[ENU=Part of A Fees Sweep;
+                           ENG=Part of A Fees Sweep];
+                SourceExpr="Authorisation Doc No." }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

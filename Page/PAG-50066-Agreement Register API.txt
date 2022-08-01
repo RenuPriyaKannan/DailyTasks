@@ -1,0 +1,83 @@
+OBJECT Page 50066 Agreement Register API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=18-10-21;
+    Time=12:18:11;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9070211;
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 1000000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000001;1;Group  ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 100000002;2;Field   ;
+                SourceExpr="Agreement Attached Type" }
+
+    { 100000003;2;Field   ;
+                SourceExpr="Attached To No." }
+
+    { 100000000;2;Field   ;
+                SourceExpr="Agreement Code" }
+
+    { 100000006;2;Field   ;
+                SourceExpr="Date of Agreement" }
+
+    { 100000009;2;Field   ;
+                SourceExpr=Barcode }
+
+    { 100000010;2;Field   ;
+                SourceExpr="Agreement Caption 1" }
+
+    { 100000011;2;Field   ;
+                SourceExpr="Agreement Caption 2" }
+
+    { 100000012;2;Field   ;
+                SourceExpr="Agreement Caption 3" }
+
+    { 100000013;2;Field   ;
+                SourceExpr="Agreement Caption 4" }
+
+    { 100000014;2;Field   ;
+                SourceExpr="Agreement Caption 5" }
+
+    { 100000015;2;Field   ;
+                SourceExpr="Agreement Caption 6" }
+
+    { 100000016;2;Field   ;
+                SourceExpr="Agreement Caption 7" }
+
+    { 100000017;2;Field   ;
+                SourceExpr="Agreement Caption 8" }
+
+    { 100000018;2;Field   ;
+                SourceExpr="Agreement Caption 9" }
+
+    { 100000019;2;Field   ;
+                SourceExpr="Agreement Caption 10" }
+
+    { 100000007;2;Field   ;
+                SourceExpr="Freeze Concent" }
+
+    { 100000008;2;Field   ;
+                SourceExpr=Exception }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

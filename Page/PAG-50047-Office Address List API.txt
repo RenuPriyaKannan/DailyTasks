@@ -1,0 +1,88 @@
+OBJECT Page 50047 Office Address List API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=11-12-20;
+    Time=10:07:37;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9068503;
+    PageType=List;
+    CardPageID=Office Address Card;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                GroupType=Repeater }
+
+    { 2   ;2   ;Field     ;
+                SourceExpr=Code }
+
+    { 4   ;2   ;Field     ;
+                SourceExpr=Description }
+
+    { 6   ;2   ;Field     ;
+                SourceExpr=Address }
+
+    { 8   ;2   ;Field     ;
+                SourceExpr="Address 2" }
+
+    { 10  ;2   ;Field     ;
+                SourceExpr=City }
+
+    { 12  ;2   ;Field     ;
+                CaptionML=[ENU=County;
+                           ENG=County;
+                           ENA=State];
+                SourceExpr=County }
+
+    { 14  ;2   ;Field     ;
+                SourceExpr=Country }
+
+    { 16  ;2   ;Field     ;
+                SourceExpr="Post Code" }
+
+    { 1040000;2;Field     ;
+                ToolTipML=[ENU=Also known as In-care-off address;
+                           ENG=Also known as In-care-off address];
+                SourceExpr="Care-of" }
+
+    { 23  ;2   ;Field     ;
+                SourceExpr="Phone No." }
+
+    { 25  ;2   ;Field     ;
+                SourceExpr="Fax No." }
+
+    { 27  ;2   ;Field     ;
+                SourceExpr="E-mail" }
+
+    { 29  ;2   ;Field     ;
+                SourceExpr="Home Page" }
+
+    { 31  ;2   ;Field     ;
+                SourceExpr="Telex No." }
+
+    { 33  ;2   ;Field     ;
+                SourceExpr="Telex Answer Back" }
+
+    { 35  ;2   ;Field     ;
+                SourceExpr="Contact Name" }
+
+    { 1000000000;2;Field  ;
+                SourceExpr=Status }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

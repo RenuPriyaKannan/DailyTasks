@@ -1,0 +1,125 @@
+OBJECT Page 50017 Share Setup API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=04-12-20;
+    Time=10:19:53;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    CaptionML=ENU=Share Setup;
+    InsertAllowed=No;
+    DeleteAllowed=No;
+    SourceTable=Table9068773;
+    PageType=Card;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                CaptionML=[ENU=General;
+                           ENG=General] }
+
+    { 1000000009;2;Field  ;
+                SourceExpr="Client No." }
+
+    { 1000000010;2;Field  ;
+                SourceExpr=ID }
+
+    { 19  ;2   ;Field     ;
+                SourceExpr="Share Holder Type" }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Company Type" }
+
+    { 4   ;2   ;Field     ;
+                SourceExpr="Authorised Share Limits" }
+
+    { 1000000000;2;Field  ;
+                ToolTipML=[ENU=For reporting only;
+                           ENG=For reporting only];
+                SourceExpr="Shares or Units" }
+
+    { 1000000014;2;Field  ;
+                ToolTipML=[ENU=For reporting only;
+                           ENG=For reporting only];
+                SourceExpr="Additional Value" }
+
+    { 9   ;2   ;Field     ;
+                SourceExpr="Share Issue Posting Nos" }
+
+    { 1000000004;2;Field  ;
+                Name=Curr;
+                CaptionML=[ENU=Currency Code;
+                           ENG=Currency Code];
+                SourceExpr=Currency }
+
+    { 1000000006;2;Field  ;
+                Name=PVC;
+                CaptionML=[ENU=Par Value in Currency;
+                           ENG=Par Value in Currency];
+                SourceExpr="Par Value in Currency" }
+
+    { 1000000008;2;Field  ;
+                Name=TSC;
+                SourceExpr="Total Authorised Units";
+                Editable=FALSE }
+
+    { 1906458301;1;Group  ;
+                CaptionML=[ENU=Decimal Places;
+                           ENG=Decimal Places] }
+
+    { 1000000003;2;Group  ;
+                GroupType=Group }
+
+    { 1040000;3;Field     ;
+                MultiLine=Yes }
+
+    { 1040001;3;Field     ;
+                CaptionML=ENU=Number of decimal places shown for Amount fields Min;
+                ToolTipML=[ENU=Amount fields like "Par Value", "Amount Paid" etc.;
+                           ENG=Amount fields like "Par Value", "Amount Paid" etc.] }
+
+    { 1040007;3;Field     ;
+                CaptionML=ENU=Number of decimal places show for Amount fields Max;
+                ToolTipML=[ENU=Amount fields like "Par Value", "Amount Paid" etc.;
+                           ENG=Amount fields like "Par Value", "Amount Paid" etc.] }
+
+    { 1040009;3;Field     ;
+                CaptionML=ENU=Number of decimal places shown for Shares/Units fields Min }
+
+    { 1040008;3;Field     ;
+                CaptionML=ENU=Number of decimal places shown for Shares/Units fields Max }
+
+    { 1000000001;3;Field  ;
+                MultiLine=Yes }
+
+    { 1000000005;3;Field  ;
+                MultiLine=Yes }
+
+    { 1000000007;3;Field  ;
+                MultiLine=Yes }
+
+    { 1904784501;1;Group  ;
+                CaptionML=[ENU=Posting;
+                           ENG=Posting] }
+
+    { 13  ;2   ;Field     ;
+                SourceExpr="No Consideration Comments" }
+
+    { 1040002;2;Field     ;
+                SourceExpr="Record Pledged Shares" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

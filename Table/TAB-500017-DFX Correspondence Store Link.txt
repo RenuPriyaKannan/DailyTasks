@@ -1,0 +1,324 @@
+OBJECT Table 50017 DFX Correspondence Store Link
+{
+  OBJECT-PROPERTIES
+  {
+    Date=23-06-22;
+    Time=11:15:41;
+    Modified=Yes;
+    Version List=NAVLITE;
+  }
+  PROPERTIES
+  {
+    Permissions=TableData 9068662=r;
+    OnInsert=VAR
+               _DocumentFolderSetupRec@1000000000 : Record 9068662;
+             BEGIN
+               "Date Linked" := TODAY;
+               "User Linked" := USERID;
+             END;
+
+    OnDelete=BEGIN
+               UnLinkDocument;
+             END;
+
+    LookupPageID=Page9069711;
+    DrillDownPageID=Page9069711;
+  }
+  FIELDS
+  {
+    { 1   ;   ;ID                  ;Code20        ;SQL Data Type=Variant;
+                                                   NotBlank=Yes }
+    { 2   ;   ;No.                 ;Code20        ;TableRelation=IF (Type=CONST(Client)) Client
+                                                                 ELSE IF (Type=CONST(Prospect)) CM-Prospect
+                                                                 ELSE IF (Type=CONST(Intermediary)) Intermediary
+                                                                 ELSE IF (Type=CONST(Entity)) Entity
+                                                                 ELSE IF (Type=CONST(Client Owner)) Owner
+                                                                 ELSE IF (Type=CONST(Potential Client)) "Potential Client" }
+    { 5   ;   ;Type                ;Option        ;OptionString=[ ,Client,Entity,Prospect,Intermediary,Client Owner,Resource,,Dimension,,,External Bank Payment,,,,Potential Client] }
+    { 6   ;   ;External DMS Status ;Option        ;OptionString=[ ,Pending,Processing,Processed];
+                                                   Editable=No }
+    { 7   ;   ;Link Type           ;Option        ;OptionString=[ ,Asset,Safe Custody,Bank,Loan,Agent,Investment,Client Entity,Client Entity History,Customer,Vendor,Portfolio,Transaction Monitoring,Interaction,Activity,Business Rule,Client Invoice,Meeting];
+                                                   Editable=Yes }
+    { 8   ;   ;Link Code           ;Code20        ;TableRelation=IF (Link Type=CONST(Asset)) "Client Asset"."Asset Code" WHERE (Client No.=FIELD(No.))
+                                                                 ELSE IF (Link Type=CONST(Safe Custody)) "Safe Custody Records"."Safe Custody Code" WHERE (Type=CONST(Client),
+                                                                                                                                                           No.=FIELD(No.))
+                                                                                                                                                           ELSE IF (Link Type=CONST(Bank)) "Client Account".No. WHERE (Account Type=CONST(Bank),
+                                                                                                                                                                                                                       Client No.=FIELD(No.))
+                                                                                                                                                                                                                       ELSE IF (Link Type=CONST(Loan)) "Client Account".No. WHERE (Account Type=CONST(Loan),
+                                                                                                                                                                                                                                                                                   Client No.=FIELD(No.))
+                                                                                                                                                                                                                                                                                   ELSE IF (Link Type=CONST(Asset)) "Client Account".No. WHERE (Account Type=CONST(Agent),
+                                                                                                                                                                                                                                                                                                                                                Client No.=FIELD(No.))
+                                                                                                                                                                                                                                                                                                                                                ELSE IF (Link Type=CONST(Investment)) "Client Investment"."Asset Code" WHERE (Client No.=FIELD(No.))
+                                                                                                                                                                                                                                                                                                                                                ELSE IF (Link Type=CONST(Client Entity)) "Client Entity"."Entity No." WHERE (Client No.=FIELD(No.))
+                                                                                                                                                                                                                                                                                                                                                ELSE IF (Link Type=CONST(Client Entity History)) "Client Entity History"."Entry No." WHERE (Client No.=FIELD(No.))
+                                                                                                                                                                                                                                                                                                                                                ELSE IF (Link Type=CONST(Customer)) "Client Customer".No. WHERE (Client No.=FIELD(No.))
+                                                                                                                                                                                                                                                                                                                                                ELSE IF (Link Type=CONST(Vendor)) "Client Vendor".No. WHERE (Client No.=FIELD(No.))
+                                                                                                                                                                                                                                                                                                                                                ELSE IF (Link Type=CONST(Interaction)) "Client Interaction Details"."Interaction No." WHERE (No.=FIELD(No.));
+                                                   Editable=Yes }
+    { 9   ;   ;Correspondence Store Type;Option   ;OptionString=Correspondence Store,External DMS }
+    { 10  ;   ;MS Office Doc Type  ;Code10        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Store"."MS Office Doc Type" WHERE (ID=FIELD(ID),
+                                                                                                                         No.=FIELD(No.),
+                                                                                                                         Type=FIELD(Type)));
+                                                   Editable=No }
+    { 20  ;   ;Subject             ;Text150       ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Store".Subject WHERE (ID=FIELD(ID),
+                                                                                                            No.=FIELD(No.),
+                                                                                                            Type=FIELD(Type)));
+                                                   Editable=No }
+    { 31  ;   ;Date Linked         ;Date           }
+    { 32  ;   ;User Linked         ;Code50        ;TableRelation=User."User Name";
+                                                   ValidateTableRelation=No;
+                                                   TestTableRelation=No }
+    { 1010;   ;FileName            ;Text250       ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Store".FileName WHERE (ID=FIELD(ID),
+                                                                                                             No.=FIELD(No.),
+                                                                                                             Type=FIELD(Type)));
+                                                   Editable=No }
+    { 1020;   ;Source of Document  ;Option        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Store"."Source of Document" WHERE (ID=FIELD(ID),
+                                                                                                                         No.=FIELD(No.),
+                                                                                                                         Type=FIELD(Type)));
+                                                   OptionString=,Navision,Imported,,,,,Workflow;
+                                                   Editable=No }
+    { 1030;   ;Document Inserted Date;Date        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Store"."Document Inserted Date" WHERE (ID=FIELD(ID),
+                                                                                                                             No.=FIELD(No.),
+                                                                                                                             Type=FIELD(Type)));
+                                                   Editable=No }
+    { 1040;   ;Document Inserted By;Code50        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Store"."Document Inserted By" WHERE (ID=FIELD(ID),
+                                                                                                                           No.=FIELD(No.),
+                                                                                                                           Type=FIELD(Type)));
+                                                   TableRelation=User."User Name";
+                                                   OnLookup=VAR
+                                                              _UserMgt@1000000000 : Codeunit 418;
+                                                            BEGIN
+                                                            END;
+
+                                                   ValidateTableRelation=No;
+                                                   Editable=No }
+    { 1112;   ;Document Type       ;Code10        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Store"."Document Type" WHERE (ID=FIELD(ID),
+                                                                                                                    No.=FIELD(No.),
+                                                                                                                    Type=FIELD(Type)));
+                                                   TableRelation="Correspondence Doc Type".Code;
+                                                   Editable=No }
+    { 1113;   ;Document Type Text  ;Text75        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Doc Type".Type WHERE (Code=FIELD(Document Type)));
+                                                   Editable=No }
+    { 1115;   ;Document Sub Type   ;Code20        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Store"."Document Sub Type" WHERE (ID=FIELD(ID),
+                                                                                                                        No.=FIELD(No.),
+                                                                                                                        Type=FIELD(Type)));
+                                                   TableRelation="Document Type Sub Type"."Document Sub Type" WHERE (Document Type=FIELD(Document Type)) }
+    { 1116;   ;Document Sub Type Text;Text75      ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Document Type Sub Type"."Document Sub Type Description" WHERE (Document Type=FIELD(Document Type),
+                                                                                                                                      Document Sub Type=FIELD(Document Sub Type))) }
+    { 1130;   ;Document Date       ;Date          ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Store"."Document Date" WHERE (ID=FIELD(ID),
+                                                                                                                    No.=FIELD(No.),
+                                                                                                                    Type=FIELD(Type)));
+                                                   Editable=No }
+    { 2000;   ;Restricted Combination;Boolean     ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Document Type Sub Type"."Restricted Combination" WHERE (Document Type=FIELD(Document Type),
+                                                                                                                               Document Sub Type=FIELD(Document Sub Type)));
+                                                   Editable=No }
+    { 3000;   ;External Document ID;Code20         }
+    { 3001;   ;External Document Subject;Text150   }
+    { 3002;   ;External Document Type;Code10       }
+    { 3003;   ;External Document Sub Type;Code20   }
+    { 3004;   ;External Doc Inserted Date;Date     }
+    { 3005;   ;External Doc Inserted By;Code50     }
+    { 83002;  ;Document Expiry Date;Date          ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Store"."Document Expiry Date" WHERE (ID=FIELD(ID),
+                                                                                                                           No.=FIELD(No.),
+                                                                                                                           Type=FIELD(Type)));
+                                                   Editable=No }
+  }
+  KEYS
+  {
+    {    ;Correspondence Store Type,Type,No.,ID,Link Type,Link Code;
+                                                   Clustered=Yes }
+    {    ;Correspondence Store Type,ID             }
+    {    ;ID,No.,Type                              }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+    VAR
+      UNLINK_DOCUMENT@1000000000 : TextConst 'ENU=Are you sure to unlink the Document %1 from %2 %3';
+
+    PROCEDURE OpenDocument@1040001(pType@1000000003 : ' ,Client,Entity,Prospect,Intermediary,Client Owner,Resource,,Dimension,,,External Bank Payment,,,,Potential Client';pNo@1000000004 : Code[20];pID@1000000005 : Code[20]);
+    VAR
+      CorrespondenceStore@1000000006 : Record 9068660;
+      DocumentFolderSetup@1000000000 : Record 9068662;
+      GeneralLedgerSetup@1000000001 : Record 98;
+      IsHandled@100000000 : Boolean;
+    BEGIN
+      OnBeforeLinkOpenDocument(Rec,IsHandled);
+      IF IsHandled THEN
+        EXIT;
+
+      CorrespondenceStore.GET(pType,pNo,pID);
+      CorrespondenceStore.OpenDocument(pType,pNo,'');
+    END;
+
+    PROCEDURE LinkDocument@1000000001();
+    VAR
+      CorrespondenceStore@1000000004 : Record 9068660;
+      CorrespondenceStoreLink@1000000005 : Record 9069078;
+      CorrespondenceStoreLink2@1000000006 : Record 9069078;
+    BEGIN
+      CorrespondenceStore.FILTERGROUP(2);
+      CorrespondenceStore.SETFILTER(Type,GETFILTER(Type));
+      CorrespondenceStore.SETFILTER("No.",GETFILTER("No."));
+      CorrespondenceStore.SETRANGE("Temporary",FALSE);
+      CorrespondenceStore.SETFILTER("Link Type Filter",GETFILTER("Link Type"));
+      CorrespondenceStore.SETFILTER("Link Code Filter",GETFILTER("Link Code"));
+      CorrespondenceStore.SETRANGE("Corresp. Store Link Exists",FALSE);
+      CorrespondenceStore.FILTERGROUP(0);
+
+      IF PAGE.RUNMODAL(PAGE::"Docs and Correspondence",CorrespondenceStore) = ACTION::LookupOK THEN BEGIN
+        IF CorrespondenceStore.ID <> '' THEN BEGIN
+          CorrespondenceStoreLink2.INIT;
+          CorrespondenceStoreLink2.Type        := CorrespondenceStore.Type;
+          CorrespondenceStoreLink2."No."       := CorrespondenceStore."No.";
+          EVALUATE(CorrespondenceStoreLink2."Link Type",GETFILTER("Link Type"));
+          CorrespondenceStoreLink2."Link Code" := GETFILTER("Link Code");
+          CorrespondenceStoreLink2.ID          := CorrespondenceStore.ID;
+          CorrespondenceStoreLink2.INSERT(TRUE);
+        END;
+      END;
+    END;
+
+    PROCEDURE UnLinkDocument@1000000000();
+    BEGIN
+      IF CONFIRM(STRSUBSTNO(UNLINK_DOCUMENT,ID,FORMAT("Link Type"),"Link Code")) THEN
+        DELETE;
+    END;
+
+    PROCEDURE OpenCard@1000000002();
+    VAR
+      ClientAccount@1000000000 : Record 9068624;
+      ClientAsset@1000000001 : Record 9068546;
+      ClientCustomer@1000000003 : Record 9068602;
+      ClientVendor@1000000004 : Record 9068604;
+      SafeCustodyRecords@1000000005 : Record 9068532;
+      ClientPortfolio@1000000006 : Record 9068565;
+      ClientInvestment@1000000007 : Record 9068542;
+      ClientEntity@1000000008 : Record 9068508;
+      ClientEntityHistory@1000000009 : Record 9068509;
+      TransactionBackgroundDetail@1000000010 : Record 9073104;
+      Activity@1000000011 : Record 9068905;
+      ClientManagementFunctions@1000000002 : Codeunit 9068493;
+      ActivityManagement@1000000012 : Codeunit 9068560;
+    BEGIN
+      {CASE Type OF
+        Type::Client : BEGIN
+          CASE "Link Type" OF
+            "Link Type"::Agent,"Link Type"::Bank,"Link Type"::Loan : BEGIN
+              ClientAccount.GET("No.","Link Code");
+              ClientManagementFunctions.OpenAccountCardWithRec(ClientAccount."Account Type", ClientAccount);
+            END;
+            "Link Type"::Asset : BEGIN
+              ClientAsset.GET("No.","Link Code");
+              ClientManagementFunctions.OpenAssetCard(ClientAsset);
+            END;
+            "Link Type"::"Safe Custody" : BEGIN
+              SafeCustodyRecords.GET(0,"No.", "Link Code");
+              PAGE.RUNMODAL(PAGE::"Safe Custody Card",SafeCustodyRecords);
+            END;
+            "Link Type"::Customer : BEGIN
+              ClientCustomer.GET("No.","Link Code");
+               PAGE.RUNMODAL(PAGE::"Client Customer Card",ClientCustomer);
+            END;
+            "Link Type"::Vendor : BEGIN
+              ClientVendor.GET("No.","Link Code");
+              PAGE.RUNMODAL(PAGE::"Client Vendor Card",ClientVendor);
+            END;
+            "Link Type"::Portfolio : BEGIN
+              ClientPortfolio.GET("No.","Link Code");
+              PAGE.RUNMODAL(PAGE::"Client Portfolio",ClientPortfolio);
+            END;
+            "Link Type"::Investment : BEGIN
+              ClientInvestment.GET("No.","Link Code");
+              PAGE.RUNMODAL(PAGE::"Client Investment Card",ClientInvestment);
+            END;
+            "Link Type"::"Client Entity" : BEGIN
+              ClientEntity.SETRANGE("Client No.","No.");
+              ClientEntity.SETRANGE("Entity No.","Link Code");
+              PAGE.RUNMODAL(PAGE::"Client Entities",ClientEntity);
+            END;
+            "Link Type"::"Client Entity History" : BEGIN
+              ClientEntityHistory.SETRANGE("Client No.","No.");
+              ClientEntityHistory.SETRANGE("Entity No.","Link Code");
+              PAGE.RUNMODAL(PAGE::"Entity History",ClientEntityHistory);
+            END;
+            "Link Type"::"Transaction Monitoring" : BEGIN
+              TransactionBackgroundDetail.GET("No.","Link Code");
+              PAGE.RUNMODAL(PAGE::"Transaction Background Card",TransactionBackgroundDetail);
+            END;
+            "Link Type"::Interaction : BEGIN
+      //        TransactionBackgroundDetail.GET("No.","Link Code");
+      //        PAGE.RUNMODAL(PAGE::"Transaction Background Card",TransactionBackgroundDetail);
+            END;
+            "Link Type"::Activity : BEGIN
+              Activity.GET("Link Code");
+              ActivityManagement.OpenActivityCardUI(Activity);
+            END;
+            "Link Type"::"Business Rule" : BEGIN
+      //        TransactionBackgroundDetail.GET("No.","Link Code");
+      //        PAGE.RUNMODAL(PAGE::"Transaction Background Card",TransactionBackgroundDetail);
+            END;
+
+          END;
+        END;
+      END;
+      }
+    END;
+
+    PROCEDURE ReturnExternalID@1000000004() : Code[20];
+    VAR
+      CorrespondenceStoreLink@1000000000 : Record 9069078;
+    BEGIN
+      CorrespondenceStoreLink.SETCURRENTKEY("Correspondence Store Type",ID);
+      CorrespondenceStoreLink.SETRANGE("Correspondence Store Type", CorrespondenceStoreLink."Correspondence Store Type"::"External DMS");
+      IF CorrespondenceStoreLink.FINDLAST THEN
+        EXIT(INCSTR(CorrespondenceStoreLink.ID))
+      ELSE
+        EXIT('1');
+    END;
+
+    [Integration]
+    LOCAL PROCEDURE OnBeforeLinkOpenDocument@100000000(CorrespondenceStore@1000000000 : Record 50017;VAR IsHandled@1000000001 : Boolean);
+    BEGIN
+    END;
+
+    BEGIN
+    {
+      05.08.20  Nigel O'Brien
+                CRF55214 add new key for performance from page 9069346
+
+      08.04.20  Alex Snape
+                CRF53524 Added OnBeforeLinkOpenDocument, ReturnExternalID now not local
+
+      01.04.20  Unnar Eliasson
+                CRF53295 Changed the Filtering when Linking Document rather than using MARKEDONLY
+                OpenCard amended to open Activity Card
+
+      02.01.20  Adrian Akers
+                CRF48933  New Link Type of Meeting
+
+      08.10.19  Dimitar Mashev
+                CRF51650 "Client Invoice" added to link types field
+
+      04.10.19  Ritam Majumdar
+                CRF52061  Field length for FileName changed to 250
+    }
+    END.
+  }
+}
+

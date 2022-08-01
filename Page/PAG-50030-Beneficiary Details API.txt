@@ -1,0 +1,126 @@
+OBJECT Page 50030 Beneficiary Details API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=04-12-20;
+    Time=11:45:26;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9068474;
+    DataCaptionExpr='';
+    PageType=Card;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000000;1;Group  ;
+                CaptionML=[ENU=General;
+                           ENG=General] }
+
+    { 1000000001;2;Field  ;
+                SourceExpr="Client No" }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Entity No" }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Entity Type" }
+
+    { 1150000;2;Field     ;
+                SourceExpr="Percentage Of Membership" }
+
+    { 1150002;2;Field     ;
+                SourceExpr="Membership Certificate No." }
+
+    { 1150004;2;Field     ;
+                SourceExpr="Date Of Issue" }
+
+    { 1000000004;2;Field  ;
+                SourceExpr="Entitlement Details" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="Effective Date" }
+
+    { 1000000006;2;Field  ;
+                SourceExpr=Condtions }
+
+    { 1000000007;2;Field  ;
+                SourceExpr="Beneficiary Classif. Code" }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="Kind of Distribution" }
+
+    { 1000000009;2;Field  ;
+                SourceExpr="Description of Distribution" }
+
+    { 1000000013;2;Field  ;
+                SourceExpr="Certificate of Formation" }
+
+    { 1000000014;2;Field  ;
+                SourceExpr="Partnersh./Operating Agreement" }
+
+    { 1000000015;2;Field  ;
+                SourceExpr="Partnership Type" }
+
+    { 1000000016;2;Field  ;
+                SourceExpr="Amount Committed" }
+
+    { 1000000017;2;Field  ;
+                SourceExpr="Commitment Currency" }
+
+    { 1000000018;2;Field  ;
+                SourceExpr="Date Registered" }
+
+    { 1000000019;2;Field  ;
+                SourceExpr="Transfer Out Date" }
+
+    { 1000000020;2;Field  ;
+                SourceExpr="Nature Of Interest" }
+
+    { 1000000021;2;Field  ;
+                SourceExpr="Limit Of Interest" }
+
+    { 1000000022;2;Field  ;
+                SourceExpr="Capital/Income" }
+
+    { 1000000023;2;Field  ;
+                SourceExpr="Date Of Majority For Minors" }
+
+    { 1000000024;2;Field  ;
+                SourceExpr="Type of Deed" }
+
+    { 1000000025;2;Field  ;
+                SourceExpr="Type of Beneficiary" }
+
+    { 1000000026;2;Field  ;
+                SourceExpr=Class }
+
+    { 1000000027;2;Field  ;
+                SourceExpr="% Share of Fund" }
+
+    { 1000000028;2;Field  ;
+                SourceExpr="Amount of Annuity" }
+
+    { 1000000029;2;Field  ;
+                SourceExpr="Gross or Net" }
+
+    { 1000000030;2;Field  ;
+                SourceExpr="Entitlement to Capital" }
+
+    { 1000000031;2;Field  ;
+                SourceExpr="Entitlement to Income" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

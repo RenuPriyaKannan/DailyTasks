@@ -1,0 +1,118 @@
+OBJECT Page 50046 Address List (CM) API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=11-12-20;
+    Time=10:07:26;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9068451;
+    DataCaptionFields=No.;
+    PageType=List;
+    CardPageID=Address Card (CM);
+    OnOpenPage=VAR
+                 RecordNo@1000000000 : Text;
+                 ApplicationSetup@1000000001 : Record 9068230;
+               BEGIN
+               END;
+
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                GroupType=Repeater }
+
+    { 1000000000;2;Field  ;
+                SourceExpr=Type }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="No." }
+
+    { 2   ;2   ;Field     ;
+                SourceExpr=Code;
+                Editable=FALSE }
+
+    { 27  ;2   ;Field     ;
+                SourceExpr="Address Type" }
+
+    { 4   ;2   ;Field     ;
+                SourceExpr=Surname;
+                Visible=FALSE }
+
+    { 6   ;2   ;Field     ;
+                SourceExpr="Forename(s)";
+                Visible=FALSE }
+
+    { 1000000001;2;Field  ;
+                SourceExpr="Address Explanation";
+                Visible=TRUE }
+
+    { 8   ;2   ;Field     ;
+                SourceExpr="Address 1" }
+
+    { 10  ;2   ;Field     ;
+                SourceExpr="Address 2" }
+
+    { 1040002;2;Field     ;
+                SourceExpr="Address 3" }
+
+    { 12  ;2   ;Field     ;
+                SourceExpr=City }
+
+    { 14  ;2   ;Field     ;
+                SourceExpr="Post Code";
+                Visible=FALSE }
+
+    { 16  ;2   ;Field     ;
+                SourceExpr=County;
+                Visible=FALSE }
+
+    { 1040006;2;Field     ;
+                SourceExpr="Country Code" }
+
+    { 1000000007;2;Field  ;
+                SourceExpr="Residence for Tax Purposes" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="Residence Start Date" }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="Residence End Date" }
+
+    { 1000000002;2;Field  ;
+                CaptionML=ENU=Phone No.;
+                SourceExpr=DisplayPhoneNo(1) }
+
+    { 1000000003;2;Field  ;
+                CaptionML=ENU=Mobile Phone No.;
+                SourceExpr=DisplayPhoneNo(2) }
+
+    { 1000000004;2;Field  ;
+                CaptionML=ENU=Fax No.;
+                SourceExpr=DisplayPhoneNo(3) }
+
+    { 22  ;2   ;Field     ;
+                SourceExpr="E-Mail";
+                Visible=FALSE }
+
+    { 1040000;2;Field     ;
+                SourceExpr="Home Page" }
+
+    { 1040004;2;Field     ;
+                SourceExpr="Care-of" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

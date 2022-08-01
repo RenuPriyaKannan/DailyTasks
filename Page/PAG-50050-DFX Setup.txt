@@ -1,0 +1,131 @@
+OBJECT Page 50050 DFX Setup
+{
+  OBJECT-PROPERTIES
+  {
+    Date=21-07-22;
+    Time=17:44:46;
+    Modified=Yes;
+    Version List=NAVLITE;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table50006;
+    PageType=Card;
+    ActionList=ACTIONS
+    {
+      { 100000002;   ;ActionContainer;
+                      Name=Action;
+                      ActionContainerType=NewDocumentItems }
+    }
+  }
+  CONTROLS
+  {
+    { 100000000;;Container;
+                Name=[ ];
+                ContainerType=ContentArea }
+
+    { 100000021;1;Group   ;
+                Name=Client;
+                GroupType=Group }
+
+    { 100000020;2;Field   ;
+                SourceExpr="Client Code" }
+
+    { 100000001;1;Group   ;
+                Name=General;
+                GroupType=Group }
+
+    { 100000003;2;Field   ;
+                SourceExpr="Create/Update Contact" }
+
+    { 100000004;2;Field   ;
+                SourceExpr="Update URL" }
+
+    { 100000005;2;Field   ;
+                SourceExpr="Hapi Key" }
+
+    { 100000011;1;Group   ;
+                Name=API URL;
+                GroupType=Group }
+
+    { 100000014;2;Field   ;
+                SourceExpr=Repository }
+
+    { 100000012;2;Field   ;
+                SourceExpr="LF API URL" }
+
+    { 100000013;2;Field   ;
+                SourceExpr="Elastic Serarch API URL";
+                Visible=False }
+
+    { 100000006;2;Field   ;
+                SourceExpr="Partition Code URL" }
+
+    { 100000025;2;Field   ;
+                SourceExpr="Name Change URL" }
+
+    { 100000008;1;Group   ;
+                Name=User Credentials;
+                GroupType=Group }
+
+    { 100000009;2;Field   ;
+                SourceExpr="API User ID" }
+
+    { 100000010;2;Field   ;
+                SourceExpr="API Password" }
+
+    { 100000015;1;Group   ;
+                Name=DFX Business Rules;
+                GroupType=Group }
+
+    { 100000016;2;Field   ;
+                SourceExpr="JFSC Entity Type" }
+
+    { 100000017;2;Field   ;
+                SourceExpr="HMRC Entity Type" }
+
+    { 100000018;2;Field   ;
+                SourceExpr="JFSC_HMRC Entity Type" }
+
+    { 100000007;1;Group   ;
+                Name=VEGA Integration;
+                Visible=True;
+                GroupType=Group }
+
+    { 100000019;2;Field   ;
+                SourceExpr="VEGA CreateCase";
+                Visible=True }
+
+    { 100000022;2;Field   ;
+                SourceExpr="VEGA GETStatus";
+                Visible=True }
+
+    { 100000023;2;Field   ;
+                SourceExpr="VEGA UserID";
+                Visible=True }
+
+    { 100000024;2;Field   ;
+                SourceExpr="VEGA Password";
+                Visible=True }
+
+    { 100000026;2;Field   ;
+                SourceExpr="Entity Type Allowed" }
+
+    { 100000027;2;Field   ;
+                SourceExpr="Entity Type Not Allowed" }
+
+    { 100000028;2;Field   ;
+                SourceExpr="Entity Type Allowed Cont." }
+
+    { 100000029;2;Field   ;
+                SourceExpr="Entity Type Not Allowed Cont." }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

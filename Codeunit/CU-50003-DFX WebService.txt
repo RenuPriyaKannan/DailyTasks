@@ -1,0 +1,94 @@
+OBJECT Codeunit 50003 DFX WebService
+{
+  OBJECT-PROPERTIES
+  {
+    Date=22-03-21;
+    Time=15:39:05;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    OnRun=BEGIN
+            CreateWebServiceCustom;
+            CreateWebService(ObjectTypeTemp::Page,9068930,'ClientLookup');
+            CreateWebService(ObjectTypeTemp::Page,9068572,'ClientEntities');
+            CreateWebService(ObjectTypeTemp::Page,9068573,'EntityHistory');
+            CreateWebService(ObjectTypeTemp::Page,9069346,'DocsandCorrespondence');
+            CreateWebService(ObjectTypeTemp::Page,9068820,'ClientPowerOfAttorneyList');
+            CreateWebService(ObjectTypeTemp::Page,9068639,'SafeCustodyRegister');
+            CreateWebService(ObjectTypeTemp::Page,9068552,'TaxRegister');
+            CreateWebService(ObjectTypeTemp::Page,9070259,'MeetingRegisterList');
+            CreateWebService(ObjectTypeTemp::Page,9068716,'ClientAcc.List');
+            CreateWebService(ObjectTypeTemp::Page,9068627,'ClientPortfolioList');
+            CreateWebService(ObjectTypeTemp::Page,9068607,'ClientInvestmentList');
+            CreateWebService(ObjectTypeTemp::Page,9068614,'ClientAssetList');
+            CreateWebService(ObjectTypeTemp::Page,9068667,'ClientCustomerList');
+            CreateWebService(ObjectTypeTemp::Page,9068670,'ClientVendorList');
+            CreateWebService(ObjectTypeTemp::Page,25,'CustomerLedgerEntries');
+            CreateWebService(ObjectTypeTemp::Page,21,'CustomersList');
+            CreateWebService(ObjectTypeTemp::Page,26,'Vendor');
+            CreateWebService(ObjectTypeTemp::Page,371,'BankAccountList');
+          END;
+
+  }
+  CODE
+  {
+    VAR
+      ObjectTypeTemp@100000000 : ',,,,,Codeunit,,,Page,Query';
+      FiltersString@100000001 : Text;
+
+    [External]
+    PROCEDURE CreateWebService@100000000(pObjectType@100000010 : ',,,,,Codeunit,,,Page,Query';pObjectID@100000011 : Integer;pServiceName@100000012 : Text);
+    VAR
+      WebServiceAggregate@100000000 : TEMPORARY Record 9900;
+      WebService@100000001 : Record 2000000076;
+    BEGIN
+      WebService.RESET;
+      WebService.SETRANGE("Service Name",pServiceName);
+      IF NOT WebService.FINDFIRST THEN BEGIN
+        WebServiceAggregate.INIT;
+        WebServiceAggregate."Object Type" := WebServiceAggregate."Object Type"::Page;
+        WebServiceAggregate."Object ID" := pObjectID;
+        WebServiceAggregate."Service Name" := pServiceName;
+        WebServiceAggregate."All Tenants" := TRUE;
+        WebServiceAggregate.Published := TRUE;
+        WebServiceAggregate.INSERT(TRUE);
+      END;
+    END;
+
+    LOCAL PROCEDURE CreateWebServiceCustom@100000006();
+    VAR
+      WebServiceAggregate@100000008 : TEMPORARY Record 9900;
+      AllObj@100000007 : Record 2000000038;
+      ServiceNameTemp@100000006 : Text;
+      WebService@100000000 : Record 2000000076;
+    BEGIN
+      AllObj.RESET;
+      AllObj.SETRANGE("Object Type",AllObj."Object Type"::Page);
+      AllObj.SETFILTER("Object ID",'%1..%2',50000,59999);
+      IF AllObj.FINDSET THEN
+        REPEAT
+          CLEAR(ServiceNameTemp);
+          ServiceNameTemp := DELCHR(AllObj."Object Name",'=');
+          IF ServiceNameTemp <> '' THEN BEGIN
+              WebService.RESET;
+              WebService.SETRANGE("Service Name",ServiceNameTemp);
+              IF NOT WebService.FINDFIRST THEN BEGIN
+                WebServiceAggregate.INIT;
+                WebServiceAggregate."Object Type" := WebServiceAggregate."Object Type"::Page;
+                WebServiceAggregate."Object ID" := AllObj."Object ID";
+                WebServiceAggregate."Service Name" := ServiceNameTemp;
+                WebServiceAggregate."All Tenants" := TRUE;
+                WebServiceAggregate.Published := TRUE;
+                WebServiceAggregate.INSERT(TRUE);
+              END;
+          END;
+      UNTIL AllObj.NEXT = 0;
+    END;
+
+    BEGIN
+    END.
+  }
+}
+

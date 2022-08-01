@@ -1,0 +1,40 @@
+OBJECT Table 50005 Counter Party
+{
+  OBJECT-PROPERTIES
+  {
+    Date=31-01-21;
+    Time=12:46:59;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Client No           ;Code20        ;DataClassification=ToBeClassified }
+    { 2   ;   ;Client Name         ;Text100       ;DataClassification=ToBeClassified }
+    { 3   ;   ;Entity No           ;Code20        ;DataClassification=ToBeClassified }
+    { 4   ;   ;Entity Name         ;Text100       ;DataClassification=ToBeClassified }
+    { 5   ;   ;Entity Type         ;Code10        ;DataClassification=ToBeClassified }
+    { 6   ;   ;Entity Type Class   ;Text30        ;DataClassification=ToBeClassified }
+    { 7   ;   ;Entity Type Description;Text30     ;DataClassification=ToBeClassified }
+    { 8   ;   ;Type                ;Text30        ;DataClassification=ToBeClassified }
+    { 9   ;   ;Appointment Date    ;Date          ;DataClassification=ToBeClassified }
+    { 10  ;   ;Counter Party name  ;Text100       ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;Client No,Entity No,Entity Type         ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

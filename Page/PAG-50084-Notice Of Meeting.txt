@@ -1,0 +1,86 @@
+OBJECT Page 50084 Notice Of Meeting
+{
+  OBJECT-PROPERTIES
+  {
+    Date=02-06-22;
+    Time=15:28:31;
+    Modified=Yes;
+    Version List=NOM;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table50003;
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 100000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 100000001;1;Group   ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 100000002;2;Field   ;
+                SourceExpr="Master Client No." }
+
+    { 100000003;2;Field   ;
+                SourceExpr="Corporate Director/Trustee" }
+
+    { 100000004;2;Field   ;
+                SourceExpr="Fiduciary Director/Trustee" }
+
+    { 100000005;2;Field   ;
+                SourceExpr="Individual Director/Trustee" }
+
+    { 100000006;2;Field   ;
+                SourceExpr="Director/Trustee" }
+
+    { 100000007;2;Field   ;
+                SourceExpr="Appointment Type" }
+
+    { 100000008;2;Field   ;
+                SourceExpr=Type }
+
+    { 100000009;2;Field   ;
+                SourceExpr="Master Client Name" }
+
+    { 100000010;2;Field   ;
+                SourceExpr="Corp Director/Trustee Name" }
+
+    { 100000011;2;Field   ;
+                SourceExpr="Fid Director/Trustee Name" }
+
+    { 100000012;2;Field   ;
+                SourceExpr="Indv Director/Trust Name" }
+
+    { 100000013;2;Field   ;
+                SourceExpr="Director/Trustee name" }
+
+    { 100000014;2;Field   ;
+                SourceExpr="Director Quorum" }
+
+    { 100000015;2;Field   ;
+                SourceExpr="Client Type" }
+
+    { 100000016;2;Field   ;
+                SourceExpr="First Partition Code" }
+
+    { 100000017;2;Field   ;
+                SourceExpr="Partition Group" }
+
+    { 100000018;2;Field   ;
+                SourceExpr="Purpose-Activity Code" }
+
+    { 100000019;2;Field   ;
+                SourceExpr="Purpose/Objective" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

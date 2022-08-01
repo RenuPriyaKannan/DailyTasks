@@ -1,0 +1,194 @@
+OBJECT Page 50043 Safe Custody Register API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=22-12-20;
+    Time=12:32:20;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table9068532;
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 1000000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000001;1;Group  ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 1000000002;2;Field  ;
+                SourceExpr=Type }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="No." }
+
+    { 1000000004;2;Field  ;
+                SourceExpr="Safe Custody Code" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr=Description }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="Date of Document" }
+
+    { 1000000007;2;Field  ;
+                SourceExpr="Temporarily Held By" }
+
+    { 1000000008;2;Field  ;
+                SourceExpr=Barcode }
+
+    { 1000000009;2;Field  ;
+                SourceExpr="Date Sent" }
+
+    { 1000000010;2;Field  ;
+                SourceExpr="Date Received" }
+
+    { 1000000011;2;Field  ;
+                SourceExpr="Document Signed By" }
+
+    { 1000000012;2;Field  ;
+                SourceExpr=ClientAnalysisA }
+
+    { 1000000013;2;Field  ;
+                SourceExpr=ClientAnalysisB }
+
+    { 1000000014;2;Field  ;
+                SourceExpr=ClientAnalysisC }
+
+    { 1000000015;2;Field  ;
+                SourceExpr=ClientAnalysisD }
+
+    { 1000000016;2;Field  ;
+                SourceExpr=ClientAnalysisE }
+
+    { 1000000017;2;Field  ;
+                SourceExpr=ClientAnalysisF }
+
+    { 1000000018;2;Field  ;
+                SourceExpr="Global Dimension 1 Code" }
+
+    { 1000000019;2;Field  ;
+                SourceExpr="Global Dimension 2 Code" }
+
+    { 1000000020;2;Field  ;
+                SourceExpr=Value }
+
+    { 1000000021;2;Field  ;
+                SourceExpr="Safe Custody Type" }
+
+    { 1000000022;2;Field  ;
+                SourceExpr="Safe Custody Sub Type" }
+
+    { 1000000023;2;Field  ;
+                SourceExpr="No. Series" }
+
+    { 1000000024;2;Field  ;
+                SourceExpr="Dual Control User 1" }
+
+    { 1000000025;2;Field  ;
+                SourceExpr="Dual Control User 2" }
+
+    { 1000000026;2;Field  ;
+                SourceExpr="Safe Custody Agreement" }
+
+    { 1000000027;2;Field  ;
+                SourceExpr="Insurance Required" }
+
+    { 1000000028;2;Field  ;
+                SourceExpr=Fees }
+
+    { 1000000029;2;Field  ;
+                SourceExpr="Asset Type" }
+
+    { 1000000030;2;Field  ;
+                SourceExpr="Asset No." }
+
+    { 1000000031;2;Field  ;
+                SourceExpr="Transferred To" }
+
+    { 1000000032;2;Field  ;
+                SourceExpr="Logged In By" }
+
+    { 1000000033;2;Field  ;
+                SourceExpr="Last Location" }
+
+    { 1000000034;2;Field  ;
+                SourceExpr="Last Date In" }
+
+    { 1000000035;2;Field  ;
+                SourceExpr="Last Date Removed" }
+
+    { 1000000036;2;Field  ;
+                SourceExpr="Physical Loc. Last Verified" }
+
+    { 1000000037;2;Field  ;
+                SourceExpr="Last Sub-Location" }
+
+    { 1000000038;2;Field  ;
+                SourceExpr="Last Moved By" }
+
+    { 1000000039;2;Field  ;
+                SourceExpr="Last Review Date" }
+
+    { 1000000040;2;Field  ;
+                SourceExpr="Last Review By" }
+
+    { 1000000041;2;Field  ;
+                SourceExpr="Next Review Date" }
+
+    { 1000000042;2;Field  ;
+                SourceExpr="Packet Number" }
+
+    { 1000000043;2;Field  ;
+                SourceExpr="Last Date Received" }
+
+    { 1000000044;2;Field  ;
+                SourceExpr="Last Received By" }
+
+    { 1000000045;2;Field  ;
+                SourceExpr="Additional Description" }
+
+    { 1000000046;2;Field  ;
+                SourceExpr=Risk }
+
+    { 1000000047;2;Field  ;
+                SourceExpr="Risk Comments" }
+
+    { 1000000048;2;Field  ;
+                SourceExpr="Multiple Items Detail" }
+
+    { 1000000049;2;Field  ;
+                SourceExpr="Date Last Modified" }
+
+    { 1000000050;2;Field  ;
+                SourceExpr="Date Last Modified By" }
+
+    { 1000000051;2;Field  ;
+                SourceExpr=Status }
+
+    { 1000000052;2;Field  ;
+                SourceExpr="Valuation Currency" }
+
+    { 1000000053;2;Field  ;
+                SourceExpr="Temporarily Held Date" }
+
+    { 1000000054;2;Field  ;
+                SourceExpr="Expiry Date of Document" }
+
+    { 1000000055;2;Field  ;
+                SourceExpr="External Reference No." }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

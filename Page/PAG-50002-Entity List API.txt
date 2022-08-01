@@ -1,0 +1,212 @@
+OBJECT Page 50002 Entity List API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=31-05-21;
+    Time=12:35:00;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    InsertAllowed=No;
+    DeleteAllowed=No;
+    SourceTable=Table9068505;
+    PageType=List;
+    OnOpenPage=VAR
+                 lText000@1040001 : TextConst 'ENU=You do not have permission to view the Entity List';
+               BEGIN
+               END;
+
+    ActionList=ACTIONS
+    {
+      { 1000000001;  ;ActionContainer;
+                      Name=New;
+                      ActionContainerType=NewDocumentItems }
+    }
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                GroupType=Repeater }
+
+    { 2   ;2   ;Field     ;
+                SourceExpr="Entity No.";
+                CaptionClass=FIELDCAPTION("Entity No.");
+                Editable=FALSE }
+
+    { 1000000030;2;Field  ;
+                SourceExpr=Type }
+
+    { 1000000031;2;Field  ;
+                SourceExpr="Personal/Corporate" }
+
+    { 1000000028;2;Field  ;
+                SourceExpr=Name }
+
+    { 1000000029;2;Field  ;
+                SourceExpr="Name 2" }
+
+    { 1000000027;2;Field  ;
+                SourceExpr="Anonimised Name";
+                Visible=FALSE }
+
+    { 1000000023;2;Field  ;
+                SourceExpr=Initials }
+
+    { 1000000022;2;Field  ;
+                SourceExpr="Search Name" }
+
+    { 1000000103;2;Field  ;
+                CaptionML=ENU=Gender;
+                SourceExpr=Gender }
+
+    { 1000000021;2;Field  ;
+                SourceExpr=PEP }
+
+    { 1000000020;2;Field  ;
+                SourceExpr=EP }
+
+    { 1000000019;2;Field  ;
+                SourceExpr=Classification;
+                Visible=FALSE }
+
+    { 1000000018;2;Field  ;
+                SourceExpr="External Reference No";
+                Visible=false }
+
+    { 1000000058;2;Field  ;
+                SourceExpr="Passport number";
+                Visible=FALSE }
+
+    { 1000000057;2;Field  ;
+                SourceExpr="Passport country of issue";
+                Visible=[FALSE ] }
+
+    { 1000000056;2;Field  ;
+                SourceExpr="Passport/ID Issue Date";
+                Visible=FALSE }
+
+    { 1000000055;2;Field  ;
+                SourceExpr="Passport expiry date";
+                Visible=FALSE }
+
+    { 1000000054;2;Field  ;
+                SourceExpr="Passport/ID Number (2)";
+                Visible=FALSE }
+
+    { 1000010053;2;Field  ;
+                SourceExpr="Passport/ID Country (2)";
+                Visible=FALSE }
+
+    { 1000000016;2;Field  ;
+                SourceExpr="Passport/ID Issue Date (2)";
+                Visible=FALSE }
+
+    { 1000000015;2;Field  ;
+                SourceExpr="Passport/ID Expiry Date (2)";
+                Visible=FALSE }
+
+    { 1000000010;2;Field  ;
+                SourceExpr="Date of Birth";
+                Visible=FALSE }
+
+    { 1000000008;2;Field  ;
+                SourceExpr=Nationality;
+                Visible=FALSE }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="Bank Swift Code";
+                Visible=FALSE }
+
+    { 1000000000;2;Field  ;
+                SourceExpr="Bank Sort Code";
+                Visible=FALSE }
+
+    { 1000000038;2;Field  ;
+                SourceExpr=Inactive;
+                Visible=FALSE }
+
+    { 1000000040;2;Field  ;
+                SourceExpr="NI Number";
+                Visible=FALSE }
+
+    { 1000000041;2;Field  ;
+                SourceExpr=Profession;
+                Visible=FALSE }
+
+    { 1000000032;2;Field  ;
+                SourceExpr="Owner No.";
+                Visible=FALSE }
+
+    { 1000000052;2;Field  ;
+                SourceExpr=Manager;
+                Visible=FALSE }
+
+    { 1000000051;2;Field  ;
+                SourceExpr=Administrator;
+                Visible=false }
+
+    { 1000009951;2;Field  ;
+                SourceExpr="First Partition Code" }
+
+    { 1000000102;2;Field  ;
+                SourceExpr="Formal Name";
+                Visible=FALSE }
+
+    { 1000000111;2;Field  ;
+                SourceExpr="Last Risk Assessment Date";
+                Visible=FALSE }
+
+    { 1000000107;2;Field  ;
+                SourceExpr="Next Risk Assessment Due Date";
+                Visible=FALSE }
+
+    { 1000000108;2;Field  ;
+                SourceExpr="Current Risk Rating";
+                Visible=FALSE }
+
+    { 1000000109;2;Field  ;
+                SourceExpr="Current Risk Weight";
+                Visible=FALSE }
+
+    { 1000000117;2;Field  ;
+                SourceExpr="Address 1";
+                Visible=FALSE }
+
+    { 1000000116;2;Field  ;
+                SourceExpr="Address 2";
+                Visible=FALSE }
+
+    { 1000000115;2;Field  ;
+                SourceExpr="Address 3";
+                Visible=FALSE }
+
+    { 1000000114;2;Field  ;
+                SourceExpr=City;
+                Visible=FALSE }
+
+    { 1000000113;2;Field  ;
+                SourceExpr="Post Code";
+                Visible=FALSE }
+
+    { 1000000112;2;Field  ;
+                SourceExpr=County;
+                Visible=FALSE }
+
+    { 1000000110;2;Field  ;
+                SourceExpr="Country Code";
+                Visible=FALSE }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

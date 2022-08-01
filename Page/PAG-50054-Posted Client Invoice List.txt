@@ -1,0 +1,908 @@
+OBJECT Page 50054 Posted Client Invoice List
+{
+  OBJECT-PROPERTIES
+  {
+    Date=21-01-21;
+    Time=14:34:35;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    Editable=No;
+    SourceTable=Table9068453;
+    PageType=List;
+    PromotedActionCategoriesML=ENU=New,Process,Report,Documents;
+    OnInit=BEGIN
+             PostBtnEnable := TRUE;
+             AuthoriserBtnEnable := TRUE;
+             PostBtnVisible := TRUE;
+             UnpostedButtonVisible := TRUE;
+             AuthoriserBtnVisible := TRUE;
+             PostedButtonVisible := TRUE;
+           END;
+
+    OnOpenPage=VAR
+                 ClientFunctions@1000000000 : Codeunit 9068493;
+                 TCIJobsSetup@1040000 : Record 9072670;
+               BEGIN
+                 TCIJobsSetup.GET;
+
+                 FILTERGROUP := 2;
+                 IF GETFILTER(Status) = 'Posted' THEN
+                   CurrPage.CAPTION := 'Posted Client Invoices.';
+                 FILTERGROUP := 0;
+
+                 IF GETFILTER(Status) = 'Posted' THEN BEGIN
+                   CurrPage.CAPTION := 'Posted Client Invoices.';
+                   PostedButtonVisible := TRUE;
+                   UnpostedButtonVisible := FALSE;
+
+                   SettlementVisible := TCIJobsSetup."Enforce Settlement Details";
+                 END ELSE
+                   SettlementVisible := FALSE;
+
+                 IF NOT CurrPage.LOOKUPMODE THEN BEGIN
+                   ShowCardVisible := TRUE;
+                   CurrPage.CAPTION := 'Posted Client Invoices.';
+                   PostBtnVisible := FALSE;
+                   SubmitBtnVisible := FALSE;
+                   AuthoriserBtnVisible := FALSE;
+                 END ELSE BEGIN
+                   IF ClientFunctions.CheckPermissions('AUTHORISER') THEN
+                     AuthoriserBtnVisible := FALSE;
+                   PostBtnVisible := TRUE;
+                   SubmitBtnVisible := FALSE;
+                 END;
+                 IF TCIJobsSetup."Draft Client Invoice Form ID" > 0 THEN BEGIN
+                   AuthoriserBtnEnable := FALSE;
+                   PostBtnEnable := FALSE;
+                   UnpostedButtonVisible := FALSE;
+                   PostedButtonVisible := TRUE;
+                 END;
+               END;
+
+    OnAfterGetRecord=BEGIN
+                       CALCFIELDS("Total Original Value", "Total Fixed Fee Value");
+                       OnAfterGetCurrRecord2;
+                     END;
+
+    OnNewRecord=BEGIN
+                  OnAfterGetCurrRecord2;
+                END;
+
+    OnAfterGetCurrRecord=BEGIN
+                           gFirstAuth := CommentExists(Rec, 'FIRST');
+                           gSecondAuth :=  CommentExists(Rec, 'SECOND');
+                           OnAfterGetCurrRecord2;
+                         END;
+
+    ActionList=ACTIONS
+    {
+      { 1900000003;0 ;ActionContainer;
+                      ActionContainerType=RelatedInformation }
+      { 1040002 ;1   ;ActionGroup;
+                      Name=PostedButton;
+                      CaptionML=ENU=Invoice }
+      { 1000000020;2 ;Action    ;
+                      ShortCutKey=Return;
+                      CaptionML=ENU=&Card;
+                      Promoted=Yes;
+                      PromotedIsBig=Yes;
+                      Image=Card;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 ClientInvoiceRec@1000000000 : Record 9068453;
+                                 DraftClientInvoicesForm@1000000001 : Page 9068535;
+                                 PostedClientInvoiceForm@1000000002 : Page 9068528;
+                               BEGIN
+                                 IF Status = Status::Unposted THEN BEGIN
+                                   DraftClientInvoicesForm.SETTABLEVIEW(Rec);
+                                   DraftClientInvoicesForm.SETRECORD(Rec);
+                                   DraftClientInvoicesForm.RUN;
+                                 END ELSE BEGIN
+                                   PostedClientInvoiceForm.SETTABLEVIEW(Rec);
+                                   PostedClientInvoiceForm.SETRECORD(Rec);
+                                   PostedClientInvoiceForm.RUN;
+                                 END;
+                               END;
+                                }
+      { 110000002;1  ;ActionGroup;
+                      CaptionML=ENU=Comments }
+      { 110000001;2  ;Action    ;
+                      CaptionML=ENU=Co&mments;
+                      RunObject=Page 9068566;
+                      RunPageLink=Type=CONST(Cl. Invoice),
+                                  Extra Key=FIELD(No.);
+                      Promoted=Yes;
+                      Image=ViewComments;
+                      PromotedCategory=Process }
+      { 1900000004;0 ;ActionContainer;
+                      ActionContainerType=ActionItems }
+      { 1000000029;1 ;ActionGroup;
+                      CaptionML=ENU=DeleteDraft;
+                      Visible=UnpostedButtonVisible }
+      { 1000000022;2 ;Action    ;
+                      CaptionML=ENU=&Delete Draft Invoice;
+                      Promoted=Yes;
+                      Visible=UnpostedButtonVisible;
+                      PromotedIsBig=Yes;
+                      Image=Delete;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 _ClientInvoiceRec@1000000000 : Record 9068453;
+                               BEGIN
+                                 CurrPage.SETSELECTIONFILTER(_ClientInvoiceRec);
+                                 fDeleteSelected(_ClientInvoiceRec);
+                               END;
+                                }
+      { 1000000015;1 ;ActionGroup;
+                      CaptionML=ENU=Submit }
+      { 1000000006;2 ;Action    ;
+                      Name=SubmitBtn;
+                      CaptionML=ENU=Submit;
+                      Promoted=Yes;
+                      Visible=SubmitBtnVisible;
+                      PromotedIsBig=Yes;
+                      Image=Completed;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 ClientInvoiceRec@1000000001 : Record 9068453;
+                               BEGIN
+                                 CurrPage.SETSELECTIONFILTER (ClientInvoiceRec);
+                                 fSubmit (ClientInvoiceRec, FALSE);  //New parameter added
+                               END;
+                                }
+      { 1000000048;1 ;ActionGroup }
+      { 1000000047;2 ;Action    ;
+                      Name=Documents;
+                      CaptionML=ENU=Documents;
+                      RunObject=Page 9069711;
+                      RunPageView=SORTING(Type,No.,ID,Link Type,Link Code);
+                      RunPageLink=Type=CONST(Client),
+                                  No.=FIELD(Customer No.),
+                                  Link Type=CONST(Client Invoice),
+                                  Link Code=FIELD(No.);
+                      Promoted=Yes;
+                      PromotedIsBig=No;
+                      Image=Document;
+                      PromotedCategory=Category4;
+                      OnAction=VAR
+                                 DocStore@1000000000 : Page 9069346;
+                               BEGIN
+                               END;
+                                }
+      { 1000000014;1 ;ActionGroup;
+                      Name=AuthoriserBtn;
+                      CaptionML=ENU=Authoriser;
+                      Visible=AuthoriserBtnVisible }
+      { 1000000013;2 ;Action    ;
+                      CaptionML=ENU=Authorise;
+                      Promoted=Yes;
+                      Visible=AuthoriserBtnVisible;
+                      PromotedIsBig=Yes;
+                      Image=Approve;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 ClientInvoiceRec@1000000001 : Record 9068453;
+                                 _NoOfRecords@1000000000 : Integer;
+                               BEGIN
+                                 CurrPage.SETSELECTIONFILTER (ClientInvoiceRec);
+
+                                 IF ClientInvoiceRec.FIND('-') THEN REPEAT
+                                   AuthoriseSelection(ClientInvoiceRec, (_NoOfRecords <> 1));
+                                 UNTIL ClientInvoiceRec.NEXT = 0;
+                               END;
+                                }
+      { 1000000009;2 ;Action    ;
+                      CaptionML=ENU=Un-Authorise;
+                      Image=Undo;
+                      OnAction=VAR
+                                 ClientInvoiceRec@1000000001 : Record 9068453;
+                               BEGIN
+                                 CurrPage.SETSELECTIONFILTER (ClientInvoiceRec);
+                                 fUnAuthorise ( ClientInvoiceRec );
+                               END;
+                                }
+      { 1000000011;2 ;Action    ;
+                      CaptionML=ENU=Un-Submit;
+                      Image=Undo;
+                      OnAction=VAR
+                                 ClientInvoiceRec@1000000001 : Record 9068453;
+                               BEGIN
+                                 CurrPage.SETSELECTIONFILTER (ClientInvoiceRec);
+                                 fUnSubmit ( ClientInvoiceRec, FALSE );  //New parameter added
+                               END;
+                                }
+      { 1000000008;1 ;ActionGroup;
+                      Name=PostBtn;
+                      CaptionML=ENU=Posting;
+                      Visible=PostBtnVisible }
+      { 1000000007;2 ;Action    ;
+                      ShortCutKey=F9;
+                      CaptionML=ENU=Post;
+                      Promoted=Yes;
+                      Visible=PostBtnVisible;
+                      PromotedIsBig=Yes;
+                      Image=Post;
+                      PromotedCategory=Process;
+                      OnAction=BEGIN
+                                 IF Authorised THEN BEGIN
+                                   Post;
+                                 END ELSE
+                                   ERROR('You must first Authorise the Draft Client Invoice');
+                               END;
+                                }
+      { 1000000005;2 ;Action    ;
+                      ShortCutKey=Shift+F9;
+                      CaptionML=ENU=Post and Print;
+                      Image=PostPrint;
+                      OnAction=VAR
+                                 PostedBG@1000000001 : Record 9068453;
+                                 Customer@1000000002 : Record 18;
+                                 InvLayoutSelection@1000000003 : Record 9068659;
+                                 ClientInvoice@1000000004 : Record 9068453;
+                               BEGIN
+                                 IF Authorised THEN BEGIN
+                                   Post;
+                                   COMMIT;
+                                   ClientInvoice.GET ( "No." );
+                                   Customer.GET(ClientInvoice."Customer No.");
+                                   InvLayoutSelection.GET(Customer."Invoice Type");
+                                   PostedBG.SETRANGE ( "No." , ClientInvoice."No." );
+                                   PostedBG.SETRANGE ( Status , PostedBG.Status::Posted );
+                                   IF PostedBG.FIND ( '-' ) THEN;
+                                   PostedBG."No. Of Copy" := 0;
+                                   REPEAT
+                                     PostedBG.MODIFY;
+                                     COMMIT;
+                                     REPORT.RUNMODAL(InvLayoutSelection."Report ID",FALSE,FALSE,PostedBG);
+                                     PostedBG."No. Of Copy" := PostedBG."No. Of Copy" + 1;
+                                   UNTIL PostedBG."No. Of Copy" > InvLayoutSelection."Default No. Of Copies";
+                                   PostedBG."No. Of Copy" := 0;
+                                   PostedBG.MODIFY;
+                                 END ELSE
+                                   ERROR('You must first Authorise the Draft Client Invoice');
+                               END;
+                                }
+      { 1000000004;2 ;Action    ;
+                      CaptionML=ENU=Test Report Batch;
+                      Image=TestReport;
+                      OnAction=VAR
+                                 TestReport@1000000000 : Report 9068645;
+                               BEGIN
+                                 TestReport.RUN;
+                               END;
+                                }
+      { 1000000002;2 ;Action    ;
+                      CaptionML=ENU=Post Batch;
+                      Image=PostBatch;
+                      OnAction=BEGIN
+                                 //IF NOT CONFIRM('You are about to post all authorised invoices, do you wish to continue?') THEN ERROR('');
+                                 //COMMIT;
+                                 //TestReport.PostClientInvoices;
+                               END;
+                                }
+      { 1000000021;1 ;ActionGroup;
+                      CaptionML=ENU=PDF Batch Production;
+                      Visible=PostedButtonVisible }
+      { 1000000019;2 ;Action    ;
+                      CaptionML=ENU=Test Report;
+                      Visible=PostedButtonVisible;
+                      Image=TestReport;
+                      OnAction=VAR
+                                 ClientInvoice@1040000 : Record 9068453;
+                               BEGIN
+                                 CurrPage.SETSELECTIONFILTER(ClientInvoice);
+                                 REPORT.RUN(REPORT::"TWM PDF Invoice Check", TRUE, TRUE, ClientInvoice)
+                               END;
+                                }
+      { 1000000018;2 ;Action    ;
+                      CaptionML=ENU=Create PDF;
+                      Visible=PostedButtonVisible;
+                      Image=SendAsPDF;
+                      OnAction=VAR
+                                 TWMPDFDoc@1040001 : Codeunit 9068233;
+                                 ClientInvoice@1040002 : Record 9068453;
+                               BEGIN
+                                 CurrPage.SETSELECTIONFILTER(ClientInvoice);
+                                 TWMPDFDoc.PDFInvoiceOptions(ClientInvoice, 0);
+                                 Rec := ClientInvoice;
+                               END;
+                                }
+      { 1000000017;2 ;Action    ;
+                      CaptionML=ENU=Create PDF and Draft Email;
+                      Visible=PostedButtonVisible;
+                      Image=SendEmailPDF;
+                      OnAction=VAR
+                                 TWMPDFDoc@1040000 : Codeunit 9068233;
+                                 ClientInvoice@1040002 : Record 9068453;
+                               BEGIN
+                                 CurrPage.SETSELECTIONFILTER(ClientInvoice);
+                                 TWMPDFDoc.PDFInvoiceOptions(ClientInvoice, 1);
+                               END;
+                                }
+      { 1000000016;2 ;Action    ;
+                      CaptionML=ENU=Create PDF and Auto Send Email;
+                      Visible=PostedButtonVisible;
+                      Image=SendEmailPDF;
+                      OnAction=VAR
+                                 TWMPDFDoc@1040000 : Codeunit 9068233;
+                                 ClientInvoice@1040002 : Record 9068453;
+                               BEGIN
+                                 CurrPage.SETSELECTIONFILTER(ClientInvoice);
+                                 TWMPDFDoc.PDFInvoiceOptions(ClientInvoice, 2);
+                               END;
+                                }
+      { 100000000;2  ;ActionGroup;
+                      CaptionML=ENU=Export to PDF;
+                      Image=SendAsPDF }
+      { 100000001;3  ;Action    ;
+                      Name=PDFExportDocs;
+                      CaptionML=ENU=Client Documents;
+                      Image=Documents;
+                      OnAction=VAR
+                                 _TWMPDFDoc@100000000 : Codeunit 9068233;
+                                 _ClientInvoice@100000001 : Record 9068453;
+                               BEGIN
+                                 CurrPage.SETSELECTIONFILTER(_ClientInvoice);
+                                 _TWMPDFDoc.PDFInvoiceOptions(_ClientInvoice, 3);
+                                 Rec := _ClientInvoice;
+                               END;
+                                }
+      { 100000002;3  ;Action    ;
+                      Name=PDFExportShare;
+                      CaptionML=ENU=Network Share;
+                      Image=FiledPosted;
+                      OnAction=VAR
+                                 _TWMPDFDoc@100000001 : Codeunit 9068233;
+                                 _ClientInvoice@100000000 : Record 9068453;
+                               BEGIN
+                                 CurrPage.SETSELECTIONFILTER(_ClientInvoice);
+                                 _TWMPDFDoc.PDFInvoiceOptions(_ClientInvoice, 4);
+                                 Rec := _ClientInvoice;
+                               END;
+                                }
+      { 1000000058;1 ;ActionGroup;
+                      CaptionML=ENU=Client Invoice }
+      { 1000000057;2 ;Action    ;
+                      CaptionML=[ENU=&Navigate;
+                                 ENG=&Navigate];
+                      Promoted=Yes;
+                      Image=Navigate;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 NavigateForm@1000000000 : Page 344;
+                               BEGIN
+                                 NavigateForm.SetDoc("Invoice Date","Invoice No.");
+                                 IF REVERSED = REVERSED::Reversed THEN
+                                   IF STRMENU ('Original Document,Reversal Document') = 2 THEN
+                                     NavigateForm.SetDoc("Reversal Document Date","Reversal Document No.");
+
+                                 NavigateForm.RUN;
+                               END;
+                                }
+      { 1000000072;1 ;ActionGroup;
+                      Name=Settlement;
+                      Visible=SettlementVisible }
+      { 1000000071;2 ;Action    ;
+                      Name=AmendSettlementDetails;
+                      CaptionML=ENU=Amend Settlement Details;
+                      Promoted=Yes;
+                      Visible=SettlementVisible;
+                      Image=EditLines;
+                      PromotedCategory=Process;
+                      OnAction=BEGIN
+                                 AmendSettlementDetails;
+                                 CurrPage.UPDATE(FALSE);
+                               END;
+                                }
+      { 1000000070;2 ;Action    ;
+                      Name=AuthoriseSettlementDetails;
+                      CaptionML=ENU=Authorise Settlement Details;
+                      Promoted=Yes;
+                      Visible=SettlementVisible;
+                      Image=AuthorizeCreditCard;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 ClientInvoice@1000000000 : Record 9068453;
+                                 ClientInvoice2@1000000001 : Record 9068453;
+                                 SelectionCount@1000000002 : Integer;
+                                 FilterCount@1000000003 : Integer;
+                               BEGIN
+                                 ClientInvoice.COPY(Rec);
+                                 ClientInvoice2.COPY(Rec);
+                                 CurrPage.SETSELECTIONFILTER(ClientInvoice);
+                                 SelectionCount := ClientInvoice.COUNT;
+                                 FilterCount := ClientInvoice2.COUNT;
+                                 IF SelectionCount > FilterCount THEN
+                                   AuthoriseSettlementDetails(ClientInvoice2)
+                                 ELSE
+                                   AuthoriseSettlementDetails(ClientInvoice);
+                               END;
+                                }
+      { 1000000044;  ;ActionContainer;
+                      Name=PrintContainer;
+                      CaptionML=ENU=Print;
+                      Description=TWM90.07#2;
+                      ActionContainerType=Reports }
+      { 1000000043;1 ;ActionGroup;
+                      Name=PrintGroup;
+                      CaptionML=ENU=Print;
+                      Description=TWM90.07#2 }
+      { 1000000042;2 ;Action    ;
+                      Name=PreviewPrintClientInvoice;
+                      CaptionML=ENU=Preview / Print Client Invoice;
+                      Description=TWM90.07#2;
+                      Promoted=Yes;
+                      Image=PrintReport;
+                      PromotedCategory=Report;
+                      OnAction=BEGIN
+                                 Customer.GET("Customer No.");
+                                 InvLayoutSelection.GET(Customer."Invoice Type");
+                                 BillingGuide.SETRANGE("No.","No.");
+
+                                 REPORT.RUNMODAL(InvLayoutSelection."Report ID",TRUE,FALSE,BillingGuide);
+                               END;
+                                }
+      { 1000000037;2 ;Action    ;
+                      Name=PrintClientInvoiceXCopies;
+                      CaptionML=ENU=Print Client Invoice (x copies);
+                      Description=TWM90.07#2;
+                      Image=PrintReport;
+                      OnAction=BEGIN
+                                 Customer.GET("Customer No.");
+                                 InvLayoutSelection.GET(Customer."Invoice Type");
+                                 BillingGuide.SETRANGE("No.","No.");
+
+                                 IF BillingGuide.FIND ( '-' ) THEN;
+                                 BillingGuide."No. Of Copy" := 0;
+                                 REPEAT
+                                   BillingGuide.MODIFY;
+                                   COMMIT;
+                                   REPORT.RUNMODAL(InvLayoutSelection."Report ID",FALSE,FALSE,BillingGuide);
+                                   BillingGuide."No. Of Copy" := BillingGuide."No. Of Copy" + 1;
+                                 UNTIL BillingGuide."No. Of Copy" > InvLayoutSelection."Default No. Of Copies";
+                                 BillingGuide."No. Of Copy" := 0;
+                                 BillingGuide.MODIFY;
+                               END;
+                                }
+    }
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                GroupType=Repeater }
+
+    { 2   ;2   ;Field     ;
+                SourceExpr="No." }
+
+    { 4   ;2   ;Field     ;
+                SourceExpr="Customer No." }
+
+    { 6   ;2   ;Field     ;
+                SourceExpr="Customer Name" }
+
+    { 1000000023;2;Field  ;
+                SourceExpr=Status }
+
+    { 1000000010;2;Field  ;
+                SourceExpr=Submit;
+                Visible=FALSE }
+
+    { 1000000024;2;Field  ;
+                CaptionML=[ENU=Authorised by;
+                           ENG=Authorised by];
+                SourceExpr="Authorised By" }
+
+    { 1000000012;2;Field  ;
+                SourceExpr=Authorised }
+
+    { 32  ;2   ;Field     ;
+                SourceExpr="Posting Date" }
+
+    { 1000000001;2;Field  ;
+                SourceExpr="Job No." }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Job Description" }
+
+    { 34  ;2   ;Field     ;
+                SourceExpr="Total Amended Value";
+                Visible=FALSE }
+
+    { 36  ;2   ;Field     ;
+                SourceExpr="Total Profit / Loss";
+                Visible=FALSE }
+
+    { 1040018;2;Field     ;
+                SourceExpr="Billing Guide Created Date" }
+
+    { 29  ;2   ;Field     ;
+                SourceExpr="Billing Addressee";
+                Visible=FALSE }
+
+    { 8   ;2   ;Field     ;
+                SourceExpr="Invoice No." }
+
+    { 10  ;2   ;Field     ;
+                SourceExpr="Invoice Date" }
+
+    { 16  ;2   ;Field     ;
+                SourceExpr="Total Bill";
+                Visible=FALSE }
+
+    { 1040010;2;Field     ;
+                SourceExpr="Total Net Bill Amount" }
+
+    { 1000000045;2;Field  ;
+                SourceExpr="Total Net Bill Amount (LCY)" }
+
+    { 1040012;2;Field     ;
+                CaptionML=[ENU=Total VAT Amount;
+                           ENG=Total VAT Amount;
+                           ENA=Total GST Amount;
+                           ENZ=Total GST Amount];
+                SourceExpr="Total VAT Amount";
+                Visible=FALSE }
+
+    { 1040029;2;Field     ;
+                CaptionML=[ENU=Total Incl. VAT;
+                           ENG=Total Incl. VAT;
+                           ENA=Total Incl. GST;
+                           ENZ=Total Incl. GST];
+                SourceExpr=CalcTotalIncVAT(Rec) }
+
+    { 1040014;2;Field     ;
+                CaptionML=[ENU=Total Value;
+                           ENG=Total Value];
+                SourceExpr="Total Original Value" + "Total Fixed Fee Value" }
+
+    { 1040016;2;Field     ;
+                SourceExpr="Total Discount Amount" }
+
+    { 1000000056;2;Field  ;
+                SourceExpr="Cust. Ledger Open";
+                Visible=FALSE }
+
+    { 1000000055;2;Field  ;
+                SourceExpr="Cust. Ledger Currency Code";
+                Visible=FALSE }
+
+    { 1000000054;2;Field  ;
+                SourceExpr="Cust. Ledger Amount";
+                Visible=FALSE }
+
+    { 1000000053;2;Field  ;
+                SourceExpr="Cust. Ledger Remaining Amount";
+                Visible=FALSE }
+
+    { 1000000051;2;Field  ;
+                SourceExpr="Cust. Ledger Amount (LCY)";
+                Visible=FALSE }
+
+    { 1000000052;2;Field  ;
+                SourceExpr="Cust. Led. Remain. Amt. (LCY)";
+                Visible=FALSE }
+
+    { 1000000068;2;Field  ;
+                SourceExpr="Recipient Account";
+                Visible=FALSE }
+
+    { 1000000067;2;Field  ;
+                SourceExpr="Settlement Client No.";
+                Visible=FALSE }
+
+    { 1000000066;2;Field  ;
+                SourceExpr="Payment Account";
+                Visible=FALSE }
+
+    { 1000000065;2;Field  ;
+                SourceExpr="Payment Method Code";
+                Visible=FALSE }
+
+    { 1000000064;2;Field  ;
+                SourceExpr="Settlement Due";
+                Visible=FALSE }
+
+    { 1000000062;2;Field  ;
+                SourceExpr="Settlement Date";
+                Visible=FALSE }
+
+    { 1000000063;2;Field  ;
+                SourceExpr="Settlement Resource";
+                Visible=FALSE }
+
+    { 110000000;2;Field   ;
+                SourceExpr="Settlement Review Confirmation" }
+
+    { 1100000057;2;Field  ;
+                SourceExpr="Settlement Auth Required";
+                Visible=FALSE }
+
+    { 110000004;2;Field   ;
+                SourceExpr="Settlement Reason Code" }
+
+    { 1000000060;2;Field  ;
+                SourceExpr="Payment Direct Debit";
+                Visible=FALSE }
+
+    { 1000000059;2;Field  ;
+                SourceExpr="Job Add. Auth Required";
+                Visible=FALSE }
+
+    { 1100000070;2;Field  ;
+                SourceExpr="Settlement Amended By" }
+
+    { 1110000069;2;Field  ;
+                SourceExpr="Settlement Amended On" }
+
+    { 1100000067;2;Field  ;
+                SourceExpr="Settlement Auth Status" }
+
+    { 1100000068;2;Field  ;
+                SourceExpr="Settlement Authorised By" }
+
+    { 1100000069;2;Field  ;
+                SourceExpr="Settlement Authorised Date" }
+
+    { 17  ;2   ;Field     ;
+                SourceExpr="Billing Address";
+                Visible=FALSE }
+
+    { 19  ;2   ;Field     ;
+                SourceExpr="Billing Address 2";
+                Visible=FALSE }
+
+    { 21  ;2   ;Field     ;
+                SourceExpr="Billing Address City";
+                Visible=FALSE }
+
+    { 23  ;2   ;Field     ;
+                CaptionML=[ENU=Billing Address State;
+                           ENG=Billing Address County;
+                           ENA=Billing Address State];
+                SourceExpr="Billing Address County";
+                Visible=FALSE }
+
+    { 25  ;2   ;Field     ;
+                SourceExpr="Billing Address Post Code";
+                Visible=FALSE }
+
+    { 27  ;2   ;Field     ;
+                SourceExpr="Billing Address Country Code";
+                Visible=FALSE }
+
+    { 1000000046;2;Field  ;
+                SourceExpr="Currency Code" }
+
+    { 1000000026;2;Field  ;
+                SourceExpr="Reversed By" }
+
+    { 1040004;2;Field     ;
+                SourceExpr="Global Dimension 1 Code";
+                Visible=FALSE }
+
+    { 1040006;2;Field     ;
+                SourceExpr="Global Dimension 2 Code";
+                Visible=FALSE }
+
+    { 1000000000;2;Field  ;
+                SourceExpr=Reference;
+                Visible=FALSE }
+
+    { 1000000032;2;Field  ;
+                CaptionML=[ENU=Administrator;
+                           ENG=Administrator];
+                SourceExpr=ClientAnalysisA;
+                Visible=FALSE }
+
+    { 1000000034;2;Field  ;
+                SourceExpr=ClientAnalysisB;
+                Visible=FALSE }
+
+    { 1000000036;2;Field  ;
+                SourceExpr=ClientAnalysisC;
+                Visible=FALSE }
+
+    { 1000000038;2;Field  ;
+                SourceExpr=ClientAnalysisD;
+                Visible=FALSE }
+
+    { 1000000040;2;Field  ;
+                SourceExpr=ClientAnalysisE;
+                Visible=FALSE }
+
+    { 1040008;2;Field     ;
+                SourceExpr=ClientAnalysisF;
+                Visible=FALSE }
+
+    { 1040025;2;Field     ;
+                SourceExpr=ClientAnalysisJ1;
+                Visible=FALSE }
+
+    { 1040027;2;Field     ;
+                SourceExpr=ClientAnalysisJ2;
+                Visible=FALSE }
+
+    { 100000003;2;Field   ;
+                SourceExpr=Comments }
+
+    { 1040000;2;Field     ;
+                SourceExpr="Has Credit Memo";
+                Visible=FALSE }
+
+    { 1000000025;2;Field  ;
+                SourceExpr="PDF Email Created" }
+
+    { 1000000027;2;Field  ;
+                SourceExpr="PDF Email Created By" }
+
+    { 1000000028;2;Field  ;
+                SourceExpr="PDF Email Created Date" }
+
+    { 1000000035;2;Field  ;
+                CaptionML=ENU=1st Authoriser;
+                SourceExpr="Review User 1 Code" }
+
+    { 1000000033;2;Field  ;
+                CaptionML=ENU=1st Authoriser Date;
+                SourceExpr="Review User 1 Date" }
+
+    { 1000000041;2;Field  ;
+                CaptionML=[ENU=1st Authoriser Comment;
+                           ENG=1st Authoriser Comment];
+                SourceExpr=gFirstAuth;
+                OnDrillDown=BEGIN
+                              gFirstAuthOnPush;
+                            END;
+
+                OnAssistEdit=BEGIN
+                               gFirstAuthOnPush;
+                             END;
+                              }
+
+    { 1000000031;2;Field  ;
+                CaptionML=ENU=2nd Authoriser;
+                SourceExpr="Review User 2 Code" }
+
+    { 1000000030;2;Field  ;
+                CaptionML=ENU=2nd Authoriser Date;
+                SourceExpr="Review User 2 Date" }
+
+    { 1000000039;2;Field  ;
+                CaptionML=[ENU=2nd Authoriser Comment;
+                           ENG=2nd Authoriser Comment];
+                SourceExpr=gSecondAuth;
+                Editable=FALSE;
+                OnDrillDown=BEGIN
+                              gSecondAuthOnPush;
+                            END;
+
+                OnAssistEdit=BEGIN
+                               gSecondAuthOnPush;
+                             END;
+                              }
+
+    { 1000000050;2;Field  ;
+                CaptionML=ENU=3rd Authoriser;
+                SourceExpr="Review User 3 Code" }
+
+    { 1000000049;2;Field  ;
+                CaptionML=ENU=3rd Authoriser Date;
+                SourceExpr="Review User 3 Date" }
+
+    { 1000000061;2;Field  ;
+                SourceExpr=Processed;
+                Visible=FALSE }
+
+  }
+  CODE
+  {
+    VAR
+      DPMxRecRef@1040000 : RecordRef;
+      BillingGuide@1000000004 : Record 9068453;
+      Customer@1000000003 : Record 18;
+      InvLayoutSelection@1000000002 : Record 9068659;
+      AuthoriserBtnVisible@19028409 : Boolean INDATASET;
+      ShowCardVisible@19009790 : Boolean INDATASET;
+      PostedButtonVisible@19005833 : Boolean INDATASET;
+      UnpostedButtonVisible@19038706 : Boolean INDATASET;
+      PostBtnVisible@19051256 : Boolean INDATASET;
+      SubmitBtnVisible@19010869 : Boolean INDATASET;
+      AuthoriserBtnEnable@19064244 : Boolean INDATASET;
+      PostBtnEnable@19077007 : Boolean INDATASET;
+      gFirstAuth@1000000001 : Boolean;
+      gSecondAuth@1000000000 : Boolean;
+      SettlementVisible@1000000005 : Boolean;
+
+    PROCEDURE Post@3();
+    VAR
+      ClientRec@1000000000 : Record 9068500;
+      ClientCustomerLink@1000000001 : Record 9072822;
+    BEGIN
+      IF ClientRec.GET(ClientCustomerLink.ReturnLinkedClientNo("Customer No."))THEN;
+      "Post Silently (Batch)" := FALSE;
+      IF (Frequency=Frequency::Request)AND("Next Invoice Update"<>"Next Invoice Update"::"Dont Update Next Invoice Date")AND
+      ("Proposed Next Invoice Date"=0D) THEN BEGIN
+        IF CONFIRM ('This Client has the Billing Frequency Set to %1.\' +
+                    'Click Yes to continue and leave the next invoice date unchanged\' +
+                    'or No to set the Next Invoice Date',TRUE,Frequency) THEN
+        CODEUNIT.RUN(CODEUNIT::"New Post Client Invoice New",Rec);
+      END ELSE BEGIN
+        CODEUNIT.RUN(CODEUNIT::"New Post Client Invoice New",Rec);
+      END;
+    END;
+
+    LOCAL PROCEDURE OnAfterGetCurrRecord2@19077479();
+    VAR
+      ClientFunctions@1000000000 : Codeunit 9068493;
+    BEGIN
+      IF CurrPage.LOOKUPMODE THEN BEGIN
+        IF ClientFunctions.CheckPermissions('AUTHORISER') THEN
+          AuthoriserBtnVisible := TRUE
+        ELSE BEGIN
+          AuthoriserBtnVisible := FALSE;
+        END;
+      END;
+
+      UnpostedButtonVisible := (Status = Status::Unposted);
+      PostedButtonVisible := (Status <> Status::Unposted);
+    END;
+
+    LOCAL PROCEDURE gFirstAuthOnPush@19064063();
+    BEGIN
+      ShowAuthoriserComments('FIRST', FALSE, FALSE);
+    END;
+
+    LOCAL PROCEDURE gSecondAuthOnPush@19071973();
+    BEGIN
+      ShowAuthoriserComments('SECOND', FALSE, FALSE);
+    END;
+
+    PROCEDURE CommentExists@1000000008(pClientInvoiceRec@1000000001 : Record 9068453;pCode@1000000002 : Code[10]) : Boolean;
+    VAR
+      _CommentRec@1000000000 : Record 9068515;
+    BEGIN
+      _CommentRec.SETRANGE(Type, _CommentRec.Type::Reviewer);
+      _CommentRec.SETRANGE("No.", "No.");
+      _CommentRec.SETRANGE("Extra Key", pCode);
+      EXIT(NOT _CommentRec.ISEMPTY);
+    END;
+
+    BEGIN
+    {
+      13.03.20  Hubert Bartkowiak
+                CRF53667 New field "Processed".
+
+      05.03.20  Alex Snape
+                CRF48497 Added Comments, Settlement Reason Code
+
+      08.01.20  Hubert Bartkowiak
+                CRF53419  New actions/group.
+      30.12.19  Unnar Eliasson
+                CRF53343  ReturnLinkedClientNo is now using Function in Client Customer Link
+
+      04.12.19  Alex Snape
+                CRF48497 Added Cust. Ledger Entry No., "Cust. Ledger Currency Code", "Cust. Ledger Amount", "Cust. Ledger Remaining Amount"
+                         "Cust. Ledger Amount (LCY)", "Cust. Led. Remain. Amt. (LCY)"
+
+      15.11.19  Alex Snape
+                CRF48497 Added Review User 3 Code and Review User 3 Date.
+
+      08.10.19  Dimitar Mashev
+                CRF51650 Docuemtns action added
+
+      01.08.19  Alex Snape
+                CRF51312 Amended Page Actions to ENU
+
+      20.06.19  Alex Snape
+                CRF50901 Added Currency and "Total Net Bill Amount (LCY)"
+    }
+    END.
+  }
+}
+

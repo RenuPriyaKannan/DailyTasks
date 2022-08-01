@@ -1,0 +1,321 @@
+OBJECT Table 50004 NAVLITE
+{
+  OBJECT-PROPERTIES
+  {
+    Date=16-06-22;
+    Time=12:18:22;
+    Modified=Yes;
+    Version List=NAVLITE;
+  }
+  PROPERTIES
+  {
+    OnInsert=BEGIN
+               //NAVUserID := USERID;
+               //"Document Date" := TODAY;
+
+               DocumentFolderSetup.GET;
+               "External Doc Management System" := DocumentFolderSetup."External Doc Management System";
+             END;
+
+    LookupPageID=Page50094;
+    DrillDownPageID=Page50094;
+  }
+  FIELDS
+  {
+    { 1   ;   ;Type                ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=[ ,Client,Entity,Customer,Vendor] }
+    { 2   ;   ;No.                 ;Code20        ;TableRelation=IF (Type=CONST(Client)) Client."Client No."
+                                                                 ELSE IF (Type=CONST(Entity)) Entity."Entity No."
+                                                                 ELSE IF (Type=CONST(Customer)) Customer.No.
+                                                                 ELSE IF (Type=CONST(Vendor)) Vendor.No.;
+                                                   OnValidate=BEGIN
+                                                                NAVUserID := USERID;
+                                                                "Document Date":= TODAY;
+
+                                                                CASE Type OF
+                                                                  Type::Client:
+                                                                    IF Client.GET("No.") THEN BEGIN
+                                                                      Name := Client.Name;
+                                                                      "First Partition Code" := Client."First Partition Code";
+                                                                      "Second Partition Code" := Client."Second Partition Code";
+                                                                      Jurisdiction := Client.Jurisdiction;
+                                                                    END;
+                                                                  Type::Entity:
+                                                                  IF Entity.GET("No.") THEN BEGIN
+                                                                      Name := Entity.Name;
+                                                                      "First Partition Code" := Entity."First Partition Code";
+                                                                      "Second Partition Code" := Entity."Second Partition Code";
+                                                                      Jurisdiction := Entity.Jurisdiction;
+                                                                      "Entity Intermediary" := Entity."Intermediary No.";
+                                                                     "Entity Owner" := Entity."Owner No.";
+                                                                      "Entity Prospect" := Entity."Prospect No.";
+                                                                    END;
+                                                                  Type::Customer:
+                                                                    IF Customer.GET("No.") THEN BEGIN
+                                                                      Name := Customer.Name;
+                                                                    END;
+                                                                  Type::Vendor:
+                                                                    IF Vendor.GET("No.") THEN BEGIN
+                                                                      Name := Vendor.Name;
+                                                                    END;
+                                                                END;
+                                                              END;
+
+                                                   DataClassification=ToBeClassified }
+    { 3   ;   ;Name                ;Text1024       }
+    { 4   ;   ;Jurisdiction        ;Code10        ;DataClassification=ToBeClassified }
+    { 5   ;   ;First Partition Code;Code10        ;TableRelation="First Partition".Code;
+                                                   DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=First Partition Code }
+    { 6   ;   ;Second Partition Code;Code10       ;TableRelation="Second Partition".Code;
+                                                   DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Second Partition Code }
+    { 7   ;   ;NAVUserID           ;Text30        ;InitValue=UserID }
+    { 8   ;   ;AttributeType       ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=[ ,Portfolio,Investment,Bank,Loan,Agent,Property,Miscellaneous Asset,Yacht,Aviation,Intellectual Property,Life Assurance,Job] }
+    { 9   ;   ;Attribute           ;Text250       ;OnLookup=VAR
+                                                              ClientAsset@100000005 : Record 9068546;
+                                                              EntityRec@100000004 : Record 9068505;
+                                                              ClientRec@100000003 : Record 9068500;
+                                                              ClientPortfolio@100000002 : Record 9068565;
+                                                              ClientInvestment@100000001 : Record 9068542;
+                                                              ClientAccount@100000000 : Record 9068624;
+                                                              TCIJob@100000006 : Record 9072681;
+                                                            BEGIN
+
+                                                              ClientPortfolio.SETRANGE("Client No.","No.");
+                                                              ClientAsset.SETRANGE("Client No.","No.");
+                                                              ClientInvestment.SETRANGE("Client No.","No.");
+                                                              ClientAccount.SETRANGE("Client No.","No.");
+                                                              TCIJob.SETRANGE("No.","No.");
+
+                                                              CASE AttributeType OF
+                                                                AttributeType::Portfolio:
+                                                                    IF PAGE.RUNMODAL ( 0 , ClientPortfolio ) = ACTION::LookupOK THEN BEGIN
+                                                                        Attribute := ClientPortfolio."Portfolio No.";
+                                                                    END;
+                                                                AttributeType::Investment:
+                                                                  IF PAGE.RUNMODAL( 0 , ClientInvestment) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := ClientInvestment."Asset Code";
+                                                                    END;
+                                                                AttributeType::Bank:
+                                                                BEGIN
+                                                                  ClientAccount.SETRANGE("Account Type",ClientAccount."Account Type"::Bank);
+                                                                  IF PAGE.RUNMODAL( 0 , ClientAccount) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := ClientAccount."No.";
+                                                                    END;
+                                                                END;
+                                                                AttributeType::Loan:
+                                                                BEGIN
+                                                                  ClientAccount.SETRANGE("Account Type",ClientAccount."Account Type"::Loan);
+                                                                  IF PAGE.RUNMODAL( 0 , ClientAccount) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := ClientAccount."No.";
+                                                                    END;
+                                                                 END;
+                                                                AttributeType::Agent:
+                                                                BEGIN
+                                                                  ClientAccount.SETRANGE("Account Type",ClientAccount."Account Type"::Agent);
+                                                                  IF PAGE.RUNMODAL( 0 , ClientAccount) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := ClientAccount."No.";
+                                                                    END;
+                                                                END;
+                                                                AttributeType::"Intellectual Property":
+                                                                 BEGIN
+                                                                   ClientAsset.SETRANGE("Asset Type",ClientAsset."Asset Type"::"Intellectual Property");
+                                                                  IF PAGE.RUNMODAL( 0 , ClientAsset) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := ClientAsset."Asset Code";
+                                                                    END;
+                                                                 END;
+                                                                AttributeType::Aviation:
+                                                                 BEGIN
+                                                                   ClientAsset.SETRANGE("Asset Type",ClientAsset."Asset Type"::Aviation);
+                                                                  IF PAGE.RUNMODAL( 0 , ClientAsset) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := ClientAsset."Asset Code";
+                                                                    END;
+                                                                 END;
+                                                                AttributeType::"Life Assurance":
+                                                                 BEGIN
+                                                                   ClientAsset.SETRANGE("Asset Type",ClientAsset."Asset Type"::"Life Assurance");
+                                                                  IF PAGE.RUNMODAL( 0 , ClientAsset) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := ClientAsset."Asset Code";
+                                                                    END;
+                                                                 END;
+                                                                AttributeType::"Miscellaneous Asset":
+                                                                 BEGIN
+                                                                   ClientAsset.SETRANGE("Asset Type",ClientAsset."Asset Type"::"Miscellaneous Asset");
+                                                                  IF PAGE.RUNMODAL( 0 , ClientAsset) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := ClientAsset."Asset Code";
+                                                                    END;
+                                                                 END;
+                                                                AttributeType::Property:
+                                                                 BEGIN
+                                                                   ClientAsset.SETRANGE("Asset Type",ClientAsset."Asset Type"::Property);
+                                                                  IF PAGE.RUNMODAL( 0 , ClientAsset) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := ClientAsset."Asset Code";
+                                                                    END;
+                                                                 END;
+                                                                AttributeType::Yacht:
+                                                                 BEGIN
+                                                                   ClientAsset.SETRANGE("Asset Type",ClientAsset."Asset Type"::Yacht);
+                                                                  IF PAGE.RUNMODAL( 0 , ClientAsset) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := ClientAsset."Asset Code";
+                                                                    END;
+                                                                 END;
+                                                                AttributeType::Job:
+                                                                 BEGIN
+                                                                  IF PAGE.RUNMODAL( 0 , TCIJob) = ACTION::LookupOK THEN BEGIN
+                                                                      Attribute := TCIJob."Search Description";
+                                                                    END;
+                                                                 END;
+                                                              END;
+                                                            END;
+
+                                                   DataClassification=ToBeClassified }
+    { 10  ;   ;Document Date       ;Date          ;DataClassification=ToBeClassified }
+    { 11  ;   ;Entity Owner        ;Text50        ;DataClassification=ToBeClassified }
+    { 12  ;   ;Entity Prospect     ;Text50        ;DataClassification=ToBeClassified }
+    { 13  ;   ;Entity Intermediary ;Text50        ;DataClassification=ToBeClassified }
+    { 14  ;   ;External Doc Management System;Option;
+                                                   DataClassification=ToBeClassified;
+                                                   OptionString=Internal Navision,,Synergy ,To be defined,DataStore,,Sharepoint,,C062 FileNet,,,Hummingbird,iManage,C090 Saperion,C076 FileNet,C103 eDocs,C102 LiveLink,C094 KGS Interface,C067 Hyperlink,LaserFiche }
+    { 15  ;   ;ID                  ;Integer       ;AutoIncrement=Yes;
+                                                   DataClassification=ToBeClassified }
+    { 16  ;   ;Link Type           ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=[ ,Linked Client,Client Entity] }
+    { 17  ;   ;Multi No.           ;Text250       ;OnLookup=VAR
+                                                              ClientLookup@100000000 : Page 9068930;
+                                                              ClientRec@100000001 : Record 9068500;
+                                                              ClientEntityRec@100000002 : Record 9068508;
+                                                              ClientEntitiesAPILookup@100000003 : Page 50093;
+                                                              TempText@100000004 : Text;
+                                                              NoText@100000005 : Text;
+                                                              TextLoop@100000006 : Text;
+                                                              Strlength@100000007 : Integer;
+                                                              FinalStr@100000008 : Text;
+                                                              NameLoop@100000009 : Text;
+                                                              Strlength1@100000011 : Integer;
+                                                              FinalStr1@100000010 : Text;
+                                                              Strlength2@100000013 : Integer;
+                                                              FinalStr2@100000012 : Text;
+                                                              TypeLoop@100000014 : Text;
+                                                            BEGIN
+
+                                                              IF Type = Type::Client THEN BEGIN
+                                                               CASE Rec."Link Type" OF
+                                                                "Link Type"::"Linked Client":
+                                                                    BEGIN
+                                                                    ClientRec.SETFILTER(ClientRec."Lead Client Link",'%1',"No.");
+                                                                    ClientRec.FINDFIRST;
+                                                                    ClientLookup.LOOKUPMODE(TRUE);
+                                                                    ClientLookup.SETTABLEVIEW(ClientRec);
+                                                                    ClientLookup.SETRECORD(ClientRec);
+                                                                    IF ClientLookup.RUNMODAL() = ACTION::LookupOK THEN BEGIN
+                                                                      NoText := ClientLookup.GetSelectionFilter;
+                                                                      ClientLookup.GETRECORD(ClientRec);
+                                                                      ClientRec.SETFILTER("Client No.",NoText);
+                                                                      IF ClientRec.FINDSET THEN
+                                                                        REPEAT
+                                                                          TextLoop += ClientRec."Client No." + ',';
+                                                                          NameLoop += ClientRec.Name + ',';
+                                                                          Strlength := STRLEN(TextLoop);
+                                                                          FinalStr := DELSTR(TextLoop,Strlength);
+                                                                          Strlength1 := STRLEN(NameLoop);
+                                                                          FinalStr1 := DELSTR(NameLoop,Strlength1);
+                                                                          "Multi No." := FinalStr;
+                                                                          "Multi Name" := FinalStr1;
+                                                                        UNTIL ClientRec.NEXT = 0;
+                                                                    END;
+                                                                    END;
+                                                                "Link Type"::"Client Entity":
+                                                                  BEGIN
+                                                                    ClientEntityRec.SETFILTER(ClientEntityRec."Client No.",'%1',"No.");
+                                                                    ClientEntityRec.FINDFIRST;
+                                                                    ClientEntitiesAPILookup.LOOKUPMODE(TRUE);
+                                                                    ClientEntitiesAPILookup.SETTABLEVIEW(ClientEntityRec);
+                                                                    ClientEntitiesAPILookup.SETRECORD(ClientEntityRec);
+                                                                    IF ClientEntitiesAPILookup.RUNMODAL() = ACTION::LookupOK THEN BEGIN
+                                                                      NoText := ClientEntitiesAPILookup.GetSelectionFilter;
+                                                                      ClientEntitiesAPILookup.GETRECORD(ClientEntityRec);
+                                                                      ClientEntityRec.SETFILTER("Entity No.",NoText);
+                                                                      IF ClientEntityRec.FINDSET THEN
+                                                                        REPEAT
+                                                                          TextLoop += ClientEntityRec."Entity No." + ',';
+                                                                          NameLoop += ClientEntityRec."Entity Name" + ',';
+                                                                          TypeLoop += FORMAT(ClientEntityRec.Type) + ',';
+                                                                          Strlength := STRLEN(TextLoop);
+                                                                          FinalStr := DELSTR(TextLoop,Strlength);
+                                                                          Strlength1 := STRLEN(NameLoop);
+                                                                          FinalStr1 := DELSTR(NameLoop,Strlength1);
+                                                                          Strlength2 := STRLEN(TypeLoop);
+                                                                          FinalStr2 := DELSTR(TypeLoop,Strlength2);
+                                                                          "Multi No." := FinalStr;
+                                                                          "Multi Name" := FinalStr1;
+                                                                          "Multi Type" := FinalStr2;
+                                                                        UNTIL ClientEntityRec.NEXT = 0;
+                                                                  END;
+                                                                  END;
+                                                              END;
+                                                              END ELSE
+                                                              IF Type = Type::Entity THEN BEGIN
+                                                               IF "Link Type" = "Link Type"::"Client Entity" THEN
+                                                                  BEGIN
+                                                                    ClientEntityRec.SETFILTER(ClientEntityRec."Client No.",'%1',"No.");
+                                                                    ClientEntityRec.FINDFIRST;
+                                                                    ClientEntitiesAPILookup.LOOKUPMODE(TRUE);
+                                                                    ClientEntitiesAPILookup.SETTABLEVIEW(ClientEntityRec);
+                                                                    ClientEntitiesAPILookup.SETRECORD(ClientEntityRec);
+                                                                    IF ClientEntitiesAPILookup.RUNMODAL() = ACTION::LookupOK THEN BEGIN
+                                                                      NoText := ClientEntitiesAPILookup.GetSelectionFilter;
+                                                                      ClientEntitiesAPILookup.GETRECORD(ClientEntityRec);
+                                                                      ClientEntityRec.SETFILTER("Entity No.",NoText);
+                                                                      IF ClientEntityRec.FINDSET THEN
+                                                                        REPEAT
+                                                                          TextLoop += ClientEntityRec."Entity No." + ',';
+                                                                          NameLoop += ClientEntityRec."Entity Name" + ',';
+                                                                          TypeLoop += FORMAT(ClientEntityRec.Type) + ',';
+                                                                          Strlength := STRLEN(TextLoop);
+                                                                          FinalStr := DELSTR(TextLoop,Strlength);
+                                                                          Strlength1 := STRLEN(NameLoop);
+                                                                          FinalStr1 := DELSTR(NameLoop,Strlength1);
+                                                                          Strlength2 := STRLEN(TypeLoop);
+                                                                          FinalStr2 := DELSTR(TypeLoop,Strlength2);
+                                                                          "Multi No." := FinalStr;
+                                                                          "Multi Name" := FinalStr1;
+                                                                          "Multi Type" := FinalStr2;
+                                                                        UNTIL ClientEntityRec.NEXT = 0;
+                                                                    // MESSAGE(TextLoop);
+                                                                     //MESSAGE(FinalStr);
+                                                                  END;
+                                                                  END;
+                                                              END;
+                                                            END;
+                                                             }
+    { 18  ;   ;Multi Name          ;Text250       ;DataClassification=ToBeClassified }
+    { 19  ;   ;Multi Type          ;Text250       ;DataClassification=ToBeClassified }
+    { 100 ;   ;Search Text         ;Text250       ;DataClassification=ToBeClassified;
+                                                   Description=//Elastic Search }
+  }
+  KEYS
+  {
+    {    ;ID,Type,No.                             ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+    VAR
+      DocMan@100000004 : Codeunit 9068511;
+      Entity@100000000 : Record 9068505;
+      Client@100000001 : Record 9068500;
+      CorrespondenceDocType@100000002 : Record 9068657;
+      DocumentTypeSubType@100000003 : Record 9068463;
+      DocumentFolderSetup@100000005 : Record 9068662;
+      Customer@100000006 : Record 18;
+      Vendor@100000007 : Record 23;
+
+    BEGIN
+    END.
+  }
+}
+

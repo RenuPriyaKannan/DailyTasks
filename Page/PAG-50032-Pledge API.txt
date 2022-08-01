@@ -1,0 +1,68 @@
+OBJECT Page 50032 Pledge API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=04-12-20;
+    Time=11:46:43;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    CaptionML=ENU=SR Share Pledge;
+    SourceTable=Table9068783;
+    DelayedInsert=No;
+    PageType=Card;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000000;1;Group  ;
+                Name=GenTab;
+                CaptionML=[ENU=General;
+                           ENG=General] }
+
+    { 1000000001;2;Field  ;
+                SourceExpr="Client No." }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Shareholder No." }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Entry No." }
+
+    { 1040000;2;Field     ;
+                SourceExpr=Description }
+
+    { 1000000004;2;Field  ;
+                Description=TWM90.07;
+                SourceExpr="Counterparty of Pledge Type" }
+
+    { 1040002;2;Field     ;
+                SourceExpr="Counterparty of Pledge" }
+
+    { 1040010;2;Field     ;
+                Lookup=No;
+                DrillDown=No;
+                SourceExpr="Counterparty of Pledge Name" }
+
+    { 1040004;2;Field     ;
+                SourceExpr="Date Pledge Start" }
+
+    { 1040006;2;Field     ;
+                SourceExpr="Date Pledge End" }
+
+    { 1040008;2;Field     ;
+                SourceExpr="Shares Under Pledge" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

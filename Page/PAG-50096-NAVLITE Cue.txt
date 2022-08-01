@@ -1,0 +1,303 @@
+OBJECT Page 50096 NAVLITE Cue
+{
+  OBJECT-PROPERTIES
+  {
+    Date=16-06-22;
+    Time=12:23:56;
+    Modified=Yes;
+    Version List=NAVLITE;
+  }
+  PROPERTIES
+  {
+    Editable=No;
+    InsertAllowed=No;
+    DeleteAllowed=No;
+    ModifyAllowed=No;
+    LinksAllowed=No;
+    SourceTable=Table50004;
+    DataCaptionExpr='DMSLITE';
+    PageType=ListPart;
+    ShowFilter=No;
+    OnAfterGetRecord=VAR
+                       TwoWeekDate@100000001 : Date;
+                       LastMonthDate@100000002 : Date;
+                       OlderDate@100000003 : Date;
+                     BEGIN
+
+                       CorrespondenceStore.SETRANGE("Document Date",TODAY);
+                       TodayUpload := CorrespondenceStore.COUNT;
+
+
+                       DocStorePDF.SETFILTER("MS Office Doc Type",'%1|%2','.PDF','PDF');
+                       PDFDocs := DocStorePDF.COUNT;
+
+                       DocStoreExcel.SETFILTER("MS Office Doc Type",'%1|%2|%3|%4','.XLSX','.CSV','XLSX','CSV');
+                       ExcelDocs := DocStoreExcel.COUNT;
+
+                       DocstoreDocx.SETFILTER("MS Office Doc Type",'%1|%2','.DOCX','Docx');
+                       DOCXDocs := DocstoreDocx.COUNT;
+
+                       DocStoreTxt.SETFILTER("MS Office Doc Type",'%1|%2','.TXT','TXT');
+                       TXTDocs := DocStoreTxt.COUNT;
+
+                       DocStoreImage.SETFILTER("MS Office Doc Type",'%1|%2|%3|%4|%5|%6','.JPEG','.PNG','.JPG','JPEG','PNG','JPG');
+                       ImageCount := DocStoreImage.COUNT;
+
+                       DocStoreUser.SETFILTER("Document Inserted By",USERID);
+                       UserDocCount := DocStoreUser.COUNT;
+
+                       {
+                       Client.SETRANGE(Jurisdiction,'JE');
+
+                       IF Client.FINDSET THEN
+                         REPEAT
+                           //Clientno += FORMAT(Client."Client No.") + '|';
+                           Client.MARK(TRUE);
+                         UNTIL Client.NEXT = 0;
+                         Client.MARKEDONLY(TRUE);
+                         Client2.COPY(Client);
+
+                         DocStoreJER.RESET;
+                         DocStoreJER3.RESET;
+                         DocStoreJER3.SETRANGE(Type,DocStoreJER.Type::Client);
+                         DocStoreJER.SETRANGE(Type,DocStoreJER.Type::Client);
+                         Client2.RESET;
+                         Client2.SETRANGE(Jurisdiction,'JE');
+                         IF Client2.FINDSET THEN
+                           REPEAT
+                             DocStoreJER.SETFILTER("No.",'%1',Client2."Client No.");
+                             IF DocStoreJER.FINDFIRST THEN
+                               REPEAT
+                                 DocStoreJER3.SETRANGE("No.",Client2."Client No.");
+                                 IF DocStoreJER3.FINDSET THEN
+                                 DocStoreJER3.MARK(TRUE);
+                                 JERDocCount += DocStoreJER.COUNT;
+                               UNTIL DocStoreJER.NEXT = 0;
+                             DocStoreJER3.MARKEDONLY(TRUE);
+                             DocStoreJER2.COPY(DocStoreJER3);
+                           UNTIL Client2.NEXT = 0 ;
+
+                       }
+
+
+                       TwoWeekDate := CALCDATE('<-2W>',TODAY);
+                       DocStoreTwoWeeks.SETFILTER("Document Date",'%1..%2',TwoWeekDate,TODAY);
+                       TwoWeeksCount := DocStoreTwoWeeks.COUNT;
+
+                       LastMonthDate := CALCDATE('<-1M>',TODAY);
+                       DocStoreLastMonth.SETFILTER("Document Date",'%1..%2',LastMonthDate,TODAY);
+                       LastMonthCount := DocStoreLastMonth.COUNT;
+
+                       OlderDate := CALCDATE('<-2M>',TODAY);
+                       DocStoreOlder.SETFILTER("Document Date",'<%1',OlderDate);
+                       OlderCount := DocStoreOlder.COUNT;
+                     END;
+
+    OnQueryClosePage=BEGIN
+                       //MESSAGE(Clientno);
+                     END;
+
+    ActionList=ACTIONS
+    {
+      { 100000012;   ;Action    ;
+                      Name=<Action100000012>;
+                      CaptionML=ENU=My Documents }
+      { 100000017;0  ;Action    ;
+                      Name=Upload;
+                      RunObject=Page 50094;
+                      Promoted=Yes;
+                      PromotedIsBig=Yes;
+                      Image=Link;
+                      PromotedCategory=Process;
+                      RunPageMode=Create;
+                      Gesture=None }
+      { 100000018;0  ;Action    ;
+                      Name=Search - Client Docs;
+                      RunObject=Page 9069346;
+                      RunPageView=SORTING(Type,No.,ID)
+                                  ORDER(Ascending)
+                                  WHERE(Type=CONST(Client));
+                      Promoted=Yes;
+                      PromotedIsBig=Yes;
+                      Image=Find;
+                      PromotedCategory=Process;
+                      RunPageMode=View }
+      { 100000019;0  ;Action    ;
+                      Name=Search - Entity Docs;
+                      RunObject=Page 9069346;
+                      RunPageView=SORTING(Type,No.,ID)
+                                  ORDER(Ascending)
+                                  WHERE(Type=CONST(Entity));
+                      Promoted=Yes;
+                      PromotedIsBig=Yes;
+                      Image=find;
+                      PromotedCategory=Process;
+                      RunPageMode=View }
+    }
+  }
+  CONTROLS
+  {
+    { 100000000;;Container;
+                Name=DMSLITE;
+                ContainerType=ContentArea }
+
+    { 100000009;1;Group   ;
+                GroupType=CueGroup }
+
+    { 100000011;2;Field   ;
+                Name=UploadDocument;
+                SourceExpr=UploadDocument;
+                OnDrillDown=BEGIN
+                              //CLEAR(NAVLITEPage);
+                              PAGE.RUNMODAL(PAGE::NAVLITE);
+                              //IF NAVLITEPage.RUNMODAL = ACTION::LookupOK THEN ;
+                            END;
+                             }
+
+    { 100000001;1;Group   ;
+                Name=General;
+                GroupType=CueGroup }
+
+    { 100000002;2;Field   ;
+                Name=TodayUpload;
+                SourceExpr=TodayUpload;
+                OnDrillDown=BEGIN
+                              PAGE.RUN(PAGE::"Docs and Correspondence", CorrespondenceStore);
+                            END;
+                             }
+
+    { 100000008;2;Field   ;
+                Name=My Document;
+                SourceExpr=UserDocCount;
+                OnDrillDown=BEGIN
+                              PAGE.RUN(PAGE::"Docs and Correspondence", DocStoreUser);
+                            END;
+                             }
+
+    { 100000010;1;Group   ;
+                Name=Document Extension type;
+                GroupType=CueGroup }
+
+    { 100000003;2;Field   ;
+                Name=PDF Docs;
+                SourceExpr=PDFDocs;
+                OnDrillDown=BEGIN
+                              PAGE.RUN(PAGE::"Docs and Correspondence", DocStorePDF);
+                            END;
+                             }
+
+    { 100000004;2;Field   ;
+                Name=Excel Docs;
+                SourceExpr=ExcelDocs;
+                OnDrillDown=BEGIN
+                              PAGE.RUN(PAGE::"Docs and Correspondence", DocStoreExcel);
+                            END;
+                             }
+
+    { 100000005;2;Field   ;
+                Name=Word Docs;
+                SourceExpr=DOCXDocs;
+                OnDrillDown=BEGIN
+                              PAGE.RUN(PAGE::"Docs and Correspondence", DocstoreDocx);
+                            END;
+                             }
+
+    { 100000006;2;Field   ;
+                Name=Text Docs;
+                SourceExpr=TXTDocs;
+                OnDrillDown=BEGIN
+                              PAGE.RUN(PAGE::"Docs and Correspondence", DocStoreTxt);
+                            END;
+                             }
+
+    { 100000007;2;Field   ;
+                Name=Image Files;
+                SourceExpr=ImageCount;
+                OnDrillDown=BEGIN
+                              PAGE.RUN(PAGE::"Docs and Correspondence", DocStoreImage);
+                            END;
+                             }
+
+    { 100000014;1;Group   ;
+                Name=Document Age;
+                Editable=False;
+                GroupType=CueGroup }
+
+    { 100000013;2;Field   ;
+                Name=Two Weeks Old Documents;
+                SourceExpr=TwoWeeksCount;
+                OnDrillDown=BEGIN
+                              PAGE.RUN(PAGE::"Docs and Correspondence", DocStoreTwoWeeks);
+                            END;
+                             }
+
+    { 100000015;2;Field   ;
+                Name=Last Month Documents;
+                SourceExpr=LastMonthCount;
+                OnDrillDown=BEGIN
+                              PAGE.RUN(PAGE::"Docs and Correspondence", DocStoreLastMonth);
+                            END;
+                             }
+
+    { 100000016;2;Field   ;
+                Name=Older than Two Months;
+                SourceExpr=OlderCount;
+                OnDrillDown=BEGIN
+                              PAGE.RUN(PAGE::"Docs and Correspondence", DocStoreOlder);
+                            END;
+                             }
+
+    { 100000020;1;Group   ;
+                Name=Elastic Search;
+                GroupType=Group }
+
+    { 100000021;2;Field   ;
+                Name=ElasticSearch;
+                SourceExpr=ElasticSearch;
+                OnDrillDown=BEGIN
+                              PAGE.RUN(PAGE::"Elastic Search",NAVLITERec1);
+                            END;
+                             }
+
+  }
+  CODE
+  {
+    VAR
+      TodayUpload@100000000 : Integer;
+      CorrespondenceStore@100000001 : Record 9068660;
+      DocStorePDF@100000002 : Record 9068660;
+      PDFDocs@100000003 : Integer;
+      DocStoreExcel@100000004 : Record 9068660;
+      ExcelDocs@100000005 : Integer;
+      DocstoreDocx@100000006 : Record 9068660;
+      DOCXDocs@100000007 : Integer;
+      DocStoreTxt@100000009 : Record 9068660;
+      TXTDocs@100000008 : Integer;
+      DocStoreImage@100000010 : Record 9068660;
+      ImageCount@100000011 : Integer;
+      DocStoreUser@100000012 : Record 9068660;
+      UserDocCount@100000013 : Integer;
+      DocStoreJER@100000014 : Record 9068660;
+      JERDocCount@100000015 : Integer;
+      Client@100000016 : Record 9068500;
+      TwoWeeksCount@100000017 : Integer;
+      DocStoreTwoWeeks@100000018 : Record 9068660;
+      LastMonthCount@100000020 : Integer;
+      DocStoreLastMonth@100000019 : Record 9068660;
+      OlderCount@100000022 : Integer;
+      DocStoreOlder@100000021 : Record 9068660;
+      Clientno@100000023 : Text;
+      Client2@100000024 : Record 9068500;
+      DocStoreJER2@100000025 : Record 9068660;
+      DocStoreJER3@100000026 : Record 9068660;
+      UploadDocument@100000027 : Integer;
+      NAVLITERec@100000028 : Record 50004;
+      NAVLITEPage@100000029 : Page 50094;
+      ElasticSearch@100000030 : Integer;
+      NAVLITERec1@100000031 : Record 50004;
+
+    BEGIN
+    END.
+  }
+}
+

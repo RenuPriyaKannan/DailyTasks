@@ -1,0 +1,68 @@
+OBJECT Page 50018 Contact Profile Answers API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=30-12-20;
+    Time=13:47:10;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table5089;
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 1000000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000001;1;Group  ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Contact No." }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Contact Company No." }
+
+    { 1000000004;2;Field  ;
+                SourceExpr="Profile Questionnaire Code" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="Line No." }
+
+    { 1000000006;2;Field  ;
+                SourceExpr=Answer }
+
+    { 1000000007;2;Field  ;
+                SourceExpr="Contact Company Name" }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="Contact Name" }
+
+    { 1000000009;2;Field  ;
+                SourceExpr="Profile Questionnaire Priority" }
+
+    { 1000000010;2;Field  ;
+                SourceExpr="Answer Priority" }
+
+    { 1000000011;2;Field  ;
+                SourceExpr="Last Date Updated" }
+
+    { 1000000012;2;Field  ;
+                SourceExpr="Questions Answered (%)" }
+
+    { 1000000013;2;Field  ;
+                SourceExpr="Profile Questionnaire Value" }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

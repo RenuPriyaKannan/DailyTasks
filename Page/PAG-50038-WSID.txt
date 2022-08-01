@@ -1,0 +1,45 @@
+OBJECT Page 50038 WSID
+{
+  OBJECT-PROPERTIES
+  {
+    Date=24-03-22;
+    Time=13:32:54;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table50018;
+    PageType=List;
+    RefreshOnActivate=Yes;
+  }
+  CONTROLS
+  {
+    { 1000000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000001;1;Group  ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 100000000;2;Field   ;
+                SourceExpr=Type }
+
+    { 100000001;2;Field   ;
+                SourceExpr="ClientNo/EntityNo" }
+
+    { 100000002;2;Field   ;
+                SourceExpr=WSID }
+
+    { 100000003;2;Field   ;
+                SourceExpr=WebPageLink }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

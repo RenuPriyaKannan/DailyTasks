@@ -1,0 +1,50 @@
+OBJECT Table 50001 Client Details
+{
+  OBJECT-PROPERTIES
+  {
+    Date=16-11-20;
+    Time=15:46:42;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Client No.          ;Code20        ;DataClassification=ToBeClassified }
+    { 2   ;   ;Entry No.           ;Integer       ;DataClassification=ToBeClassified }
+    { 10  ;   ;Type                ;Code10        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Type }
+    { 20  ;   ;Name                ;Text50        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Name }
+    { 30  ;   ;Proper law          ;Code10        ;CaptionML=ENU=Proper law }
+    { 40  ;   ;Jurisdiction        ;Code10        ;CaptionML=ENU=Jurisdiction }
+    { 50  ;   ;Tax Status          ;Code10        ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=Tax Status }
+    { 1000;   ;FATCA Account Classification;Code20;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=FATCA Account Classification }
+    { 1010;   ;CRS Account Classification;Code20  ;DataClassification=ToBeClassified;
+                                                   CaptionML=ENU=CRS Account Classification }
+    { 1020;   ;Tax Code            ;Code10        ;DataClassification=ToBeClassified }
+    { 1030;   ;Tax Return Country Code;Code10     ;DataClassification=ToBeClassified }
+    { 1040;   ;TIN Type            ;Code20        ;DataClassification=ToBeClassified }
+    { 1050;   ;TIN                 ;Code20        ;DataClassification=ToBeClassified }
+    { 1060;   ;Tax Category        ;Code20        ;DataClassification=ToBeClassified }
+    { 1061;   ;WSID                ;Text100       ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;Client No.,Entry No.                    ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

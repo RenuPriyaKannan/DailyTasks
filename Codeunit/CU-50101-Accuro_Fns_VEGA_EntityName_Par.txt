@@ -1,0 +1,1307 @@
+OBJECT Codeunit 50101 Accuro_Fns_VEGA_EntityName_Par
+{
+  OBJECT-PROPERTIES
+  {
+    Date=20-07-22;
+    Time=18:10:00;
+    Modified=Yes;
+    Version List=NOM;
+  }
+  PROPERTIES
+  {
+    Subtype=Normal;
+    OnRun=VAR
+            RecDFXVEGA@100000001 : Record 50020;
+            APILog@100000000 : Record 50019;
+            Entity@100000002 : Record 9068505;
+            LOGFunction@100000003 : 'Insert,Delete,Modify,Rename';
+          BEGIN
+            //CompileDirectorTrust;
+            //MESSAGE('Success');
+            APILog.RESET;
+            APILog.SETRANGE(API,'Name Change');
+            APILog.SETRANGE(Flag,FALSE);
+            APILog.SETRANGE("Function",LOGFunction::Insert);
+            IF APILog.FINDFIRST THEN
+            REPEAT
+            NameChangeAPICall(APILog."Record Type",APILog."Record No.",APILog.Name,APILog.OldName,APILog.NewName);
+            UNTIL APILog.NEXT = 0;
+
+
+            APILog.RESET;
+            APILog.SETRANGE(API,'Partition');
+            APILog.SETRANGE(Flag,FALSE);
+            APILog.SETRANGE("Function",LOGFunction::Modify);
+            IF APILog.FINDFIRST THEN
+            REPEAT
+            PartitionCodeAPICall(APILog."Record Type",APILog."Record No.",APILog.Name,APILog.OldPartitionCode,APILog.NewPartitionCode,APILog.OldPartitionGroup,APILog.NewPartitionGroup,APILog."Function");
+            UNTIL APILog.NEXT = 0;
+            //END;
+
+            {
+            IF RecDFXVEGA.FINDFIRST THEN
+              REPEAT
+               // IF RecDFXVEGA.Status = RecDFXVEGA.Status::UnProcessed THEN BEGIN
+                 // VegaPassportExpiryCreateCase(RecDFXVEGA."Entry No.",RecDFXVEGA."Entity No.");
+                //END
+                //ELSE
+                IF (RecDFXVEGA.Status = RecDFXVEGA.Status::InProcess) OR (RecDFXVEGA.Status = RecDFXVEGA.Status::InReview) THEN BEGIN
+                  VegaPassportExpiryGetStatus(RecDFXVEGA."Entry No.");
+              END
+            UNTIL RecDFXVEGA.NEXT = 0;
+            }
+          END;
+
+  }
+  CODE
+  {
+    VAR
+      text1@100000000 : Text[2048];
+      Base64@100000001 : Text;
+
+    PROCEDURE CompileDirectorTrust@100000000();
+    VAR
+      ClientRec@100000005 : Record 9068500;
+      ClientRec2@100000007 : Record 9068500;
+      EntityRec@100000006 : Record 9068505;
+      ClientEntity@100000004 : Record 9068508;
+      ClientSetup@100000003 : Record 9068496;
+      ClientTypeRec@100000002 : Record 9068501;
+      NoticeOfMeeting@100000001 : Record 50003;
+      SubClientEntity@100000000 : Record 9068508;
+      BusinessGroupRole@100000008 : Record 9068252;
+      Resource@100000009 : Record 156;
+    BEGIN
+      ClientSetup.GET;
+
+      NoticeOfMeeting.DELETEALL;
+
+      IF ClientRec.FINDSET THEN REPEAT
+        ClientRec.CALCFIELDS("Client Type Type");
+        IF ClientRec."Client Type Type" IN [ClientRec."Client Type Type"::Company,ClientRec."Client Type Type"::Trust] THEN BEGIN
+          ClientEntity.SETRANGE("Client No.",ClientRec."Client No.");
+          ClientEntity.SETFILTER("Entity Type",'%1|%2',ClientSetup."Director Code",ClientSetup."Trustee Code");
+          IF ClientEntity.FINDSET THEN REPEAT
+            NoticeOfMeeting.INIT;
+            NoticeOfMeeting."Master Client No." := ClientRec."Client No.";
+            NoticeOfMeeting."Master Client Name" := ClientRec."Client Formal Name";
+            IF ClientRec."Client Type Type" = ClientRec."Client Type Type"::Company THEN //DFX-01 Start
+              NoticeOfMeeting."Client Type" :=  'Company';
+            IF ClientRec."Client Type Type" = ClientRec."Client Type Type"::Trust THEN
+              NoticeOfMeeting."Client Type" :=  'Trust';
+            NoticeOfMeeting."First Partition Code" := ClientRec."First Partition Code";//DFX-01 End
+            NoticeOfMeeting."Director Quorum" := ClientRec."Directors' Quorum";
+            NoticeOfMeeting."Purpose-Activity Code" := ClientRec."Purpose-Activity Code"; // In House
+            NoticeOfMeeting."Purpose/Objective" := ClientRec."Purpose/Objective"; // In House
+            CASE ClientEntity.Type OF
+              ClientEntity.Type::Client : BEGIN
+                NoticeOfMeeting.Type := NoticeOfMeeting.Type::Client;
+                NoticeOfMeeting."Corporate Director/Trustee" := ClientEntity."Entity No.";
+                NoticeOfMeeting."Corp Director/Trustee Name" := ClientEntity.GetFormalName;
+              END;
+              ClientEntity.Type::Entity : BEGIN
+                IF EntityRec.GET(ClientEntity."Entity No.") THEN BEGIN
+                  IF EntityRec."Personal/Corporate" = EntityRec."Personal/Corporate"::Personal THEN BEGIN
+                    NoticeOfMeeting.Type := NoticeOfMeeting.Type::"Personal Entity";
+                    NoticeOfMeeting."Individual Director/Trustee" := ClientEntity."Entity No.";
+                    NoticeOfMeeting."Indv Director/Trust Name" := ClientEntity.GetFormalName;
+                  END ELSE BEGIN
+                    NoticeOfMeeting.Type := NoticeOfMeeting.Type::"Corporate Entity";
+                    NoticeOfMeeting."Corporate Director/Trustee" := ClientEntity."Entity No.";
+                    NoticeOfMeeting."Corp Director/Trustee Name" := ClientEntity.GetFormalName;
+                  END;
+                END;
+              END;
+
+              ClientEntity.Type::Resource : BEGIN //DFX-01 Begin
+                IF Resource.GET(ClientEntity."Entity No.") THEN BEGIN
+                  NoticeOfMeeting.Type := NoticeOfMeeting.Type::Resource;
+                    NoticeOfMeeting."Individual Director/Trustee" := ClientEntity."Entity No.";
+                    NoticeOfMeeting."Indv Director/Trust Name" := ClientEntity.GetFormalName;
+                  END;
+              END; //DFX-01 End
+
+            END;
+
+            BusinessGroupRole.RESET;//DFX-01 Start
+            BusinessGroupRole.SETRANGE("Business Group Type",BusinessGroupRole."Business Group Type"::"First Partition");
+            BusinessGroupRole.SETRANGE("Table Name",'Client');
+            BusinessGroupRole.SETRANGE(Role,ClientRec."First Partition Code");
+            IF BusinessGroupRole.FINDSET THEN
+              NoticeOfMeeting."Partition Group" := BusinessGroupRole."Business Group Code";//DFX-01 End
+
+            NoticeOfMeeting."Fiduciary Director/Trustee" := NoticeOfMeeting."Corporate Director/Trustee";
+            NoticeOfMeeting."Fid Director/Trustee Name" := NoticeOfMeeting."Corp Director/Trustee Name";
+
+            IF NoticeOfMeeting.Type = NoticeOfMeeting.Type::Client THEN BEGIN
+              NoticeOfMeeting."Director/Trustee" := '';
+              NoticeOfMeeting."Director/Trustee name" := '';
+            END;
+
+            IF NoticeOfMeeting."Director/Trustee name" = '' THEN
+              NoticeOfMeeting."Director/Trustee" := '';
+
+            IF NoticeOfMeeting.INSERT THEN;
+
+            IF ClientEntity.Type = ClientEntity.Type::Client THEN BEGIN
+              SubClientEntity.RESET;
+              SubClientEntity.SETRANGE("Client No.",ClientEntity."Entity No.");
+              SubClientEntity.SETFILTER("Entity Type",'%1|%2',ClientSetup."Director Code",ClientSetup."Trustee Code");
+              IF SubClientEntity.FINDSET THEN REPEAT
+                CLEAR(NoticeOfMeeting);
+                NoticeOfMeeting.INIT;
+                NoticeOfMeeting."Master Client No." := ClientRec."Client No.";
+                NoticeOfMeeting."Master Client Name" := ClientRec."Client Formal Name";
+                IF ClientRec."Client Type Type" = ClientRec."Client Type Type"::Company THEN //DFX-01 Start
+                  NoticeOfMeeting."Client Type" :=  'Company';
+                IF ClientRec."Client Type Type" = ClientRec."Client Type Type"::Trust THEN
+                  NoticeOfMeeting."Client Type" :=  'Trust';
+                NoticeOfMeeting."First Partition Code" := ClientRec."First Partition Code";//DFX-01 End
+                NoticeOfMeeting."Director Quorum" := ClientRec."Directors' Quorum";
+                NoticeOfMeeting."Purpose-Activity Code" := ClientRec."Purpose-Activity Code"; // In House
+                NoticeOfMeeting."Purpose/Objective" := ClientRec."Purpose/Objective"; // In House
+
+                ClientRec2.GET(SubClientEntity."Client No.");
+                NoticeOfMeeting."Corporate Director/Trustee" := SubClientEntity."Client No.";
+                NoticeOfMeeting."Corp Director/Trustee Name" := ClientRec2."Client Formal Name";
+                IF ClientRec."Client Type Type" = ClientRec2."Client Type Type"::Company THEN //DFX-01 Start
+                  NoticeOfMeeting."Client Type" :=  'Company';
+                IF ClientRec."Client Type Type" = ClientRec2."Client Type Type"::Trust THEN
+                  NoticeOfMeeting."Client Type" :=  'Trust';
+                NoticeOfMeeting."First Partition Code" := ClientRec2."First Partition Code";//DFX-01 End
+                NoticeOfMeeting."Purpose-Activity Code" := ClientRec2."Purpose-Activity Code"; // In House
+                NoticeOfMeeting."Purpose/Objective" := ClientRec2."Purpose/Objective"; // In House
+                NoticeOfMeeting."Director/Trustee" := SubClientEntity."Entity No.";
+                NoticeOfMeeting."Director/Trustee name" := SubClientEntity.GetFormalName;
+
+                CASE SubClientEntity.Type OF
+                  SubClientEntity.Type::Client : NoticeOfMeeting.Type := NoticeOfMeeting.Type::Client;
+                  SubClientEntity.Type::Resource : NoticeOfMeeting.Type := NoticeOfMeeting.Type::Resource;
+                  SubClientEntity.Type::Entity : BEGIN
+                    IF EntityRec.GET(SubClientEntity."Entity No.") THEN BEGIN
+                      IF EntityRec."Personal/Corporate" = EntityRec."Personal/Corporate"::Personal THEN
+                        NoticeOfMeeting.Type := NoticeOfMeeting.Type::"Personal Entity"
+                      ELSE
+                        NoticeOfMeeting.Type := NoticeOfMeeting.Type::"Corporate Entity";
+                    END;
+                  END;
+                END;
+                NoticeOfMeeting."Director Quorum" := ClientRec2."Directors' Quorum";
+                NoticeOfMeeting."Purpose-Activity Code" := ClientRec."Purpose-Activity Code"; // In House
+                NoticeOfMeeting."Purpose/Objective" := ClientRec."Purpose/Objective"; // In House
+                BusinessGroupRole.RESET;//DFX-01 Start
+                BusinessGroupRole.SETRANGE("Business Group Type",BusinessGroupRole."Business Group Type"::"First Partition");
+                BusinessGroupRole.SETRANGE("Table Name",'Client');
+                BusinessGroupRole.SETRANGE(Role,ClientRec2."First Partition Code");
+                IF BusinessGroupRole.FINDSET THEN
+                    NoticeOfMeeting."Partition Group" := BusinessGroupRole."Business Group Code";//DFX-01 End
+                NoticeOfMeeting."Fiduciary Director/Trustee" := NoticeOfMeeting."Corporate Director/Trustee";
+                NoticeOfMeeting."Fid Director/Trustee Name" := NoticeOfMeeting."Corp Director/Trustee Name";
+
+                IF NoticeOfMeeting.Type = NoticeOfMeeting.Type::Client THEN BEGIN
+                  NoticeOfMeeting."Director/Trustee" := '';
+                  NoticeOfMeeting."Director/Trustee name" := '';
+                END;
+                IF NoticeOfMeeting."Director/Trustee name" = '' THEN
+                  NoticeOfMeeting."Director/Trustee" := '';
+
+                IF NoticeOfMeeting.INSERT THEN;
+              UNTIL SubClientEntity.NEXT = 0;
+            END;
+          UNTIL ClientEntity.NEXT = 0;
+
+        END;
+      UNTIL ClientRec.NEXT = 0;
+    END;
+
+    [EventSubscriber(Page,9072492,OnModifyRecordEvent)]
+    LOCAL PROCEDURE ClientPartitionSubModify@100000005(VAR Rec@100000000 : Record 9068500;VAR xRec@100000001 : Record 9068500;VAR AllowModify@100000002 : Boolean);
+    VAR
+      AllObj@100000012 : Record 2000000038;
+      Client@100000011 : Record 9068500;
+      Entity@100000010 : Record 9068505;
+      Name@100000009 : Text;
+      Function@100000008 : 'Insert,Delete,Modify';
+      AdditionalDataPartitionCode@100000007 : Record 9072482;
+      AddtionalCodes@100000006 : Text;
+      LastStringPos@100000005 : Integer;
+      PartitionCodes@100000004 : Text;
+      oldPartitionCodes@100000003 : Text;
+      oldAddtionalCodes@100000013 : Text;
+      LastStringPos1@100000014 : Integer;
+      BusinessGroupRole@100000015 : Record 9068252;
+      AddtionalGroup@100000021 : Text;
+      LastStringPos2@100000020 : Integer;
+      PartitionGroup@100000019 : Text;
+      oldPartitionGroup@100000018 : Text;
+      oldAddtionalGroup@100000017 : Text;
+      LastStringPos4@100000016 : Integer;
+      BusinessGroupRole1@100000022 : Record 9068252;
+    BEGIN
+      IF xRec."First Partition Code" <> Rec."First Partition Code" THEN BEGIN
+        AllObj.RESET;
+        AllObj.SETRANGE("Object Type",AllObj."Object Type"::Table);
+        AllObj.SETRANGE("Object Name",Rec.TABLENAME);
+        IF AllObj.FINDFIRST THEN;
+          oldAddtionalCodes := xRec."First Partition Code" + ',';
+              AddtionalCodes := Rec."First Partition Code" + ',';
+        AdditionalDataPartitionCode.RESET;
+        AdditionalDataPartitionCode.SETRANGE("Main Code",FALSE);
+        AdditionalDataPartitionCode.SETRANGE("Table No.",AllObj."Object ID");
+        AdditionalDataPartitionCode.SETRANGE("PK Value",Rec."Client No.");
+          IF AdditionalDataPartitionCode.FINDSET THEN BEGIN
+              REPEAT
+                oldAddtionalCodes += AdditionalDataPartitionCode."Additional Code" + ',';
+                AddtionalCodes += AdditionalDataPartitionCode."Additional Code" + ',';
+              UNTIL AdditionalDataPartitionCode.NEXT = 0;
+        END;
+        LastStringPos1 := STRLEN(oldAddtionalCodes) - 1;
+        oldPartitionCodes := COPYSTR(oldAddtionalCodes,1,LastStringPos1);
+        LastStringPos := STRLEN(AddtionalCodes) - 1;
+        PartitionCodes := COPYSTR(AddtionalCodes,1,LastStringPos);
+
+
+
+      BusinessGroupRole.RESET;
+      BusinessGroupRole.SETFILTER("Table No.",'<>%1',0);
+      BusinessGroupRole.SETRANGE(Role,xRec."First Partition Code");
+      BusinessGroupRole.SETRANGE("Table Name",'Client');
+      BusinessGroupRole.SETRANGE("Business Group Type",BusinessGroupRole."Business Group Type"::"First Partition");
+      IF BusinessGroupRole.FINDSET THEN REPEAT
+        oldAddtionalGroup += BusinessGroupRole."Business Group Code" + ',';
+      UNTIL BusinessGroupRole.NEXT = 0;
+      IF STRLEN(oldAddtionalGroup)>0 THEN BEGIN
+        LastStringPos2 := STRLEN(oldAddtionalGroup) - 1;
+        oldPartitionGroup := COPYSTR(oldAddtionalGroup,1,LastStringPos2);
+      END;
+
+      BusinessGroupRole1.RESET;
+      BusinessGroupRole1.SETFILTER("Table No.",'<>%1',0);
+      BusinessGroupRole1.SETRANGE(Role,Rec."First Partition Code");
+      BusinessGroupRole1.SETRANGE("Table Name",'Client');
+      BusinessGroupRole1.SETRANGE("Business Group Type",BusinessGroupRole1."Business Group Type"::"First Partition");
+      IF BusinessGroupRole1.FINDSET THEN REPEAT
+        AddtionalGroup += BusinessGroupRole1."Business Group Code" + ',';
+      UNTIL BusinessGroupRole1.NEXT = 0;
+      IF STRLEN(AddtionalGroup) > 0  THEN BEGIN
+        LastStringPos4 := STRLEN(AddtionalGroup) - 1;
+        PartitionGroup := COPYSTR(AddtionalGroup,1,LastStringPos4);
+      END;
+
+
+      APILogPartitionCodeEntry('Client',Rec."Client No.",Rec."Client Formal Name",oldPartitionCodes,PartitionCodes,oldPartitionGroup,PartitionGroup,"Function"::Modify);
+      //PartitionCodeAPICall('Client',Rec."Client No.",Rec."Client Formal Name",oldPartitionCodes,PartitionCodes,"Function"::Modify);
+      END;
+    END;
+
+    [EventSubscriber(Page,9072493,OnModifyRecordEvent)]
+    LOCAL PROCEDURE EntityPartitionSubModify@100000009(VAR Rec@100000000 : Record 9068505;VAR xRec@100000001 : Record 9068505;VAR AllowModify@100000002 : Boolean);
+    VAR
+      AllObj@100000014 : Record 2000000038;
+      Client@100000013 : Record 9068500;
+      Entity@100000012 : Record 9068505;
+      Name@100000011 : Text;
+      Function@100000010 : 'Insert,Delete,Modify';
+      AdditionalDataPartitionCode@100000009 : Record 9072482;
+      AddtionalCodes@100000008 : Text;
+      LastStringPos@100000007 : Integer;
+      PartitionCodes@100000006 : Text;
+      oldPartitionCodes@100000005 : Text;
+      oldAddtionalCodes@100000004 : Text;
+      LastStringPos1@100000003 : Integer;
+      BusinessGroupRole@100000022 : Record 9068252;
+      AddtionalGroup@100000021 : Text;
+      LastStringPos2@100000020 : Integer;
+      PartitionGroup@100000019 : Text;
+      oldPartitionGroup@100000018 : Text;
+      oldAddtionalGroup@100000017 : Text;
+      LastStringPos4@100000016 : Integer;
+      BusinessGroupRole1@100000015 : Record 9068252;
+    BEGIN
+      IF xRec."First Partition Code" <> Rec."First Partition Code" THEN BEGIN
+      AllObj.RESET;
+      AllObj.SETRANGE("Object Type",AllObj."Object Type"::Table);
+      AllObj.SETRANGE("Object Name",Rec.TABLENAME);
+      IF AllObj.FINDFIRST THEN;
+      oldAddtionalCodes := xRec."First Partition Code" + ',';
+      AddtionalCodes := Rec."First Partition Code" + ',';
+      AdditionalDataPartitionCode.RESET;
+      AdditionalDataPartitionCode.SETRANGE("Main Code",FALSE);
+      AdditionalDataPartitionCode.SETRANGE("Table No.",AllObj."Object ID");
+      AdditionalDataPartitionCode.SETRANGE("PK Value",Rec."Entity No.");
+        IF AdditionalDataPartitionCode.FINDSET THEN BEGIN
+            REPEAT
+              oldAddtionalCodes += AdditionalDataPartitionCode."Additional Code" + ',';
+              AddtionalCodes += AdditionalDataPartitionCode."Additional Code" + ',';
+            UNTIL AdditionalDataPartitionCode.NEXT = 0;
+      END;
+      LastStringPos1 := STRLEN(oldAddtionalCodes) - 1;
+      oldPartitionCodes := COPYSTR(oldAddtionalCodes,1,LastStringPos1);
+      LastStringPos := STRLEN(AddtionalCodes) - 1;
+      PartitionCodes := COPYSTR(AddtionalCodes,1,LastStringPos);
+
+      BusinessGroupRole.RESET;
+      BusinessGroupRole.SETFILTER("Table No.",'<>%1',0);
+      BusinessGroupRole.SETRANGE(Role,xRec."First Partition Code");
+      BusinessGroupRole.SETRANGE("Table Name",'Entity');
+      BusinessGroupRole.SETRANGE("Business Group Type",BusinessGroupRole."Business Group Type"::"First Partition");
+      IF BusinessGroupRole.FINDSET THEN REPEAT
+      oldAddtionalGroup += BusinessGroupRole."Business Group Code" + ',';
+      UNTIL BusinessGroupRole.NEXT = 0;
+      IF STRLEN(oldAddtionalGroup)>0 THEN BEGIN
+      LastStringPos2 := STRLEN(oldAddtionalGroup) - 1;
+      oldPartitionGroup := COPYSTR(oldAddtionalGroup,1,LastStringPos2);
+      END;
+
+      BusinessGroupRole1.RESET;
+      BusinessGroupRole1.SETFILTER("Table No.",'<>%1',0);
+      BusinessGroupRole1.SETRANGE(Role,Rec."First Partition Code");
+      BusinessGroupRole1.SETRANGE("Table Name",'Entity');
+      BusinessGroupRole1.SETRANGE("Business Group Type",BusinessGroupRole1."Business Group Type"::"First Partition");
+      IF BusinessGroupRole1.FINDSET THEN REPEAT
+      AddtionalGroup += BusinessGroupRole1."Business Group Code" + ',';
+      UNTIL BusinessGroupRole1.NEXT = 0;
+      IF STRLEN(AddtionalGroup) > 0  THEN BEGIN
+      LastStringPos4 := STRLEN(AddtionalGroup) - 1;
+      PartitionGroup := COPYSTR(AddtionalGroup,1,LastStringPos4);
+      END;
+
+
+      Name := Rec."Name 2" + ' ' + Rec.Name ;
+
+      APILogPartitionCodeEntry('Entity',Rec."Entity No.",Name,oldPartitionCodes,PartitionCodes,oldPartitionGroup,PartitionGroup,"Function"::Modify);
+      END;
+    END;
+
+    LOCAL PROCEDURE PartitionCodeAPICall@100000003(AttachedToType@100000037 : Text;AttachedToNo@100000038 : Code[250];Name@100000039 : Text[250];OldPartitionCode@100000040 : Code[250];NewPartitionCode@100000041 : Code[250];OldPartitionGroup@100000044 : Text[250];NewPartitionGroup@100000045 : Text[250];Function@100000042 : 'Insert,Delete,Modify,Rename') : Boolean;
+    VAR
+      HttpWebReqMgt@100000036 : Codeunit 1297;
+      BaseURL@100000035 : Text;
+      User@100000034 : Text;
+      Password@100000033 : Text;
+      payload@100000032 : Text;
+      ResponseBody@100000031 : Text;
+      ErrorMessage@100000030 : Text;
+      ErrorDetails@100000029 : Text;
+      HttpStatusCode@100000028 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpStatusCode";
+      ResponseHeader@100000027 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NameValueCollection";
+      RequestJson@100000026 : Text;
+      ResponseJson@100000025 : Text;
+      HttpError@100000024 : Text;
+      JsonArray@100000023 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JArray";
+      JsonObject@100000022 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      TempBlob@100000021 : Record 99008535;
+      OutStr@100000020 : OutStream;
+      TempBlob1@100000019 : Record 99008535;
+      InStr@100000018 : InStream;
+      ApiResult@100000017 : Text;
+      JSONMgt@100000016 : Codeunit 5459;
+      ApiRequest@100000015 : Text;
+      Base64Text@100000014 : Text;
+      InStr1@100000013 : InStream;
+      TextRead@100000012 : Text;
+      OutStr1@100000011 : OutStream;
+      TempBlob2@100000010 : Record 99008535;
+      Instr2@100000009 : InStream;
+      Bytes@100000008 : DotNet "'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Array";
+      convert@100000007 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Convert";
+      MemoryStream@100000006 : DotNet "'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.MemoryStream";
+      Encoding@100000005 : DotNet "'mscorlib'.System.Text.Encoding";
+      DFXSetup@100000004 : Record 50006;
+      Window@100000003 : Dialog;
+      NoOfRecs@100000002 : Integer;
+      CurrRec@100000001 : Integer;
+      TempPath@100000000 : Text;
+      APILog@100000043 : Record 50019;
+      m@100000054 : Integer;
+      n@100000053 : Integer;
+      l@100000052 : Integer;
+      value@100000051 : Text;
+      CurrentElement@100000050 : Text;
+      CurrentValue@100000049 : Text;
+      ValuePair@100000048 : Text;
+      Status@100000047 : Text;
+      FormatChar@100000046 : TextConst 'ENU={}"''[]';
+    BEGIN
+      DFXSetup.GET;
+      BaseURL := DFXSetup."Partition Code URL";
+      User := DFXSetup."API User ID";
+      Password := DFXSetup."API Password";
+
+      Window.OPEN('Processing data... @1@@@@@@@@@@');
+        NoOfRecs := DFXSetup.COUNT;
+          CurrRec += 1;
+          IF NoOfRecs <= 100 THEN
+            Window.UPDATE(1,(CurrRec / NoOfRecs * 10000) DIV 1)
+          ELSE IF CurrRec MOD (NoOfRecs DIV 100) = 0 THEN
+            Window.UPDATE(1,(CurrRec / NoOfRecs * 10000) DIV 1);
+
+
+      HttpWebReqMgt.Initialize(BaseURL);
+      HttpWebReqMgt.DisableUI;
+      HttpWebReqMgt.SetMethod('POST');
+      HttpWebReqMgt.SetContentType('application/json');
+      HttpWebReqMgt.SetReturnType('application/json');
+      HttpWebReqMgt.AddBasicAuthentication(User,Password);
+      TempBlob.INIT;
+      TempBlob.Blob.CREATEOUTSTREAM(OutStr);
+      OutStr.WRITETEXT('{');
+      OutStr.WRITETEXT('"AttachedToType": "'+ AttachedToType +'",');
+      OutStr.WRITETEXT('"AttachedToNo": "'+ AttachedToNo +'",');
+      OutStr.WRITETEXT('"PartyName": "' + Name + '",');
+      OutStr.WRITETEXT('"OldParitionCode":"' + OldPartitionCode + '",');
+      OutStr.WRITETEXT('"NewParitionCode": "'+ NewPartitionCode + '",');
+      OutStr.WRITETEXT('"Function": "'+ FORMAT("Function") + '",');
+      OutStr.WRITETEXT('"EventDateTime": "'+ FORMAT(CURRENTDATETIME,0,9) + '",');
+      OutStr.WRITETEXT('"oldPartitionGroup": "'+ OldPartitionGroup+'",');
+      OutStr.WRITETEXT('"newPartitionGroup": "'+ NewPartitionGroup+'"');
+      OutStr.WRITETEXT('}');
+
+
+
+      HttpWebReqMgt.AddBodyBlob(TempBlob);
+      ApiRequest:= TempBlob.ReadAsText('',TEXTENCODING::UTF8);
+      TempBlob1.INIT;
+      TempBlob1.Blob.CREATEINSTREAM(InStr);
+      IF HttpWebReqMgt.GetResponse(InStr,HttpStatusCode,ResponseHeader) THEN BEGIN
+        ApiResult:= TempBlob1.ReadAsText('',TEXTENCODING::UTF8);
+        JSONMgt.InitializeFromString(ApiResult);
+
+      //NL.001 --start
+      IF NOT JSONMgt.InitializeFromString(ApiResult) THEN
+        EXIT(FALSE)
+      ELSE BEGIN
+
+
+      m := 0;
+      n := 1;
+
+      value := ApiResult;
+      value := DELCHR(value,'=','{}');
+      l := STRLEN(value);
+
+      WHILE m < l DO BEGIN
+        ValuePair := SELECTSTR(n,value);  // get comma separated pairs of values and element names
+
+        m := STRPOS(value,ValuePair)+STRLEN(ValuePair); // move pointer to the end of the current pair in Value
+
+        ValuePair := DELCHR(ValuePair,'=',FormatChar);
+
+        CurrentElement := COPYSTR(ValuePair,1,STRPOS(ValuePair,':'));
+        CurrentElement := DELCHR(CurrentElement,'=',':');
+
+        CurrentValue := COPYSTR(ValuePair,STRPOS(ValuePair,':'));
+        CurrentValue := DELCHR(CurrentValue,'=',':');
+
+      CASE CurrentElement OF
+              'status':
+                // must be a new record or lookup the existing record
+                BEGIN
+                  Status := CurrentValue;
+                  END;
+              'message':
+                BEGIN
+                  ErrorMessage := CurrentValue;
+                END;
+      END;
+      n := n +1;//for getting all the data
+      END;
+      COMMIT;
+      IF Status = 'success' THEN BEGIN
+        APILog.RESET;
+        APILog.SETRANGE("Record Type",AttachedToType);
+        APILog.SETRANGE("Record No.",AttachedToNo);
+        APILog.SETRANGE(OldPartitionCode,OldPartitionCode);
+        APILog.SETRANGE(NewPartitionCode,NewPartitionCode);
+        APILog.SETRANGE(OldPartitionGroup,OldPartitionGroup);
+        APILog.SETRANGE(NewPartitionGroup,NewPartitionGroup);
+        APILog.SETRANGE("Function","Function");
+        IF APILog.FINDSET THEN BEGIN
+          APILog.Flag := TRUE;
+          APILog.MODIFY;
+        END;
+        APILog.LogEntries('Partition API',BaseURL,FORMAT(AttachedToType),AttachedToNo,TRUE,'','','',OldPartitionCode,NewPartitionCode,OldPartitionGroup,NewPartitionGroup);
+        EXIT(TRUE);
+      END
+      ELSE
+      IF Status = 'InternalError' THEN BEGIN
+        //MESSAGE(ErrorMessage);
+        APILog.LogEntries('Partition API',BaseURL,FORMAT(AttachedToType),AttachedToNo,FALSE,ErrorMessage,'','',OldPartitionCode,NewPartitionCode,OldPartitionGroup,NewPartitionGroup);
+        EXIT(FALSE);
+      END
+      ELSE
+      IF Status = 'DuplicationError' THEN BEGIN
+        APILog.LogEntries('Partition API',BaseURL,FORMAT(AttachedToType),AttachedToNo,FALSE,ErrorMessage,'','',OldPartitionCode,NewPartitionCode,OldPartitionGroup,NewPartitionGroup);
+        EXIT(FALSE);
+      END;
+        //NL.001 --end
+
+      END; //ELSE
+        //ERROR(GETLASTERRORTEXT);
+
+      Window.CLOSE;
+
+      END;
+    END;
+
+    LOCAL PROCEDURE APILogPartitionCodeEntry@100000007(AttachedToType@100000005 : Text;AttachedToNo@100000004 : Code[100];Name@100000003 : Text[100];OldPartitionCode@100000002 : Code[250];NewPartitionCode@100000001 : Code[250];OldPartitionGroup@100000008 : Code[250];NewPartitionGroup@100000007 : Code[250];Function@100000000 : 'Insert,Delete,Modify,Rename');
+    VAR
+      APILog@100000006 : Record 50019;
+    BEGIN
+      APILog.RESET;
+      APILog.SETRANGE(API,'Partition');
+      APILog.SETRANGE("Record Type",AttachedToType);
+      APILog.SETRANGE("Record No.",AttachedToNo);
+      APILog.SETRANGE(OldPartitionCode,OldPartitionCode);
+      APILog.SETRANGE(NewPartitionCode,NewPartitionCode);
+      APILog.SETRANGE("Function","Function");
+      IF NOT APILog.FINDFIRST THEN BEGIN
+        APILog.INIT;
+        APILog.API := 'Partition';
+        APILog."Record Type" := AttachedToType;
+        APILog."Record No." := AttachedToNo;
+        APILog.Name := Name;
+        APILog.OldPartitionCode := OldPartitionCode;
+        APILog.NewPartitionCode := NewPartitionCode;
+        APILog.OldPartitionGroup := OldPartitionGroup;
+        APILog.NewPartitionGroup := NewPartitionGroup;
+        APILog.Status := APILog.Status::Success;
+        APILog."Function" := "Function";
+        APILog.Flag := FALSE;
+        APILog."Created Date" := CREATEDATETIME(TODAY,TIME);
+        APILog.INSERT;
+      END;
+    END;
+
+    PROCEDURE VegaPassportExpiryCreateCase@100000001(pExternalReferanceNo@100000000 : Code[50];PEntityNo@100000038 : Code[20]);
+    VAR
+      HttpWebReqMgt@100000037 : Codeunit 1297;
+      BaseURL@100000036 : Text;
+      User@100000035 : Text;
+      Password@100000034 : Text;
+      payload@100000033 : Text;
+      ResponseBody@100000032 : Text;
+      ErrorMessage@100000031 : Text;
+      ErrorDetails@100000030 : Text;
+      HttpStatusCode@100000029 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpStatusCode";
+      ResponseHeader@100000028 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NameValueCollection";
+      RequestJson@100000027 : Text;
+      ResponseJson@100000026 : Text;
+      HttpError@100000025 : Text;
+      JsonArray@100000024 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JArray";
+      JsonObject@100000023 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      TempBlob@100000022 : Record 99008535;
+      OutStr@100000021 : OutStream;
+      TempBlob1@100000020 : Record 99008535;
+      InStr@100000019 : InStream;
+      ApiResult@100000018 : Text;
+      JSONMgt@100000017 : Codeunit 5459;
+      ApiRequest@100000016 : Text;
+      Base64Text@100000015 : Text;
+      InStr1@100000014 : InStream;
+      TextRead@100000013 : Text;
+      OutStr1@100000012 : OutStream;
+      TempBlob2@100000011 : Record 99008535;
+      Instr2@100000010 : InStream;
+      Bytes@100000009 : DotNet "'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Array";
+      convert@100000008 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Convert";
+      MemoryStream@100000007 : DotNet "'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.MemoryStream";
+      Encoding@100000006 : DotNet "'mscorlib'.System.Text.Encoding";
+      DFXSetup@100000005 : Record 50006;
+      Window@100000004 : Dialog;
+      NoOfRecs@100000003 : Integer;
+      CurrRec@100000002 : Integer;
+      TempPath@100000001 : Text;
+      Entity@100000039 : Record 9068505;
+      AddressRec@100000040 : Record 9068451;
+    BEGIN
+      DFXSetup.GET;
+      BaseURL := DFXSetup."VEGA CreateCase";
+      User := DFXSetup."VEGA UserID";
+      Password := DFXSetup."VEGA Password";
+
+      Window.OPEN('Processing data... @1@@@@@@@@@@');
+        NoOfRecs := DFXSetup.COUNT;
+          CurrRec += 1;
+          IF NoOfRecs <= 100 THEN
+            Window.UPDATE(1,(CurrRec / NoOfRecs * 10000) DIV 1)
+          ELSE IF CurrRec MOD (NoOfRecs DIV 100) = 0 THEN
+            Window.UPDATE(1,(CurrRec / NoOfRecs * 10000) DIV 1);
+
+
+
+
+          Entity.RESET;
+          IF Entity.GET(PEntityNo) THEN BEGIN
+
+            AddressRec.RESET;
+            AddressRec.SETRANGE(Type,AddressRec.Type::Entity);
+            AddressRec.SETRANGE("No.",Entity."Entity No.");
+            IF AddressRec.FINDFIRST THEN;
+             IF AddressRec."E-Mail" = '' THEN BEGIN
+               MESSAGE('Email is NULL! Can''t proceed further');
+             END;
+
+            HttpWebReqMgt.Initialize(BaseURL);
+            HttpWebReqMgt.DisableUI;
+            HttpWebReqMgt.SetMethod('POST');
+            HttpWebReqMgt.SetContentType('application/json');
+            HttpWebReqMgt.SetReturnType('application/json');
+            HttpWebReqMgt.AddBasicAuthentication(User,Password);
+            TempBlob.INIT;
+            TempBlob.Blob.CREATEOUTSTREAM(OutStr);
+            OutStr.WRITETEXT('{');
+            OutStr.WRITETEXT('"externalObjectReference": "' + pExternalReferanceNo +'",');
+            OutStr.WRITETEXT('"entityTitle": "'+ Entity.Title +'",');
+            OutStr.WRITETEXT('"entityFirstName": "' + Entity."Name 2" + '",');
+            OutStr.WRITETEXT('"entityMiddleName":"' + Entity.Name + '",');
+            OutStr.WRITETEXT('"entitySurname": "'+ Entity.Initials + '",');
+            OutStr.WRITETEXT('"entityTelephoneNo": "'+ AddressRec."Phone No." + '",');
+            OutStr.WRITETEXT('"entityEmail": "'+ AddressRec."E-Mail" + '",');
+            OutStr.WRITETEXT('"dateOfBirth": "'+ FORMAT(Entity."Date of Birth",0,9) + '"');
+            OutStr.WRITETEXT('}');
+
+
+
+            HttpWebReqMgt.AddBodyBlob(TempBlob);
+            ApiRequest:= TempBlob.ReadAsText('',TEXTENCODING::UTF8);
+           // MESSAGE(ApiRequest);
+
+            TempBlob1.INIT;
+            TempBlob1.Blob.CREATEINSTREAM(InStr);
+            IF HttpWebReqMgt.GetResponse(InStr,HttpStatusCode,ResponseHeader) THEN BEGIN
+              ApiResult:= TempBlob1.ReadAsText('',TEXTENCODING::UTF8);
+              JSONMgt.InitializeFromString(ApiResult);
+              //MESSAGE(ApiResult);
+              ParsePassportCreateCase(ApiResult,pExternalReferanceNo);
+            END ELSE BEGIN
+             ERROR(GETLASTERRORTEXT);
+            END;
+          END;
+      Window.CLOSE;
+    END;
+
+    PROCEDURE VegaPassportExpiryGetStatus@100000004(pExternalReferanceNo@100000000 : Code[50]);
+    VAR
+      HttpWebReqMgt@100000037 : Codeunit 1297;
+      BaseURL@100000036 : Text;
+      User@100000035 : Text;
+      Password@100000034 : Text;
+      payload@100000033 : Text;
+      ResponseBody@100000032 : Text;
+      ErrorMessage@100000031 : Text;
+      ErrorDetails@100000030 : Text;
+      HttpStatusCode@100000029 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpStatusCode";
+      ResponseHeader@100000028 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NameValueCollection";
+      RequestJson@100000027 : Text;
+      ResponseJson@100000026 : Text;
+      HttpError@100000025 : Text;
+      JsonArray@100000024 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JArray";
+      JsonObject@100000023 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      TempBlob@100000022 : Record 99008535;
+      OutStr@100000021 : OutStream;
+      TempBlob1@100000020 : Record 99008535;
+      InStr@100000019 : InStream;
+      ApiResult@100000018 : Text;
+      JSONMgt@100000017 : Codeunit 5459;
+      ApiRequest@100000016 : Text;
+      Base64Text@100000015 : Text;
+      InStr1@100000014 : InStream;
+      TextRead@100000013 : Text;
+      OutStr1@100000012 : OutStream;
+      TempBlob2@100000011 : Record 99008535;
+      Instr2@100000010 : InStream;
+      Bytes@100000009 : DotNet "'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Array";
+      convert@100000008 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Convert";
+      MemoryStream@100000007 : DotNet "'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.MemoryStream";
+      Encoding@100000006 : DotNet "'mscorlib'.System.Text.Encoding";
+      DFXSetup@100000005 : Record 50006;
+      Window@100000004 : Dialog;
+      NoOfRecs@100000003 : Integer;
+      CurrRec@100000002 : Integer;
+      TempPath@100000001 : Text;
+      Entity@100000039 : Record 9068505;
+    BEGIN
+      DFXSetup.GET;
+      BaseURL := DFXSetup."VEGA GETStatus";
+      User := DFXSetup."VEGA UserID";
+      Password := DFXSetup."VEGA Password";
+
+      Window.OPEN('Processing data... @1@@@@@@@@@@');
+        NoOfRecs := DFXSetup.COUNT;
+          CurrRec += 1;
+          IF NoOfRecs <= 100 THEN
+            Window.UPDATE(1,(CurrRec / NoOfRecs * 10000) DIV 1)
+          ELSE IF CurrRec MOD (NoOfRecs DIV 100) = 0 THEN
+            Window.UPDATE(1,(CurrRec / NoOfRecs * 10000) DIV 1);
+
+
+            HttpWebReqMgt.Initialize(BaseURL);
+            HttpWebReqMgt.DisableUI;
+            HttpWebReqMgt.SetMethod('POST');
+            HttpWebReqMgt.SetContentType('application/json');
+            HttpWebReqMgt.SetReturnType('application/json');
+            HttpWebReqMgt.AddBasicAuthentication(User,Password);
+            TempBlob.INIT;
+            TempBlob.Blob.CREATEOUTSTREAM(OutStr);
+            OutStr.WRITETEXT('{');
+            OutStr.WRITETEXT('"externalObjectReference": "' + pExternalReferanceNo +'"');
+            OutStr.WRITETEXT('}');
+
+
+
+            HttpWebReqMgt.AddBodyBlob(TempBlob);
+            ApiRequest:= TempBlob.ReadAsText('',TEXTENCODING::UTF8);
+           // MESSAGE(ApiRequest);
+            TempBlob1.INIT;
+            TempBlob1.Blob.CREATEINSTREAM(InStr);
+            IF HttpWebReqMgt.GetResponse(InStr,HttpStatusCode,ResponseHeader) THEN BEGIN
+              ApiResult:= TempBlob1.ReadAsText('',TEXTENCODING::UTF8);
+              JSONMgt.InitializeFromString(ApiResult);
+             // MESSAGE(ApiResult);
+
+              ParsePassportGetStatus1(ApiResult,pExternalReferanceNo);
+            END ELSE BEGIN
+              ERROR(GETLASTERRORTEXT);
+            END;
+      Window.CLOSE;
+    END;
+
+    LOCAL PROCEDURE ParsePassportCreateCase@100000006(pJson@100000004 : Text;pExternalReferanceNo@100000005 : Code[50]);
+    VAR
+      VegaTemp@100000000 : TEMPORARY Record 50020;
+      DFXVEGAInterface@100000001 : Record 50020;
+      JSONMgt@100000003 : Codeunit 5459;
+      RecordRef@100000002 : RecordRef;
+      RecVega@100000006 : Record 50020;
+    BEGIN
+      IF NOT JSONMgt.InitializeFromString(pJson) THEN;
+        //EXIT(FALSE);
+
+      WITH VegaTemp DO BEGIN
+        CLEAR(VegaTemp);
+        RecordRef.GETTABLE(VegaTemp);
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'status',FIELDNO("API Status"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'errorMessage',FIELDNO("Error Message"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'objectReference',FIELDNO("Object Reference"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'caseStatus',FIELDNO("Case Status"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'percentageComplete',FIELDNO("Percentage Complete"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'data',FIELDNO(Data));
+        RecordRef.SETTABLE(VegaTemp);
+      END;
+      IF VegaTemp."API Status" = 'Success' THEN BEGIN
+        RecVega.RESET;
+      IF RecVega.GET(pExternalReferanceNo) THEN BEGIN
+        RecVega.Status := RecVega.Status::InProcess;
+        RecVega.MODIFY;
+      END
+      END
+      ELSE
+      IF VegaTemp."API Status" = 'InternalError' THEN
+        MESSAGE(VegaTemp."Error Message");
+    END;
+
+    LOCAL PROCEDURE ParsePassportGetStatus@100000014(pJson@100000004 : Text;pExternalReferanceNo@100000006 : Code[50]);
+    VAR
+      DFXVega@100000000 : Record 50020;
+      DFXVEGAInterface@100000001 : Record 50020;
+      JSONMgt@100000003 : Codeunit 5459;
+      RecordRef@100000002 : RecordRef;
+      DataJson@100000005 : Text[2048];
+    BEGIN
+      {IF NOT JSONMgt.InitializeFromString(pJson) THEN;
+       // EXIT(FALSE);
+
+      WITH DFXVega DO BEGIN
+        CLEAR(DFXVega);
+        DFXVega.RESET;
+        DFXVega.SETRANGE("Entry No.",pExternalReferanceNo);
+        DFXVega.FINDFIRST;
+        RecordRef.GETTABLE(DFXVega);
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'status',FIELDNO("API Status"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'errorMessage',FIELDNO("Error Message"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'objectReference',FIELDNO("Case ID"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'caseStatus',FIELDNO("Case Status"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'percentageComplete',FIELDNO("Percentage Complete"));
+        //JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'data',FIELDNO(Data));
+        RecordRef.SETTABLE(DFXVega);
+        DFXVega.MODIFY(TRUE);
+
+      //IF VegaTemp."API Status" = 'Sucess' THEN
+      //  EXIT(TRUE)
+      //ELSE
+      IF DFXVega."API Status" = 'InternalError' THEN
+        ERROR(DFXVega."Error Message");
+
+      IF DFXVega.Data = 'null' THEN BEGIN
+        IF DFXVega."Percentage Complete" = 100 THEN
+          Completedataentry(pJson,pExternalReferanceNo);
+      END ELSE
+        ERROR('Response Error');
+
+      END;
+      }
+    END;
+
+    LOCAL PROCEDURE Completedataentry@100000008(pValue@100000000 : Text;pExternalReferanceNo@100000015 : Code[50]);
+    VAR
+      p@100000002 : Integer;
+      x@100000001 : Integer;
+      CurrentObject@100000003 : Text;
+      ValuePair@100000005 : Text;
+      CurrentElement@100000007 : Text;
+      CurrentValue@100000008 : Text;
+      FormatChar@100000010 : TextConst 'ENU={}"''[]';
+      JSONMgt@100000012 : Codeunit 5459;
+      RecordRef@100000011 : RecordRef;
+      DataJson@100000004 : Text;
+      TempBlob@100000016 : Record 99008535;
+      Outstr@100000017 : OutStream;
+      Value@100000018 : Text;
+      DFXDMSLite@100000019 : Codeunit 50004;
+      Instr@100000020 : InStream;
+      FileName@100000021 : Text;
+      m@100000022 : Integer;
+      n@100000023 : Integer;
+      l@100000006 : Integer;
+      DFXVEGA@100000009 : Record 50020;
+      DFXVEGA1@100000013 : Record 50020;
+    BEGIN
+      p := STRLEN(pValue);//To get the data from customer details of passport
+      x := STRPOS(pValue,':{');
+
+      IF STRPOS(pValue,'[]')>0 THEN EXIT; // empty response, no need to parse
+
+
+      CurrentObject := COPYSTR(pValue,x-1,p);
+      CurrentObject := DELSTR(CurrentObject,1,2);
+      CurrentElement := CONVERTSTR(CurrentObject,'}','*');
+      CurrentElement := DELCHR(CurrentElement,'=','*');
+      CurrentElement := INSSTR(CurrentElement,'}',p);//Contain the JSON of data only
+
+
+      IF NOT JSONMgt.InitializeFromString(CurrentElement) THEN;
+      //  EXIT(FALSE);
+
+      WITH DFXVEGA DO BEGIN
+        CLEAR(DFXVEGA);
+        DFXVEGA.RESET;
+        DFXVEGA.SETRANGE("Entry No.",pExternalReferanceNo);
+        DFXVEGA.FINDFIRST;
+        RecordRef.GETTABLE(DFXVEGA);
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'idVerification_IssueDate',FIELDNO("New Passport Issue Date"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'idVerification_DocumentNumber',FIELDNO("New Passport Number"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'idVerification_ExpiryDate',FIELDNO("New Passport Expiry Date"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'idVerification_NationalityCode',FIELDNO("New Passport Country of Issue"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'fileName',FIELDNO("File Name"));
+        //JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'idVerification_IDScanDocument',FIELDNO(scan
+        RecordRef.SETTABLE(DFXVEGA);
+        DFXVEGA.Status := DFXVEGA.Status::Processed;
+        DFXVEGA."Case ID" := DFXVEGA."Object Reference";
+        IF DFXVEGA.MODIFY(TRUE) THEN BEGIN
+          EntityMetadataModify(DFXVEGA);
+          NAVLITE_Metadata_Insert(DFXVEGA);
+        //MESSAGE('Case Successful')
+        END;
+
+      END;
+
+      {
+      m := 0;
+      n := 1;
+
+      Value := CurrentElement;
+      Value := DELCHR(Value,'=','{}');
+      l := STRLEN(Value);
+
+      WHILE m < l DO BEGIN
+        ValuePair := SELECTSTR(n,Value);  // get comma separated pairs of values and element names
+
+        m := STRPOS(Value,ValuePair)+STRLEN(ValuePair); // move pointer to the end of the current pair in Value
+
+        ValuePair := DELCHR(ValuePair,'=',FormatChar);
+
+        CurrentElement := COPYSTR(ValuePair,1,STRPOS(ValuePair,':'));
+        CurrentElement := DELCHR(CurrentElement,'=',':');
+
+        CurrentValue := COPYSTR(ValuePair,STRPOS(ValuePair,':'));
+        CurrentValue := DELCHR(CurrentValue,'=',':');
+
+      CASE CurrentElement OF
+              'idVerification_IDScanDocument':
+                // must be a new record or lookup the existing record
+                BEGIN
+                  Base64 := CurrentValue;
+                  END;
+      END;
+      n := n +1;//for getting all the data
+      END;
+
+      CLEAR(FileName);
+      FileName := 'Passport - ' + DFXVEGA."Entity No." + ' - ' + FORMAT(TODAY);
+
+      TempBlob.FromBase64String(Base64);
+      IF DFXDMSLite.NAVLFDocumentFlowAPI(TempBlob,FileName) THEN
+        NAVLITE_Metadata_Insert(DFXVEGA,FileName);
+      }
+    END;
+
+    LOCAL PROCEDURE EntityMetadataModify@100000019(VAR Rec@100000000 : Record 50020);
+    VAR
+      Entity@100000003 : Record 9068505;
+    BEGIN
+      IF Rec.Status = Rec.Status::Processed THEN BEGIN
+        IF Rec."New Passport Number" <> '' THEN BEGIN
+          Entity.RESET;
+          IF Entity.GET(Rec."Entity No.") THEN BEGIN
+            IF Rec."First/Second" = Rec."First/Second"::First THEN BEGIN
+              Entity."Passport number" := Rec."New Passport Number";
+              Entity."Passport/ID Issue Date" := Rec."New Passport Issue Date";
+              Entity."Passport expiry date" := Rec."New Passport Expiry Date";
+              Entity."Passport country of issue" := Rec."New Passport Country of Issue";
+              Entity.MODIFY;
+            END
+            ELSE IF Rec."First/Second" = Rec."First/Second"::Second THEN BEGIN
+              Entity."Passport/ID Number (2)" := Rec."New Passport Number";
+              Entity."Passport/ID Issue Date (2)" := Rec."New Passport Issue Date";
+              Entity."Passport/ID Expiry Date (2)" := Rec."New Passport Expiry Date";
+              Entity."Passport/ID Country (2)" := Rec."New Passport Country of Issue";
+              Entity.MODIFY;
+            END
+          END;
+        END;
+      END;
+    END;
+
+    LOCAL PROCEDURE NAVLITE_Metadata_Insert@100000002(pRecVEGA@100000000 : Record 50020);
+    VAR
+      Entity@100000001 : Record 9068505;
+      NAVLITE@100000002 : Record 50004;
+      DFXBulkDocumentLink@100000003 : Record 50015;
+    BEGIN
+      IF Entity.GET(pRecVEGA."Entity No.") THEN
+        BEGIN
+          NAVLITE.INIT;
+          NAVLITE.Type := NAVLITE.Type::Entity;
+          NAVLITE."No." := Entity."Entity No.";
+          NAVLITE.Name := Entity."Name 2" + Entity.Name;
+          NAVLITE."First Partition Code" := Entity."First Partition Code";
+          NAVLITE."Second Partition Code" := Entity."Second Partition Code";
+          NAVLITE.Jurisdiction := Entity.Jurisdiction;
+          NAVLITE.NAVUserID := USERID;
+          NAVLITE."Document Date" := pRecVEGA."Passport Expiry Date";
+          NAVLITE.INSERT(TRUE);
+
+          DFXBulkDocumentLink.INIT;
+          DFXBulkDocumentLink.ID := NAVLITE.ID;
+          DFXBulkDocumentLink.Type := DFXBulkDocumentLink.Type::Entity;
+          DFXBulkDocumentLink."No." := Entity."Entity No.";
+          DFXBulkDocumentLink.VALIDATE("Document Type",'R02');
+          DFXBulkDocumentLink.VALIDATE("Document Sub Type",'P12');
+          DFXBulkDocumentLink."File Name" := pRecVEGA."File Name";
+          DFXBulkDocumentLink.INSERT(TRUE);
+        END;
+    END;
+
+    LOCAL PROCEDURE ParsePassportGetStatus1@100000011(pJson@100000001 : Text;pExternalReferanceNo@100000000 : Code[50]);
+    VAR
+      VegaTemp@100000006 : Record 50020;
+      DFXVEGAInterface@100000005 : Record 50020;
+      JSONMgt@100000004 : Codeunit 5459;
+      RecordRef@100000003 : RecordRef;
+      DataJson@100000002 : Text[2048];
+    BEGIN
+      IF NOT JSONMgt.InitializeFromString(pJson) THEN;
+       // EXIT(FALSE);
+
+      WITH VegaTemp DO BEGIN
+        CLEAR(VegaTemp);
+        VegaTemp.RESET;
+        VegaTemp.SETRANGE("Entry No.",pExternalReferanceNo);
+        VegaTemp.FINDFIRST;
+        RecordRef.GETTABLE(VegaTemp);
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'status',FIELDNO("API Status"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'errorMessage',FIELDNO("Error Message"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'objectReference',FIELDNO("Object Reference"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'caseStatus',FIELDNO("Case Status"));
+        JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'percentageComplete',FIELDNO("Percentage Complete"));
+       //JSONMgt.GetValueAndSetToRecFieldNo(RecordRef,'data',FIELDNO(Data));
+        RecordRef.SETTABLE(VegaTemp);
+        VegaTemp.MODIFY(TRUE);
+
+      //IF VegaTemp."API Status" = 'Sucess' THEN
+      //  EXIT(TRUE)
+      //ELSE
+      IF VegaTemp."API Status" = 'InternalError' THEN
+        ERROR(VegaTemp."Error Message");
+
+        IF VegaTemp."Percentage Complete" = 33 THEN
+          InReviewUpdate(pExternalReferanceNo);
+
+      //IF VegaTemp.Data <> 'null' THEN BEGIN
+        IF VegaTemp."Percentage Complete" = 100 THEN
+          Completedataentry(pJson,pExternalReferanceNo);
+      //END ELSE
+       // ERROR('Response data not received');
+
+      END;
+    END;
+
+    LOCAL PROCEDURE InReviewUpdate@100000012(pExternalReferanceNo@100000001 : Code[50]);
+    VAR
+      vegaRec@100000000 : Record 50020;
+    BEGIN
+      vegaRec.RESET;
+      vegaRec.SETRANGE("Entry No.",pExternalReferanceNo);
+      IF vegaRec.FINDFIRST THEN BEGIN
+        vegaRec.Status := vegaRec.Status::InReview;
+        vegaRec.MODIFY;
+      END;
+    END;
+
+    PROCEDURE RejectStatusUpdate@100000015(pExternalReferanceNo@100000001 : Code[50];PEntityNo@100000000 : Code[20];RejectMessage@100000002 : Text);
+    VAR
+      vegaRec@100000003 : Record 50020;
+    BEGIN
+      vegaRec.RESET;
+      vegaRec.SETRANGE("Entry No.",pExternalReferanceNo);
+      IF vegaRec.FINDFIRST THEN BEGIN
+        vegaRec.Status := vegaRec.Status::Rejected;
+        vegaRec."Status Message" := 'Rejected';
+        vegaRec.MODIFY;
+      END;
+    END;
+
+    [EventSubscriber(Table,9068505,OnAfterModifyFunction)]
+    PROCEDURE EntityNameModify@100000010(VAR Sender@100000000 : Record 9068505;xRecEntity@100000001 : Record 9068505;Entity@100000002 : Record 9068505);
+    VAR
+      pOldName@100000003 : Text;
+      pNewName@100000004 : Text;
+    BEGIN
+      {CLEAR(pOldName);
+      CLEAR(pNewName);
+
+
+      IF xRecEntity.Name <> Entity.Name THEN BEGIN
+        pOldName := xRecEntity."Name 2" + ' ' + xRecEntity.Name;
+        pNewName := Entity."Name 2" + ' ' + Entity.Name ;
+      END;
+
+
+      IF xRecEntity."Name 2" <> Entity."Name 2" THEN BEGIN
+        pOldName := xRecEntity."Name 2" + ' ' + xRecEntity.Name;
+        pNewName := Entity."Name 2" + ' ' + Entity.Name ;
+      END;
+
+      APILogNameChangeEntry('Entity',Entity."Entity No.",pNewName,pOldName,pNewName);
+      }
+    END;
+
+    [EventSubscriber(Table,9068500,OnAfterModifyEvent)]
+    PROCEDURE ClientNameModify@100000013(VAR Rec@100000000 : Record 9068500;VAR xRec@100000001 : Record 9068500;RunTrigger@100000002 : Boolean);
+    BEGIN
+      {IF xRec.Name <> Rec.Name THEN BEGIN
+        APILogNameChangeEntry('Client',Rec."Client No.",Rec.Name,xRec.Name,Rec.Name);
+      END;
+      }
+    END;
+
+    LOCAL PROCEDURE APILogNameChangeEntry@100000016(AttachedToType@100000005 : Text;AttachedToNo@100000004 : Code[100];Name@100000003 : Text[100];OldName@100000002 : Code[250];NewName@100000001 : Code[250]);
+    VAR
+      APILog@100000006 : Record 50019;
+    BEGIN
+      APILog.RESET;
+      APILog.SETRANGE(API,'Name Change');
+      APILog.SETRANGE("Record Type",AttachedToType);
+      APILog.SETRANGE("Record No.",AttachedToNo);
+      APILog.SETRANGE(OldName,OldName);
+      APILog.SETRANGE(NewName,NewName);
+      IF NOT APILog.FINDFIRST THEN BEGIN
+        APILog.INIT;
+        APILog.API := 'Name Change';
+        APILog."Record Type" := AttachedToType;
+        APILog."Record No." := AttachedToNo;
+        APILog.Name := NewName;
+        APILog.OldName := OldName;
+        APILog.NewName := NewName;
+        APILog.Status := APILog.Status::Success;
+        APILog.Flag := FALSE;
+        APILog."Created Date" := CREATEDATETIME(TODAY,TIME);
+        APILog.INSERT;
+      END;
+    END;
+
+    LOCAL PROCEDURE NameChangeAPICall@100000022(AttachedToType@100000037 : Text;AttachedToNo@100000038 : Code[250];Name@100000039 : Text[250];OldName@100000040 : Code[250];NewName@100000041 : Code[250]) : Boolean;
+    VAR
+      HttpWebReqMgt@100000036 : Codeunit 1297;
+      BaseURL@100000035 : Text;
+      User@100000034 : Text;
+      Password@100000033 : Text;
+      payload@100000032 : Text;
+      ResponseBody@100000031 : Text;
+      ErrorMessage@100000030 : Text;
+      ErrorDetails@100000029 : Text;
+      HttpStatusCode@100000028 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Net.HttpStatusCode";
+      ResponseHeader@100000027 : DotNet "'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Specialized.NameValueCollection";
+      RequestJson@100000026 : Text;
+      ResponseJson@100000025 : Text;
+      HttpError@100000024 : Text;
+      JsonArray@100000023 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JArray";
+      JsonObject@100000022 : DotNet "'Newtonsoft.Json'.Newtonsoft.Json.Linq.JObject";
+      TempBlob@100000021 : Record 99008535;
+      OutStr@100000020 : OutStream;
+      TempBlob1@100000019 : Record 99008535;
+      InStr@100000018 : InStream;
+      ApiResult@100000017 : Text;
+      JSONMgt@100000016 : Codeunit 5459;
+      ApiRequest@100000015 : Text;
+      Base64Text@100000014 : Text;
+      InStr1@100000013 : InStream;
+      TextRead@100000012 : Text;
+      OutStr1@100000011 : OutStream;
+      TempBlob2@100000010 : Record 99008535;
+      Instr2@100000009 : InStream;
+      Bytes@100000008 : DotNet "'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Array";
+      convert@100000007 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Convert";
+      MemoryStream@100000006 : DotNet "'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.MemoryStream";
+      Encoding@100000005 : DotNet "'mscorlib'.System.Text.Encoding";
+      DFXSetup@100000004 : Record 50006;
+      Window@100000003 : Dialog;
+      NoOfRecs@100000002 : Integer;
+      CurrRec@100000001 : Integer;
+      TempPath@100000000 : Text;
+      APILog@100000043 : Record 50019;
+      m@100000054 : Integer;
+      n@100000053 : Integer;
+      l@100000052 : Integer;
+      value@100000051 : Text;
+      CurrentElement@100000050 : Text;
+      CurrentValue@100000049 : Text;
+      ValuePair@100000048 : Text;
+      Status@100000047 : Text;
+      FormatChar@100000046 : TextConst 'ENU={}"''[]';
+    BEGIN
+      DFXSetup.GET;
+      BaseURL := DFXSetup."Name Change URL";
+      User := DFXSetup."API User ID";
+      Password := DFXSetup."API Password";
+
+      Window.OPEN('Processing data... @1@@@@@@@@@@');
+        NoOfRecs := DFXSetup.COUNT;
+          CurrRec += 1;
+          IF NoOfRecs <= 100 THEN
+            Window.UPDATE(1,(CurrRec / NoOfRecs * 10000) DIV 1)
+          ELSE IF CurrRec MOD (NoOfRecs DIV 100) = 0 THEN
+            Window.UPDATE(1,(CurrRec / NoOfRecs * 10000) DIV 1);
+
+
+      HttpWebReqMgt.Initialize(BaseURL);
+      HttpWebReqMgt.DisableUI;
+      HttpWebReqMgt.SetMethod('POST');
+      HttpWebReqMgt.SetContentType('application/json');
+      HttpWebReqMgt.SetReturnType('application/json');
+      HttpWebReqMgt.AddBasicAuthentication(User,Password);
+      TempBlob.INIT;
+      TempBlob.Blob.CREATEOUTSTREAM(OutStr);
+      OutStr.WRITETEXT('{');
+      OutStr.WRITETEXT('"attachedToType": "'+ AttachedToType +'",');
+      OutStr.WRITETEXT('"attachedToNo": "'+ AttachedToNo +'",');
+      OutStr.WRITETEXT('"partyName": "' + Name + '",');
+      OutStr.WRITETEXT('"oldName":"' + OldName + '",');
+      OutStr.WRITETEXT('"newName": "'+ NewName + '",');
+      OutStr.WRITETEXT('"createdDate": "'+ FORMAT(CURRENTDATETIME,0,9) + '",');
+      OutStr.WRITETEXT('"modifiedDate": "'+ FORMAT(CURRENTDATETIME,0,9) + '"');
+      OutStr.WRITETEXT('}');
+
+
+
+      HttpWebReqMgt.AddBodyBlob(TempBlob);
+      ApiRequest:= TempBlob.ReadAsText('',TEXTENCODING::UTF8);
+      TempBlob1.INIT;
+      TempBlob1.Blob.CREATEINSTREAM(InStr);
+      IF HttpWebReqMgt.GetResponse(InStr,HttpStatusCode,ResponseHeader) THEN BEGIN
+        ApiResult:= TempBlob1.ReadAsText('',TEXTENCODING::UTF8);
+        JSONMgt.InitializeFromString(ApiResult);
+
+      //NL.001 --start
+      IF NOT JSONMgt.InitializeFromString(ApiResult) THEN
+        EXIT(FALSE)
+      ELSE BEGIN
+
+
+      m := 0;
+      n := 1;
+
+      value := ApiResult;
+      value := DELCHR(value,'=','{}');
+      l := STRLEN(value);
+
+      WHILE m < l DO BEGIN
+        ValuePair := SELECTSTR(n,value);  // get comma separated pairs of values and element names
+
+        m := STRPOS(value,ValuePair)+STRLEN(ValuePair); // move pointer to the end of the current pair in Value
+
+        ValuePair := DELCHR(ValuePair,'=',FormatChar);
+
+        CurrentElement := COPYSTR(ValuePair,1,STRPOS(ValuePair,':'));
+        CurrentElement := DELCHR(CurrentElement,'=',':');
+
+        CurrentValue := COPYSTR(ValuePair,STRPOS(ValuePair,':'));
+        CurrentValue := DELCHR(CurrentValue,'=',':');
+
+      CASE CurrentElement OF
+              'status':
+                // must be a new record or lookup the existing record
+                BEGIN
+                  Status := CurrentValue;
+                  END;
+              'message':
+                BEGIN
+                  ErrorMessage := CurrentValue;
+                END;
+      END;
+      n := n +1;//for getting all the data
+      END;
+      COMMIT;
+      IF Status = 'Success' THEN BEGIN
+        APILog.RESET;
+        APILog.SETRANGE("Record Type",AttachedToType);
+        APILog.SETRANGE("Record No.",AttachedToNo);
+        APILog.SETRANGE(OldName,OldName);
+        APILog.SETRANGE(NewName,NewName);
+        IF APILog.FINDSET THEN BEGIN
+          APILog.Flag := TRUE;
+          APILog.MODIFY;
+        END;
+        APILog.LogEntries('Name Change API',BaseURL,FORMAT(AttachedToType),AttachedToNo,TRUE,'',OldName,NewName,'','','','');
+        EXIT(TRUE);
+      END
+      ELSE
+      IF Status = 'InternalError' THEN BEGIN
+        //MESSAGE(ErrorMessage);
+        APILog.LogEntries('Name Change API',BaseURL,FORMAT(AttachedToType),AttachedToNo,FALSE,ErrorMessage,OldName,NewName,'','','','');
+        EXIT(FALSE);
+      END
+      ELSE
+      IF Status = 'DataError' THEN BEGIN
+        APILog.LogEntries('Name Change API',BaseURL,FORMAT(AttachedToType),AttachedToNo,FALSE,ErrorMessage,OldName,NewName,'','','','');
+        EXIT(FALSE);
+      END;
+        //NL.001 --end
+
+      END; //ELSE
+        //ERROR(GETLASTERRORTEXT);
+
+      Window.CLOSE;
+
+      END;
+    END;
+
+    BEGIN
+    {
+      //DFX-01 CR Addtional Fields in NOM Table and field mapping
+    }
+    END.
+  }
+}
+

@@ -1,0 +1,227 @@
+OBJECT Table 50015 DFX Bulk Document Link
+{
+  OBJECT-PROPERTIES
+  {
+    Date=23-06-22;
+    Time=11:13:19;
+    Modified=Yes;
+    Version List=NAVLITE;
+  }
+  PROPERTIES
+  {
+    DataPerCompany=Yes;
+    OnInsert=VAR
+               NAVLITE@100000000 : Record 50004;
+             BEGIN
+               NAVLITE.SETRANGE(ID,ID);
+               IF NAVLITE.FINDFIRST THEN BEGIN
+                 Type := NAVLITE.Type;
+                 "No." := NAVLITE."No.";
+                 TAG := 'Systemtag';
+               END;
+             END;
+
+  }
+  FIELDS
+  {
+    { 1   ;   ;ID                  ;Integer       ;DataClassification=ToBeClassified }
+    { 2   ;   ;Line No.            ;Integer       ;AutoIncrement=Yes;
+                                                   DataClassification=ToBeClassified }
+    { 3   ;   ;Type                ;Option        ;TableRelation=NAVLITE.Type;
+                                                   DataClassification=ToBeClassified;
+                                                   OptionString=,Client,Entity,Customer,Vendor }
+    { 4   ;   ;No.                 ;Code20        ;TableRelation=NAVLITE.No.;
+                                                   DataClassification=ToBeClassified }
+    { 5   ;   ;Document Type       ;Code10        ;TableRelation="Correspondence Doc Type";
+                                                   OnValidate=BEGIN
+                                                                CorrespondenceDocType.SETRANGE(Code,Rec."Document Type");
+                                                                IF CorrespondenceDocType.FINDFIRST THEN
+                                                                  "Document Type Description" := CorrespondenceDocType.Type;
+
+                                                              END;
+
+                                                   DataClassification=ToBeClassified }
+    { 6   ;   ;Document Sub Type   ;Code20        ;TableRelation="Document Type Sub Type"."Document Sub Type" WHERE (Document Type=FIELD(Document Type));
+                                                   OnValidate=BEGIN
+                                                                DocumentTypeSubType.SETRANGE("Document Type",Rec."Document Type");
+                                                                DocumentTypeSubType.SETRANGE("Document Sub Type",Rec."Document Sub Type");
+                                                                IF DocumentTypeSubType.FINDFIRST THEN
+                                                                  "Document Sub Type Description" := DocumentTypeSubType."Document Sub Type Description";
+                                                              END;
+
+                                                   DataClassification=ToBeClassified }
+    { 7   ;   ;Document Type Description;Text75   ;DataClassification=ToBeClassified }
+    { 8   ;   ;Document Sub Type Description;Text75;
+                                                   DataClassification=ToBeClassified }
+    { 14  ;   ;File Path           ;Text250       ;OnLookup=VAR
+                                                              ClientDocPath@100000001 : Text[100];
+                                                              DocSetup@100000000 : Record 9068662;
+                                                              TempFilePath@100000002 : Text;
+                                                              Instr@100000003 : InStream;
+                                                              TextRead@100000004 : Text;
+                                                              TempBlob@100000005 : Record 99008535;
+                                                              Sample@100000006 : Text;
+                                                              Outstr@100000007 : OutStream;
+                                                              Convert@100000008 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Convert";
+                                                              TempFileName@100000009 : Text;
+                                                              StrFileName@100000010 : Text;
+                                                              DFXDMSLite@100000011 : Codeunit 50004;
+                                                              FileTest@100000012 : File;
+                                                              Int@100000013 : Integer;
+                                                              StreamInTest@100000014 : InStream;
+                                                              txt@100000015 : Text;
+                                                              StreamEnd@100000016 : Boolean;
+                                                              Hasval@100000017 : Boolean;
+                                                              Instr1@100000018 : InStream;
+                                                              NAVLITEPage@100000019 : Page 50094;
+                                                              StringBig@100000020 : BigText;
+                                                            BEGIN
+                                                              CLEAR(TempFilePath);
+                                                              CLEAR(TempFileName);
+                                                              CLEAR(TempBlobRead);
+                                                              "File Path" := FileManagement.BLOBImportWithFilter(TempBlobRead,'openfile','','All Files (*.*)|*.*','*.*');
+
+                                                              //Sample := TempBlobRead.ToBase64String();
+                                                              //MESSAGE(Sample);
+                                                              TempFileName := FileManagement.GetFileName("File Path");
+
+                                                              //"File Path" := TempFilePath;
+                                                              "File Name" := FORMAT(CURRENTDATETIME) + ' - ' + TempFileName;
+
+                                                              "Content Blob" := TempBlob.Blob;
+
+                                                              IF DFXDMSLite.NAVLFDocumentFlowAPI(TempBlobRead,"File Name",Rec) THEN;
+
+
+
+                                                              {
+                                                              NAVLITEPage.GetFileDetails(TempBlob,"File Name",Rec.Type,Rec."No.",Rec.ID);
+
+                                                              TempBlob.Blob := "Content Blob";
+                                                              DFXDMSLite.NAVLFDocumentFlowAPI(TempBlob,"File Name",Rec.Type,Rec."No.",Rec.ID);
+
+
+
+
+
+
+                                                              Clear(TextRead);
+                                                              CLEAR(TempFilePath);
+                                                              CLEAR(Instr);
+                                                              CLEAR(TempFileName);
+                                                              TempFileName := FileManagement.BLOBImportWithFilter(TempBlob,'openfile','','All Files (*.*)|*.*','*.*');
+                                                              TempFileName := FileManagement.GetFileName(TempFilePath);
+
+                                                              "File Path" := TempFilePath;
+                                                              "File Name" := FORMAT(CURRENTDATETIME) + ' - ' + TempFileName;
+
+                                                              //DFXDMSLite.NAVLFDocumentFlowAPI(TempBlob,"File Name");
+                                                              //Sample := TempBlob.ToBase64String();
+                                                              //MESSAGE(Sample);
+
+                                                              TempBlob.Blob.CREATEINSTREAM(Instr);
+                                                              //FILE.UPLOADINTOSTREAM('Open File', '', 'All Files (*.*)|*.*',TempFilePath, Instr1);
+                                                              //Instr1.READ(TextRead);
+                                                              //MESSAGE('0. %1',TextRead);
+
+                                                              "File Path" := DocMan.GetFileName('Select File',ClientDocPath,'');
+
+                                                              TempBlob.INIT;
+                                                              TempBlob.Blob.CREATEOUTSTREAM(Outstr);
+                                                              Sample := TempBlob.ToBase64String();
+                                                              MESSAGE(Sample);
+
+                                                              //Sample := Convert.ToBase64String(TextRead);
+                                                              MESSAGE(Sample);
+
+
+                                                              IF (UPLOADINTOSTREAM('Open File', '', 'All Files (*.*)|*.*',TempFilePath, Instr)) THEN BEGIN
+                                                              // If you use read then while written after read will not read anything because already everything in InStream variable is read -- vice versa
+                                                              //Instr.READ(TextRead);
+                                                              Instr.READTEXT(TextRead);
+                                                              //StreamEnd := Instr.EOS;
+                                                              MESSAGE('1. %1',TextRead);
+                                                              END;
+
+                                                              while not Instr.EOS do begin
+                                                                    Instr.READTEXT(TextRead);
+                                                                    //Do some processing
+                                                                   // Message('Stream is still processing')
+                                                                  end;
+                                                                  Message('End of Stream');
+
+                                                              MESSAGE('2. %1',TextRead);
+
+                                                              TempBlob.Blob.CREATEOUTSTREAM(Outstr);
+                                                              COPYSTREAM(Outstr,Instr);
+                                                              Hasval:= TempBlob.Blob.HASVALUE;
+                                                              MESSAGE(FORMAT(TempBlob.Blob.HASVALUE));
+                                                              Outstr.WRITETEXT(TextRead);
+                                                              //TextRead := TempBlob.ToBase64String;
+                                                              MESSAGE('3. %1',TextRead);
+
+
+
+                                                              //Tested Code
+                                                              DocSetup.GET;
+                                                              IF DocSetup."External Doc Management System" <> DocSetup."External Doc Management System"::Sharepoint THEN
+                                                                DocMan."Get Document Path"(Type,"No.",'',ClientDocPath,TRUE);
+
+                                                              "File Path" := DocMan.GetFileName('Select File',ClientDocPath,'');
+
+
+                                                              TempBlob.INIT;
+                                                              TempBlob.Blob.CREATEOUTSTREAM(Outstr);
+                                                              Sample := TempBlob.ToBase64String();
+                                                              MESSAGE(Sample);
+
+                                                              //Sample := Convert.ToBase64String(TextRead);
+                                                              MESSAGE(Sample);
+                                                              }
+                                                              //Testing
+                                                            END;
+
+                                                   DataClassification=ToBeClassified }
+    { 20  ;   ;File Name           ;Text250       ;OnLookup=VAR
+                                                              FileManagement@100000000 : Codeunit 419;
+                                                              TempFileName@100000001 : Text;
+                                                              TempBlob@100000002 : Record 99008535;
+                                                              DFXDMSLite@100000003 : Codeunit 50004;
+                                                              TempFilePath@100000004 : Text;
+                                                            BEGIN
+                                                            END;
+
+                                                   DataClassification=ToBeClassified }
+    { 21  ;   ;Processed           ;Boolean       ;DataClassification=ToBeClassified }
+    { 23  ;   ;TAG                 ;Text30        ;DataClassification=ToBeClassified }
+    { 24  ;   ;Content Blob        ;BLOB          ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;ID,Line No.                             ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+    VAR
+      CorrespondenceDocType@100000006 : Record 9068657;
+      DocumentTypeSubType@100000005 : Record 9068463;
+      ClientDocPath@100000004 : Text[100];
+      DocSetup@100000003 : Record 9068662;
+      DocMan@100000002 : Codeunit 9068511;
+      FileManagement@100000000 : Codeunit 419;
+      TempBlobRead@100000007 : Record 99008535;
+      TempblobFile@100000008 : Record 99008535;
+      TxtConfirmOverwriteFile@100000011 : TextConst 'ENU=Do you want to overwrite existing file?';
+      TxtErrDocNotLinked@100000010 : TextConst 'ENU=Document not linked.';
+      DEFAULT_MSG_SUCCESS@100000009 : TextConst 'ENU=Document linked.';
+      TempFileName@100000012 : Text;
+      APILog@100000013 : Record 50019;
+
+    BEGIN
+    END.
+  }
+}
+

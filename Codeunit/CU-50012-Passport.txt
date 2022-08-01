@@ -1,0 +1,49 @@
+OBJECT Codeunit 50012 Passport
+{
+  OBJECT-PROPERTIES
+  {
+    Date=15-06-21;
+    Time=20:53:20;
+    Modified=Yes;
+    Version List=;
+  }
+  PROPERTIES
+  {
+    OnRun=BEGIN
+          END;
+
+  }
+  CODE
+  {
+
+    [External]
+    PROCEDURE UpdatePassports@1000000000(EntityNumber@1000000002 : Code[20];FirstSecond@1000000000 : 'First,Second';PassportNumber@1000000001 : Text[50];IssueDate@1000000003 : Date;ExpiryDate@1000000004 : Date;CountryIssued@1000000005 : Code[10]);
+    VAR
+      EntityRec@1000000006 : Record 9068505;
+    BEGIN
+      IF NOT EntityRec.GET(EntityNumber) THEN
+        EXIT;
+
+      CASE FirstSecond OF
+        FirstSecond::First : BEGIN
+          EntityRec."Passport number" := PassportNumber;
+          EntityRec."Passport/ID Issue Date" := IssueDate;
+          EntityRec."Passport expiry date" := ExpiryDate;
+          EntityRec."Passport country of issue" := CountryIssued;
+        END;
+        FirstSecond::Second : BEGIN
+          EntityRec."Passport/ID Number (2)" := PassportNumber;
+          EntityRec."Passport/ID Issue Date (2)" := IssueDate;
+          EntityRec."Passport/ID Expiry Date (2)" := ExpiryDate;
+          EntityRec."Passport/ID Country (2)" := CountryIssued;
+        END;
+      END;
+
+      EntityRec.MODIFY;
+    END;
+
+    BEGIN
+    END.
+  }
+}
+

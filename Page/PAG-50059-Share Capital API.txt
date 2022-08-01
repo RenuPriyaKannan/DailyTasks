@@ -1,0 +1,118 @@
+OBJECT Page 50059 Share Capital API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=15-01-21;
+    Time=13:22:30;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    CaptionML=ENU=Share Classes;
+    SourceTable=Table9068768;
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                Editable=FALSE;
+                GroupType=Repeater }
+
+    { 1000000012;2;Field  ;
+                SourceExpr="Client No.";
+                Visible=FALSE }
+
+    { 2   ;2   ;Field     ;
+                SourceExpr=Type;
+                Visible=FALSE }
+
+    { 4   ;2   ;Field     ;
+                SourceExpr="Currency Code" }
+
+    { 6   ;2   ;Field     ;
+                SourceExpr="Share Class" }
+
+    { 10  ;2   ;Field     ;
+                SourceExpr="Par Value" }
+
+    { 8   ;2   ;Field     ;
+                SourceExpr="Authorised Units" }
+
+    { 12  ;2   ;Field     ;
+                SourceExpr="Total Value" }
+
+    { 41  ;2   ;Field     ;
+                SourceExpr="Units Available" }
+
+    { 17  ;2   ;Field     ;
+                SourceExpr="Issued Units" }
+
+    { 1000000014;2;Field  ;
+                SourceExpr="Votes Per Share" }
+
+    { 19  ;2   ;Field     ;
+                SourceExpr="Issued Value (Par)" }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Amount Paid (Par)" }
+
+    { 28  ;2   ;Field     ;
+                SourceExpr="Add. Value" }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="Amount Paid (Add value)" }
+
+    { 1000000010;2;Field  ;
+                SourceExpr="Amount Paid Total" }
+
+    { 21  ;2   ;Field     ;
+                SourceExpr="Printed Certificate No. Series" }
+
+    { 53  ;2   ;Field     ;
+                SourceExpr="Use Temp. Certificate No.s";
+                Visible=FALSE }
+
+    { 1000000009;2;Field  ;
+                SourceExpr="Total at Date (Par)" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="Issued at Date (Units)" }
+
+    { 1000000007;2;Field  ;
+                SourceExpr="Authorised at Date (Units)" }
+
+    { 1000000015;2;Field  ;
+                SourceExpr="Issued at Date (Par)" }
+
+    { 1000000011;2;Field  ;
+                SourceExpr="Add. value at Date" }
+
+    { 1000000017;2;Field  ;
+                SourceExpr="Available at Date (Units)" }
+
+    { 1000000019;2;Field  ;
+                SourceExpr="Available at Date (Par)" }
+
+    { 1000000021;2;Field  ;
+                SourceExpr="Amt Paid at Date (Par)" }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="Amt Paid at Date (Add Value)" }
+
+    { 51  ;2   ;Field     ;
+                SourceExpr="Temp. Certificate No. Series";
+                Visible=FALSE }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

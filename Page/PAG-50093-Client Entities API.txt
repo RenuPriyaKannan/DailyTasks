@@ -1,0 +1,898 @@
+OBJECT Page 50093 Client Entities API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=18-01-22;
+    Time=09:54:11;
+    Modified=Yes;
+    Version List=NAVLITE;
+  }
+  PROPERTIES
+  {
+    InsertAllowed=No;
+    DeleteAllowed=No;
+    ModifyAllowed=Yes;
+    SourceTable=Table9068508;
+    DataCaptionExpr=SingleInstanceFn.GetCaptionNotCurrentClient("Client No.");
+    SourceTableView=SORTING(Entity Type,Entity No.)
+                    ORDER(Ascending);
+    PageType=List;
+    OnInit=BEGIN
+             CommissionVisible := TRUE;
+             CommissionEditable := TRUE;
+
+             POAButtonVisible := TRUE;
+             CommissionButtonVisible := TRUE;
+             DirButtonVisible := TRUE;
+             AltDirButtonVisible := TRUE;
+             SharesButtonVisible := TRUE;
+             MembersButtonVisible := TRUE;
+             PartnerButtonVisible := FALSE;
+             SignatoryButtonVisible := TRUE;
+             BeneficiaryButtonVisible := TRUE;
+             PledgesButtonVisible := TRUE;
+             CapitalButtonVisible := TRUE;
+           END;
+
+    OnOpenPage=VAR
+                 ClientNo@1000000002 : Text;
+                 _Relmgtsetup@1000000000 : Record 9068462;
+                 ApplicationSetup@1000000001 : Record 9068230;
+               BEGIN
+
+                 IF _Relmgtsetup.READPERMISSION = TRUE THEN BEGIN
+                   IF _Relmgtsetup.FIND('-') THEN
+                     IF _Relmgtsetup."Use Compliance Classifications" = TRUE THEN BEGIN
+                        ComplianceRequiredVisible := TRUE;
+                        ComplianceCategoryVisible := TRUE;
+                   END;
+                 END;
+
+                 SetControls;
+
+                 IF ApplicationSetup.CheckClientReference('C101') THEN BEGIN
+                   ClientNo := GETFILTER("Client No.");
+                   FILTERGROUP(10);
+                   SETFILTER("Client No.", ClientNo);
+                   FILTERGROUP(0);
+                 END;
+               END;
+
+    OnAfterGetRecord=BEGIN
+                       OnAfterGetCurrRecord2;
+                       Commission37OnFormat;
+
+                       ClientEntitySecurityRec.GET("Client No.", "Entity No.", "Entity Type");
+                       ClientEntitySecurityRec.COPYFILTERS(Rec);
+                       ClientEntitySecurityRec.CALCFIELDS("Total Units");
+
+                       //"Total Units" := ClientEntitySecurityRec."Total Units";
+                       IF "Entity Type Class" <> "Entity Type Class"::Shareholder THEN
+                         TotalUnits :=''
+                       ELSE TotalUnits := FORMAT(ClientEntitySecurityRec."Total Units");
+                     END;
+
+    OnNewRecord=BEGIN
+                  "Client No." := ClientCurrent;
+                  OnAfterGetCurrRecord2;
+                END;
+
+    OnAfterGetCurrRecord=BEGIN
+                           OnAfterGetCurrRecord2;
+                         END;
+
+    ActionList=ACTIONS
+    {
+      { 1900000003;0 ;ActionContainer;
+                      ActionContainerType=RelatedInformation }
+      { 1000000021;1 ;ActionGroup }
+      { 1000000007;2 ;Action    ;
+                      Name=SharesButton;
+                      CaptionML=[ENU=Shares;
+                                 ENG=&Shares];
+                      Promoted=Yes;
+                      Visible=SharesButtonVisible;
+                      Image=Certificate;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 _SRHolderLedgerEntry@1000000000 : Record 9068778;
+                                 _SRHolderLedgerEntryList@1000000001 : Page 9068972;
+                               BEGIN
+                                 _SRHolderLedgerEntry.SETRANGE("Client No.","Client No.");
+                                 _SRHolderLedgerEntry.SETRANGE("Share Holder No.", "Entity No.");
+                                 _SRHolderLedgerEntry.SETRANGE("Share Holder Type", Type);
+                                 _SRHolderLedgerEntryList.SETTABLEVIEW(_SRHolderLedgerEntry);
+                                 _SRHolderLedgerEntryList.RUN;
+                               END;
+                                }
+      { 1000000009;2 ;Action    ;
+                      Name=POAButton;
+                      CaptionML=[ENU=POA;
+                                 ENG=&POA];
+                      Promoted=Yes;
+                      Visible=POAButtonVisible;
+                      PromotedIsBig=Yes;
+                      Image=Agreement;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 POAAgent@1000000000 : Record 9068759;
+                               BEGIN
+                                 POAAgent.FILTERGROUP(2);
+                                 POAAgent.SETRANGE("Client No.", "Client No.");
+                                 POAAgent.SETRANGE("Agent Type", Type);
+                                 POAAgent.SETRANGE("Agent No.", "Entity No.");
+                                 POAAgent.FILTERGROUP(0);
+
+                                 PAGE.RUNMODAL(0, POAAgent);//FORM::"Client POA Agent List"
+                               END;
+                                }
+      { 1000000025;2 ;Action    ;
+                      Name=MembersButton;
+                      CaptionML=ENU=Member;
+                      Promoted=Yes;
+                      Visible=MembersButtonVisible;
+                      PromotedIsBig=Yes;
+                      Image=CustomerContact;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 _BeneficiaryDetailsRec@1000000000 : Record 9068474;
+                                 _MembershipDetailsPage@1000000001 : Page 9068468;
+                               BEGIN
+                                 _BeneficiaryDetailsRec.SETRANGE(_BeneficiaryDetailsRec."Client No", "Client No.");
+                                 _BeneficiaryDetailsRec.SETRANGE(_BeneficiaryDetailsRec."Entity No", "Entity No.");
+                                 _BeneficiaryDetailsRec.SETRANGE(_BeneficiaryDetailsRec."Entity Type", "Entity Type");
+                                 IF NOT _BeneficiaryDetailsRec.FIND('-') THEN BEGIN
+                                   _BeneficiaryDetailsRec.INIT;
+                                   _BeneficiaryDetailsRec."Client No" := "Client No.";
+                                   _BeneficiaryDetailsRec."Entity No" := "Entity No.";
+                                   _BeneficiaryDetailsRec."Entity Type" := "Entity Type";
+                                 END;
+
+                                 _MembershipDetailsPage.SETTABLEVIEW(_BeneficiaryDetailsRec);
+                                 _MembershipDetailsPage.SETRECORD(_BeneficiaryDetailsRec);
+                                 _MembershipDetailsPage.RUNMODAL;
+                               END;
+                                }
+      { 1000000026;2 ;Action    ;
+                      Name=PartnerButton;
+                      CaptionML=ENU=Partner;
+                      Promoted=Yes;
+                      Visible=PartnerButtonVisible;
+                      PromotedIsBig=Yes;
+                      Image=Vendor;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 _BeneficiaryDetailsRec@1000000000 : Record 9068474;
+                                 _BeneficiaryDetailsForm@1000000001 : Page 9068984;
+                               BEGIN
+                                 _BeneficiaryDetailsRec.SETRANGE(_BeneficiaryDetailsRec."Client No", "Client No.");
+                                 _BeneficiaryDetailsRec.SETRANGE(_BeneficiaryDetailsRec."Entity No", "Entity No.");
+                                 _BeneficiaryDetailsRec.SETRANGE(_BeneficiaryDetailsRec."Entity Type", "Entity Type");
+                                 IF NOT _BeneficiaryDetailsRec.FIND('-') THEN BEGIN
+                                   _BeneficiaryDetailsRec.INIT;
+                                   _BeneficiaryDetailsRec."Client No" := "Client No.";
+                                   _BeneficiaryDetailsRec."Entity No" := "Entity No.";
+                                   _BeneficiaryDetailsRec."Entity Type" := "Entity Type";
+                                 END;
+
+                                 _BeneficiaryDetailsForm.SETTABLEVIEW(_BeneficiaryDetailsRec);
+                                 _BeneficiaryDetailsForm.SETRECORD(_BeneficiaryDetailsRec);
+                                 _BeneficiaryDetailsForm.RUNMODAL;
+                               END;
+                                }
+      { 1000000027;2 ;Action    ;
+                      Name=SignatoryButton;
+                      CaptionML=ENU=Signatory;
+                      Promoted=Yes;
+                      Visible=SignatoryButtonVisible;
+                      PromotedIsBig=Yes;
+                      Image=Signature;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 SignatoryDetails@1000000000 : Record 9068712;
+                                 SignatoryCard@1000000001 : Page 9068832;
+                               BEGIN
+                                 SignatoryDetails.FILTERGROUP(1);
+                                 SignatoryDetails.SETRANGE("Client No.", "Client No.");
+                                 SignatoryDetails.SETRANGE("Entity No.", "Entity No.");
+                                 SignatoryDetails.FILTERGROUP(1);
+                                 IF NOT SignatoryDetails.FIND('-') THEN BEGIN
+                                    SignatoryDetails.INIT;
+                                    SignatoryDetails."Client No." := "Client No.";
+                                    SignatoryDetails."Entity No." := "Entity No.";
+                                    SignatoryDetails.Code := '01';
+                                 END;
+
+                                 SignatoryCard.SETTABLEVIEW(SignatoryDetails);
+                                 SignatoryCard.SETRECORD(SignatoryDetails);
+                                 SignatoryCard.RUNMODAL;
+                               END;
+                                }
+      { 1000000028;2 ;Action    ;
+                      Name=BeneficiaryButton;
+                      CaptionML=ENU=Beneficiary;
+                      Promoted=Yes;
+                      Visible=BeneficiaryButtonVisible;
+                      PromotedIsBig=Yes;
+                      Image=VendorContact;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 _BeneficiaryDetailsForm@1000000000 : Page 9068469;
+                                 _BeneficiaryDetailsRec@1000000001 : Record 9068474;
+                               BEGIN
+                                 _BeneficiaryDetailsRec.SETRANGE(_BeneficiaryDetailsRec."Client No", "Client No.");
+                                 _BeneficiaryDetailsRec.SETRANGE(_BeneficiaryDetailsRec."Entity No", "Entity No.");
+                                 _BeneficiaryDetailsRec.SETRANGE(_BeneficiaryDetailsRec."Entity Type", "Entity Type");
+                                 IF NOT _BeneficiaryDetailsRec.FIND('-') THEN BEGIN
+                                   _BeneficiaryDetailsRec.INIT;
+                                   _BeneficiaryDetailsRec."Client No" := "Client No.";
+                                   _BeneficiaryDetailsRec."Entity No" := "Entity No.";
+                                   _BeneficiaryDetailsRec."Entity Type" := "Entity Type";
+                                 END;
+
+                                 _BeneficiaryDetailsForm.SETTABLEVIEW(_BeneficiaryDetailsRec);
+                                 _BeneficiaryDetailsForm.SETRECORD(_BeneficiaryDetailsRec);
+                                 _BeneficiaryDetailsForm.RUNMODAL;
+                               END;
+                                }
+      { 1000000029;2 ;Action    ;
+                      Name=PledgesButton;
+                      CaptionML=ENU=Pledges;
+                      Promoted=Yes;
+                      Visible=PledgesButtonVisible;
+                      PromotedIsBig=Yes;
+                      Image=AvailableToPromise;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 SharesPledgeReg@1000000000 : Record 9068783;
+                               BEGIN
+                                 SharesPledgeReg.SETRANGE("Client No.", "Client No.");
+                                 SharesPledgeReg.SETRANGE("Shareholder No.", "Entity No.");
+                                 PAGE.RUNMODAL(0, SharesPledgeReg);
+                               END;
+                                }
+      { 1000000030;2 ;Action    ;
+                      Name=CapitalButton;
+                      CaptionML=ENU=Capital A/C's;
+                      Promoted=Yes;
+                      Visible=CapitalButtonVisible;
+                      PromotedIsBig=Yes;
+                      Image=Accounts;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 _GLSetup@1000000005 : Record 98;
+                                 _ClientRec@1000000004 : Record 9068500;
+                                 _ClientSetup@1000000003 : Record 9068496;
+                                 _PEFPartnerAcc@1000000002 : Record 9071175;
+                                 _PEFPartnerDetails@1000000001 : Record 9071174;
+                                 _PEFPartnerAccCard@1000000000 : Page 9071311;
+                               BEGIN
+                                 IF NavOneSystem.PrivateEquityFundIsLicensed THEN BEGIN
+                                   _ClientSetup.GET;
+                                   _PEFPartnerDetails.SETRANGE( "Source No." , "Entity No." );
+                                   IF _PEFPartnerDetails.FINDFIRST THEN BEGIN
+                                     IF ( _ClientRec.GET( "Client No." ) ) AND
+                                        ( _ClientRec."Client No." = _ClientRec."Fund Code" ) THEN BEGIN //its a fund
+                                       _PEFPartnerAcc.SETRANGE( "Fund Code" , "Client No." );
+                                       _PEFPartnerAcc.SETRANGE( "Partner No." , _PEFPartnerDetails."Partner No." );
+                                     END ELSE BEGIN
+                                       _PEFPartnerAcc.SETRANGE( "Limited Partnership Code" , "Client No." );
+                                       _PEFPartnerAcc.SETRANGE( "Partner No." , _PEFPartnerDetails."Partner No." );
+                                     END;
+                                     CASE "Entity Type" OF
+                                       _ClientSetup."Limited Partner Code" : _PEFPartnerAcc.SETRANGE(Role,_PEFPartnerAcc.Role::"Limited Partner");
+                                       _ClientSetup."General Partner Code" : _PEFPartnerAcc.SETRANGE(Role,_PEFPartnerAcc.Role::"General Partner");
+                                       _ClientSetup."Carry Partner Code"   : _PEFPartnerAcc.SETRANGE(Role,_PEFPartnerAcc.Role::"Carry Partner");
+                                       _ClientSetup."Founder Partner Code"   : _PEFPartnerAcc.SETRANGE(Role,_PEFPartnerAcc.Role::"Founder Partner" );
+                                       _ClientSetup."Special Limited Partner Code" : _PEFPartnerAcc.SETRANGE(Role,_PEFPartnerAcc.Role::"Special Limited Partner" );
+                                     END;
+
+                                     IF _PEFPartnerAcc.FINDFIRST THEN BEGIN
+                                       CLEAR(_PEFPartnerAccCard);
+                                       _PEFPartnerAccCard.SETTABLEVIEW(_PEFPartnerAcc);
+                                       _PEFPartnerAccCard.SETRECORD(_PEFPartnerAcc);
+                                       _PEFPartnerAccCard.RUNMODAL;
+                                     END ELSE
+                                       ERROR( 'No Partner Account info were found for Entity %1' , "Entity No." );
+                                   END ELSE
+                                     ERROR( 'No Partner Details were found for Entity %1' , "Entity No." );
+                                 END ELSE
+                                   ERROR( 'You do not have access to this information as you are not licensed to the Private Equity Fund Module' );
+                               END;
+                                }
+      { 1000000023;1 ;ActionGroup }
+      { 1000000006;2 ;Action    ;
+                      Name=AltDirButton;
+                      CaptionML=[ENU=&Alt Directors;
+                                 ENG=&Alt Directors];
+                      Promoted=Yes;
+                      Visible=AltDirButtonVisible;
+                      PromotedIsBig=Yes;
+                      Image=ChangeCustomer;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 ClientEntity2@1000000001 : Record 9068508;
+                               BEGIN
+                                 ClientEntity2 := Rec;
+                                 ClientAltDirs.RESET;
+                                 ClientAltDirs.FILTERGROUP(2);
+                                 IF ClientCurrent = '' THEN
+                                   ClientAltDirs.SETRANGE("Client No.", "Client No.")
+                                 ELSE
+                                   ClientAltDirs.SETRANGE("Client No.", ClientCurrent);
+                                 ClientAltDirs.FILTERGROUP(0);
+                                 ClientAltDirs.SETRANGE("Related Type", Type);
+                                 ClientAltDirs.SETRANGE("Related Entity No.","Entity No.");
+                                 ClientAltDirs.SETRANGE("Related Entity Type" , "Entity Type");
+                                 PAGE.RUNMODAL(PAGE::"Client Alternate Directors",ClientAltDirs);
+                                 SETRANGE("Entity Type",ClientEntity2."Entity Type");
+                                 CurrPage.UPDATE;
+                                 SETRANGE("Entity Type");
+                                 CurrPage.UPDATE;
+                               END;
+                                }
+      { 1000000036;2 ;Action    ;
+                      Name=AltDirButtonHistory;
+                      CaptionML=ENU=ALT Directors History;
+                      Promoted=Yes;
+                      Visible=AltDirButtonVisible;
+                      PromotedIsBig=Yes;
+                      Image=ChangeCustomer;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 ClientEntity2@1000000001 : Record 9068508;
+                               BEGIN
+                                 ClientEntity2 := Rec;
+                                 ClientAltDirsHistory.RESET;
+                                 ClientAltDirsHistory.FILTERGROUP(2);
+                                 IF ClientCurrent = '' THEN
+                                   ClientAltDirsHistory.SETRANGE("Client No.", "Client No.")
+                                 ELSE
+                                   ClientAltDirsHistory.SETRANGE("Client No.", ClientCurrent);
+                                 ClientAltDirsHistory.FILTERGROUP(0);
+                                 ClientAltDirsHistory.SETRANGE("Related Type", Type);
+                                 ClientAltDirsHistory.SETRANGE("Related Entity No.","Entity No.");
+                                 ClientAltDirsHistory.SETRANGE("Related Entity Type" , "Entity Type");
+                                 PAGE.RUNMODAL(PAGE::"Related History",ClientAltDirsHistory);
+                                 SETRANGE("Entity Type",ClientEntity2."Entity Type");
+                                 CurrPage.UPDATE;
+                                 SETRANGE("Entity Type");
+                                 CurrPage.UPDATE;
+                               END;
+                                }
+      { 1000000001;2 ;Action    ;
+                      Name=DirButton;
+                      CaptionML=[ENU=&Directors;
+                                 ENG=&Directors];
+                      Promoted=Yes;
+                      Visible=DirButtonVisible;
+                      PromotedIsBig=Yes;
+                      Image=PersonInCharge;
+                      PromotedCategory=Process;
+                      OnAction=BEGIN
+
+                                 ClientAltDirs.RESET;
+                                 ClientAltDirs.FILTERGROUP(2);
+                                 ClientAltDirs.SETRANGE("Client No.", "Client No.");
+                                 ClientAltDirs.FILTERGROUP(0);
+                                 ClientAltDirs.SETCURRENTKEY("Client No." , "Entity No.");
+                                 ClientAltDirs.SETRANGE(Type, Type);
+                                 ClientAltDirs.SETRANGE("Entity No.","Entity No.");
+                                 PAGE.RUN(PAGE::"Client Alt Directors Link",ClientAltDirs);
+                                 CurrPage.UPDATE;
+                               END;
+                                }
+      { 1000000032;1 ;ActionGroup }
+      { 1000000033;2 ;Action    ;
+                      Name=Documents;
+                      CaptionML=ENU=Documents;
+                      RunObject=Page 9069711;
+                      RunPageView=SORTING(Type,No.,ID,Link Type,Link Code);
+                      RunPageLink=Type=CONST(Client),
+                                  No.=FIELD(Client No.),
+                                  Link Type=CONST(Client Entity),
+                                  Link Code=FIELD(Entity No.);
+                      Promoted=Yes;
+                      Image=Document;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 DocStore@1000000000 : Page 9069346;
+                               BEGIN
+                               END;
+                                }
+      { 1900000004;0 ;ActionContainer;
+                      ActionContainerType=ActionItems }
+      { 1000000013;1 ;ActionGroup;
+                      Name=CommissionButton;
+                      CaptionML=[ENU=Commissions;
+                                 ENG=Commissions];
+                      Visible=CommissionButtonVisible }
+      { 1000000004;2 ;Action    ;
+                      CaptionML=[ENU=&View;
+                                 ENG=&View];
+                      RunObject=Page 9069274;
+                      Image=View }
+      { 1000000011;2 ;Action    ;
+                      CaptionML=[ENU=&Payment;
+                                 ENG=&Payment];
+                      RunObject=Page 9069275;
+                      Image=Payment }
+      { 1000000003;1 ;ActionGroup;
+                      CaptionML=[ENU=Functions;
+                                 ENG=Functions] }
+      { 1000000002;2 ;Action    ;
+                      CaptionML=[ENU=Appointment;
+                                 ENG=Appointment];
+                      Promoted=Yes;
+                      Image=NewOpportunity;
+                      PromotedCategory=Process;
+                      OnAction=BEGIN
+                                 ClientRec.RESET;
+                                 ClientRec.SETRANGE("Client No.","Client No.");
+                                 IF "Client No." = '' THEN
+                                   ClientRec.SETRANGE("Client No.",GETFILTER("Client No."));
+                                 REPORT.RUNMODAL(REPORT::"Appoint Entity",TRUE,FALSE,ClientRec);
+                               END;
+                                }
+      { 1000000015;2 ;Action    ;
+                      CaptionML=[ENU=Resign Entity;
+                                 ENG=Resign Entity];
+                      Promoted=Yes;
+                      Image=RemoveContacts;
+                      PromotedCategory=Process;
+                      OnAction=VAR
+                                 _ClientEntity@1000000001 : Record 9068508;
+                                 _EntityType@1000000000 : Record 9068506;
+                               BEGIN
+                                 _ClientEntity.SETRANGE("Client No.", "Client No.");
+                                 _ClientEntity.SETRANGE("Entity No.", "Entity No.");
+                                 _ClientEntity.SETRANGE("Entity Type", "Entity Type");
+
+                                 ClientSetup.GET;
+                                 IF "Entity Type" = ClientSetup."Alternate Director Code" THEN BEGIN
+                                    ClientAltDirs.RESET;
+                                    ClientAltDirs.FILTERGROUP(2);
+                                    ClientAltDirs.SETRANGE("Client No.", "Client No.");
+                                    ClientAltDirs.FILTERGROUP(0);
+                                    ClientAltDirs.SETCURRENTKEY("Client No." , "Entity No.");
+                                    ClientAltDirs.SETRANGE("Entity No.","Entity No.");
+                                    IF ClientAltDirs.FIND('-') THEN
+                                      ERROR('This entity exists on the Alternate Director list.\' +
+                                        'You must resign him from the Alternate Director list.\\' +
+                                        'Open the Client Entities from the Client card, \' +
+                                        'select the Alternate Director list from the linked Director \'+
+                                        'and make the resignation on that form.');
+                                 END;
+
+                                 _EntityType.GET("Entity Type");
+                                 IF NOT UserHasPermissionToResignEntityType(_EntityType) THEN
+                                   ERROR('You do not have permission to resign a %1',_EntityType.Description);
+
+                                 REPORT.RUNMODAL(REPORT::"Resign Entity",TRUE,FALSE, _ClientEntity);
+                               END;
+                                }
+    }
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                GroupType=Repeater }
+
+    { 1000000017;2;Field  ;
+                SourceExpr="Client No." }
+
+    { 11  ;2   ;Field     ;
+                SourceExpr=Type;
+                Editable=FALSE }
+
+    { 1000000044;2;Field  ;
+                SourceExpr="Client Type" }
+
+    { 24  ;2   ;Field     ;
+                SourceExpr="Entity No.";
+                Editable=FALSE;
+                OnLookup=VAR
+                           _Entity@1000000002 : Record 9068505;
+                           _Client@1000000001 : Record 9068500;
+                           _Resource@1000000000 : Record 156;
+                         BEGIN
+                           CASE Rec.Type OF
+                             Type::Entity:
+                               IF _Entity.GET("Entity No.") THEN BEGIN
+                                 IF _Entity."Entity Type" = _Entity."Entity Type"::Bank THEN
+                                   PAGE.RUN(9068916, _Entity);
+                                 IF (_Entity."Entity Type" = _Entity."Entity Type"::" ") AND (_Entity."Personal/Corporate" = _Entity."Personal/Corporate"::Personal) THEN
+                                   PAGE.RUN(9068922, _Entity);
+                                 IF (_Entity."Entity Type" = _Entity."Entity Type"::" ") AND (_Entity."Personal/Corporate" = _Entity."Personal/Corporate"::Corporate) THEN
+                                   PAGE.RUN(9068921, _Entity);
+                               END;
+                             Type::Client:
+                               IF _Client.GET("Entity No.") THEN BEGIN
+                                 PAGE.RUN(9069550, _Client);
+                               END;
+                             Type::Resource:
+                               IF _Resource.GET("Entity No.") THEN BEGIN
+                                 PAGE.RUN(76, _Resource);
+                               END;
+                             ELSE BEGIN END;
+                           END;
+                         END;
+                          }
+
+    { 6   ;2   ;Field     ;
+                SourceExpr="Entity Type";
+                Editable=FALSE }
+
+    { 1000000045;2;Field  ;
+                SourceExpr="Entity Type Class" }
+
+    { 1000000041;2;Field  ;
+                SourceExpr="Client Status";
+                Visible=False }
+
+    { 1000000043;2;Field  ;
+                SourceExpr="FATCA Reporting FI" }
+
+    { 1000000037;2;Field  ;
+                SourceExpr="FATCA Filer Category" }
+
+    { 1000000047;2;Field  ;
+                SourceExpr="FATCA Substantial Owner" }
+
+    { 1000000039;2;Field  ;
+                SourceExpr="CRS Reporting FI" }
+
+    { 1000000038;2;Field  ;
+                SourceExpr="CRS Controlling Person Code" }
+
+    { 12  ;2   ;Field     ;
+                SourceExpr="Entity Name";
+                Editable=FALSE }
+
+    { 1000000046;2;Field  ;
+                SourceExpr="Entity Initials" }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="Entity Forename(s)";
+                Editable=FALSE }
+
+    { 1000000008;2;Field  ;
+                SourceExpr=Comment;
+                OnValidate=BEGIN
+                             CommentOnPush;
+                           END;
+                            }
+
+    { 14  ;2   ;Field     ;
+                SourceExpr="Entity Type Description";
+                Editable=FALSE }
+
+    { 16  ;2   ;Field     ;
+                SourceExpr="Date Appointed" }
+
+    { 4   ;2   ;Field     ;
+                SourceExpr="Date Resigned";
+                Editable=FALSE }
+
+    { 1000000000;2;Field  ;
+                SourceExpr="Commission %";
+                Visible="CommissionVisible";
+                Editable="CommissionEditable" }
+
+    { 18  ;2   ;Field     ;
+                SourceExpr=Notes }
+
+    { 1000000031;2;Field  ;
+                CaptionML=[ENU=Total Units;
+                           ENG=Total Units];
+                SourceExpr=TotalUnits;
+                Editable=FALSE }
+
+    { 1000000016;2;Field  ;
+                SourceExpr="Percentage Ownership" }
+
+    { 1000000034;2;Field  ;
+                SourceExpr="Preferred Address";
+                Visible=FALSE }
+
+    { 1000000035;2;Field  ;
+                SourceExpr="Address Code";
+                Visible=FALSE }
+
+    { 1000000012;2;Field  ;
+                SourceExpr="Entry Date" }
+
+    { 1000000014;2;Field  ;
+                SourceExpr="Entry Time" }
+
+    { 1000000010;2;Field  ;
+                SourceExpr="User ID" }
+
+    { 1000000020;2;Field  ;
+                Name=Compliance Required;
+                SourceExpr="Compliance Required";
+                Visible="ComplianceRequiredVisible" }
+
+    { 1000000018;2;Field  ;
+                Name=Compliance Category;
+                SourceExpr="Compliance Classification";
+                Visible="ComplianceCategoryVisible" }
+
+    { 1000000022;2;Field  ;
+                SourceExpr="Signature Rights" }
+
+    { 1000000024;2;Field  ;
+                SourceExpr="Add. Notes" }
+
+    { 1000000019;2;Field  ;
+                SourceExpr="Client Name" }
+
+    { 1000000042;2;Field  ;
+                SourceExpr="Ben Own/CP" }
+
+    { 1000000040;2;Field  ;
+                SourceExpr="BO/CP Manual Overwrite";
+                Visible=false }
+
+  }
+  CODE
+  {
+    VAR
+      SingleInstanceFn@2088020 : Codeunit 9068579;
+      ClientRec@1000000002 : Record 9068500;
+      ClientAltDirs@1000000004 : Record 9068670;
+      ClientSetup@1000000005 : Record 9068496;
+      NavOneSystem@1000000007 : Codeunit 9068249;
+      SharesButtonVisible@19069553 : Boolean INDATASET;
+      AltDirButtonVisible@19055222 : Boolean INDATASET;
+      DirButtonVisible@19004231 : Boolean INDATASET;
+      CommissionButtonVisible@19022356 : Boolean INDATASET;
+      POAButtonVisible@19053778 : Boolean INDATASET;
+      ComplianceRequiredVisible@19006973 : Boolean INDATASET;
+      ComplianceCategoryVisible@19067071 : Boolean INDATASET;
+      CommissionEditable@19041973 : Boolean INDATASET;
+      CommissionVisible@19013165 : Boolean INDATASET;
+      MembersButtonVisible@1000000000 : Boolean INDATASET;
+      PartnerButtonVisible@1000000001 : Boolean INDATASET;
+      SignatoryButtonVisible@1000000003 : Boolean INDATASET;
+      BeneficiaryButtonVisible@1000000006 : Boolean INDATASET;
+      PledgesButtonVisible@1000000008 : Boolean INDATASET;
+      CapitalButtonVisible@1000000009 : Boolean INDATASET;
+      ClientEntitySecurityRec@1000000010 : Record 9068508;
+      TotalUnits@1000000011 : Text;
+      ClientAltDirsHistory@1000000012 : Record 9068584;
+
+    PROCEDURE SetControls@1000000000();
+    BEGIN
+      IF NavOneSystem.CommissionEnabled THEN
+        CommissionVisible := TRUE
+      ELSE
+        CommissionVisible := FALSE;
+    END;
+
+    LOCAL PROCEDURE OnAfterGetCurrRecord2@19077479();
+    VAR
+      ShareSetup@1000000000 : Record 9068773;
+      ExtRelations@1000000001 : Record 9068687;
+    BEGIN
+
+      IF "Entity Type Class" = "Entity Type Class"::Shareholder THEN BEGIN
+        IF NOT SharesButtonVisible THEN
+          SharesButtonVisible := TRUE;
+      END
+      ELSE BEGIN
+        IF SharesButtonVisible THEN
+          SharesButtonVisible := FALSE;
+      END;
+
+      ClientSetup.GET;
+
+      IF AltDirButtonVisible THEN
+        AltDirButtonVisible := FALSE;
+
+      IF "Entity Type" = ClientSetup."Director Code" THEN BEGIN
+        IF NOT AltDirButtonVisible THEN
+          AltDirButtonVisible := TRUE;
+      END ELSE
+        IF ClientSetup."Director Code Ext." THEN
+          IF ExtRelations.GET(ClientSetup."Director Code","Entity Type") THEN
+            AltDirButtonVisible := TRUE;
+
+      IF DirButtonVisible THEN
+        DirButtonVisible := FALSE;
+
+      IF "Entity Type" = ClientSetup."Alternate Director Code" THEN BEGIN
+        IF NOT DirButtonVisible THEN
+          DirButtonVisible := TRUE;
+      END ELSE
+        IF ClientSetup."Alternate Director Code Ext." THEN
+          IF ExtRelations.GET(ClientSetup."Alternate Director Code","Entity Type") THEN
+            DirButtonVisible := TRUE;
+
+      IF "Entity Type" = ClientSetup."Membership Code" THEN BEGIN
+        IF NOT MembersButtonVisible THEN
+          MembersButtonVisible := TRUE;
+      END ELSE BEGIN
+        IF MembersButtonVisible THEN
+          MembersButtonVisible := FALSE;
+      END;
+
+
+      IF NavOneSystem.CommissionEnabled THEN BEGIN
+        IF ("Entity Type" = ClientSetup."Commission Code") AND ("Entity Type" <> '') THEN BEGIN
+          IF NOT CommissionButtonVisible THEN
+            CommissionButtonVisible := TRUE;
+        END ELSE BEGIN
+          IF CommissionButtonVisible THEN
+            CommissionButtonVisible := FALSE;
+        END
+      END ELSE BEGIN
+          IF CommissionButtonVisible THEN
+            CommissionButtonVisible := FALSE;
+        END;
+
+
+      IF "Entity Type" = ClientSetup."Power of Attorney Code" THEN BEGIN
+        IF NOT POAButtonVisible THEN
+          POAButtonVisible := TRUE;
+      END ELSE BEGIN
+        IF POAButtonVisible THEN
+          POAButtonVisible := FALSE;
+      END;
+
+      IF "Entity Type" = ClientSetup."Signatory Code" THEN BEGIN
+        IF NOT SignatoryButtonVisible THEN
+          SignatoryButtonVisible := TRUE;
+      END ELSE BEGIN
+        IF SignatoryButtonVisible THEN
+          SignatoryButtonVisible := FALSE;
+      END;
+
+      IF "Entity Type" = ClientSetup."Beneficiary Code" THEN BEGIN
+        IF NOT BeneficiaryButtonVisible THEN
+          BeneficiaryButtonVisible := TRUE;
+      END ELSE BEGIN
+        IF ClientSetup."Beneficiary Code Ext." THEN
+          BeneficiaryButtonVisible := ExtRelations.GET(ClientSetup."Beneficiary Code", "Entity Type")
+        ELSE
+          BeneficiaryButtonVisible := FALSE;
+      END;
+
+      IF ShareSetup.GET("Client No.") THEN
+        PledgesButtonVisible := (ShareSetup."Record Pledged Shares" AND ("Entity Type" = ShareSetup."Share Holder Type"))
+      ELSE
+        PledgesButtonVisible := FALSE;
+
+
+      CapitalButtonVisible := (("Entity Type" = ClientSetup."Limited Partner Code") OR
+                               ("Entity Type" = ClientSetup."General Partner Code") OR
+                               ("Entity Type" = ClientSetup."Special Limited Partner Code") OR
+                               ("Entity Type" = ClientSetup."Carry Partner Code") OR
+                               ("Entity Type" = ClientSetup."Founder Partner Code"));
+    END;
+
+    LOCAL PROCEDURE CommentOnPush@19063718();
+    VAR
+      CommentsRec@1000000000 : Record 9068515;
+    BEGIN
+      CommentsRec.SETRANGE(Type,CommentsRec.Type::"Cl. Entity");
+      CommentsRec.SETRANGE("Client No.","Client No.");
+      CommentsRec.SETRANGE("No.", "Entity No.");
+      CommentsRec.SETRANGE("Extra Key", "Entity Type");
+      PAGE.RUNMODAL(PAGE::Comments,CommentsRec);
+    END;
+
+    LOCAL PROCEDURE Commission37OnFormat@19053724();
+    BEGIN
+      IF NavOneSystem.SuspectWIPFunctionality THEN BEGIN
+        ClientSetup.GET ( '' );
+        IF "Entity Type" = ClientSetup."Commission Code" THEN
+          CommissionEditable := TRUE
+        ELSE
+          CommissionEditable := FALSE;
+      END ELSE
+        CommissionEditable := FALSE;
+    END;
+
+    PROCEDURE UserHasPermissionToResignEntityType@1000000001(EntityType@1000000000 : Record 9068506) : Boolean;
+    VAR
+      ClientManagement@1000000003 : Codeunit 9068493;
+      Resource@1000000002 : Record 156;
+      BusinessGroup@1000000001 : Record 9068251;
+      AccessControl@1000000004 : Record 2000000053;
+    BEGIN
+
+      CASE EntityType."Restrict Resignation Type" OF
+        EntityType."Restrict Resignation Type"::" ":
+          EXIT(TRUE);
+        EntityType."Restrict Resignation Type"::"Resource Group":
+          BEGIN
+            IF ClientManagement.CheckPermissionsNoSuper(EntityType."Restrict Resignation Filter") THEN
+              EXIT(TRUE);
+           END;
+        EntityType."Restrict Resignation Type"::"Business Group":
+          BEGIN
+            BusinessGroup.SETFILTER("Group Code",EntityType."Restrict Resignation Filter");
+            AccessControl.SETRANGE("User Security ID",USERSECURITYID);
+            IF AccessControl.FINDFIRST THEN BEGIN
+              AccessControl.CALCFIELDS("User Name");
+              Resource.SETRANGE(Resource."Login User ID",AccessControl."User Name");
+
+              IF Resource.FINDFIRST THEN BEGIN
+                REPEAT
+                  IF (BusinessGroup."Group Code" <> '') AND (BusinessGroup."Group Code" = Resource."Business Group")  THEN
+                    EXIT(TRUE);
+                UNTIL BusinessGroup.NEXT = 0;
+              END;
+            END;
+          END;
+      END;
+
+      EXIT(FALSE);
+    END;
+
+    [External]
+    PROCEDURE GetSelectionFilter@2() : Code[80];
+    VAR
+      RCRec@1000 : Record 9068508;
+      FirstVal@1001 : Code[20];
+      LastVal@1002 : Code[20];
+      SelectionFilter@1003 : Code[250];
+      ValCount@1004 : Integer;
+      More@1005 : Boolean;
+    BEGIN
+      CurrPage.SETSELECTIONFILTER(RCRec);
+      ValCount := RCRec.COUNT;
+      IF ValCount > 0 THEN BEGIN
+        RCRec.FIND('-');
+        WHILE ValCount > 0 DO BEGIN
+          ValCount := ValCount - 1;
+          RCRec.MARKEDONLY(FALSE);
+          FirstVal := RCRec."Entity No.";
+          LastVal := FirstVal;
+          More := (ValCount > 0);
+          WHILE More DO
+            IF RCRec.NEXT = 0 THEN
+              More := FALSE
+            ELSE
+              IF NOT RCRec.MARK THEN
+                More := FALSE
+              ELSE BEGIN
+                LastVal := RCRec."Entity No.";
+                ValCount := ValCount - 1;
+                IF ValCount = 0 THEN
+                  More := FALSE;
+              END;
+          IF SelectionFilter <> '' THEN
+            SelectionFilter := SelectionFilter + '|';
+          IF FirstVal = LastVal THEN
+            SelectionFilter := SelectionFilter + FirstVal
+          ELSE
+            SelectionFilter := SelectionFilter + FirstVal + '..' + LastVal;
+          IF ValCount > 0 THEN BEGIN
+            RCRec.MARKEDONLY(TRUE);
+            RCRec.NEXT;
+          END;
+        END;
+      END;
+      EXIT(SelectionFilter);
+    END;
+
+    BEGIN
+    {
+      28.04.20  Omair Nasir
+                CRF51820 Added Entity Type Class field
+
+      06.01.20  Unnar Eliasson
+                CRF53343 NavOne Code Removed from Standard Objects
+
+      05.11.19  Unnar Eliasson
+                CRF52728 Field 46 FATCA Substantial Owner added
+    }
+    END.
+  }
+}
+

@@ -1,0 +1,343 @@
+OBJECT Page 50057 Client Invoice
+{
+  OBJECT-PROPERTIES
+  {
+    Date=21-01-21;
+    Time=14:35:07;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    Editable=Yes;
+    SourceTable=Table9068453;
+    PageType=List;
+    PromotedActionCategoriesML=ENU=New,Process,Report,Documents;
+    OnOpenPage=VAR
+                 ClientFunctions@1000000000 : Codeunit 9068493;
+                 TCIJobsSetup@1040000 : Record 9072670;
+               BEGIN
+               END;
+
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1   ;1   ;Group     ;
+                GroupType=Repeater }
+
+    { 2   ;2   ;Field     ;
+                SourceExpr="No." }
+
+    { 4   ;2   ;Field     ;
+                SourceExpr="Customer No." }
+
+    { 6   ;2   ;Field     ;
+                SourceExpr="Customer Name" }
+
+    { 1000000023;2;Field  ;
+                SourceExpr=Status }
+
+    { 1000000010;2;Field  ;
+                SourceExpr=Submit;
+                Visible=FALSE }
+
+    { 1000000024;2;Field  ;
+                CaptionML=[ENU=Authorised by;
+                           ENG=Authorised by];
+                SourceExpr="Authorised By" }
+
+    { 1000000012;2;Field  ;
+                SourceExpr=Authorised }
+
+    { 32  ;2   ;Field     ;
+                SourceExpr="Posting Date" }
+
+    { 1000000001;2;Field  ;
+                SourceExpr="Job No." }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Job Description" }
+
+    { 34  ;2   ;Field     ;
+                SourceExpr="Total Amended Value";
+                Visible=FALSE }
+
+    { 36  ;2   ;Field     ;
+                SourceExpr="Total Profit / Loss";
+                Visible=FALSE }
+
+    { 1040018;2;Field     ;
+                SourceExpr="Billing Guide Created Date" }
+
+    { 29  ;2   ;Field     ;
+                SourceExpr="Billing Addressee";
+                Visible=FALSE }
+
+    { 8   ;2   ;Field     ;
+                SourceExpr="Invoice No." }
+
+    { 10  ;2   ;Field     ;
+                SourceExpr="Invoice Date" }
+
+    { 16  ;2   ;Field     ;
+                SourceExpr="Total Bill";
+                Visible=FALSE }
+
+    { 1040010;2;Field     ;
+                SourceExpr="Total Net Bill Amount" }
+
+    { 1000000045;2;Field  ;
+                SourceExpr="Total Net Bill Amount (LCY)" }
+
+    { 1040012;2;Field     ;
+                CaptionML=[ENU=Total VAT Amount;
+                           ENG=Total VAT Amount;
+                           ENA=Total GST Amount;
+                           ENZ=Total GST Amount];
+                SourceExpr="Total VAT Amount";
+                Visible=FALSE }
+
+    { 1040029;2;Field     ;
+                CaptionML=[ENU=Total Incl. VAT;
+                           ENG=Total Incl. VAT;
+                           ENA=Total Incl. GST;
+                           ENZ=Total Incl. GST];
+                SourceExpr=CalcTotalIncVAT(Rec) }
+
+    { 1040014;2;Field     ;
+                CaptionML=[ENU=Total Value;
+                           ENG=Total Value];
+                SourceExpr="Total Original Value" + "Total Fixed Fee Value" }
+
+    { 1040016;2;Field     ;
+                SourceExpr="Total Discount Amount" }
+
+    { 1000000056;2;Field  ;
+                SourceExpr="Cust. Ledger Open";
+                Visible=FALSE }
+
+    { 1000000055;2;Field  ;
+                SourceExpr="Cust. Ledger Currency Code";
+                Visible=FALSE }
+
+    { 1000000054;2;Field  ;
+                SourceExpr="Cust. Ledger Amount";
+                Visible=FALSE }
+
+    { 1000000053;2;Field  ;
+                SourceExpr="Cust. Ledger Remaining Amount";
+                Visible=FALSE }
+
+    { 1000000051;2;Field  ;
+                SourceExpr="Cust. Ledger Amount (LCY)";
+                Visible=FALSE }
+
+    { 1000000052;2;Field  ;
+                SourceExpr="Cust. Led. Remain. Amt. (LCY)";
+                Visible=FALSE }
+
+    { 1000000068;2;Field  ;
+                SourceExpr="Recipient Account";
+                Visible=FALSE }
+
+    { 1000000067;2;Field  ;
+                SourceExpr="Settlement Client No.";
+                Visible=FALSE }
+
+    { 1000000066;2;Field  ;
+                SourceExpr="Payment Account";
+                Visible=FALSE }
+
+    { 1000000065;2;Field  ;
+                SourceExpr="Payment Method Code";
+                Visible=FALSE }
+
+    { 1000000064;2;Field  ;
+                SourceExpr="Settlement Due";
+                Visible=FALSE }
+
+    { 1000000062;2;Field  ;
+                SourceExpr="Settlement Date";
+                Visible=FALSE }
+
+    { 1000000063;2;Field  ;
+                SourceExpr="Settlement Resource";
+                Visible=FALSE }
+
+    { 110000000;2;Field   ;
+                SourceExpr="Settlement Review Confirmation" }
+
+    { 1100000057;2;Field  ;
+                SourceExpr="Settlement Auth Required";
+                Visible=FALSE }
+
+    { 110000004;2;Field   ;
+                SourceExpr="Settlement Reason Code" }
+
+    { 1000000060;2;Field  ;
+                SourceExpr="Payment Direct Debit";
+                Visible=FALSE }
+
+    { 1000000059;2;Field  ;
+                SourceExpr="Job Add. Auth Required";
+                Visible=FALSE }
+
+    { 1100000070;2;Field  ;
+                SourceExpr="Settlement Amended By" }
+
+    { 1110000069;2;Field  ;
+                SourceExpr="Settlement Amended On" }
+
+    { 1100000067;2;Field  ;
+                SourceExpr="Settlement Auth Status" }
+
+    { 1100000068;2;Field  ;
+                SourceExpr="Settlement Authorised By" }
+
+    { 1100000069;2;Field  ;
+                SourceExpr="Settlement Authorised Date" }
+
+    { 17  ;2   ;Field     ;
+                SourceExpr="Billing Address";
+                Visible=FALSE }
+
+    { 19  ;2   ;Field     ;
+                SourceExpr="Billing Address 2";
+                Visible=FALSE }
+
+    { 21  ;2   ;Field     ;
+                SourceExpr="Billing Address City";
+                Visible=FALSE }
+
+    { 23  ;2   ;Field     ;
+                CaptionML=[ENU=Billing Address State;
+                           ENG=Billing Address County;
+                           ENA=Billing Address State];
+                SourceExpr="Billing Address County";
+                Visible=FALSE }
+
+    { 25  ;2   ;Field     ;
+                SourceExpr="Billing Address Post Code";
+                Visible=FALSE }
+
+    { 27  ;2   ;Field     ;
+                SourceExpr="Billing Address Country Code";
+                Visible=FALSE }
+
+    { 1000000046;2;Field  ;
+                SourceExpr="Currency Code" }
+
+    { 1000000026;2;Field  ;
+                SourceExpr="Reversed By" }
+
+    { 1040004;2;Field     ;
+                SourceExpr="Global Dimension 1 Code";
+                Visible=FALSE }
+
+    { 1040006;2;Field     ;
+                SourceExpr="Global Dimension 2 Code";
+                Visible=FALSE }
+
+    { 1000000000;2;Field  ;
+                SourceExpr=Reference;
+                Visible=FALSE }
+
+    { 1000000032;2;Field  ;
+                CaptionML=[ENU=Administrator;
+                           ENG=Administrator];
+                SourceExpr=ClientAnalysisA;
+                Visible=FALSE }
+
+    { 1000000034;2;Field  ;
+                SourceExpr=ClientAnalysisB;
+                Visible=FALSE }
+
+    { 1000000036;2;Field  ;
+                SourceExpr=ClientAnalysisC;
+                Visible=FALSE }
+
+    { 1000000038;2;Field  ;
+                SourceExpr=ClientAnalysisD;
+                Visible=FALSE }
+
+    { 1000000040;2;Field  ;
+                SourceExpr=ClientAnalysisE;
+                Visible=FALSE }
+
+    { 1040008;2;Field     ;
+                SourceExpr=ClientAnalysisF;
+                Visible=FALSE }
+
+    { 1040025;2;Field     ;
+                SourceExpr=ClientAnalysisJ1;
+                Visible=FALSE }
+
+    { 1040027;2;Field     ;
+                SourceExpr=ClientAnalysisJ2;
+                Visible=FALSE }
+
+    { 100000003;2;Field   ;
+                SourceExpr=Comments }
+
+    { 1040000;2;Field     ;
+                SourceExpr="Has Credit Memo";
+                Visible=FALSE }
+
+    { 1000000025;2;Field  ;
+                SourceExpr="PDF Email Created" }
+
+    { 1000000027;2;Field  ;
+                SourceExpr="PDF Email Created By" }
+
+    { 1000000028;2;Field  ;
+                SourceExpr="PDF Email Created Date" }
+
+    { 1000000035;2;Field  ;
+                CaptionML=ENU=1st Authoriser;
+                SourceExpr="Review User 1 Code" }
+
+    { 1000000033;2;Field  ;
+                CaptionML=ENU=1st Authoriser Date;
+                SourceExpr="Review User 1 Date" }
+
+    { 1000000041;2;Field  ;
+                CaptionML=[ENU=1st Authoriser Comment;
+                           ENG=1st Authoriser Comment] }
+
+    { 1000000031;2;Field  ;
+                CaptionML=ENU=2nd Authoriser;
+                SourceExpr="Review User 2 Code" }
+
+    { 1000000030;2;Field  ;
+                CaptionML=ENU=2nd Authoriser Date;
+                SourceExpr="Review User 2 Date" }
+
+    { 1000000039;2;Field  ;
+                CaptionML=[ENU=2nd Authoriser Comment;
+                           ENG=2nd Authoriser Comment];
+                Editable=FALSE }
+
+    { 1000000050;2;Field  ;
+                CaptionML=ENU=3rd Authoriser;
+                SourceExpr="Review User 3 Code" }
+
+    { 1000000049;2;Field  ;
+                CaptionML=ENU=3rd Authoriser Date;
+                SourceExpr="Review User 3 Date" }
+
+    { 1000000061;2;Field  ;
+                SourceExpr=Processed;
+                Visible=FALSE }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

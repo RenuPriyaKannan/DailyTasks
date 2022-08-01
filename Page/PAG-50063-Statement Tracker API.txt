@@ -1,0 +1,196 @@
+OBJECT Page 50063 Statement Tracker API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=15-01-21;
+    Time=14:10:57;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    CaptionML=ENG=Statements Tracker;
+    SourceTable=Table9068746;
+    DataCaptionExpr='Overview';
+    PageType=List;
+    OnOpenPage=VAR
+                 _StaTrackerSetupRec@1000000000 : Record 9068745;
+               BEGIN
+               END;
+
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000001;1;Group  ;
+                CaptionML=ENU=Filters }
+
+    { 1000000039;2;Group  ;
+                GroupType=GridLayout;
+                Layout=Rows }
+
+    { 1000000040;3;Group  ;
+                GroupType=Group }
+
+    { 1040000;4;Field     ;
+                CaptionML=[ENU=Statement Administrator;
+                           ENG=Statement Administrator];
+                TableRelation=Resource }
+
+    { 1000000004;4;Field  ;
+                CaptionML=[ENU=Client Status;
+                           ENG=Client Status] }
+
+    { 1000000006;4;Field  ;
+                CaptionML=[ENU=Tracker Period Status;
+                           ENG=Tracker Period Status] }
+
+    { 1040015;4;Field     ;
+                CaptionML=[ENU=Global Dimension 1;
+                           ENG=Global Dimension 1];
+                CaptionClass='1,1,1' }
+
+    { 1040018;4;Field     ;
+                CaptionML=[ENU=Global Dimension 2;
+                           ENG=Global Dimension 2];
+                CaptionClass='1,1,2' }
+
+    { 1000000041;3;Group  ;
+                GroupType=Group }
+
+    { 1000000007;4;Field  ;
+                CaptionML=ENU=Client Analysis A Filter;
+                CaptionClass='50,1,A' }
+
+    { 1000000002;4;Field  ;
+                CaptionML=ENU=Client Analysis B Filter;
+                CaptionClass='50,1,B' }
+
+    { 1000000003;4;Field  ;
+                CaptionML=ENU=Client Analysis C Filter;
+                CaptionClass='50,1,C' }
+
+    { 1000000021;4;Field  ;
+                CaptionML=ENU=Client Analysis D Filter;
+                CaptionClass='50,1,D' }
+
+    { 1000000014;4;Field  ;
+                CaptionML=ENU=Client Analysis E Filter;
+                CaptionClass='50,1,E' }
+
+    { 1000000012;4;Field  ;
+                CaptionML=ENU=Client Analysis F Filter;
+                CaptionClass='50,1,F' }
+
+    { 1000000005;1;Group  ;
+                Editable=false;
+                GroupType=Repeater }
+
+    { 1000000037;2;Field  ;
+                SourceExpr="Client No.";
+                CaptionClass=FIELDCAPTION("Client No.");
+                Editable=FALSE }
+
+    { 1000000036;2;Field  ;
+                SourceExpr="Client Name";
+                CaptionClass=FIELDCAPTION("Client Name");
+                Editable=FALSE }
+
+    { 1000000035;2;Field  ;
+                SourceExpr="Client Status";
+                CaptionClass=FIELDCAPTION("Client Status");
+                Editable=FALSE }
+
+    { 1000000034;2;Field  ;
+                SourceExpr="Global Dimension 1 Code" }
+
+    { 1000000033;2;Field  ;
+                SourceExpr=ClientAnalysisA;
+                CaptionClass=FIELDCAPTION(ClientAnalysisA);
+                Editable=FALSE }
+
+    { 1000000032;2;Field  ;
+                SourceExpr=ClientAnalysisB }
+
+    { 1000000031;2;Field  ;
+                SourceExpr=ClientAnalysisC }
+
+    { 1000000030;2;Field  ;
+                SourceExpr=ClientAnalysisD }
+
+    { 1000000029;2;Field  ;
+                SourceExpr=ClientAnalysisE }
+
+    { 1000000028;2;Field  ;
+                SourceExpr=ClientAnalysisF }
+
+    { 1000000027;2;Field  ;
+                SourceExpr="Statement Administrator" }
+
+    { 1000000026;2;Field  ;
+                SourceExpr="Account Type" }
+
+    { 1000000025;2;Field  ;
+                SourceExpr="Linked To" }
+
+    { 1000000024;2;Field  ;
+                SourceExpr="Account With" }
+
+    { 1000000023;2;Field  ;
+                SourceExpr="Account No." }
+
+    { 1000000042;2;Field  ;
+                SourceExpr="Account CCY" }
+
+    { 1000000022;2;Field  ;
+                SourceExpr="Tracker Period Status" }
+
+    { 1000000020;2;Field  ;
+                SourceExpr="Tracking Process Comments";
+                Editable=FALSE }
+
+    { 1000000019;2;Field  ;
+                SourceExpr="Statement Frequency" }
+
+    { 1000000018;2;Field  ;
+                SourceExpr="Last Statement Received Date" }
+
+    { 1000000017;2;Field  ;
+                SourceExpr="Next Statement Due Date" }
+
+    { 1000000016;2;Field  ;
+                SourceExpr="Last Reconcilied" }
+
+    { 1000000015;2;Field  ;
+                SourceExpr="Last Statement Received No." }
+
+    { 1000000013;2;Field  ;
+                SourceExpr=Frequency;
+                Visible=FALSE }
+
+    { 1000000011;2;Field  ;
+                SourceExpr="Next Statement Due No.";
+                Visible=FALSE }
+
+    { 1000000010;2;Field  ;
+                SourceExpr="Last Statement End Date" }
+
+    { 1000000009;2;Field  ;
+                SourceExpr=Bookkeeper;
+                Visible=FALSE }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="Next Year End";
+                Visible=FALSE }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

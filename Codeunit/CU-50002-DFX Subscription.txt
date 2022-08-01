@@ -1,0 +1,105 @@
+OBJECT Codeunit 50002 DFX Subscription
+{
+  OBJECT-PROPERTIES
+  {
+    Date=09-03-21;
+    Time=19:50:50;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    OnRun=BEGIN
+          END;
+
+  }
+  CODE
+  {
+
+    [EventSubscriber(Table,5050,OnAfterModifyEvent)]
+    PROCEDURE ContactOnAfterModify_HS_Contacts@100000001(VAR Rec@100000001 : Record 5050;VAR xRec@100000002 : Record 5050;RunTrigger@100000003 : Boolean);
+    VAR
+      HSContacts@100000000 : Record 50011;
+    BEGIN
+      IF NOT Rec."Exclude from Segment" THEN BEGIN
+        HSContacts.SETRANGE("No.",Rec."No.");
+        IF NOT HSContacts.FINDFIRST THEN BEGIN
+          HSContacts."No." := Rec."No.";
+          HSContacts.Name := Rec.Name;
+          HSContacts.City := Rec.City;
+          HSContacts."Name 2" := Rec."Name 2";
+          HSContacts."Phone No." := Rec."Phone No." ;
+          HSContacts."Country/Region Code" := Rec."Country/Region Code";
+          HSContacts."E-Mail" := Rec."E-Mail" ;
+          HSContacts."Date Created" := TODAY;
+          HSContacts.UpdateStatus := HSContacts.UpdateStatus::Insert ;
+          HSContacts.INSERT;
+        END
+        ELSE BEGIN
+          HSContacts."No." := Rec."No.";
+          HSContacts.Name := Rec.Name;
+          HSContacts.City := Rec.City;
+          HSContacts."Name 2" := Rec."Name 2";
+          HSContacts."Phone No." := Rec."Phone No.";
+          HSContacts."Country/Region Code" := Rec."Country/Region Code";
+          HSContacts."E-Mail" := Rec."E-Mail";
+          HSContacts."Date Updated" := TODAY;
+          HSContacts.UpdateStatus := HSContacts.UpdateStatus::Update;
+          HSContacts.MODIFY;
+        END;
+      END;
+    END;
+
+    [EventSubscriber(Table,5050,OnAfterDeleteEvent)]
+    PROCEDURE ContactOnAfterDelete_HS_Contacts@100000000(VAR Rec@100000000 : Record 5050;RunTrigger@100000001 : Boolean);
+    VAR
+      HSContacts@100000002 : Record 50011;
+    BEGIN
+      HSContacts.RESET;
+      HSContacts.SETRANGE("No.",Rec."No.");
+      IF HSContacts.FINDFIRST THEN BEGIN
+      IF NOT Rec."Exclude from Segment" THEN BEGIN
+        HSContacts."No." := Rec."No.";
+        HSContacts.Name := Rec.Name;
+        HSContacts.City :=Rec.City;
+        HSContacts."Name 2" := Rec."Name 2";
+        HSContacts."Phone No." := Rec."Phone No." ;
+        HSContacts."Country/Region Code" := Rec."Country/Region Code";
+        HSContacts."E-Mail" := Rec."E-Mail";
+        //HSContacts."Date Created" := TODAY;
+       // HSContacts."Date Updated" := TODAY;
+        HSContacts.UpdateStatus := HSContacts.UpdateStatus::Delete;
+        HSContacts.MODIFY;
+      END;
+      END
+      ELSE IF NOT HSContacts.FINDFIRST THEN BEGIN
+          HSContacts."No." := Rec."No.";
+          HSContacts.Name := Rec.Name;
+          HSContacts.City := Rec.City;
+          HSContacts."Name 2" := Rec."Name 2";
+          HSContacts."Phone No." := Rec."Phone No." ;
+          HSContacts."Country/Region Code" := Rec."Country/Region Code";
+          HSContacts."E-Mail" := Rec."E-Mail" ;
+          HSContacts."Date Created" := TODAY;
+          HSContacts.UpdateStatus := HSContacts.UpdateStatus::Delete ;
+          HSContacts.INSERT;
+        END
+        ELSE BEGIN
+          HSContacts."No." := Rec."No.";
+          HSContacts.Name := Rec.Name;
+          HSContacts.City := Rec.City;
+          HSContacts."Name 2" := Rec."Name 2";
+          HSContacts."Phone No." := Rec."Phone No.";
+          HSContacts."Country/Region Code" := Rec."Country/Region Code";
+          HSContacts."E-Mail" := Rec."E-Mail";
+          HSContacts."Date Updated" := TODAY;
+          HSContacts.UpdateStatus := HSContacts.UpdateStatus::Delete;
+          HSContacts.MODIFY;
+        END;
+    END;
+
+    BEGIN
+    END.
+  }
+}
+

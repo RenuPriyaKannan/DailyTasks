@@ -1,0 +1,77 @@
+OBJECT Table 50011 DFX Hubspot Contact
+{
+  OBJECT-PROPERTIES
+  {
+    Date=08-03-21;
+    Time=12:31:50;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;No.                 ;Code20        ;DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=No.;
+                                                              ENG=No.] }
+    { 2   ;   ;Name                ;Text100       ;OnValidate=VAR
+                                                                ContBusRel@1001 : Record 5054;
+                                                                Cust@1000 : Record 18;
+                                                                Vend@1002 : Record 23;
+                                                              BEGIN
+                                                              END;
+
+                                                   DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Name;
+                                                              ENG=Name] }
+    { 3   ;   ;Name 2              ;Text50        ;DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Name 2;
+                                                              ENG=Name 2] }
+    { 4   ;   ;City                ;Text30        ;TableRelation=IF (Country/Region Code=CONST()) "Post Code".City
+                                                                 ELSE IF (Country/Region Code=FILTER(<>'')) "Post Code".City WHERE (Country/Region Code=FIELD(Country/Region Code));
+                                                   ValidateTableRelation=No;
+                                                   TestTableRelation=No;
+                                                   DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=City;
+                                                              ENG=City] }
+    { 5   ;   ;Phone No.           ;Text30        ;ExtendedDatatype=Phone No.;
+                                                   DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Phone No.;
+                                                              ENG=Phone No.] }
+    { 6   ;   ;Country/Region Code ;Code10        ;TableRelation=Country/Region;
+                                                   DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Country/Region Code;
+                                                              ENG=Country/Region Code] }
+    { 7   ;   ;E-Mail              ;Text80        ;OnValidate=VAR
+                                                                MailManagement@1000 : Codeunit 9520;
+                                                              BEGIN
+                                                              END;
+
+                                                   ExtendedDatatype=E-Mail;
+                                                   DataClassification=ToBeClassified;
+                                                   CaptionML=[ENU=Email;
+                                                              ENG=Email] }
+    { 8   ;   ;Date Created        ;Date          ;DataClassification=ToBeClassified }
+    { 9   ;   ;Date Updated        ;Date          ;DataClassification=ToBeClassified }
+    { 10  ;   ;UpdateStatus        ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=None,Insert,Update,Delete,Error }
+    { 11  ;   ;ExecutionId         ;Integer       ;DataClassification=ToBeClassified }
+    { 12  ;   ;HubspotStatus       ;Option        ;DataClassification=ToBeClassified;
+                                                   OptionString=None,Insert,Update,Delete,Error }
+  }
+  KEYS
+  {
+    {    ;No.                                     ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

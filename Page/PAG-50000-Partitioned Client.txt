@@ -1,0 +1,99 @@
+OBJECT Page 50000 Partitioned Client
+{
+  OBJECT-PROPERTIES
+  {
+    Date=14-07-21;
+    Time=17:35:48;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table50000;
+    SourceTableView=WHERE(Table Name=CONST(CL));
+    PageType=List;
+    ActionList=ACTIONS
+    {
+      { 1000000022;  ;ActionContainer;
+                      CaptionML=ENU=test;
+                      ActionContainerType=NewDocumentItems }
+    }
+  }
+  CONTROLS
+  {
+    { 1000000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000001;1;Group  ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Table Name" }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="USER ID" }
+
+    { 1000000004;2;Field  ;
+                SourceExpr="Client No._Entity No." }
+
+    { 1000000005;2;Field  ;
+                SourceExpr="First Partition Code" }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="Second Partition Code" }
+
+    { 1000000007;2;Field  ;
+                SourceExpr="Client Type" }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="Client Name" }
+
+    { 1000000009;2;Field  ;
+                SourceExpr="CL Country of Incorporation" }
+
+    { 1000000010;2;Field  ;
+                SourceExpr="CL Date of Incorporation" }
+
+    { 1000000011;2;Field  ;
+                SourceExpr="Registered Number" }
+
+    { 1000000012;2;Field  ;
+                SourceExpr="Currency Code" }
+
+    { 1000000013;2;Field  ;
+                SourceExpr="Administrative Office" }
+
+    { 1000000014;2;Field  ;
+                SourceExpr="Registered Office" }
+
+    { 1000000015;2;Field  ;
+                SourceExpr="Global Dimension 1 Code" }
+
+    { 1000000016;2;Field  ;
+                SourceExpr=ClientAnalysisA }
+
+    { 1000000017;2;Field  ;
+                SourceExpr=ClientAnalysisB }
+
+    { 1000000018;2;Field  ;
+                SourceExpr=ClientAnalysisC }
+
+    { 1000000019;2;Field  ;
+                SourceExpr=ClientAnalysisD }
+
+    { 1000000020;2;Field  ;
+                SourceExpr=ClientAnalysisE }
+
+    { 1000000021;2;Field  ;
+                SourceExpr=ClientAnalysisF }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

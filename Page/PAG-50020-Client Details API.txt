@@ -1,0 +1,77 @@
+OBJECT Page 50020 Client Details API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=27-11-20;
+    Time=13:09:54;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    SourceTable=Table50001;
+    PageType=List;
+  }
+  CONTROLS
+  {
+    { 1000000000;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000001;1;Group  ;
+                Name=Group;
+                GroupType=Repeater }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Client No." }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Entry No." }
+
+    { 1000000004;2;Field  ;
+                SourceExpr=Type }
+
+    { 1000000005;2;Field  ;
+                SourceExpr=Name }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="Proper law" }
+
+    { 1000000007;2;Field  ;
+                SourceExpr=Jurisdiction }
+
+    { 1000000008;2;Field  ;
+                SourceExpr="Tax Status" }
+
+    { 1000000009;2;Field  ;
+                SourceExpr="FATCA Account Classification" }
+
+    { 1000000010;2;Field  ;
+                SourceExpr="CRS Account Classification" }
+
+    { 1000000011;2;Field  ;
+                SourceExpr="Tax Code" }
+
+    { 1000000012;2;Field  ;
+                SourceExpr="Tax Return Country Code" }
+
+    { 1000000013;2;Field  ;
+                SourceExpr="TIN Type" }
+
+    { 1000000014;2;Field  ;
+                SourceExpr=TIN }
+
+    { 1000000015;2;Field  ;
+                SourceExpr="Tax Category" }
+
+    { 1000000018;2;Field  ;
+                SourceExpr=WSID }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

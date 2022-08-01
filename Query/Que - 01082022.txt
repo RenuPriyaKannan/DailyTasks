@@ -1,0 +1,130 @@
+OBJECT Query 50000 Get Client Appointments
+{
+  OBJECT-PROPERTIES
+  {
+    Date=18-05-20;
+    Time=11:11:01;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  ELEMENTS
+  {
+    { 100000000;;DataItem;                   ;
+               DataItemTable=Table9068500 }
+
+    { 100000001;1;Filter;                    ;
+               DataSource=Name }
+
+    { 100000002;1;Column;                    ;
+               DataSource=Client No. }
+
+    { 100000003;1;Column;                    ;
+               DataSource=Type }
+
+    { 100000004;1;DataItem;                  ;
+               DataItemTable=Table9068508;
+               DataItemLink=Client No.=Client."Client No.";
+               DataItemLinkType=Exclude Row If No Match }
+
+    { 100000005;2;Column;                    ;
+               DataSource=Entity No. }
+
+    { 100000006;2;Column;                    ;
+               DataSource=Entity Type }
+
+    { 100000007;2;Column;                    ;
+               DataSource=Entity Name }
+
+    { 100000008;2;Column;                    ;
+               DataSource=Date Appointed }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT Query 50001 Get Dimension Value
+{
+  OBJECT-PROPERTIES
+  {
+    Date=17-06-20;
+    Time=16:20:33;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  ELEMENTS
+  {
+    { 100000000;;DataItem;                   ;
+               DataItemTable=Table349 }
+
+    { 100000001;1;Filter;                    ;
+               DataSource=Client Analysis Dimension }
+
+    { 100000002;1;Column;                    ;
+               DataSource=Code }
+
+    { 100000003;1;Column;                    ;
+               DataSource=Name }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
+OBJECT Query 50003 Web Service Agg
+{
+  OBJECT-PROPERTIES
+  {
+    Date=18-03-21;
+    Time=16:28:33;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+  }
+  ELEMENTS
+  {
+    { 100000000;;DataItem;                   ;
+               DataItemTable=Table9900;
+               DataItemTableFilter=Object Type=FILTER(Page),
+                                   Object ID=FILTER(50000..59999|9068930|9068572|9068573|9069346|9068820|9068639|9068552|9070259|25) }
+
+    { 100000001;1;Column;                    ;
+               DataSource=Object Type }
+
+    { 100000002;1;Column;                    ;
+               DataSource=Object ID }
+
+    { 100000003;1;Column;                    ;
+               DataSource=Service Name }
+
+    { 100000004;1;Column;                    ;
+               DataSource=Published }
+
+    { 100000005;1;Column;                    ;
+               DataSource=All Tenants }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

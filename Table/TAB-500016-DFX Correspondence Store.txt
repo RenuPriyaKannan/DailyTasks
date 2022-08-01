@@ -1,0 +1,514 @@
+OBJECT Table 50016 DFX Correspondence Store
+{
+  OBJECT-PROPERTIES
+  {
+    Date=23-06-22;
+    Time=15:10:03;
+    Modified=Yes;
+    Version List=NAVLITE;
+  }
+  PROPERTIES
+  {
+    Permissions=TableData 9068662=r;
+    OnInsert=VAR
+               _DocumentFolderSetupRec@1000000000 : Record 9068662;
+             BEGIN
+               {IF "Document Inserted Date" = 0D THEN
+                 "Document Inserted Date" := TODAY;
+
+               IF ISNULLGUID("Document GUID") THEN
+                 "Document GUID" := CREATEGUID();
+
+               Name := ReturnEntityName;
+               "Last Date Modified" := TODAY;
+
+               WITH DocumentFolderSetup DO BEGIN
+                 GET;
+                 CASE "External Doc Management System" OF
+                   "External Doc Management System"::"Internal Navision" : ; //Nothing
+                   "External Doc Management System"::"Synergy "          : ; //Nothing
+                   "External Doc Management System"::"To be defined"     : ; //Nothing
+                   "External Doc Management System"::DataStore           : ; //Nothing
+                   "External Doc Management System"::Sharepoint          : SendToHoldingPoolSharepoint(1);
+                   "External Doc Management System"::"C076 FileNet"      : ; // IsDoneBySubscriberNow SendToHoldingPoolFileNet(1);
+                   "External Doc Management System"::LaserFiche          : ; //Nothing
+                   "External Doc Management System"::"C102 LiveLink"     : ; //Nothing
+                   ELSE
+                     ERROR('DMS Integration type not supported.');
+                 END;
+               END;
+
+               _DocumentFolderSetupRec.GET;
+               CASE _DocumentFolderSetupRec."Doc. Type Mandatory" OF
+                 _DocumentFolderSetupRec."Doc. Type Mandatory"::"Doc Type Only" :
+                 BEGIN
+                   IF "Document Type"='' THEN
+                     ERROR('Document Type cannot be blank! Please Link E-mail again');
+                 END;
+                 _DocumentFolderSetupRec."Doc. Type Mandatory"::"Doc Type and Sub Type" :
+                 BEGIN
+                   IF ("Document Type"='') OR ("Document Sub Type"='') THEN
+                     ERROR('Document Type and Document Subtype cannot be blank! Please Link E-mail again');
+                 END;
+               END;
+               }
+             END;
+
+    OnModify=BEGIN
+               "Last Date Modified" := TODAY;
+
+               WITH DocumentFolderSetup DO BEGIN
+                 GET;
+                 CASE "External Doc Management System" OF
+                   "External Doc Management System"::"Internal Navision" : ; //Nothing
+                   "External Doc Management System"::"Synergy "          : ; //Nothing
+                   "External Doc Management System"::"To be defined"     : ; //Nothing
+                   "External Doc Management System"::DataStore           : ; //Nothing
+                   "External Doc Management System"::Sharepoint          : SendToHoldingPoolSharepoint(2);
+                   "External Doc Management System"::iManage             : ; //Nothing
+                   "External Doc Management System"::"C076 FileNet"      : ; //Nothing
+                   "External Doc Management System"::LaserFiche          : ; //Nothing
+                   "External Doc Management System"::"C102 LiveLink"     : ; //Nothing
+                   ELSE
+                     ERROR('DMS Integration type not supported.');
+                 END;
+               END;
+               {
+               DocumentFolderSetup.GET;
+               CASE DocumentFolderSetup."Doc. Type Mandatory" OF
+                 DocumentFolderSetup."Doc. Type Mandatory"::"Doc Type Only" :
+                 BEGIN
+                   IF "Document Type"='' THEN
+                     ERROR('Document Type cannot be blank! Please Link E-mail again');
+                 END;
+                 DocumentFolderSetup."Doc. Type Mandatory"::"Doc Type and Sub Type" :
+                 BEGIN
+                   IF ("Document Type"='') OR ("Document Sub Type"='') THEN
+                     ERROR('Document Type and Document Subtype cannot be blank! Please Link E-mail again');
+                 END;
+               END;
+               }
+             END;
+
+    OnDelete=BEGIN
+               WITH DocumentFolderSetup DO BEGIN
+                 GET;
+                 CASE "External Doc Management System" OF
+                   "External Doc Management System"::"Internal Navision" : ; //Nothing
+                   "External Doc Management System"::"Synergy "          : ; //Nothing
+                   "External Doc Management System"::"To be defined"     : ; //Nothing
+                   "External Doc Management System"::DataStore           : ; //Nothing
+                   "External Doc Management System"::Hummingbird         : ERROR('You are not allowed to delete documents!');
+                   "External Doc Management System"::iManage             : ; //Nothing
+                   "External Doc Management System"::"C090 Saperion"     : ; //Nothing
+                   "External Doc Management System"::"C076 FileNet"      : ; //Nothing
+                   "External Doc Management System"::LaserFiche          : ; //Nothing
+                   "External Doc Management System"::"C102 LiveLink"     : ; //Nothing
+                   ELSE
+                     ERROR('DMS Integration type not supported.');
+                 END;
+               END;
+             END;
+
+    LookupPageID=Page9069348;
+    DrillDownPageID=Page9069348;
+  }
+  FIELDS
+  {
+    { 1   ;   ;ID                  ;Code20        ;SQL Data Type=Variant }
+    { 2   ;   ;No.                 ;Code20        ;TableRelation=IF (Type=CONST(Client)) Client
+                                                                 ELSE IF (Type=CONST(Prospect)) CM-Prospect
+                                                                 ELSE IF (Type=CONST(Intermediary)) Intermediary
+                                                                 ELSE IF (Type=CONST(Entity)) Entity
+                                                                 ELSE IF (Type=CONST(Client Owner)) Owner
+                                                                 ELSE IF (Type=CONST(Potential Client)) "Potential Client"
+                                                                 ELSE IF (Type=FILTER(Customer)) Customer }
+    { 5   ;   ;Type                ;Option        ;OptionString=[ ,Client,Entity,Prospect,Intermediary,Client Owner,Resource,,Dimension,,,External Bank Payment,,,,Potential Client,Custom1,Customer,Vendor,Contact] }
+    { 6   ;   ;External DMS Status ;Option        ;OptionString=[ ,Pending,Processing,Processed];
+                                                   Editable=No }
+    { 10  ;   ;MS Office Doc Type  ;Code10         }
+    { 20  ;   ;Subject             ;Text150        }
+    { 30  ;   ;Info1               ;Text100        }
+    { 40  ;   ;Info2               ;Text100        }
+    { 50  ;   ;Document GUID       ;GUID           }
+    { 60  ;   ;Name                ;Text100        }
+    { 70  ;   ;Last Date Modified  ;Date          ;Editable=No }
+    { 100 ;   ;Temporary           ;Boolean        }
+    { 105 ;   ;Authorised          ;Boolean        }
+    { 110 ;   ;Workflow No.        ;Integer       ;TableRelation=IF (Source of Document=CONST(Workflow)) "TWM Workflow"."Entry No." WHERE (Entry No.=FIELD(Workflow No.)) }
+    { 111 ;   ;Payment No.         ;Code35         }
+    { 1000;   ;FilePath            ;Text250        }
+    { 1002;   ;PathInStdCasePath   ;Boolean        }
+    { 1010;   ;FileName            ;Text250        }
+    { 1020;   ;Source of Document  ;Option        ;OptionString=,Navision,Imported,,,,,Workflow,Payment }
+    { 1030;   ;Document Inserted Date;Date         }
+    { 1040;   ;Document Inserted By;Code50        ;TableRelation=User."User Name";
+                                                   OnLookup=VAR
+                                                              _UserMgt@1000000000 : Codeunit 418;
+                                                            BEGIN
+                                                              _UserMgt.LookupUserID("Document Inserted By");
+                                                            END;
+
+                                                   ValidateTableRelation=No;
+                                                   TestTableRelation=No }
+    { 1050;   ;Last Accessed Via Navision;Date     }
+    { 1060;   ;Last Accessed By    ;Code50        ;TableRelation=User."User Name";
+                                                   OnLookup=VAR
+                                                              _UserMgt@1000000000 : Codeunit 418;
+                                                            BEGIN
+                                                              _UserMgt.LookupUserID("Last Accessed By");
+                                                            END;
+
+                                                   ValidateTableRelation=No;
+                                                   TestTableRelation=No }
+    { 1100;   ;Document in Paper Form;Boolean      }
+    { 1110;   ;Additional Information;Text100      }
+    { 1111;   ;Mail Merge Template Code;Code10    ;TableRelation="Interaction Template$" }
+    { 1112;   ;Document Type       ;Code10        ;TableRelation=IF (Type=CONST(Client)) "Correspondence Doc Type".Code WHERE (Client Document=CONST(Yes),
+                                                                                                                               Client Type=FIELD(Client Type Filter),
+                                                                                                                               Category=FIELD(Category Filter))
+                                                                                                                               ELSE IF (Type=CONST(Entity)) "Correspondence Doc Type".Code WHERE (Entity Document=CONST(Yes),
+                                                                                                                                                                                                  Entity Type=FIELD(Entity Type Filter),
+                                                                                                                                                                                                  Category=FIELD(Category Filter))
+                                                                                                                                                                                                  ELSE IF (Type=CONST(Prospect)) "Correspondence Doc Type".Code WHERE (Prospect Document=CONST(Yes),
+                                                                                                                                                                                                                                                                       Category=FIELD(Category Filter))
+                                                                                                                                                                                                                                                                       ELSE IF (Type=CONST(Intermediary)) "Correspondence Doc Type".Code WHERE (Intermediary Document=CONST(Yes),
+                                                                                                                                                                                                                                                                                                                                                Category=FIELD(Category Filter))
+                                                                                                                                                                                                                                                                                                                                                ELSE IF (Type=CONST(Client Owner)) "Correspondence Doc Type".Code WHERE (Client Owner Document=CONST(Yes),
+                                                                                                                                                                                                                                                                                                                                                                                                                         Category=FIELD(Category Filter))
+                                                                                                                                                                                                                                                                                                                                                                                                                         ELSE IF (Type=CONST(Resource)) "Correspondence Doc Type".Code WHERE (Resource Document=CONST(Yes),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              Category=FIELD(Category Filter))
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ELSE IF (Type=CONST(Dimension)) "Correspondence Doc Type".Code WHERE (Dimension Document=CONST(Yes),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Category=FIELD(Category Filter))
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ELSE IF (Type=CONST(External Bank Payment)) "Correspondence Doc Type".Code WHERE (Ext. Bank Payment Document=CONST(Yes),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      Category=FIELD(Category Filter))
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ELSE IF (Type=CONST(Potential Client)) "Correspondence Doc Type".Code WHERE (Potential Client Document=CONST(Yes),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   Category=FIELD(Category Filter))
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ELSE "Correspondence Doc Type".Code }
+    { 1113;   ;Document Type Text  ;Text75        ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Correspondence Doc Type".Type WHERE (Code=FIELD(Document Type)));
+                                                   Editable=No }
+    { 1115;   ;Document Sub Type   ;Code20        ;TableRelation="Document Type Sub Type"."Document Sub Type" WHERE (Document Type=FIELD(Document Type)) }
+    { 1116;   ;Document Sub Type Text;Text75      ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Document Type Sub Type"."Document Sub Type Description" WHERE (Document Type=FIELD(Document Type),
+                                                                                                                                      Document Sub Type=FIELD(Document Sub Type))) }
+    { 1120;   ;Author              ;Text100        }
+    { 1130;   ;Document Date       ;Date           }
+    { 1140;   ;Priority            ;Option        ;OptionString=High,Medium,Low }
+    { 1150;   ;Document Copy_      ;Boolean        }
+    { 2000;   ;Restricted Combination;Boolean     ;FieldClass=FlowField;
+                                                   CalcFormula=Lookup("Document Type Sub Type"."Restricted Combination" WHERE (Document Type=FIELD(Document Type),
+                                                                                                                               Document Sub Type=FIELD(Document Sub Type))) }
+    { 2001;   ;Corresp. Store Link Exists;Boolean ;FieldClass=FlowField;
+                                                   CalcFormula=Exist("Correspondence Store Link" WHERE (Type=FIELD(Type),
+                                                                                                        No.=FIELD(No.),
+                                                                                                        ID=FIELD(ID),
+                                                                                                        Link Type=FIELD(Link Type Filter),
+                                                                                                        Link Code=FIELD(Link Code Filter)));
+                                                   Editable=No }
+    { 2005;   ;Entity Type Filter  ;Code20        ;FieldClass=FlowFilter;
+                                                   Editable=No }
+    { 2007;   ;Link Type Filter    ;Option        ;FieldClass=FlowFilter;
+                                                   OptionString=[ ,Asset,Safe Custody,Bank,Loan,Agent,Investment,Client Entity,Client Entity History,Customer,Vendor,Portfolio,Transaction Monitoring,Interaction,Activity,Business Rule,Client Invoice,Meeting];
+                                                   Editable=Yes }
+    { 2008;   ;Link Code Filter    ;Code20        ;FieldClass=FlowFilter;
+                                                   Editable=Yes }
+    { 2010;   ;Client Type Filter  ;Code20        ;FieldClass=FlowFilter;
+                                                   Editable=No }
+    { 2015;   ;Category Filter     ;Code20        ;FieldClass=FlowFilter;
+                                                   Editable=No }
+    { 76100;  ;Portfolio Company ID;Code20         }
+    { 83000;  ;No. of Linked Records;Integer      ;FieldClass=FlowField;
+                                                   CalcFormula=Count("Correspondence Store Link" WHERE (ID=FIELD(ID),
+                                                                                                        No.=FIELD(No.),
+                                                                                                        Type=FIELD(Type)));
+                                                   Editable=No }
+    { 83002;  ;Document Expiry Date;Date           }
+    { 83003;  ;Complaint No.       ;Code10        ;TableRelation="Complaint Register"."Complaint No." WHERE (Client No.=FIELD(No.)) }
+    { 83004;  ;Litigation No.      ;Code10        ;TableRelation="Litigation Register"."Litigation No." WHERE (Client No.=FIELD(No.)) }
+    { 83005;  ;Trans. Mon. Document No.;Code20    ;TableRelation="Transaction Background Detail"."Document No." }
+    { 85000;  ;Archived            ;Boolean        }
+    { 85050;  ;Archived Date       ;Date           }
+    { 85100;  ;Archived By         ;Code50        ;TableRelation=User."User Name";
+                                                   OnLookup=VAR
+                                                              _UserMgt@1000000000 : Codeunit 418;
+                                                            BEGIN
+                                                              _UserMgt.LookupUserID("Archived By");
+                                                            END;
+
+                                                   ValidateTableRelation=No;
+                                                   TestTableRelation=No }
+    { 85500;  ;Client Tracker No   ;Integer        }
+    { 85501;  ;Client Tracker blob ;BLOB           }
+    { 86001;  ;LaserFiche Entry ID ;Integer        }
+    { 88000;  ;Meta_Int_1          ;Integer       ;CaptionClass='52,1' }
+    { 88001;  ;Meta_Int_2          ;Integer       ;CaptionClass='52,2' }
+    { 88002;  ;Meta_Int_3          ;Integer       ;CaptionClass='52,3' }
+    { 88010;  ;Meta_Text_1         ;Text100       ;CaptionClass='52,4' }
+    { 88011;  ;Meta_Text_2         ;Text100       ;CaptionClass='52,5' }
+    { 88012;  ;Meta_Text_3         ;Text100       ;OnLookup=BEGIN
+                                                              {DocumentFolderSetup.SetCorrespondenceStoreRec(Rec);
+                                                              DocumentFolderSetup.MetaTextLookup(Meta_Text_3, 3);
+                                                              }
+                                                            END;
+
+                                                   CaptionClass='52,6' }
+    { 88013;  ;Meta_Text_4         ;Text150       ;CaptionClass='52,7' }
+    { 88014;  ;Meta_Text_5         ;Text250       ;CaptionClass='52,8' }
+    { 88015;  ;Meta_Text_6         ;Text250       ;CaptionClass='52,9' }
+    { 88020;  ;Meta_Code_1         ;Code50        ;OnValidate=BEGIN
+                                                                {DocumentFolderSetup.SetCorrespondenceStoreRec(Rec);
+                                                                DocumentFolderSetup.MetaCodeValidate(Meta_Code_1, 1);
+                                                                }
+                                                              END;
+
+                                                   OnLookup=BEGIN
+                                                              {DocumentFolderSetup.SetCorrespondenceStoreRec(Rec);
+                                                              DocumentFolderSetup.MetaCodeLookup(Meta_Code_1, 1);
+                                                              VALIDATE(Meta_Code_1,Meta_Code_1);
+                                                              }
+                                                            END;
+
+                                                   CaptionClass='52,10' }
+    { 88021;  ;Meta_Code_2         ;Code50        ;OnValidate=BEGIN
+                                                                {DocumentFolderSetup.SetCorrespondenceStoreRec(Rec);
+                                                                DocumentFolderSetup.MetaCodeValidate(Meta_Code_2, 2);
+                                                                }
+                                                              END;
+
+                                                   OnLookup=BEGIN
+                                                              {DocumentFolderSetup.SetCorrespondenceStoreRec(Rec);
+                                                              DocumentFolderSetup.MetaCodeLookup(Meta_Code_2, 2);
+                                                              VALIDATE(Meta_Code_2,Meta_Code_2);
+                                                              }
+                                                            END;
+
+                                                   CaptionClass='52,11' }
+    { 88022;  ;Meta_Code_3         ;Code50        ;OnValidate=BEGIN
+                                                                {DocumentFolderSetup.SetCorrespondenceStoreRec(Rec);
+                                                                DocumentFolderSetup.MetaCodeValidate(Meta_Code_3, 3);
+                                                                }
+                                                              END;
+
+                                                   OnLookup=BEGIN
+                                                              {DocumentFolderSetup.SetCorrespondenceStoreRec(Rec);
+                                                              DocumentFolderSetup.MetaCodeLookup(Meta_Code_3, 3);
+                                                              VALIDATE(Meta_Code_3,Meta_Code_3);
+                                                              }
+                                                            END;
+
+                                                   CaptionClass='52,12' }
+    { 88023;  ;Meta_Code_4         ;Code100       ;OnValidate=BEGIN
+                                                                {DocumentFolderSetup.SetCorrespondenceStoreRec(Rec);
+                                                                DocumentFolderSetup.MetaCodeValidate(Meta_Code_4, 4);
+                                                                }
+                                                              END;
+
+                                                   OnLookup=BEGIN
+                                                              {DocumentFolderSetup.SetCorrespondenceStoreRec(Rec);
+                                                              DocumentFolderSetup.MetaCodeLookup(Meta_Code_4, 4);
+                                                              VALIDATE(Meta_Code_4,Meta_Code_4);
+                                                              }
+                                                            END;
+
+                                                   CaptionClass='52,13' }
+    { 88030;  ;Meta_Decimal_1      ;Decimal       ;CaptionClass='52,14' }
+    { 88031;  ;Meta_Decimal_2      ;Decimal       ;CaptionClass='52,15' }
+    { 88040;  ;Meta_Date_1         ;Date          ;CaptionClass='52,16' }
+    { 88041;  ;Meta_Date_2         ;Date          ;CaptionClass='52,17' }
+    { 88050;  ;Meta_Time_1         ;Time          ;CaptionClass='52,18' }
+    { 88051;  ;Meta_Time_2         ;Time          ;CaptionClass='52,19' }
+    { 88060;  ;Meta_DateTime_1     ;DateTime      ;CaptionClass='52,20' }
+    { 88061;  ;Meta_DateTime_2     ;DateTime      ;CaptionClass='52,21' }
+    { 9068370;;F2-Restricted       ;Boolean       ;FieldClass=FlowField;
+                                                   CalcFormula=Exist("Partitioning Restrictions" WHERE (User ID=FILTER(%ME),
+                                                                                                        Table Name=FILTER(Client|Entity|Owner|Prospect|Potential Client),
+                                                                                                        Primary Key=FIELD(No.)));
+                                                   Editable=No }
+  }
+  KEYS
+  {
+    {    ;Type,No.,ID                             ;Clustered=Yes }
+    {    ;Document Inserted Date,ID                }
+    {    ;Last Accessed Via Navision,ID            }
+    {    ;Subject                                  }
+    {    ;No.,Document Type,Document Inserted Date }
+    {    ;Document Type                            }
+    {    ;FileName                                 }
+    {    ;Document Date,ID                         }
+    {    ;Meta_Date_1,Meta_Date_2                  }
+    {    ;Meta_Text_3                              }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+    VAR
+      AppSetupRec@1000000001 : Record 9068230;
+      DocumentFolderSetup@1000000000 : Record 9068662;
+
+    PROCEDURE OpenDocument@1040001(pType@1000000003 : ' ,Client,Entity,Prospect,Intermediary,Client Owner,Resource,,Dimension,,,External Bank Payment,,,,Potential Client';pNo@1000000004 : Code[20];pKeyValues@1000000005 : Text[250]);
+    VAR
+      DocMan@1040003 : Codeunit 9068511;
+      _DocumentFolderSetupRec@1040002 : Record 9068662;
+      _TCISPFunctions@1040004 : Codeunit 9072391;
+      _iManageMgmt@1000000001 : Codeunit 9072380;
+      IsHandled@1000000000 : Boolean;
+    BEGIN
+      OnBeforeOpenDocument(Rec,IsHandled);
+      IF IsHandled THEN
+        EXIT;
+
+      WITH DocumentFolderSetup DO BEGIN
+        GET;
+        CASE "External Doc Management System" OF
+          "External Doc Management System"::"Internal Navision" : DocMan."Open Document"(Type,"No.",ID);
+          "External Doc Management System"::"Synergy "          : DocMan."Open Document"(Type,"No.",ID);
+          "External Doc Management System"::"To be defined"     : DocMan."Open Document"(Type,"No.",ID);
+          "External Doc Management System"::DataStore           : DocMan."Open Document"(Type,"No.",ID);
+          "External Doc Management System"::Sharepoint          : _TCISPFunctions.OpenFromSharePoint(FilePath,FileName,"Document GUID");
+          "External Doc Management System"::"C076 FileNet"      : DocMan."Open Document"(Type,"No.",ID);
+          "External Doc Management System"::LaserFiche          : DocMan."Open Document"(Type,"No.",ID);
+          ELSE
+            ERROR('DMS Integration type not supported.');
+        END;
+      END;
+    END;
+
+    PROCEDURE SendToHoldingPooliManage@1040002(pJobType@1040000 : Integer);
+    VAR
+      _ClientRec@1040001 : Record 9068500;
+      _EntityRec@1040002 : Record 9068505;
+      _IntermediaryRec@1040003 : Record 9068447;
+      _CorresStore@1040005 : Record 9068660;
+      _Resource@1040006 : Record 156;
+      _Prospect@1040007 : Record 9068440;
+      _OwnerRec@1040008 : Record 9068443;
+      _PotentialClient@1040004 : Record 9068732;
+      _iManageMgmt@1040009 : Codeunit 9072380;
+      _CorresStoreDFX@100000000 : Record 50016;
+    BEGIN
+      {_CorresStore := Rec;
+      CASE Type OF
+        Type::Client : BEGIN
+          _ClientRec.GET("No.");
+          _iManageMgmt.CreateHoldingPoolEntry(pJobType, _CorresStore, 1);
+        END;
+
+        Type::Entity : BEGIN
+          _EntityRec.GET("No.");
+          _iManageMgmt.CreateHoldingPoolEntry(pJobType, _CorresStore, 4);
+        END;
+
+        Type::Intermediary : BEGIN
+          _IntermediaryRec.GET("No.");
+          _iManageMgmt.CreateHoldingPoolEntry(pJobType, _CorresStore, 3);
+        END;
+
+        Type::"Client Owner" : BEGIN
+          _OwnerRec.GET("No.");
+          _iManageMgmt.CreateHoldingPoolEntry(pJobType, _CorresStore, 2);
+        END;
+
+        Type::Resource : BEGIN
+          _Resource.GET("No.");
+          _iManageMgmt.CreateHoldingPoolEntry(pJobType, _CorresStore, 5);
+        END;
+
+        Type::Prospect : BEGIN
+          _Prospect.GET("No.");
+          _iManageMgmt.CreateHoldingPoolEntry(pJobType, _CorresStore, 7);
+        END;
+
+        Type::"Potential Client" : BEGIN
+          _PotentialClient.GET("No.");
+          _iManageMgmt.CreateHoldingPoolEntry(pJobType, _CorresStore, 6);
+        END;
+
+
+      END;
+      }
+    END;
+
+    PROCEDURE SendToHoldingPoolSharepoint@1000000008(pJobType@1000000002 : Integer);
+    VAR
+      _TCIMessages@1000000003 : Record 9072397;
+      _SharePointFunctions@1000000001 : Codeunit 9072391;
+      _RecordRef@1000000000 : RecordRef;
+    BEGIN
+      {
+      IF pJobType = 3 THEN BEGIN
+        _TCIMessages.SETRANGE(_TCIMessages."NAV GUID","Document GUID");
+        IF _TCIMessages.FIND('-') THEN
+          _TCIMessages.DELETE;
+        EXIT;
+      END;
+      _RecordRef.GETTABLE(Rec);
+      _RecordRef.SETPOSITION(GETPOSITION);
+      CASE pJobType OF
+        1: _SharePointFunctions.MessageCreateEventHandler(_RecordRef,FilePath,FileName, "Document GUID");
+        2: _SharePointFunctions.MessageUpdateEventHandler(_RecordRef,FilePath,FileName, "Document GUID");
+      END;
+      }
+    END;
+
+    LOCAL PROCEDURE ReturnEntityName@1000000003() : Text;
+    VAR
+      Client@1000000000 : Record 9068500;
+      Entity@1000000001 : Record 9068505;
+      Prospect@1000000002 : Record 9068440;
+      Intermediary@1000000003 : Record 9068447;
+      Owner@1000000004 : Record 9068443;
+      PotentialClient@1000000005 : Record 9068732;
+    BEGIN
+      IF Type = Type::Client THEN BEGIN
+        IF Client.GET("No.") THEN
+          EXIT(Client."Search Name");
+      END ELSE IF Type = Type::Prospect THEN BEGIN
+        IF Prospect.GET("No.") THEN
+          EXIT(Prospect."Search Name");
+      END ELSE IF Type = Type::"Client Owner" THEN BEGIN
+        IF Owner.GET("No.") THEN
+          EXIT(Owner."Search Name");
+      END ELSE IF Type = Type::Entity THEN BEGIN
+        IF Entity.GET("No.") THEN
+          EXIT(Entity."Search Name");
+      END ELSE IF Type = Type::"Potential Client" THEN BEGIN
+        IF PotentialClient.GET("No.") THEN
+          EXIT(PotentialClient."Search Name");
+      END ELSE IF Type = Type::Intermediary THEN BEGIN
+        IF Intermediary.GET("No.") THEN
+          EXIT(Intermediary."Search Name");
+      END;
+    END;
+
+    [Integration]
+    LOCAL PROCEDURE OnBeforeOpenDocument@1000000001(CorrespondenceStore@1000000000 : Record 50016;VAR IsHandled@1000000001 : Boolean);
+    BEGIN
+    END;
+
+    BEGIN
+    {
+      29.06.20  Hubert Bartkowiak
+                CRF55316 "Client Invoice" and "Meeting" options added to "Link Type Filter".
+
+      ------------------------------------------------------------------------------------------------------------------------------
+      07.04.20  Ritam Majumdar
+                CRF54043 LaserFiche Integration new Fields 86001 added.
+
+      01.04.20  Unnar Eliasson
+                CRF53295 Fields 2001, 2007 & 2008 added as flowfilters and flowfield
+                to allow filtering out documents that are already linked to when going to the
+                Docs & Correspondence Page from Link Document to Activity
+
+      30.03.20  Nigel O'Brien
+                CRF52742 add C102 livelink to insert,modify,delete
+
+      17.02.20  Gregory Kordowski
+                CRF48955 OnInsert/OnModify - check for "Doc. Type Mandatory"
+    }
+    END.
+  }
+}
+

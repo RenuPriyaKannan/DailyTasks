@@ -1,0 +1,228 @@
+OBJECT Page 50062 Tax Tracker API
+{
+  OBJECT-PROPERTIES
+  {
+    Date=16-03-22;
+    Time=17:47:24;
+    Modified=Yes;
+    Version List=DFX Suite;
+  }
+  PROPERTIES
+  {
+    CaptionML=ENU=Tax Tracker;
+    SaveValues=Yes;
+    SourceTable=Table9068801;
+    DataCaptionExpr='Overview';
+    PageType=List;
+    CardPageID=Tax Tracker Card;
+  }
+  CONTROLS
+  {
+    { 1900000001;0;Container;
+                ContainerType=ContentArea }
+
+    { 1000000005;1;Group  ;
+                GroupType=Repeater }
+
+    { 1000000038;2;Field  ;
+                SourceExpr="Record No.";
+                Editable=FALSE }
+
+    { 1000000037;2;Field  ;
+                SourceExpr=Name;
+                Editable=FALSE }
+
+    { 1000000044;2;Field  ;
+                SourceExpr="Client Type" }
+
+    { 1000000036;2;Field  ;
+                SourceExpr="Client Status";
+                Editable=FALSE }
+
+    { 1000000035;2;Field  ;
+                SourceExpr=ClientAnalysisA;
+                Editable=FALSE }
+
+    { 1000000034;2;Field  ;
+                SourceExpr="Tax Return Start Date" }
+
+    { 1000000033;2;Field  ;
+                SourceExpr="Tax Return End Date" }
+
+    { 1000000032;2;Field  ;
+                SourceExpr="Tracker Period Status" }
+
+    { 1000000031;2;Field  ;
+                SourceExpr="Tracking Process Comments";
+                Editable=FALSE }
+
+    { 1000000030;2;Field  ;
+                SourceExpr="Field 1" }
+
+    { 1000000029;2;Field  ;
+                SourceExpr="Field 2" }
+
+    { 1000000028;2;Field  ;
+                SourceExpr="Field 3" }
+
+    { 1000000027;2;Field  ;
+                SourceExpr="Field 4" }
+
+    { 1000000026;2;Field  ;
+                SourceExpr="Field 5" }
+
+    { 1000000057;2;Field  ;
+                SourceExpr="Field 6" }
+
+    { 1000000058;2;Field  ;
+                SourceExpr="Field 7" }
+
+    { 1000000059;2;Field  ;
+                SourceExpr="Field 8" }
+
+    { 1000000060;2;Field  ;
+                SourceExpr="Field 9" }
+
+    { 1000000061;2;Field  ;
+                SourceExpr="Field 10" }
+
+    { 1000000062;2;Field  ;
+                SourceExpr="Field 11" }
+
+    { 1000000063;2;Field  ;
+                SourceExpr="Field 12" }
+
+    { 1000000012;2;Field  ;
+                SourceExpr="Field 13" }
+
+    { 1000000007;2;Field  ;
+                SourceExpr="Field 14" }
+
+    { 1000000006;2;Field  ;
+                SourceExpr="Field 15" }
+
+    { 1000000004;2;Field  ;
+                SourceExpr="Field 16" }
+
+    { 1000000000;2;Field  ;
+                SourceExpr="Field 17" }
+
+    { 1000000025;2;Field  ;
+                SourceExpr="Tax Liability" }
+
+    { 1000000024;2;Field  ;
+                SourceExpr="Tax Liability Currency" }
+
+    { 1000000023;2;Field  ;
+                SourceExpr="Paid Liability" }
+
+    { 1000000022;2;Field  ;
+                SourceExpr="Paid Liability Currency" }
+
+    { 1000000020;2;Field  ;
+                SourceExpr="POA 1" }
+
+    { 1000000019;2;Field  ;
+                SourceExpr="POA 1 Currency" }
+
+    { 1000000018;2;Field  ;
+                SourceExpr="POA 1 Paid Date" }
+
+    { 1000000017;2;Field  ;
+                SourceExpr="POA 2" }
+
+    { 1000000016;2;Field  ;
+                SourceExpr="POA 2 Currency" }
+
+    { 1000000015;2;Field  ;
+                SourceExpr="POA 2 Paid Date" }
+
+    { 1000000013;2;Field  ;
+                SourceExpr="Tax Code" }
+
+    { 1000000014;2;Field  ;
+                SourceExpr="Tax Return Country" }
+
+    { 1000000011;2;Field  ;
+                SourceExpr="Tax Category" }
+
+    { 1000000010;2;Field  ;
+                SourceExpr="Tax Status" }
+
+    { 1000000009;2;Field  ;
+                SourceExpr="TIN Type" }
+
+    { 1000000008;2;Field  ;
+                SourceExpr=TIN }
+
+    { 1000000040;2;Field  ;
+                SourceExpr="Filing Date" }
+
+    { 1000000045;2;Field  ;
+                SourceExpr="Consolidated Main Fund No.";
+                Visible=FALSE }
+
+    { 1000000046;2;Field  ;
+                SourceExpr=Fee;
+                Visible=FALSE }
+
+    { 1000000047;2;Field  ;
+                SourceExpr=WIP;
+                Visible=FALSE }
+
+    { 1000000048;2;Field  ;
+                SourceExpr="Nill Return";
+                Visible=FALSE }
+
+    { 1000000049;2;Field  ;
+                SourceExpr="Not Required";
+                Visible=FALSE }
+
+    { 1000000050;2;Field  ;
+                SourceExpr="Completed by";
+                Visible=FALSE }
+
+    { 1000000051;2;Field  ;
+                SourceExpr="Reviewed by";
+                Visible=FALSE }
+
+    { 1000000052;2;Field  ;
+                SourceExpr="Submitted by";
+                Visible=FALSE }
+
+    { 1000000053;2;Field  ;
+                SourceExpr="S731 Pool Balance";
+                Visible=FALSE }
+
+    { 1000000054;2;Field  ;
+                SourceExpr="Claim to Reduce PoA";
+                Visible=FALSE }
+
+    { 1000000055;2;Field  ;
+                SourceExpr="Tax Return Type" }
+
+    { 1000000056;2;Field  ;
+                SourceExpr="POAs Made for the Year";
+                Visible=FALSE }
+
+    { 1000000001;2;Field  ;
+                SourceExpr="General Information" }
+
+    { 1000000002;2;Field  ;
+                SourceExpr="Tax Adv/Consultant" }
+
+    { 1000000003;2;Field  ;
+                SourceExpr="Taxable Reference" }
+
+    { 100000000;2;Field   ;
+                SourceExpr=Frequency }
+
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+
